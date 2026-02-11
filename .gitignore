@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+.Trash
+
+# User Library
+Library/
+
+# Hidden files
+.*
+!.gitignore
+!.git
+
+# Keep only project files
+# Everything except index.html is ignored by default
