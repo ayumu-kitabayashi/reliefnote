@@ -28,19 +28,21 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-            font-size: 15px;
+            font-size: clamp(14px, 3.8vw, 15px);
             line-height: 1.6;
             color: var(--text-primary);
             background: var(--bg-secondary);
             -webkit-font-smoothing: antialiased;
-            padding-bottom: calc(60px + env(safe-area-inset-bottom));
+            padding-bottom: calc(52px + env(safe-area-inset-bottom));
         }
 
         .app-container {
             max-width: 430px;
+            width: 100%;
             margin: 0 auto;
             background: var(--bg-warm);
             min-height: 100vh;
+            min-height: 100dvh;
             position: relative;
         }
 
@@ -59,11 +61,11 @@
         }
 
         /* Typography */
-        .heading-xl { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
-        .heading-lg { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
-        .heading-md { font-size: 17px; font-weight: 600; }
+        .heading-xl { font-size: clamp(22px, 6vw, 28px); font-weight: 700; letter-spacing: -0.5px; }
+        .heading-lg { font-size: clamp(18px, 5vw, 22px); font-weight: 700; letter-spacing: -0.3px; }
+        .heading-md { font-size: clamp(15px, 4vw, 17px); font-weight: 600; }
         .heading-sm { font-size: 15px; font-weight: 600; }
-        .body-md { font-size: 15px; font-weight: 400; color: var(--text-primary); }
+        .body-md { font-size: clamp(14px, 3.8vw, 15px); font-weight: 400; color: var(--text-primary); }
         .body-sm { font-size: 13px; font-weight: 400; color: var(--text-secondary); }
         .caption { font-size: 12px; font-weight: 400; color: var(--text-tertiary); }
 
@@ -71,7 +73,8 @@
         .btn-primary {
             display: block;
             width: 100%;
-            padding: 16px;
+            height: 48px;
+            padding: 0 16px;
             background: var(--accent);
             color: #ffffff;
             border: none;
@@ -87,7 +90,8 @@
         .btn-secondary {
             display: block;
             width: 100%;
-            padding: 16px;
+            height: 48px;
+            padding: 0 16px;
             background: var(--bg-primary);
             color: var(--text-primary);
             border: 1px solid var(--border);
@@ -111,7 +115,7 @@
             background: var(--bg-primary);
             border: 1px solid var(--border-light);
             border-radius: 12px;
-            padding: 20px;
+            padding: 14px 16px;
         }
 
         /* Badges */
@@ -142,11 +146,12 @@
         .splash-screen {
             background: var(--bg-warm);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 60px 32px;
+            padding: 60px 16px;
             text-align: center;
         }
 
@@ -184,9 +189,10 @@
         /* 画面0.5: オンボーディングメッセージ */
         .onboarding-container {
             min-height: 100vh;
+            min-height: calc(100dvh - 52px);
             display: flex;
             flex-direction: column;
-            padding: 20px 32px 32px;
+            padding: 20px 16px 32px;
             background: var(--bg-warm);
         }
 
@@ -312,7 +318,7 @@
 
         /* 画面1: オンボーディング（質問） */
         .question-header {
-            padding: 20px 24px;
+            padding: 20px 16px;
             display: flex;
             align-items: center;
         }
@@ -329,8 +335,8 @@
         .question-card {
             background: var(--bg-primary);
             border-radius: 16px;
-            padding: 32px 24px;
-            margin: 0 24px 24px;
+            padding: 24px 16px;
+            margin: 0 16px 24px;
         }
 
         .domain-badge {
@@ -367,12 +373,12 @@
             width: 100%;
             background: var(--bg-primary);
             border: 1px solid var(--border);
-            padding: 16px;
+            padding: 10px 14px;
             border-radius: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             cursor: pointer;
             text-align: center;
-            font-size: 15px;
+            font-size: 14px;
             transition: all 0.15s;
             color: var(--text-primary);
         }
@@ -393,7 +399,7 @@
             padding: 16px;
             border: 1px solid var(--border);
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 16px;
             font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
             color: var(--text-primary);
             background: var(--bg-primary);
@@ -412,13 +418,13 @@
         /* 画面2: ホーム */
         .home-header {
             background: var(--bg-primary);
-            padding: 32px 24px 28px;
+            padding: 32px 16px 28px;
             border-bottom: 1px solid var(--border-light);
         }
 
         .header-top {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             margin-bottom: 20px;
         }
 
@@ -453,13 +459,13 @@
         }
 
         .home-section {
-            padding: 32px 24px;
+            padding: 24px 16px;
         }
 
         .section-title {
-            font-size: 17px;
+            font-size: clamp(15px, 4vw, 17px);
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
             color: var(--text-primary);
         }
 
@@ -474,8 +480,8 @@
             background: var(--bg-primary);
             border: 1px solid var(--border-light);
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
             display: flex;
             align-items: flex-start;
             gap: 12px;
@@ -590,40 +596,61 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 32px 24px 20px;
+            padding: 32px 16px 20px;
             background: var(--bg-primary);
         }
 
         .guide-title {
-            font-size: 28px;
+            font-size: clamp(22px, 6vw, 28px);
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--text-primary);
         }
 
         .calendar-btn {
-            display: none;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .calendar-btn:hover {
+            background: var(--accent-light);
+            border-color: var(--accent);
+        }
+
+        .calendar-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--text-secondary);
         }
 
         .guide-tabs {
             display: flex;
-            gap: 0;
-            padding: 0 24px;
-            border-bottom: 1px solid var(--border-light);
-            margin-bottom: 0;
+            gap: 8px;
+            padding: 12px 16px;
             background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-light);
         }
 
         #guideContent {
             transition: opacity 0.2s ease;
+            background: var(--bg-warm);
         }
 
         .tab-btn {
-            flex: 1;
-            padding: 12px 8px;
+            padding: 6px 16px;
             background: transparent;
             border: none;
-            border-bottom: 2px solid transparent;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: 400;
             color: var(--text-tertiary);
@@ -633,22 +660,33 @@
 
         .tab-btn.active {
             color: var(--text-primary);
-            border-bottom-color: var(--accent);
+            background: var(--accent-light);
             font-weight: 600;
         }
 
         .btn-filter-questions {
-            margin: 20px 24px;
-            width: calc(100% - 48px);
-            background: var(--warning-light);
-            color: var(--warning);
-            border: 1px solid var(--warning);
-            padding: 14px;
+            margin: 12px 16px;
+            width: calc(100% - 32px);
+            background: var(--bg-warm);
+            border: 1px solid var(--border);
+            padding: 12px 16px;
             border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
             cursor: pointer;
             transition: opacity 0.15s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-filter-questions-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .btn-filter-questions-action {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
         }
 
         .btn-filter-questions:active {
@@ -656,16 +694,33 @@
         }
 
         .phase-section {
-            border-bottom: 1px solid var(--border-light);
+            margin: 12px 16px;
         }
 
         .phase-header {
             background: var(--bg-primary);
-            padding: 20px 24px;
+            padding: 14px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            transition: background 0.2s ease;
+        }
+
+        .phase-header:active {
+            background: var(--bg-secondary);
+        }
+
+        .phase-arrow {
+            transition: transform 0.2s ease;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .phase-section.open .phase-arrow {
+            transform: rotate(180deg);
         }
 
         .phase-title-row {
@@ -681,48 +736,150 @@
         }
 
         .task-count-badge {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
+            background: var(--accent-light);
+            color: var(--accent);
             padding: 3px 10px;
-            border-radius: 20px;
+            border-radius: 12px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .phase-tasks {
-            background: var(--bg-secondary);
             display: none;
+            padding-top: 12px;
         }
 
         .phase-section.open .phase-tasks {
             display: block;
+            animation: slideDown 0.2s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-4px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .completed-tasks-section {
+            margin-top: 12px;
+        }
+
+        .completed-tasks-header {
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            color: var(--text-tertiary);
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+            border-radius: 12px;
+        }
+
+        .completed-tasks-header:active {
+            background: var(--border-light);
+        }
+
+        .completed-tasks-list {
+            display: none;
+            padding-top: 12px;
+        }
+
+        .completed-tasks-section.open .completed-tasks-list {
+            display: block;
+            animation: slideDown 0.2s ease;
+        }
+
+        .completed-arrow {
+            transition: transform 0.2s ease;
+            font-size: 12px;
+        }
+
+        .completed-tasks-section.open .completed-arrow {
+            transform: rotate(180deg);
         }
 
         .task-item {
             background: var(--bg-primary);
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border-light);
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
             display: flex;
-            align-items: center;
-            gap: 16px;
+            align-items: flex-start;
+            gap: 12px;
             cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .task-item:active {
+            background: var(--bg-secondary);
         }
 
         .task-item:last-child {
-            border-bottom: none;
+            margin-bottom: 0;
         }
 
         .task-checkbox {
             width: 20px;
             height: 20px;
+            min-width: 20px;
+            min-height: 20px;
             cursor: pointer;
-            accent-color: var(--accent);
+            appearance: none;
+            -webkit-appearance: none;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            background: var(--bg-primary);
+            position: relative;
+            transition: all 0.2s ease;
+            margin-top: 2px;
+        }
+
+        .task-checkbox:checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .task-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .task-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
         .task-name {
-            flex: 1;
             font-size: 15px;
             color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .task-deadline {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .task-confirm-hint {
+            font-size: 13px;
+            color: var(--accent);
         }
 
         .task-name.done {
@@ -745,7 +902,7 @@
             height: 48px;
             display: flex;
             align-items: center;
-            padding: 0 20px;
+            padding: 0 16px;
             background: transparent;
         }
 
@@ -760,7 +917,7 @@
 
         .detail-content {
             max-width: 430px;
-            padding: 0 20px calc(160px + env(safe-area-inset-bottom));
+            padding: 0 16px calc(52px + 60px + 48px + env(safe-area-inset-bottom));
             margin: 0 auto;
         }
 
@@ -806,15 +963,15 @@
         .detail-summary-card {
             background: var(--accent-light);
             border-radius: 12px;
-            padding: 16px 20px;
-            font-size: 15px;
+            padding: 14px 16px;
+            font-size: 14px;
             line-height: 1.7;
             color: var(--text-primary);
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
 
         .detail-section {
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
 
         .detail-section-header {
@@ -823,14 +980,14 @@
             color: var(--text-secondary);
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .detail-white-card {
             background: #ffffff;
             border: 1px solid var(--border-light);
             border-radius: 12px;
-            padding: 16px 20px;
+            padding: 14px 16px;
         }
 
         .detail-why-text {
@@ -972,21 +1129,21 @@
 
         .detail-footer {
             position: fixed;
-            bottom: calc(60px + env(safe-area-inset-bottom));
+            bottom: calc(52px + env(safe-area-inset-bottom));
             left: 50%;
             transform: translateX(-50%);
             max-width: 430px;
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            padding: 12px 20px;
+            padding: 10px 16px;
             border-top: 1px solid var(--border-light);
             z-index: 100;
         }
 
         .btn-complete {
             width: 100%;
-            height: 52px;
+            height: 48px;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
@@ -1015,7 +1172,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
+            padding: 0 16px;
             background: var(--bg-primary);
             border-bottom: 1px solid var(--border-light);
         }
@@ -1038,7 +1195,7 @@
 
         .confirm-progress-container {
             background: var(--bg-primary);
-            padding: 0 20px 16px;
+            padding: 0 16px 16px;
         }
 
         .confirm-progress-bar {
@@ -1063,9 +1220,10 @@
         }
 
         .confirm-question-area {
-            padding: 20px;
+            padding: 16px;
             background: var(--bg-warm);
             min-height: calc(100vh - 56px - 80px);
+            min-height: calc(100dvh - 56px - 80px);
         }
 
         .confirm-question-slide {
@@ -1160,9 +1318,10 @@
         .name-input-screen {
             background: var(--bg-primary);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
-            padding: 20px 24px;
+            padding: 20px 16px;
         }
 
         .name-input-header {
@@ -1237,18 +1396,19 @@
             padding: 0;
             background: var(--bg-warm);
             min-height: 100vh;
+            padding-bottom: calc(52px + 80px + env(safe-area-inset-bottom));
         }
 
         .settings-header {
             background: var(--bg-primary);
-            padding: 32px 24px 20px;
+            padding: 32px 16px 20px;
             border-bottom: 1px solid var(--border-light);
         }
 
         .settings-section {
             background: var(--bg-primary);
             margin-bottom: 24px;
-            padding: 24px;
+            padding: 16px;
         }
 
         .settings-section-title {
@@ -1304,7 +1464,7 @@
 
         .settings-footer {
             text-align: center;
-            padding: 40px 24px;
+            padding: 40px 16px;
             color: var(--text-tertiary);
             font-size: 12px;
             line-height: 1.8;
@@ -1331,7 +1491,7 @@
         .modal {
             background: var(--bg-primary);
             border-radius: 16px 16px 0 0;
-            padding: 28px 24px;
+            padding: 24px 16px;
             max-width: 430px;
             width: 100%;
             padding-bottom: calc(24px + env(safe-area-inset-bottom));
@@ -1391,9 +1551,9 @@
         .dialog {
             background: var(--bg-primary);
             border-radius: 16px;
-            padding: 28px 24px;
+            padding: 24px 16px;
             max-width: 320px;
-            width: calc(100% - 48px);
+            width: calc(100% - 32px);
             text-align: center;
             animation: fadeIn 0.2s ease;
         }
@@ -1453,6 +1613,36 @@
             cursor: pointer;
         }
 
+        /* フローティング相談ボタン */
+        .floating-consult-btn {
+            position: fixed;
+            bottom: calc(52px + 12px + env(safe-area-inset-bottom));
+            right: 16px;
+            z-index: 300;
+            height: 44px;
+            padding: 0 16px;
+            border-radius: 22px;
+            background: var(--accent);
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.15s ease;
+        }
+
+        .floating-consult-btn.show {
+            display: flex;
+        }
+
+        .floating-consult-btn:active {
+            transform: scale(0.95);
+        }
+
         /* フッターナビ */
         .footer-nav {
             position: fixed;
@@ -1464,18 +1654,18 @@
             background: var(--bg-primary);
             border-top: 1px solid var(--border-light);
             display: flex;
-            height: 60px;
+            height: 52px;
             padding-bottom: env(safe-area-inset-bottom);
             z-index: 200;
         }
 
         .nav-item {
-            flex: 1;
+            width: 33.33%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 2px;
             cursor: pointer;
             border: none;
             background: none;
@@ -1484,16 +1674,231 @@
         }
 
         .nav-item.active {
-            color: var(--accent);
+            color: var(--text-primary);
         }
 
         .nav-icon {
-            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-icon svg {
+            width: 24px;
+            height: 24px;
         }
 
         .nav-label {
-            font-size: 11px;
-            font-weight: 500;
+            display: none;
+        }
+
+        /* ホーム画面の歯車アイコン */
+        .settings-icon-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            padding: 10px;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 画面7: 遺族コンシェルジュ */
+        .concierge-content {
+            padding: 0;
+            background: var(--bg-warm);
+            min-height: 100vh;
+            padding-bottom: calc(52px + 80px + env(safe-area-inset-bottom));
+        }
+
+        .concierge-header {
+            background: transparent;
+            padding: 32px 16px 20px;
+        }
+
+        .concierge-title {
+            font-size: clamp(18px, 5vw, 22px);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .concierge-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .concierge-section {
+            padding: 0 16px 24px;
+        }
+
+        .concierge-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .concierge-intro-card {
+            background: var(--accent-light);
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .concierge-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 12px;
+        }
+
+        .concierge-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .concierge-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .concierge-contact-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .concierge-contact-card:active {
+            transform: scale(0.98);
+        }
+
+        .concierge-contact-card.primary {
+            border: 2px solid var(--accent);
+        }
+
+        .concierge-contact-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .concierge-contact-content {
+            flex: 1;
+        }
+
+        .concierge-contact-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .concierge-contact-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .concierge-contact-note {
+            font-size: 12px;
+            color: var(--accent);
+        }
+
+        .concierge-contact-card.primary .concierge-contact-note {
+            color: var(--accent);
+        }
+
+        .concierge-contact-card:not(.primary) .concierge-contact-note {
+            color: var(--text-tertiary);
+        }
+
+        .concierge-contact-arrow {
+            font-size: 18px;
+            color: var(--text-tertiary);
+        }
+
+        .concierge-topics-list {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 14px 16px;
+        }
+
+        .concierge-topic-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 2.2;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .concierge-topic-bullet {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+            margin-top: 10px;
+        }
+
+        .concierge-testimonial {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 14px 16px;
+        }
+
+        .concierge-testimonial-text {
+            font-size: 15px;
+            font-style: italic;
+            color: var(--text-primary);
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        .concierge-testimonial-source {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .concierge-message {
+            text-align: center;
+        }
+
+        .concierge-message-primary {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .concierge-message-secondary {
+            font-size: 13px;
+            color: var(--text-secondary);
         }
 
         .toast {
@@ -1528,10 +1933,366 @@
             }
         }
 
+        /* カレンダー画面 */
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 20px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-light);
+            position: relative;
+        }
+
+        .calendar-back-btn {
+            position: absolute;
+            left: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 15px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .calendar-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .overdue-summary {
+            margin: 16px 20px;
+            background: var(--warning-light);
+            padding: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .overdue-text {
+            font-size: 14px;
+            color: var(--warning);
+            font-weight: 500;
+        }
+
+        .btn-expand {
+            background: none;
+            border: none;
+            color: var(--warning);
+            font-size: 12px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .overdue-tasks-list {
+            margin: 0 20px 16px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+        }
+
+        .calendar-no-date {
+            margin: 40px 20px;
+            padding: 32px 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .calendar-container {
+            padding: 16px 20px;
+        }
+
+        .calendar-month-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .month-nav-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px 14px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .month-nav-btn:hover {
+            background: var(--accent-light);
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .calendar-month-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        .calendar-grid {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: 12px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            padding: 10px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .calendar-dates {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+        }
+
+        .calendar-date-cell {
+            min-height: 72px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 4px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .calendar-date-cell:hover:not(.other-month) {
+            background: var(--bg-secondary);
+            transform: scale(1.05);
+        }
+
+        .calendar-date-cell.selected {
+            background: var(--accent-light);
+            border: 2px solid var(--accent);
+            box-shadow: 0 2px 8px rgba(45, 106, 79, 0.15);
+        }
+
+        .calendar-date-cell.other-month {
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .calendar-date-number {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .calendar-date-cell.past:not(.today) .calendar-date-number {
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .calendar-date-cell.today .calendar-date-number {
+            background: var(--accent);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(45, 106, 79, 0.3);
+        }
+
+        .calendar-date-dots {
+            display: flex;
+            gap: 4px;
+            margin-top: auto;
+        }
+
+        .calendar-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-dot.overdue {
+            background: var(--warning);
+        }
+
+        .calendar-dot.done {
+            background: var(--text-tertiary);
+            opacity: 0.5;
+        }
+
+        .selected-date-tasks {
+            margin: 16px 20px;
+            padding-bottom: 80px;
+        }
+
+        .selected-date-header {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .selected-date-tasks .task-item {
+            margin-bottom: 8px;
+        }
+
+        .selected-date-no-tasks {
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 14px;
+            padding: 32px 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .calendar-dates {
+            animation: fadeIn 0.2s ease;
+        }
+
+        .selected-date-tasks {
+            animation: slideDown 0.2s ease;
+        }
+
         @media (min-width: 431px) {
             .app-container {
                 border-left: 1px solid var(--border-light);
                 border-right: 1px solid var(--border-light);
+            }
+        }
+
+        /* 360px以下（小型Android） */
+        @media (max-width: 360px) {
+            body {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .heading-xl {
+                font-size: 22px;
+            }
+
+            .option-btn {
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+
+            .card,
+            .task-card-small,
+            .concierge-contact-card,
+            .concierge-topics-list,
+            .concierge-testimonial,
+            .detail-white-card,
+            .detail-summary-card {
+                padding: 12px 14px;
+            }
+
+            .home-header,
+            .guide-header,
+            .concierge-header,
+            .settings-header,
+            .question-header,
+            .detail-header,
+            .confirm-new-header,
+            .confirm-progress-container,
+            .confirm-question-area {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .home-section,
+            .concierge-section {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .question-card {
+                margin-left: 12px;
+                margin-right: 12px;
+                padding: 20px 14px;
+            }
+
+            .settings-section {
+                padding: 14px 12px;
+            }
+
+            .floating-consult-btn {
+                right: 12px;
+            }
+
+            .floating-consult-btn span:last-child {
+                display: none;
+            }
+
+            .floating-consult-btn {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                padding: 0;
+                justify-content: center;
+            }
+        }
+
+        /* 394px〜430px（iPhone Plus/Pro Max） */
+        @media (min-width: 394px) {
+            .home-section,
+            .concierge-section,
+            .detail-section {
+                margin-bottom: 28px;
+            }
+
+            .card,
+            .task-card-small,
+            .concierge-contact-card,
+            .concierge-topics-list,
+            .concierge-testimonial,
+            .detail-white-card,
+            .detail-summary-card {
+                padding: 16px 20px;
+            }
+
+            .concierge-intro-card {
+                padding: 24px 20px;
+            }
+
+            .heading-xl {
+                font-size: 28px;
             }
         }
     </style>
@@ -1605,7 +2366,12 @@
             <div class="home-header">
                 <div class="header-top">
                     <span class="model-badge">📍 北竜町モデル</span>
-                    <button class="share-btn" onclick="showToast('この機能は準備中です')">👥 家族に共有</button>
+                    <button class="settings-icon-btn" onclick="showScreen('screen-settings')">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
                 </div>
                 <div class="header-greeting">こんにちは、</div>
                 <div>
@@ -1622,18 +2388,19 @@
                 <div id="todayTasks"></div>
             </div>
 
-            <div class="home-section" style="display: none;">
+            <div class="home-section">
                 <div class="section-title">迷ったら相談</div>
-                <div class="consultation-card">
-                    <div class="consultation-title">専任サポーター</div>
-                    <div class="online-status">オンライン (10分以内目安)</div>
-                    <div class="consultation-buttons">
-                        <button class="btn-consult btn-consult-primary" onclick="showToast('この機能は準備中です')">💬 チャットで相談</button>
-                        <button class="btn-consult btn-consult-secondary" onclick="showToast('この機能は準備中です')">📞 電話予約</button>
+                <div class="task-card-small" onclick="showScreen('screen-concierge')" style="cursor: pointer;">
+                    <div style="flex-shrink: 0;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
-                    <div class="consultation-note">※ボットではなく、専門チームが対応します</div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 15px; font-weight: 600; color: var(--text-primary);">コンシェルジュに相談する</div>
+                    </div>
+                    <div style="font-size: 18px; color: var(--text-tertiary);">›</div>
                 </div>
-                <a class="link-to-confirm" onclick="showScreen('screen-confirm')">未回答の確認事項を見る</a>
             </div>
         </div>
 
@@ -1641,14 +2408,23 @@
         <div id="screen-guide" class="screen">
             <div class="guide-header">
                 <div class="guide-title">おくやみガイド</div>
-                <button class="calendar-btn" onclick="showToast('この機能は準備中です')">📅 カレンダー</button>
+                <button class="calendar-btn" onclick="showCalendar()">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    カレンダー
+                </button>
             </div>
             <div class="guide-tabs">
                 <button class="tab-btn active" onclick="setGuideView('phase')">期限順</button>
                 <button class="tab-btn" onclick="setGuideView('domain')">行き先順</button>
             </div>
             <button class="btn-filter-questions" onclick="showScreen('screen-confirm')">
-                ✓ 質問に答える（あなた専用に絞り込み）
+                <span class="btn-filter-questions-text">質問に答えて、あなた専用に絞り込み</span>
+                <span class="btn-filter-questions-action">回答する ›</span>
             </button>
             <div id="guideContent"></div>
         </div>
@@ -1746,6 +2522,159 @@
             </div>
         </div>
 
+        <!-- 画面7: 遺族コンシェルジュ -->
+        <div id="screen-concierge" class="screen">
+            <div class="concierge-content">
+                <!-- ヘッダー -->
+                <div class="concierge-header">
+                    <div class="concierge-title">遺族コンシェルジュ</div>
+                    <div class="concierge-subtitle">手続きのことも、気持ちのことも。</div>
+                </div>
+
+                <!-- コンシェルジュ紹介 -->
+                <div class="concierge-section">
+                    <div class="concierge-intro-card">
+                        <div class="concierge-avatar">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="7" r="4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="concierge-name">ReliefNote サポートチーム</div>
+                        <div class="concierge-description">
+                            遺族支援の専門スタッフが、手続きの疑問から心の不安まで寄り添います。お気軽にご相談ください。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 相談メニュー -->
+                <div class="concierge-section">
+                    <div class="concierge-section-title">相談する</div>
+
+                    <!-- LINEで相談 -->
+                    <div class="concierge-contact-card primary" onclick="openLineOA()">
+                        <div class="concierge-contact-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="concierge-contact-content">
+                            <div class="concierge-contact-title">LINEで相談する</div>
+                            <div class="concierge-contact-desc">トークでいつでも相談できます</div>
+                            <div class="concierge-contact-note">返信は原則24時間以内</div>
+                        </div>
+                        <div class="concierge-contact-arrow">›</div>
+                    </div>
+                </div>
+
+                <!-- こんなことを相談できます -->
+                <div class="concierge-section">
+                    <div class="concierge-section-title">こんなことを相談できます</div>
+                    <div class="concierge-topics-list">
+                        <div class="concierge-topic-item">
+                            <div class="concierge-topic-bullet"></div>
+                            <div>何から手をつければいいか分からない</div>
+                        </div>
+                        <div class="concierge-topic-item">
+                            <div class="concierge-topic-bullet"></div>
+                            <div>役場の手続きで必要な書類を教えてほしい</div>
+                        </div>
+                        <div class="concierge-topic-item">
+                            <div class="concierge-topic-bullet"></div>
+                            <div>相続のことを誰に相談すればいいか</div>
+                        </div>
+                        <div class="concierge-topic-item">
+                            <div class="concierge-topic-bullet"></div>
+                            <div>気持ちの整理がつかず辛い</div>
+                        </div>
+                        <div class="concierge-topic-item">
+                            <div class="concierge-topic-bullet"></div>
+                            <div>家族で手続きをどう分担すればいいか</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 利用者の声 -->
+                <div class="concierge-section">
+                    <div class="concierge-section-title">利用者の声</div>
+                    <div class="concierge-testimonial">
+                        <div class="concierge-testimonial-text">
+                            "人に相談できることが一番ありがたかった"
+                        </div>
+                        <div class="concierge-testimonial-source">
+                            — ユーザーインタビューより（12名中10名が最も価値があると評価）
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 安心メッセージ -->
+                <div class="concierge-section">
+                    <div class="concierge-message">
+                        <div class="concierge-message-primary">あなたは一人ではありません。</div>
+                        <div class="concierge-message-secondary">いつでも、何度でもご相談ください。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 画面8: カレンダー -->
+        <div id="screen-calendar" class="screen">
+            <div class="calendar-header">
+                <button class="calendar-back-btn" onclick="showScreen('screen-guide')">← 戻る</button>
+                <span class="calendar-title">カレンダー</span>
+            </div>
+
+            <!-- 期限切れサマリー -->
+            <div id="overdueTasksSummary" class="overdue-summary" style="display: none;">
+                <div class="overdue-text" id="overdueText">期限を過ぎたタスクが3件あります</div>
+                <button class="btn-expand" onclick="toggleOverdueTasks()">▼</button>
+            </div>
+            <div id="overdueTasksList" class="overdue-tasks-list" style="display: none;"></div>
+
+            <!-- 死亡日未入力メッセージ -->
+            <div id="calendarNoDateMessage" class="calendar-no-date" style="display: none;">
+                <div style="text-align: center; color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">
+                    亡くなった日を入力すると、期限が表示されます
+                </div>
+                <button class="btn-primary" onclick="goToDeathDateQuestion()">入力する</button>
+            </div>
+
+            <!-- カレンダー本体 -->
+            <div id="calendarContainer" class="calendar-container">
+                <!-- 月ナビゲーション -->
+                <div class="calendar-month-nav">
+                    <button class="month-nav-btn" onclick="changeMonth(-1)">＜</button>
+                    <span class="calendar-month-label" id="calendarMonthLabel">2026年2月</span>
+                    <button class="month-nav-btn" onclick="changeMonth(1)">＞</button>
+                </div>
+
+                <!-- カレンダーグリッド -->
+                <div class="calendar-grid">
+                    <!-- 曜日ヘッダー -->
+                    <div class="calendar-weekdays">
+                        <div class="calendar-weekday">日</div>
+                        <div class="calendar-weekday">月</div>
+                        <div class="calendar-weekday">火</div>
+                        <div class="calendar-weekday">水</div>
+                        <div class="calendar-weekday">木</div>
+                        <div class="calendar-weekday">金</div>
+                        <div class="calendar-weekday">土</div>
+                    </div>
+
+                    <!-- 日付セル -->
+                    <div class="calendar-dates" id="calendarDates">
+                        <!-- JavaScriptで動的生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 選択日のタスクリスト -->
+            <div id="selectedDateTasks" class="selected-date-tasks" style="display: none;">
+                <div class="selected-date-header" id="selectedDateHeader">2月15日（土）のタスク</div>
+                <div id="selectedDateTasksList"></div>
+            </div>
+        </div>
+
         <!-- 名前変更モーダル -->
         <div id="editNameModal" class="modal-overlay">
             <div class="modal">
@@ -1779,24 +2708,56 @@
             </div>
         </div>
 
+        <!-- フローティング相談ボタン -->
+        <button class="floating-consult-btn" id="floatingConsultBtn" onclick="openLineOA()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>相談する</span>
+        </button>
+
         <!-- フッターナビ -->
         <div class="footer-nav">
-            <button class="nav-item active" onclick="showScreen('screen-home')">
-                <div class="nav-icon">🏠</div>
+            <button class="nav-item active" onclick="switchTab('home')">
+                <div class="nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
                 <div class="nav-label">ホーム</div>
             </button>
-            <button class="nav-item" onclick="showScreen('screen-guide')">
-                <div class="nav-icon">📋</div>
+            <button class="nav-item" onclick="switchTab('guide')">
+                <div class="nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 5H7C6.46957 5 5.96086 5.21071 5.58579 5.58579C5.21071 5.96086 5 6.46957 5 7V19C5 19.5304 5.21071 20.0391 5.58579 20.4142C5.96086 20.7893 6.46957 21 7 21H17C17.5304 21 18.0391 20.7893 18.4142 20.4142C18.7893 20.0391 19 19.5304 19 19V7C19 6.46957 18.7893 5.96086 18.4142 5.58579C18.0391 5.21071 17.5304 5 17 5H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 5C9 4.46957 9.21071 3.96086 9.58579 3.58579C9.96086 3.21071 10.4696 3 11 3H13C13.5304 3 14.0391 3.21071 14.4142 3.58579C14.7893 3.96086 15 4.46957 15 5C15 5.53043 14.7893 6.03914 14.4142 6.41421C14.0391 6.78929 13.5304 7 13 7H11C10.4696 7 9.96086 6.78929 9.58579 6.41421C9.21071 6.03914 9 5.53043 9 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 12H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 16H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
                 <div class="nav-label">ガイド</div>
             </button>
-            <button class="nav-item" onclick="showScreen('screen-settings')">
-                <div class="nav-icon">⋯</div>
-                <div class="nav-label">その他</div>
+            <button class="nav-item" onclick="switchTab('concierge')">
+                <div class="nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="nav-label">相談</div>
             </button>
         </div>
     </div>
 
     <script>
+        // LINE公式アカウントURL（変更可能）
+        const LINE_OA_URL = 'https://lin.ee/XXXXXXX';
+
+        // アコーディオンの開閉状態を保持（メモリのみ、localStorageには保存しない）
+        window._accordionState = window._accordionState || {};
+        // スクロール位置を保持
+        window._guideScrollTop = window._guideScrollTop || 0;
+
         // データ定義（既存のものを維持）
         const questions = [
             { id: "Q-REL-01", domain: "ADMIN", text: "亡くなられた方とのご関係を教えてください", type: "single", options: [
@@ -2026,7 +2987,7 @@
             {
                 id: "hokuryu_yakuba",
                 name: "北竜町役場",
-                icon: "🏛",
+                icon: "●",
                 description: "北海道雨竜郡北竜町字和11-1",
                 phone: "0164-34-2111",
                 hours: "平日 8:30-17:15",
@@ -2035,7 +2996,7 @@
             {
                 id: "nenkin",
                 name: "年金事務所（深川）",
-                icon: "🏢",
+                icon: "●",
                 description: "北海道深川市2条18番36号",
                 phone: "0164-23-1299",
                 hours: "平日 8:30-17:15",
@@ -2044,7 +3005,7 @@
             {
                 id: "homukyoku",
                 name: "法務局・家庭裁判所（深川）",
-                icon: "⚖️",
+                icon: "●",
                 description: "北海道深川市3条2番1号",
                 phone: "0164-23-3269",
                 hours: "平日 8:30-17:15",
@@ -2053,7 +3014,7 @@
             {
                 id: "zeimusho",
                 name: "深川税務署",
-                icon: "🏢",
+                icon: "●",
                 description: "北海道深川市2条17番17号",
                 phone: "0164-23-2191",
                 hours: "平日 8:30-17:00",
@@ -2062,7 +3023,7 @@
             {
                 id: "sougisha",
                 name: "葬儀社",
-                icon: "🕊️",
+                icon: "●",
                 description: "",
                 phone: "",
                 hours: "",
@@ -2071,7 +3032,7 @@
             {
                 id: "bank",
                 name: "銀行・証券会社",
-                icon: "🏦",
+                icon: "●",
                 description: "口座のある各金融機関",
                 phone: "",
                 hours: "平日 9:00-15:00（窓口）",
@@ -2080,7 +3041,7 @@
             {
                 id: "hoken",
                 name: "保険会社・共済",
-                icon: "📋",
+                icon: "●",
                 description: "加入先の各保険会社",
                 phone: "",
                 hours: "",
@@ -2089,7 +3050,7 @@
             {
                 id: "kinmusaki",
                 name: "勤務先（自分 / 故人）",
-                icon: "💼",
+                icon: "●",
                 description: "",
                 phone: "",
                 hours: "",
@@ -2098,7 +3059,7 @@
             {
                 id: "keisatsu",
                 name: "警察署（深川）",
-                icon: "🚔",
+                icon: "●",
                 description: "北海道深川市4条8番20号",
                 phone: "0164-22-0110",
                 hours: "平日 8:30-17:15",
@@ -2107,7 +3068,7 @@
             {
                 id: "unyu",
                 name: "運輸支局（旭川）",
-                icon: "🚗",
+                icon: "●",
                 description: "北海道旭川市春光町10番地",
                 phone: "050-5540-2003",
                 hours: "平日 8:45-16:00",
@@ -2116,7 +3077,7 @@
             {
                 id: "telecom",
                 name: "携帯キャリア・通信・NHK",
-                icon: "📱",
+                icon: "●",
                 description: "",
                 phone: "",
                 hours: "",
@@ -2125,7 +3086,7 @@
             {
                 id: "jitaku",
                 name: "自宅・その他",
-                icon: "🏠",
+                icon: "●",
                 description: "自宅での確認・準備作業",
                 phone: "",
                 hours: "",
@@ -2941,6 +3902,15 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
 
+            // フローティング相談ボタンの表示制御
+            const floatingBtn = document.getElementById('floatingConsultBtn');
+            const screensWithFloatingBtn = ['screen-home', 'screen-guide', 'screen-confirm', 'screen-settings', 'screen-concierge'];
+            if (screensWithFloatingBtn.includes(screenId)) {
+                floatingBtn.classList.add('show');
+            } else {
+                floatingBtn.classList.remove('show');
+            }
+
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if (screenId === 'screen-home') {
                 document.querySelectorAll('.nav-item')[0].classList.add('active');
@@ -2949,14 +3919,52 @@
             } else if (screenId === 'screen-guide') {
                 document.querySelectorAll('.nav-item')[1].classList.add('active');
                 renderGuide();
-            } else if (screenId === 'screen-settings') {
+
+                // スクロール位置を復元
+                requestAnimationFrame(() => {
+                    const guideScreen = document.getElementById('screen-guide');
+                    if (guideScreen && window._guideScrollTop) {
+                        guideScreen.scrollTop = window._guideScrollTop;
+                    }
+                });
+            } else if (screenId === 'screen-detail') {
+                // タスク詳細画面はスクロール位置を先頭にリセット
+                requestAnimationFrame(() => {
+                    const detailScreen = document.getElementById('screen-detail');
+                    if (detailScreen) {
+                        detailScreen.scrollTop = 0;
+                    }
+                });
+            } else if (screenId === 'screen-concierge') {
                 document.querySelectorAll('.nav-item')[2].classList.add('active');
+            } else if (screenId === 'screen-settings') {
                 updateUserNameDisplay();
             } else if (screenId === 'screen-confirm') {
                 // 確認センターを表示
                 document.getElementById('confirmQuestionArea').style.display = 'block';
                 startConfirmCenter();
             }
+        }
+
+        // タブ切り替え
+        function switchTab(tab) {
+            if (tab === 'home') {
+                showScreen('screen-home');
+            } else if (tab === 'guide') {
+                showScreen('screen-guide');
+            } else if (tab === 'concierge') {
+                showScreen('screen-concierge');
+            }
+        }
+
+        // LINE公式アカウントを開く
+        function openLineOA() {
+            window.open(LINE_OA_URL, '_blank');
+        }
+
+        // 電話をかける
+        function callPhone() {
+            window.location.href = 'tel:0164342111';
         }
 
         // オンボーディングメッセージ
@@ -3436,7 +4444,7 @@
             const phaseOrder = ['H24', 'D7', 'D14', 'D49', 'M3', 'M4', 'M10', 'Y3'];
             let html = '';
 
-            phaseOrder.forEach(phaseId => {
+            phaseOrder.forEach((phaseId, index) => {
                 const phaseTasks = tasks.filter(t => t.phase === phaseId).map(t => ({
                     ...t,
                     status: taskStatuses[t.id] || determineTaskStatus(t)
@@ -3447,22 +4455,37 @@
                 const incompleteTasks = phaseTasks.filter(t => t.status !== 'DONE');
                 const completedTasks = phaseTasks.filter(t => t.status === 'DONE');
 
+                // 開閉状態を復元（デフォルトは最初のフェーズのみ開く）
+                const key = 'deadline_' + phaseId;
+                const isOpen = window._accordionState[key] !== undefined ? window._accordionState[key] : (index === 0);
+                const openClass = isOpen ? ' open' : '';
+
+                // 完了したタスクの開閉状態を復元（デフォルトは閉じる）
+                const completedKey = 'completed_deadline_' + phaseId;
+                const isCompletedOpen = window._accordionState[completedKey] || false;
+                const completedOpenClass = isCompletedOpen ? ' open' : '';
+
                 html += `
-                    <div class="phase-section" onclick="togglePhase(this)">
+                    <div class="phase-section${openClass}" data-phase-id="${phaseId}" onclick="togglePhase(this)">
                         <div class="phase-header">
                             <div class="phase-title-row">
                                 <span class="phase-title">${phases[phaseId]}</span>
                                 ${incompleteTasks.length > 0 ? `<span class="task-count-badge">${incompleteTasks.length}</span>` : ''}
                             </div>
-                            <span>▼</span>
+                            <span class="phase-arrow">▼</span>
                         </div>
                         <div class="phase-tasks">
                             ${renderTaskList(incompleteTasks)}
                             ${completedTasks.length > 0 ? `
-                                <div style="padding: 16px 24px; background: var(--bg-secondary); color: var(--text-tertiary); font-size: 13px;">
-                                    完了したタスク (${completedTasks.length})
+                                <div class="completed-tasks-section${completedOpenClass}" data-completed-id="${phaseId}" onclick="event.stopPropagation(); toggleCompletedTasks(this)">
+                                    <div class="completed-tasks-header">
+                                        <span>完了したタスク (${completedTasks.length})</span>
+                                        <span class="completed-arrow">▼</span>
+                                    </div>
+                                    <div class="completed-tasks-list">
+                                        ${renderTaskList(completedTasks, true)}
+                                    </div>
                                 </div>
-                                ${renderTaskList(completedTasks, true)}
                             ` : ''}
                         </div>
                     </div>
@@ -3475,7 +4498,7 @@
         function renderGuideByDestination(container) {
             let html = '';
 
-            destinationGroups.forEach(group => {
+            destinationGroups.forEach((group, index) => {
                 // このグループに属するタスクを取得
                 const groupTasks = tasks.map(t => ({
                     ...t,
@@ -3495,37 +4518,52 @@
                 let hintCard = '';
                 if (group.id === 'hokuryu_yakuba' && incompleteTasks.length > 0) {
                     hintCard = `
-                        <div style="background: var(--accent-light); padding: 16px 20px; margin: 12px 24px; border-radius: 12px; font-size: 13px; line-height: 1.7; color: var(--text-primary);">
-                            💡 これらの手続きは役場への1回の来庁でまとめて行えます。事前に電話（0164-34-2111）で持参物を確認しましょう。
+                        <div style="background: var(--accent-light); padding: 12px 16px; margin: 0 0 12px 0; border-radius: 12px; font-size: 13px; line-height: 1.6; color: var(--text-primary);">
+                            これらの手続きは役場への1回の来庁でまとめて行えます。事前に電話（0164-34-2111）で持参物を確認しましょう。
                         </div>
                     `;
                 }
 
+                // 開閉状態を復元（デフォルトは最初のグループのみ開く）
+                const key = 'dest_' + group.id;
+                const isOpen = window._accordionState[key] !== undefined ? window._accordionState[key] : (index === 0);
+                const openClass = isOpen ? ' open' : '';
+
+                // 完了したタスクの開閉状態を復元（デフォルトは閉じる）
+                const completedKey = 'completed_dest_' + group.id;
+                const isCompletedOpen = window._accordionState[completedKey] || false;
+                const completedOpenClass = isCompletedOpen ? ' open' : '';
+
                 html += `
-                    <div class="phase-section" onclick="togglePhase(this)">
+                    <div class="phase-section${openClass}" data-phase-id="${group.id}" onclick="togglePhase(this)">
                         <div class="phase-header">
                             <div class="phase-title-row">
-                                <span style="font-size: 20px; margin-right: 8px;">${group.icon}</span>
+                                <span style="font-size: 14px; margin-right: 8px; color: var(--accent);">${group.icon}</span>
                                 <span class="phase-title">${group.name}</span>
                                 ${incompleteTasks.length > 0 ? `<span class="task-count-badge">${incompleteTasks.length}</span>` : ''}
                             </div>
-                            <span>▼</span>
+                            <span class="phase-arrow">▼</span>
                         </div>
                         ${group.description || group.phone || group.hours ? `
                             <div style="padding: 12px 24px; background: var(--bg-secondary); font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
                                 ${group.description ? `<div style="margin-bottom: 4px;">${group.description}</div>` : ''}
-                                ${group.phone ? `<div style="margin-bottom: 4px;">📞 <a href="tel:${group.phone}" style="color: var(--accent); text-decoration: none;">${group.phone}</a></div>` : ''}
-                                ${group.hours ? `<div>🕒 ${group.hours}</div>` : ''}
+                                ${group.phone ? `<div style="margin-bottom: 4px;"><a href="tel:${group.phone}" style="color: var(--accent); text-decoration: none;">${group.phone}</a></div>` : ''}
+                                ${group.hours ? `<div>${group.hours}</div>` : ''}
                             </div>
                         ` : ''}
-                        ${hintCard}
                         <div class="phase-tasks">
+                            ${hintCard}
                             ${renderTaskList(incompleteTasks, false, true)}
                             ${completedTasks.length > 0 ? `
-                                <div style="padding: 16px 24px; background: var(--bg-secondary); color: var(--text-tertiary); font-size: 13px;">
-                                    完了したタスク (${completedTasks.length})
+                                <div class="completed-tasks-section${completedOpenClass}" data-completed-id="${group.id}" onclick="event.stopPropagation(); toggleCompletedTasks(this)">
+                                    <div class="completed-tasks-header">
+                                        <span>完了したタスク (${completedTasks.length})</span>
+                                        <span class="completed-arrow">▼</span>
+                                    </div>
+                                    <div class="completed-tasks-list">
+                                        ${renderTaskList(completedTasks, true, true)}
+                                    </div>
                                 </div>
-                                ${renderTaskList(completedTasks, true, true)}
                             ` : ''}
                         </div>
                     </div>
@@ -3537,38 +4575,43 @@
 
         function renderTaskList(taskList, isDone = false, showPhaseBadge = false) {
             return taskList.map(t => {
-                let statusBadge = '';
                 let checkboxDisabled = '';
-                let bgColor = 'var(--bg-primary)';
                 let clickHandler = `showTaskDetail('${t.id}')`;
-                let phaseBadge = '';
+                let extraInfo = '';
+                let borderStyle = '';
 
-                if (showPhaseBadge) {
-                    phaseBadge = `<span class="badge-domain" style="margin-right: 8px;">${phases[t.phase]}</span>`;
+                // Extract deadline from task title
+                let taskTitle = t.title;
+                let deadlineText = '';
+                const deadlineMatch = t.title.match(/[（(]?期限[：:]\s*([^）)]+)[）)]?/);
+                if (deadlineMatch) {
+                    deadlineText = deadlineMatch[1].trim();
+                    // Remove deadline from title for cleaner display
+                    taskTitle = t.title.replace(/[（(]?期限[：:]\s*[^）)]+[）)]?/, '').trim();
                 }
 
                 if (!isDone) {
                     if (t.status === 'NEED_CONFIRM') {
-                        statusBadge = '<span class="badge badge-confirm">確認が必要</span><span style="margin-left: 8px; font-size: 12px; color: var(--accent);">→ 質問に回答</span>';
+                        extraInfo = '<div class="task-confirm-hint">→ 質問に回答してください</div>';
                         checkboxDisabled = 'disabled';
                         clickHandler = `openQuestionsForTask('${t.id}', 'screen-guide')`;
                     } else if (t.status === 'BLOCKED') {
-                        statusBadge = '<span class="badge badge-blocked">先にやることがあります</span>';
+                        extraInfo = '<div class="task-confirm-hint" style="color: var(--text-tertiary);">先にやることがあります</div>';
                         checkboxDisabled = 'disabled';
-                        bgColor = 'var(--bg-secondary)';
+                        borderStyle = 'border-color: var(--border); opacity: 0.6;';
                         clickHandler = `showBlockingTask('${t.id}')`;
-                    } else if (t.status === 'OPEN') {
-                        statusBadge = '<span class="badge badge-open">やること</span>';
                     }
-                } else {
-                    statusBadge = '<span class="badge badge-done">✓ 完了</span>';
                 }
 
                 return `
-                    <div class="task-item" style="background: ${bgColor};" onclick="event.stopPropagation(); ${clickHandler}">
+                    <div class="task-item" style="${borderStyle}" onclick="event.stopPropagation(); ${clickHandler}">
                         <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''} ${checkboxDisabled} onclick="event.stopPropagation(); toggleTaskStatus('${t.id}')">
-                        <div class="task-name ${isDone ? 'done' : ''}" style="flex: 1;">${phaseBadge}${t.title}${statusBadge}</div>
-                        <div>＞</div>
+                        <div class="task-info">
+                            <div class="task-name ${isDone ? 'done' : ''}">${taskTitle}</div>
+                            ${deadlineText ? `<div class="task-deadline">期限: ${deadlineText}</div>` : ''}
+                            ${extraInfo}
+                        </div>
+                        <div style="color: var(--text-tertiary); font-size: 18px;">›</div>
                     </div>
                 `;
             }).join('');
@@ -3587,6 +4630,26 @@
 
         function togglePhase(element) {
             element.classList.toggle('open');
+
+            // 開閉状態を保存
+            const phaseId = element.getAttribute('data-phase-id');
+            if (phaseId) {
+                const isOpen = element.classList.contains('open');
+                const key = currentGuideView === 'phase' ? 'deadline_' + phaseId : 'dest_' + phaseId;
+                window._accordionState[key] = isOpen;
+            }
+        }
+
+        function toggleCompletedTasks(element) {
+            element.classList.toggle('open');
+
+            // 開閉状態を保存
+            const completedId = element.getAttribute('data-completed-id');
+            if (completedId) {
+                const isOpen = element.classList.contains('open');
+                const key = currentGuideView === 'phase' ? 'completed_deadline_' + completedId : 'completed_dest_' + completedId;
+                window._accordionState[key] = isOpen;
+            }
         }
 
         function setGuideView(view) {
@@ -3676,6 +4739,12 @@
 
         // タスク詳細表示
         function showTaskDetail(taskId) {
+            // ガイド画面のスクロール位置を保存
+            const guideScreen = document.getElementById('screen-guide');
+            if (guideScreen) {
+                window._guideScrollTop = guideScreen.scrollTop;
+            }
+
             currentTaskId = taskId;
             const task = tasks.find(t => t.id === taskId);
             const detail = taskDetails[taskId];
@@ -4106,6 +5175,309 @@
             showScreen(confirmSourceScreen);
         }
 
+        // カレンダー機能
+        let currentCalendarYear = new Date().getFullYear();
+        let currentCalendarMonth = new Date().getMonth();
+        let selectedDate = null;
+
+        function showCalendar() {
+            // 死亡日が入力されているか確認
+            const deathDate = answers['Q-DOD-01'];
+            const noDateMessage = document.getElementById('calendarNoDateMessage');
+            const calendarContainer = document.getElementById('calendarContainer');
+            const overdueTasksSummary = document.getElementById('overdueTasksSummary');
+
+            if (!deathDate) {
+                noDateMessage.style.display = 'block';
+                calendarContainer.style.display = 'none';
+                overdueTasksSummary.style.display = 'none';
+            } else {
+                noDateMessage.style.display = 'none';
+                calendarContainer.style.display = 'block';
+
+                // 現在の年月でカレンダーを表示
+                currentCalendarYear = new Date().getFullYear();
+                currentCalendarMonth = new Date().getMonth();
+                renderCalendar();
+
+                // 期限切れタスクをチェック
+                checkOverdueTasks();
+            }
+
+            showScreen('screen-calendar');
+        }
+
+        function goToDeathDateQuestion() {
+            // Q-DOD-01に直接遷移
+            const dodQuestion = questions.find(q => q.id === 'Q-DOD-01');
+            if (dodQuestion) {
+                showFilteredQuestions(['Q-DOD-01'], 'screen-calendar', null);
+            }
+        }
+
+        function changeMonth(delta) {
+            currentCalendarMonth += delta;
+            if (currentCalendarMonth < 0) {
+                currentCalendarMonth = 11;
+                currentCalendarYear--;
+            } else if (currentCalendarMonth > 11) {
+                currentCalendarMonth = 0;
+                currentCalendarYear++;
+            }
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            // 月ラベル更新
+            const monthLabel = document.getElementById('calendarMonthLabel');
+            monthLabel.textContent = `${currentCalendarYear}年${currentCalendarMonth + 1}月`;
+
+            // カレンダーグリッドを生成
+            const datesContainer = document.getElementById('calendarDates');
+            datesContainer.innerHTML = '';
+
+            const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1);
+            const lastDay = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
+            const startDayOfWeek = firstDay.getDay();
+            const daysInMonth = lastDay.getDate();
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // 前月の日付を埋める
+            const prevMonthLastDay = new Date(currentCalendarYear, currentCalendarMonth, 0);
+            for (let i = startDayOfWeek - 1; i >= 0; i--) {
+                const day = prevMonthLastDay.getDate() - i;
+                const cell = createDateCell(day, true, null);
+                datesContainer.appendChild(cell);
+            }
+
+            // 当月の日付
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(currentCalendarYear, currentCalendarMonth, day);
+                date.setHours(0, 0, 0, 0);
+                const isToday = date.getTime() === today.getTime();
+                const isPast = date < today;
+                const cell = createDateCell(day, false, date, isToday, isPast);
+                datesContainer.appendChild(cell);
+            }
+
+            // 次月の日付を埋める
+            const totalCells = datesContainer.children.length;
+            const remainingCells = 42 - totalCells; // 6週間分
+            for (let day = 1; day <= remainingCells; day++) {
+                const cell = createDateCell(day, true, null);
+                datesContainer.appendChild(cell);
+            }
+        }
+
+        function createDateCell(day, isOtherMonth, date, isToday = false, isPast = false) {
+            const cell = document.createElement('div');
+            cell.className = 'calendar-date-cell';
+            if (isOtherMonth) cell.classList.add('other-month');
+            if (isPast && !isOtherMonth) cell.classList.add('past');
+            if (isToday) cell.classList.add('today');
+
+            const dayNumber = document.createElement('div');
+            dayNumber.className = 'calendar-date-number';
+            dayNumber.textContent = day;
+            cell.appendChild(dayNumber);
+
+            // タスクのドットインジケーター
+            if (!isOtherMonth && date) {
+                const tasksForDate = getTasksForDate(date);
+                if (tasksForDate.length > 0) {
+                    const dotsContainer = document.createElement('div');
+                    dotsContainer.className = 'calendar-date-dots';
+
+                    // タスクの状態を判定
+                    const hasOverdue = tasksForDate.some(t => {
+                        const status = taskStatuses[t.id] || determineTaskStatus(t);
+                        return status !== 'DONE' && date < new Date();
+                    });
+                    const allDone = tasksForDate.every(t => {
+                        const status = taskStatuses[t.id] || determineTaskStatus(t);
+                        return status === 'DONE';
+                    });
+
+                    // ドット数を決定
+                    const dotCount = tasksForDate.length >= 3 ? 2 : 1;
+                    for (let i = 0; i < dotCount; i++) {
+                        const dot = document.createElement('div');
+                        dot.className = 'calendar-dot';
+                        if (hasOverdue) {
+                            dot.classList.add('overdue');
+                        } else if (allDone) {
+                            dot.classList.add('done');
+                        }
+                        dotsContainer.appendChild(dot);
+                    }
+
+                    cell.appendChild(dotsContainer);
+                }
+
+                // タップイベント
+                cell.onclick = () => selectCalendarDate(date);
+            }
+
+            return cell;
+        }
+
+        function getTasksForDate(date) {
+            const deathDate = answers['Q-DOD-01'];
+            if (!deathDate) return [];
+
+            const death = new Date(deathDate);
+            const targetDate = new Date(date);
+            targetDate.setHours(0, 0, 0, 0);
+
+            return tasks.filter(task => {
+                // NOT_APPLICABLEは除外
+                const status = taskStatuses[task.id] || determineTaskStatus(task);
+                if (status === 'NOT_APPLICABLE') return false;
+
+                const deadline = getTaskDeadline(task, death);
+                if (!deadline) return false;
+
+                deadline.setHours(0, 0, 0, 0);
+                return deadline.getTime() === targetDate.getTime();
+            });
+        }
+
+        function getTaskDeadline(task, deathDate) {
+            const death = new Date(deathDate);
+            const deadline = new Date(death);
+
+            switch (task.phase) {
+                case 'H24':
+                    deadline.setDate(death.getDate() + 1);
+                    break;
+                case 'D7':
+                    deadline.setDate(death.getDate() + 7);
+                    break;
+                case 'D14':
+                    deadline.setDate(death.getDate() + 14);
+                    break;
+                case 'D49':
+                    deadline.setDate(death.getDate() + 49);
+                    break;
+                case 'M3':
+                    deadline.setMonth(death.getMonth() + 3);
+                    break;
+                case 'M4':
+                    deadline.setMonth(death.getMonth() + 4);
+                    break;
+                case 'M10':
+                    deadline.setMonth(death.getMonth() + 10);
+                    break;
+                case 'Y3':
+                    deadline.setFullYear(death.getFullYear() + 3);
+                    break;
+                default:
+                    return null;
+            }
+
+            return deadline;
+        }
+
+        function selectCalendarDate(date) {
+            selectedDate = date;
+
+            // 選択状態を更新
+            document.querySelectorAll('.calendar-date-cell').forEach(cell => {
+                cell.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+
+            // タスクリストを表示
+            const tasksForDate = getTasksForDate(date);
+            const selectedDateTasks = document.getElementById('selectedDateTasks');
+            const selectedDateHeader = document.getElementById('selectedDateHeader');
+            const selectedDateTasksList = document.getElementById('selectedDateTasksList');
+
+            // 日付ヘッダーを更新
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+            const weekday = weekdays[date.getDay()];
+            selectedDateHeader.textContent = `${month}月${day}日（${weekday}）のタスク`;
+
+            if (tasksForDate.length === 0) {
+                selectedDateTasksList.innerHTML = '<div class="selected-date-no-tasks">この日に期限のタスクはありません</div>';
+            } else {
+                selectedDateTasksList.innerHTML = renderTaskList(tasksForDate.map(t => ({
+                    ...t,
+                    status: taskStatuses[t.id] || determineTaskStatus(t)
+                })), false, true);
+            }
+
+            selectedDateTasks.style.display = 'block';
+        }
+
+        function checkOverdueTasks() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const deathDate = answers['Q-DOD-01'];
+            if (!deathDate) return;
+
+            const death = new Date(deathDate);
+
+            const overdueTasks = tasks.filter(task => {
+                const status = taskStatuses[task.id] || determineTaskStatus(task);
+                if (status === 'DONE' || status === 'NOT_APPLICABLE') return false;
+
+                const deadline = getTaskDeadline(task, death);
+                if (!deadline) return false;
+
+                deadline.setHours(0, 0, 0, 0);
+                return deadline < today;
+            });
+
+            const overdueTasksSummary = document.getElementById('overdueTasksSummary');
+            const overdueText = document.getElementById('overdueText');
+
+            if (overdueTasks.length > 0) {
+                overdueText.textContent = `期限を過ぎたタスクが${overdueTasks.length}件あります`;
+                overdueTasksSummary.style.display = 'flex';
+            } else {
+                overdueTasksSummary.style.display = 'none';
+            }
+        }
+
+        function toggleOverdueTasks() {
+            const overdueTasksList = document.getElementById('overdueTasksList');
+            const isVisible = overdueTasksList.style.display === 'block';
+
+            if (isVisible) {
+                overdueTasksList.style.display = 'none';
+            } else {
+                // 期限切れタスクを取得
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const deathDate = answers['Q-DOD-01'];
+                const death = new Date(deathDate);
+
+                const overdueTasks = tasks.filter(task => {
+                    const status = taskStatuses[task.id] || determineTaskStatus(task);
+                    if (status === 'DONE' || status === 'NOT_APPLICABLE') return false;
+
+                    const deadline = getTaskDeadline(task, death);
+                    if (!deadline) return false;
+
+                    deadline.setHours(0, 0, 0, 0);
+                    return deadline < today;
+                }).map(t => ({
+                    ...t,
+                    status: taskStatuses[t.id] || determineTaskStatus(t)
+                }));
+
+                overdueTasksList.innerHTML = renderTaskList(overdueTasks, false, true);
+                overdueTasksList.style.display = 'block';
+            }
+        }
+
         // ユーティリティ
         function showToast(message) {
             const toast = document.getElementById('toast');
@@ -4224,6 +5596,10 @@
             ];
             STORAGE_KEYS.forEach(key => localStorage.removeItem(key));
 
+            // アコーディオン状態とスクロール位置をクリア
+            window._accordionState = {};
+            window._guideScrollTop = 0;
+
             closeLogoutDialog();
             showScreen('screen-splash');
             showToast('ログアウトしました');
@@ -4243,6 +5619,11 @@
         function confirmResetAnswers() {
             localStorage.removeItem('rn_answers');
             answers = {};
+
+            // アコーディオン状態とスクロール位置もクリア
+            window._accordionState = {};
+            window._guideScrollTop = 0;
+
             closeResetDialog();
             currentQuestionIndex = 0;
             showScreen('screen-onboarding');
@@ -4288,3 +5669,4 @@
     </script>
 </body>
 </html>
+
