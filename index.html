@@ -12,8 +12,8 @@
             --text-primary: #1a1a1a;
             --text-secondary: #6b6b6b;
             --text-tertiary: #999999;
-            --accent: #2d6a4f;
-            --accent-light: #e8f0ec;
+            --accent: #3F453F;
+            --accent-light: #ededed;
             --warning: #c45a3c;
             --warning-light: #fef0ec;
             --border: #e8e8e8;
@@ -28,19 +28,21 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-            font-size: 15px;
+            font-size: clamp(14px, 3.8vw, 15px);
             line-height: 1.6;
             color: var(--text-primary);
             background: var(--bg-secondary);
             -webkit-font-smoothing: antialiased;
-            padding-bottom: calc(60px + env(safe-area-inset-bottom));
+            padding-bottom: calc(52px + env(safe-area-inset-bottom));
         }
 
         .app-container {
             max-width: 430px;
+            width: 100%;
             margin: 0 auto;
             background: var(--bg-warm);
             min-height: 100vh;
+            min-height: 100dvh;
             position: relative;
         }
 
@@ -59,11 +61,11 @@
         }
 
         /* Typography */
-        .heading-xl { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
-        .heading-lg { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
-        .heading-md { font-size: 17px; font-weight: 600; }
+        .heading-xl { font-size: clamp(22px, 6vw, 28px); font-weight: 700; letter-spacing: -0.5px; }
+        .heading-lg { font-size: clamp(18px, 5vw, 22px); font-weight: 700; letter-spacing: -0.3px; }
+        .heading-md { font-size: clamp(15px, 4vw, 17px); font-weight: 600; }
         .heading-sm { font-size: 15px; font-weight: 600; }
-        .body-md { font-size: 15px; font-weight: 400; color: var(--text-primary); }
+        .body-md { font-size: clamp(14px, 3.8vw, 15px); font-weight: 400; color: var(--text-primary); }
         .body-sm { font-size: 13px; font-weight: 400; color: var(--text-secondary); }
         .caption { font-size: 12px; font-weight: 400; color: var(--text-tertiary); }
 
@@ -71,7 +73,8 @@
         .btn-primary {
             display: block;
             width: 100%;
-            padding: 16px;
+            height: 48px;
+            padding: 0 16px;
             background: var(--accent);
             color: #ffffff;
             border: none;
@@ -87,7 +90,8 @@
         .btn-secondary {
             display: block;
             width: 100%;
-            padding: 16px;
+            height: 48px;
+            padding: 0 16px;
             background: var(--bg-primary);
             color: var(--text-primary);
             border: 1px solid var(--border);
@@ -111,7 +115,7 @@
             background: var(--bg-primary);
             border: 1px solid var(--border-light);
             border-radius: 12px;
-            padding: 20px;
+            padding: 14px 16px;
         }
 
         /* Badges */
@@ -142,17 +146,40 @@
         .splash-screen {
             background: var(--bg-warm);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 60px 32px;
+            padding: 60px 16px;
             text-align: center;
         }
 
         .splash-icon {
             font-size: 56px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
+        }
+
+        .splash-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .splash-logo-fallback {
+            display: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--accent);
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
         .splash-title {
@@ -160,17 +187,27 @@
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--text-primary);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
-        .splash-features {
-            display: none;
+        .splash-tagline {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .splash-message {
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 40px;
         }
 
         .btn-splash {
             width: 100%;
             max-width: 320px;
-            margin-top: 40px;
         }
 
         .splash-footer {
@@ -181,138 +218,9 @@
             text-align: center;
         }
 
-        /* 画面0.5: オンボーディングメッセージ */
-        .onboarding-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 32px 32px;
-            background: var(--bg-warm);
-        }
-
-        .onboarding-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        .onboarding-back-btn {
-            background: none;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            color: var(--text-primary);
-            padding: 8px;
-            visibility: visible;
-        }
-
-        .onboarding-back-btn.hidden {
-            visibility: hidden;
-        }
-
-        .onboarding-skip {
-            color: var(--text-tertiary);
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .onboarding-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 8px;
-        }
-
-        .onboarding-icon {
-            font-size: 56px;
-            margin-bottom: 32px;
-        }
-
-        .onboarding-text {
-            font-size: 20px;
-            line-height: 1.6;
-            color: var(--text-primary);
-            margin-bottom: 48px;
-            max-width: 360px;
-            font-weight: 500;
-        }
-
-        .onboarding-text .highlight {
-            font-weight: 700;
-        }
-
-        .onboarding-text .orange {
-            color: var(--warning);
-        }
-
-        .onboarding-footer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 28px;
-        }
-
-        .onboarding-dots {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-        }
-
-        .onboarding-dots .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .onboarding-dots .dot.active {
-            width: 24px;
-            border-radius: 3px;
-            background: var(--accent);
-        }
-
-        .onboarding-btn {
-            width: 100%;
-            max-width: 320px;
-            padding: 16px;
-            background: var(--accent);
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .onboarding-btn:active {
-            opacity: 0.85;
-        }
-
-        .onboarding-fade-in {
-            animation: fadeInOnboarding 0.3s ease;
-        }
-
-        @keyframes fadeInOnboarding {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         /* 画面1: オンボーディング（質問） */
         .question-header {
-            padding: 20px 24px;
+            padding: 20px 16px;
             display: flex;
             align-items: center;
         }
@@ -329,8 +237,8 @@
         .question-card {
             background: var(--bg-primary);
             border-radius: 16px;
-            padding: 32px 24px;
-            margin: 0 24px 24px;
+            padding: 24px 16px;
+            margin: 0 16px 24px;
         }
 
         .domain-badge {
@@ -367,12 +275,12 @@
             width: 100%;
             background: var(--bg-primary);
             border: 1px solid var(--border);
-            padding: 16px;
+            padding: 10px 14px;
             border-radius: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             cursor: pointer;
             text-align: center;
-            font-size: 15px;
+            font-size: 14px;
             transition: all 0.15s;
             color: var(--text-primary);
         }
@@ -393,7 +301,7 @@
             padding: 16px;
             border: 1px solid var(--border);
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 16px;
             font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
             color: var(--text-primary);
             background: var(--bg-primary);
@@ -409,16 +317,80 @@
             font-size: 14px;
         }
 
+        /* Name input within question flow */
+        .name-input-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 8px;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .name-input-form .question-text {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .name-input-form .question-info {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 17px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.15s;
+            font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+            background: var(--bg-primary);
+        }
+
+        .name-input:focus {
+            border-color: var(--accent);
+        }
+
+        .name-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .name-input-actions {
+            width: 100%;
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn-skip-name {
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 8px;
+            text-decoration: none;
+        }
+
         /* 画面2: ホーム */
+        #screen-home {
+            background: var(--bg-warm);
+        }
+
         .home-header {
             background: var(--bg-primary);
-            padding: 32px 24px 28px;
+            padding: 32px 16px 28px;
             border-bottom: 1px solid var(--border-light);
         }
 
         .header-top {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             margin-bottom: 20px;
         }
 
@@ -431,7 +403,7 @@
         }
 
         .header-greeting {
-            font-size: 15px;
+            font-size: 13px;
             color: var(--text-secondary);
             margin-bottom: 8px;
         }
@@ -452,15 +424,144 @@
             padding: 6px 0;
         }
 
+        .home-progress {
+            margin-top: 20px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: var(--border-light);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .unanswered-questions-card {
+            margin: 0 16px 24px;
+            background: var(--bg-warm);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+
+        .unanswered-questions-card:active {
+            opacity: 0.7;
+        }
+
+        .unanswered-questions-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .unanswered-questions-action {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .settings-icon-btn {
+            color: var(--text-tertiary);
+        }
+
         .home-section {
-            padding: 32px 24px;
+            padding: 24px 16px;
+        }
+
+        .home-today-section {
+            padding: 24px 16px 0;
+        }
+
+        .home-today-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .home-consult-section {
+            padding: 0 16px;
+            margin-bottom: calc(44px + 24px + env(safe-area-inset-bottom));
+        }
+
+        .consult-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
         }
 
         .section-title {
-            font-size: 17px;
+            font-size: clamp(15px, 4vw, 17px);
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
             color: var(--text-primary);
+        }
+
+        .consult-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+
+        .consult-card:active {
+            opacity: 0.9;
+        }
+
+        .consult-main-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .consult-sub-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-top: 4px;
+        }
+
+        .consult-button {
+            margin-top: 14px;
+            background: var(--accent);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 0;
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+
+        .consult-button:active {
+            opacity: 0.8;
         }
 
         .section-title-count {
@@ -474,12 +575,26 @@
             background: var(--bg-primary);
             border: 1px solid var(--border-light);
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
             display: flex;
             align-items: flex-start;
             gap: 12px;
             cursor: pointer;
+        }
+
+        /* 今日やることセクション内のタスクカード */
+        #todayTasks .task-card-small {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            border-bottom: 1px solid var(--border-light);
+            padding: 14px 0;
+            margin-bottom: 0;
+        }
+
+        #todayTasks .task-card-small:last-child {
+            border-bottom: none;
         }
 
         .task-card-small.urgent,
@@ -489,9 +604,9 @@
         }
 
         .deadline-badge {
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 20px;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
             font-weight: 500;
         }
 
@@ -590,40 +705,61 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 32px 24px 20px;
+            padding: 32px 16px 20px;
             background: var(--bg-primary);
         }
 
         .guide-title {
-            font-size: 28px;
+            font-size: clamp(22px, 6vw, 28px);
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--text-primary);
         }
 
         .calendar-btn {
-            display: none;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .calendar-btn:hover {
+            background: var(--accent-light);
+            border-color: var(--accent);
+        }
+
+        .calendar-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--text-secondary);
         }
 
         .guide-tabs {
             display: flex;
-            gap: 0;
-            padding: 0 24px;
-            border-bottom: 1px solid var(--border-light);
-            margin-bottom: 0;
+            gap: 8px;
+            padding: 12px 16px;
             background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-light);
         }
 
         #guideContent {
             transition: opacity 0.2s ease;
+            background: var(--bg-warm);
         }
 
         .tab-btn {
-            flex: 1;
-            padding: 12px 8px;
+            padding: 6px 16px;
             background: transparent;
             border: none;
-            border-bottom: 2px solid transparent;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: 400;
             color: var(--text-tertiary);
@@ -633,22 +769,33 @@
 
         .tab-btn.active {
             color: var(--text-primary);
-            border-bottom-color: var(--accent);
+            background: var(--accent-light);
             font-weight: 600;
         }
 
         .btn-filter-questions {
-            margin: 20px 24px;
-            width: calc(100% - 48px);
-            background: var(--warning-light);
-            color: var(--warning);
-            border: 1px solid var(--warning);
-            padding: 14px;
+            margin: 12px 16px;
+            width: calc(100% - 32px);
+            background: var(--bg-warm);
+            border: 1px solid var(--border);
+            padding: 12px 16px;
             border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
             cursor: pointer;
             transition: opacity 0.15s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-filter-questions-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .btn-filter-questions-action {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
         }
 
         .btn-filter-questions:active {
@@ -656,16 +803,33 @@
         }
 
         .phase-section {
-            border-bottom: 1px solid var(--border-light);
+            margin: 12px 16px;
         }
 
         .phase-header {
             background: var(--bg-primary);
-            padding: 20px 24px;
+            padding: 14px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            transition: background 0.2s ease;
+        }
+
+        .phase-header:active {
+            background: var(--bg-secondary);
+        }
+
+        .phase-arrow {
+            transition: transform 0.2s ease;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .phase-section.open .phase-arrow {
+            transform: rotate(180deg);
         }
 
         .phase-title-row {
@@ -681,48 +845,150 @@
         }
 
         .task-count-badge {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
+            background: var(--accent-light);
+            color: var(--accent);
             padding: 3px 10px;
-            border-radius: 20px;
+            border-radius: 12px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .phase-tasks {
-            background: var(--bg-secondary);
             display: none;
+            padding-top: 12px;
         }
 
         .phase-section.open .phase-tasks {
             display: block;
+            animation: slideDown 0.2s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-4px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .completed-tasks-section {
+            margin-top: 12px;
+        }
+
+        .completed-tasks-header {
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            color: var(--text-tertiary);
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+            border-radius: 12px;
+        }
+
+        .completed-tasks-header:active {
+            background: var(--border-light);
+        }
+
+        .completed-tasks-list {
+            display: none;
+            padding-top: 12px;
+        }
+
+        .completed-tasks-section.open .completed-tasks-list {
+            display: block;
+            animation: slideDown 0.2s ease;
+        }
+
+        .completed-arrow {
+            transition: transform 0.2s ease;
+            font-size: 12px;
+        }
+
+        .completed-tasks-section.open .completed-arrow {
+            transform: rotate(180deg);
         }
 
         .task-item {
             background: var(--bg-primary);
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border-light);
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
             display: flex;
-            align-items: center;
-            gap: 16px;
+            align-items: flex-start;
+            gap: 12px;
             cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .task-item:active {
+            background: var(--bg-secondary);
         }
 
         .task-item:last-child {
-            border-bottom: none;
+            margin-bottom: 0;
         }
 
         .task-checkbox {
             width: 20px;
             height: 20px;
+            min-width: 20px;
+            min-height: 20px;
             cursor: pointer;
-            accent-color: var(--accent);
+            appearance: none;
+            -webkit-appearance: none;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            background: var(--bg-primary);
+            position: relative;
+            transition: all 0.2s ease;
+            margin-top: 2px;
+        }
+
+        .task-checkbox:checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .task-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .task-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
         .task-name {
-            flex: 1;
             font-size: 15px;
             color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .task-deadline {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .task-confirm-hint {
+            font-size: 13px;
+            color: var(--accent);
         }
 
         .task-name.done {
@@ -745,7 +1011,7 @@
             height: 48px;
             display: flex;
             align-items: center;
-            padding: 0 20px;
+            padding: 0 16px;
             background: transparent;
         }
 
@@ -755,17 +1021,19 @@
             color: var(--text-secondary);
             font-size: 15px;
             cursor: pointer;
-            padding: 8px;
+            padding: 8px 12px 8px 0;
+            min-width: 44px;
+            min-height: 44px;
         }
 
         .detail-content {
             max-width: 430px;
-            padding: 0 20px calc(160px + env(safe-area-inset-bottom));
+            padding: 0 16px calc(44px + 48px + 32px + env(safe-area-inset-bottom));
             margin: 0 auto;
         }
 
         .detail-title-area {
-            margin-bottom: 24px;
+            margin-bottom: 8px;
         }
 
         .detail-task-title {
@@ -773,7 +1041,6 @@
             font-weight: 700;
             line-height: 1.4;
             color: var(--text-primary);
-            margin-bottom: 8px;
         }
 
         .detail-status-badge {
@@ -781,11 +1048,12 @@
             font-size: 12px;
             padding: 4px 10px;
             border-radius: 20px;
+            margin-top: 8px;
         }
 
-        .detail-status-badge.open {
-            background: var(--accent-light);
-            color: var(--accent);
+        .detail-status-badge.open,
+        .detail-status-badge.done {
+            display: none;
         }
 
         .detail-status-badge.confirm {
@@ -793,28 +1061,131 @@
             color: #856d0a;
         }
 
-        .detail-status-badge.done {
-            background: #e8e8e8;
-            color: #6b6b6b;
-        }
-
         .detail-status-badge.blocked {
             background: #f0f0f0;
             color: #999999;
         }
 
-        .detail-summary-card {
-            background: var(--accent-light);
-            border-radius: 12px;
-            padding: 16px 20px;
-            font-size: 15px;
+        .detail-summary-text {
+            margin-top: 8px;
+            font-size: 14px;
             line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .detail-deadline {
+            margin-top: 16px;
+            margin-bottom: 24px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border-light);
+            background: var(--bg-primary);
+        }
+
+        .detail-deadline-main {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .detail-deadline-label {
+            color: var(--text-secondary);
+        }
+
+        .detail-deadline-date {
             color: var(--text-primary);
-            margin-bottom: 32px;
+        }
+
+        .detail-deadline-remaining {
+            color: var(--text-secondary);
+        }
+
+        .detail-deadline-remaining.urgent {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .detail-deadline-remaining.soon {
+            color: #b8860b;
+            font-weight: 600;
+        }
+
+        .detail-deadline-remaining.overdue {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .detail-deadline-sub {
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+
+        .detail-deadline-sub.link {
+            color: var(--accent);
+            cursor: pointer;
+        }
+
+        /* 期限超過 - 赤背景 */
+        .detail-deadline.overdue-warning {
+            background: var(--warning-light);
+            border-color: var(--warning);
+        }
+
+        .detail-deadline.overdue-warning .detail-deadline-main {
+            color: var(--warning);
+        }
+
+        .detail-deadline.overdue-warning .detail-deadline-label {
+            color: var(--warning);
+        }
+
+        .detail-deadline.overdue-warning .detail-deadline-sub {
+            color: var(--text-secondary);
+        }
+
+        /* 緊急（7日以内） - オレンジ背景 */
+        .detail-deadline.urgent-warning {
+            background: #fff4e6;
+            border-color: #ff9800;
+        }
+
+        .detail-deadline.urgent-warning .detail-deadline-label {
+            color: #e65100;
+        }
+
+        .detail-deadline.urgent-warning .detail-deadline-date {
+            color: #e65100;
+        }
+
+        /* 注意（14日以内） - 薄い黄色背景 */
+        .detail-deadline.soon-warning {
+            background: #fffbf0;
+            border-color: #ffc107;
+        }
+
+        .detail-deadline.soon-warning .detail-deadline-label {
+            color: #f57c00;
+        }
+
+        .detail-deadline.soon-warning .detail-deadline-date {
+            color: #f57c00;
+        }
+
+        /* 未回答（死亡日未入力） - アクセントカラー */
+        .detail-deadline.no-date {
+            background: var(--accent-light);
+            border-color: var(--accent);
+        }
+
+        .detail-deadline.no-date .detail-deadline-label,
+        .detail-deadline.no-date .detail-deadline-main {
+            color: var(--accent);
         }
 
         .detail-section {
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
 
         .detail-section-header {
@@ -823,14 +1194,14 @@
             color: var(--text-secondary);
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .detail-white-card {
             background: #ffffff;
             border: 1px solid var(--border-light);
             border-radius: 12px;
-            padding: 16px 20px;
+            padding: 14px 16px;
         }
 
         .detail-why-text {
@@ -896,13 +1267,48 @@
 
         .detail-step-item {
             display: flex;
-            gap: 12px;
+            align-items: flex-start;
+            gap: 10px;
             padding: 16px 0;
             border-bottom: 1px dashed var(--border-light);
         }
 
         .detail-step-item:last-child {
             border-bottom: none;
+        }
+
+        .detail-step-checkbox {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            min-height: 18px;
+            margin-top: 3px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            border: 1.5px solid var(--border);
+            border-radius: 50%;
+            background: var(--bg-primary);
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .detail-step-checkbox:checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .detail-step-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 1px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 1.5px 1.5px 0;
+            transform: rotate(45deg);
         }
 
         .detail-step-number {
@@ -924,6 +1330,11 @@
             font-size: 14px;
             line-height: 1.6;
             color: var(--text-primary);
+            transition: color 0.2s ease;
+        }
+
+        .detail-step-item.completed .detail-step-text {
+            color: var(--text-tertiary);
         }
 
         .detail-done-text {
@@ -936,6 +1347,7 @@
 
         .detail-faq-item {
             border-bottom: 1px solid var(--border-light);
+            overflow: hidden;
         }
 
         .detail-faq-item:last-child {
@@ -949,20 +1361,38 @@
             padding: 12px 0;
             cursor: pointer;
             user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .detail-faq-arrow {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .detail-faq-item.open .detail-faq-arrow {
+            transform: rotate(180deg);
         }
 
         .detail-faq-answer {
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.7;
             color: var(--text-secondary);
-            padding: 0 0 12px;
+            padding: 0;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.2s ease;
+            opacity: 0;
+            transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.3s ease;
         }
 
         .detail-faq-item.open .detail-faq-answer {
-            max-height: 500px;
+            max-height: 1000px;
+            opacity: 1;
+            padding: 0 0 12px 0;
         }
 
         .detail-preparing {
@@ -972,21 +1402,21 @@
 
         .detail-footer {
             position: fixed;
-            bottom: calc(60px + env(safe-area-inset-bottom));
+            bottom: calc(52px + env(safe-area-inset-bottom));
             left: 50%;
             transform: translateX(-50%);
             max-width: 430px;
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            padding: 12px 20px;
+            padding: 10px 16px;
             border-top: 1px solid var(--border-light);
             z-index: 100;
         }
 
         .btn-complete {
             width: 100%;
-            height: 52px;
+            height: 48px;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
@@ -1015,7 +1445,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
+            padding: 0 16px;
             background: var(--bg-primary);
             border-bottom: 1px solid var(--border-light);
         }
@@ -1038,7 +1468,7 @@
 
         .confirm-progress-container {
             background: var(--bg-primary);
-            padding: 0 20px 16px;
+            padding: 0 16px 16px;
         }
 
         .confirm-progress-bar {
@@ -1063,9 +1493,10 @@
         }
 
         .confirm-question-area {
-            padding: 20px;
+            padding: 16px;
             background: var(--bg-warm);
             min-height: calc(100vh - 56px - 80px);
+            min-height: calc(100dvh - 56px - 80px);
         }
 
         .confirm-question-slide {
@@ -1156,99 +1587,24 @@
             max-height: 500px;
         }
 
-        /* 画面0.7: 名前入力 */
-        .name-input-screen {
-            background: var(--bg-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 24px;
-        }
-
-        .name-input-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 60px;
-        }
-
-        .name-input-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 0 24px;
-            max-width: 280px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .name-input-title {
-            text-align: center;
-            margin-bottom: 8px;
-        }
-
-        .name-input-subtitle {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .name-input {
-            width: 100%;
-            padding: 16px;
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            font-size: 17px;
-            text-align: center;
-            outline: none;
-            transition: border-color 0.15s;
-            font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-        }
-
-        .name-input:focus {
-            border-color: var(--accent);
-        }
-
-        .name-input::placeholder {
-            color: var(--text-tertiary);
-        }
-
-        .name-input-actions {
-            width: 100%;
-            margin-top: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .btn-skip-name {
-            background: none;
-            border: none;
-            color: var(--text-tertiary);
-            font-size: 14px;
-            cursor: pointer;
-            padding: 8px;
-            text-decoration: none;
-        }
-
         /* 画面6: その他（設定） */
         .settings-content {
             padding: 0;
             background: var(--bg-warm);
             min-height: 100vh;
+            padding-bottom: calc(52px + 80px + env(safe-area-inset-bottom));
         }
 
         .settings-header {
             background: var(--bg-primary);
-            padding: 32px 24px 20px;
+            padding: 32px 16px 20px;
             border-bottom: 1px solid var(--border-light);
         }
 
         .settings-section {
             background: var(--bg-primary);
             margin-bottom: 24px;
-            padding: 24px;
+            padding: 16px;
         }
 
         .settings-section-title {
@@ -1304,7 +1660,7 @@
 
         .settings-footer {
             text-align: center;
-            padding: 40px 24px;
+            padding: 40px 16px;
             color: var(--text-tertiary);
             font-size: 12px;
             line-height: 1.8;
@@ -1331,7 +1687,7 @@
         .modal {
             background: var(--bg-primary);
             border-radius: 16px 16px 0 0;
-            padding: 28px 24px;
+            padding: 24px 16px;
             max-width: 430px;
             width: 100%;
             padding-bottom: calc(24px + env(safe-area-inset-bottom));
@@ -1391,9 +1747,9 @@
         .dialog {
             background: var(--bg-primary);
             border-radius: 16px;
-            padding: 28px 24px;
+            padding: 24px 16px;
             max-width: 320px;
-            width: calc(100% - 48px);
+            width: calc(100% - 32px);
             text-align: center;
             animation: fadeIn 0.2s ease;
         }
@@ -1453,6 +1809,36 @@
             cursor: pointer;
         }
 
+        /* フローティング相談ボタン */
+        .floating-consult-btn {
+            position: fixed;
+            bottom: calc(52px + 12px + env(safe-area-inset-bottom));
+            right: 16px;
+            z-index: 300;
+            height: 44px;
+            padding: 0 16px;
+            border-radius: 22px;
+            background: var(--accent);
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.15s ease;
+        }
+
+        .floating-consult-btn.show {
+            display: flex;
+        }
+
+        .floating-consult-btn:active {
+            transform: scale(0.95);
+        }
+
         /* フッターナビ */
         .footer-nav {
             position: fixed;
@@ -1464,18 +1850,18 @@
             background: var(--bg-primary);
             border-top: 1px solid var(--border-light);
             display: flex;
-            height: 60px;
+            height: 52px;
             padding-bottom: env(safe-area-inset-bottom);
             z-index: 200;
         }
 
         .nav-item {
-            flex: 1;
+            width: 33.33%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 2px;
             cursor: pointer;
             border: none;
             background: none;
@@ -1484,16 +1870,210 @@
         }
 
         .nav-item.active {
-            color: var(--accent);
+            color: var(--text-primary);
         }
 
         .nav-icon {
-            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-icon svg {
+            width: 24px;
+            height: 24px;
         }
 
         .nav-label {
+            display: none;
+        }
+
+        /* ホーム画面の歯車アイコン */
+        .settings-icon-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            padding: 10px;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 画面7: 遺族コンシェルジュ */
+        .concierge-content {
+            padding: 24px 16px calc(44px + 24px + env(safe-area-inset-bottom));
+            background: var(--bg-warm);
+        }
+
+        /* エリア1: 感情的メッセージ */
+        .concierge-hero {
+            margin-bottom: 24px;
+        }
+
+        .concierge-hero-main {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--text-primary);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .concierge-hero-sub {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* エリア2: LINEで相談するボタン */
+        .concierge-line-button {
+            background: var(--accent);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            margin-bottom: 24px;
+            transition: opacity 0.15s;
+        }
+
+        .concierge-line-button:active {
+            opacity: 0.9;
+        }
+
+        .concierge-line-icon {
+            flex-shrink: 0;
+        }
+
+        .concierge-line-content {
+            flex: 1;
+        }
+
+        .concierge-line-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 2px;
+        }
+
+        .concierge-line-subtitle {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* エリア3: 担当者紹介 */
+        .concierge-staff-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .concierge-staff-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .concierge-staff-info {
+            flex: 1;
+        }
+
+        .concierge-staff-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .concierge-staff-role {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        /* エリア4: 相談例 */
+        .concierge-topics-section {
+            margin-bottom: 24px;
+        }
+
+        .concierge-topics-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .concierge-topics-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 14px 16px;
+        }
+
+        .concierge-topic-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            line-height: 2.0;
+        }
+
+        .concierge-topic-bullet {
+            font-size: 6px;
+            color: var(--accent);
+            flex-shrink: 0;
+            margin-top: 8px;
+        }
+
+        .concierge-topic-text {
+            font-size: 13px;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        /* エリア5: 利用者の声 */
+        .concierge-testimonial-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 14px 16px;
+        }
+
+        .concierge-testimonial-quote {
+            font-size: 32px;
+            color: var(--border);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .concierge-testimonial-text {
+            font-size: 14px;
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-style: normal;
+            margin-bottom: 8px;
+        }
+
+        .concierge-testimonial-source {
             font-size: 11px;
-            font-weight: 500;
+            color: var(--text-tertiary);
         }
 
         .toast {
@@ -1528,10 +2108,366 @@
             }
         }
 
+        /* カレンダー画面 */
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 20px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-light);
+            position: relative;
+        }
+
+        .calendar-back-btn {
+            position: absolute;
+            left: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 15px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .calendar-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .overdue-summary {
+            margin: 16px 20px;
+            background: var(--warning-light);
+            padding: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .overdue-text {
+            font-size: 14px;
+            color: var(--warning);
+            font-weight: 500;
+        }
+
+        .btn-expand {
+            background: none;
+            border: none;
+            color: var(--warning);
+            font-size: 12px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .overdue-tasks-list {
+            margin: 0 20px 16px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+        }
+
+        .calendar-no-date {
+            margin: 40px 20px;
+            padding: 32px 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .calendar-container {
+            padding: 16px 20px;
+        }
+
+        .calendar-month-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .month-nav-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px 14px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .month-nav-btn:hover {
+            background: var(--accent-light);
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .calendar-month-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        .calendar-grid {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: 12px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            padding: 10px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .calendar-dates {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+        }
+
+        .calendar-date-cell {
+            min-height: 72px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 4px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .calendar-date-cell:hover:not(.other-month) {
+            background: var(--bg-secondary);
+            transform: scale(1.05);
+        }
+
+        .calendar-date-cell.selected {
+            background: var(--accent-light);
+            border: 2px solid var(--accent);
+            box-shadow: 0 2px 8px rgba(63, 69, 63, 0.15);
+        }
+
+        .calendar-date-cell.other-month {
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .calendar-date-number {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .calendar-date-cell.past:not(.today) .calendar-date-number {
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .calendar-date-cell.today .calendar-date-number {
+            background: var(--accent);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(63, 69, 63, 0.3);
+        }
+
+        .calendar-date-dots {
+            display: flex;
+            gap: 4px;
+            margin-top: auto;
+        }
+
+        .calendar-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-dot.overdue {
+            background: var(--warning);
+        }
+
+        .calendar-dot.done {
+            background: var(--text-tertiary);
+            opacity: 0.5;
+        }
+
+        .selected-date-tasks {
+            margin: 16px 20px;
+            padding-bottom: 80px;
+        }
+
+        .selected-date-header {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .selected-date-tasks .task-item {
+            margin-bottom: 8px;
+        }
+
+        .selected-date-no-tasks {
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 14px;
+            padding: 32px 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .calendar-dates {
+            animation: fadeIn 0.2s ease;
+        }
+
+        .selected-date-tasks {
+            animation: slideDown 0.2s ease;
+        }
+
         @media (min-width: 431px) {
             .app-container {
                 border-left: 1px solid var(--border-light);
                 border-right: 1px solid var(--border-light);
+            }
+        }
+
+        /* 360px以下（小型Android） */
+        @media (max-width: 360px) {
+            body {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .heading-xl {
+                font-size: 22px;
+            }
+
+            .option-btn {
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+
+            .card,
+            .task-card-small,
+            .concierge-contact-card,
+            .concierge-topics-list,
+            .concierge-testimonial,
+            .detail-white-card,
+            .detail-summary-card {
+                padding: 12px 14px;
+            }
+
+            .home-header,
+            .guide-header,
+            .concierge-header,
+            .settings-header,
+            .question-header,
+            .detail-header,
+            .confirm-new-header,
+            .confirm-progress-container,
+            .confirm-question-area {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .home-section,
+            .concierge-section {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .question-card {
+                margin-left: 12px;
+                margin-right: 12px;
+                padding: 20px 14px;
+            }
+
+            .settings-section {
+                padding: 14px 12px;
+            }
+
+            .floating-consult-btn {
+                right: 12px;
+            }
+
+            .floating-consult-btn span:last-child {
+                display: none;
+            }
+
+            .floating-consult-btn {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                padding: 0;
+                justify-content: center;
+            }
+        }
+
+        /* 394px〜430px（iPhone Plus/Pro Max） */
+        @media (min-width: 394px) {
+            .home-section,
+            .concierge-section,
+            .detail-section {
+                margin-bottom: 28px;
+            }
+
+            .card,
+            .task-card-small,
+            .concierge-contact-card,
+            .concierge-topics-list,
+            .concierge-testimonial,
+            .detail-white-card,
+            .detail-summary-card {
+                padding: 16px 20px;
+            }
+
+            .concierge-intro-card {
+                padding: 24px 20px;
+            }
+
+            .heading-xl {
+                font-size: 28px;
             }
         }
     </style>
@@ -1542,52 +2478,19 @@
         <!-- 画面0: スプラッシュ -->
         <div id="screen-splash" class="screen active">
             <div class="splash-screen">
-                <div class="splash-icon">📍</div>
+                <img
+                    src="./logo.png"
+                    alt="ReliefNote"
+                    class="splash-logo"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+                <div class="splash-logo-fallback">R</div>
                 <div class="splash-title">ReliefNote</div>
-                <button class="btn-splash btn-primary" onclick="startOnboardingMessage()">はじめる</button>
+                <div class="splash-tagline">遺族のためのGPS</div>
+                <div class="splash-message">悲しみの中でも、<br>迷わず前へ。</div>
+                <button class="btn-splash btn-primary" onclick="startOnboarding()">はじめる</button>
                 <div class="splash-footer">
                     © ReliefNote Inc.
-                </div>
-            </div>
-        </div>
-
-        <!-- 画面0.5: オンボーディングメッセージ -->
-        <div id="screen-onboarding-message" class="screen">
-            <div class="onboarding-container">
-                <div class="onboarding-header">
-                    <button class="onboarding-back-btn" id="onboardingBackBtn" onclick="prevOnboardingStep()">＜</button>
-                    <a class="onboarding-skip" onclick="skipOnboarding()">スキップ</a>
-                </div>
-                <div class="onboarding-content" id="onboardingContent">
-                    <!-- Dynamic content -->
-                </div>
-                <div class="onboarding-footer">
-                    <div class="onboarding-dots" id="onboardingDots">
-                        <span class="dot active"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                    </div>
-                    <button class="onboarding-btn" id="onboardingBtn" onclick="nextOnboardingStep()">次へ</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 画面0.7: 名前入力 -->
-        <div id="screen-name-input" class="screen">
-            <div class="name-input-screen">
-                <div class="name-input-header">
-                    <button class="back-btn" onclick="goBackToOnboarding()">＜</button>
-                </div>
-                <div class="name-input-content">
-                    <div class="heading-lg name-input-title">お名前を教えてください</div>
-                    <div class="body-sm name-input-subtitle">呼びかけに使います。ニックネームでも大丈夫です。</div>
-                    <input type="text" id="nameInput" class="name-input" placeholder="例：田中" maxlength="20">
-                    <div class="name-input-actions">
-                        <button class="btn-primary" id="nameSubmitBtn" onclick="submitName()" disabled>はじめる</button>
-                        <button class="btn-skip-name" onclick="skipNameInput()">名前を入れずに始める</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1605,35 +2508,37 @@
             <div class="home-header">
                 <div class="header-top">
                     <span class="model-badge">📍 北竜町モデル</span>
-                    <button class="share-btn" onclick="showToast('この機能は準備中です')">👥 家族に共有</button>
+                    <button class="settings-icon-btn" onclick="showScreen('screen-settings')">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                    </button>
                 </div>
-                <div class="header-greeting">こんにちは、</div>
+                <div class="header-greeting" id="greetingText">こんにちは、</div>
                 <div>
                     <span class="header-name">田中さん</span>
                     <span class="header-weeks" id="weeksDisplay">--週目</span>
                 </div>
+                <div class="home-progress" id="homeProgress"></div>
             </div>
 
-            <div class="home-section">
-                <div class="section-title">
-                    今日やること
-                    <span class="section-title-count">最大3件</span>
+            <div class="home-today-section">
+                <div class="home-today-card">
+                    <div class="section-title">今日やること</div>
+                    <div id="todayTasks"></div>
                 </div>
-                <div id="todayTasks"></div>
             </div>
 
-            <div class="home-section" style="display: none;">
-                <div class="section-title">迷ったら相談</div>
-                <div class="consultation-card">
-                    <div class="consultation-title">専任サポーター</div>
-                    <div class="online-status">オンライン (10分以内目安)</div>
-                    <div class="consultation-buttons">
-                        <button class="btn-consult btn-consult-primary" onclick="showToast('この機能は準備中です')">💬 チャットで相談</button>
-                        <button class="btn-consult btn-consult-secondary" onclick="showToast('この機能は準備中です')">📞 電話予約</button>
-                    </div>
-                    <div class="consultation-note">※ボットではなく、専門チームが対応します</div>
+            <div id="unansweredQuestionsCard" class="unanswered-questions-card" onclick="showScreen('screen-confirm')" style="display: none;"></div>
+
+            <div class="home-consult-section">
+                <div class="consult-section-title">サポート</div>
+                <div class="consult-card" onclick="showScreen('screen-concierge')">
+                    <div class="consult-main-text">一人で抱え込まないでください</div>
+                    <div class="consult-sub-text">手続きや気持ちのこと、いつでもご相談ください</div>
+                    <button class="consult-button">相談する</button>
                 </div>
-                <a class="link-to-confirm" onclick="showScreen('screen-confirm')">未回答の確認事項を見る</a>
             </div>
         </div>
 
@@ -1641,14 +2546,23 @@
         <div id="screen-guide" class="screen">
             <div class="guide-header">
                 <div class="guide-title">おくやみガイド</div>
-                <button class="calendar-btn" onclick="showToast('この機能は準備中です')">📅 カレンダー</button>
+                <button class="calendar-btn" onclick="showCalendar()">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    カレンダー
+                </button>
             </div>
             <div class="guide-tabs">
                 <button class="tab-btn active" onclick="setGuideView('phase')">期限順</button>
                 <button class="tab-btn" onclick="setGuideView('domain')">行き先順</button>
             </div>
             <button class="btn-filter-questions" onclick="showScreen('screen-confirm')">
-                ✓ 質問に答える（あなた専用に絞り込み）
+                <span class="btn-filter-questions-text">質問に答えて、あなた専用に絞り込み</span>
+                <span class="btn-filter-questions-action">回答する ›</span>
             </button>
             <div id="guideContent"></div>
         </div>
@@ -1746,6 +2660,136 @@
             </div>
         </div>
 
+        <!-- 画面7: 遺族コンシェルジュ -->
+        <div id="screen-concierge" class="screen">
+            <div class="concierge-content">
+                <!-- エリア1: 感情的メッセージ -->
+                <div class="concierge-hero">
+                    <div class="concierge-hero-main">一人で抱え込まないでください。</div>
+                    <div class="concierge-hero-sub">手続きのことも、気持ちのことも、<br>いつでもご相談ください。</div>
+                </div>
+
+                <!-- エリア2: LINEで相談するボタン -->
+                <div class="concierge-line-button" onclick="openLineOA()">
+                    <div class="concierge-line-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="concierge-line-content">
+                        <div class="concierge-line-title">LINEで相談する</div>
+                        <div class="concierge-line-subtitle">トークでいつでも・返信は原則24時間以内</div>
+                    </div>
+                </div>
+
+                <!-- エリア3: 担当者紹介 -->
+                <div class="concierge-staff-card">
+                    <div class="concierge-staff-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div class="concierge-staff-info">
+                        <div class="concierge-staff-name">北林 歩</div>
+                        <div class="concierge-staff-role">遺族支援コンシェルジュ</div>
+                    </div>
+                </div>
+
+                <!-- エリア4: 相談例 -->
+                <div class="concierge-topics-section">
+                    <div class="concierge-topics-title">こんなことを相談できます</div>
+                    <div class="concierge-topics-card">
+                        <div class="concierge-topic-item">
+                            <div class="concierge-topic-bullet">●</div>
+                            <div class="concierge-topic-text">何から手をつければいいか分からない</div>
+                        </div>
+                        <div class="concierge-topic-item">
+                            <div class="concierge-topic-bullet">●</div>
+                            <div class="concierge-topic-text">役場の手続きで必要な書類を教えてほしい</div>
+                        </div>
+                        <div class="concierge-topic-item">
+                            <div class="concierge-topic-bullet">●</div>
+                            <div class="concierge-topic-text">相続のことを誰に相談すればいいか</div>
+                        </div>
+                        <div class="concierge-topic-item">
+                            <div class="concierge-topic-bullet">●</div>
+                            <div class="concierge-topic-text">気持ちの整理がつかず辛い</div>
+                        </div>
+                        <div class="concierge-topic-item">
+                            <div class="concierge-topic-bullet">●</div>
+                            <div class="concierge-topic-text">家族で手続きをどう分担すればいいか</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- エリア5: 利用者の声 -->
+                <div class="concierge-testimonial-card">
+                    <div class="concierge-testimonial-quote">"</div>
+                    <div class="concierge-testimonial-text">人に相談できることが一番ありがたかった</div>
+                    <div class="concierge-testimonial-source">ユーザーインタビューより</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 画面8: カレンダー -->
+        <div id="screen-calendar" class="screen">
+            <div class="calendar-header">
+                <button class="calendar-back-btn" onclick="showScreen('screen-guide')">← 戻る</button>
+                <span class="calendar-title">カレンダー</span>
+            </div>
+
+            <!-- 期限切れサマリー -->
+            <div id="overdueTasksSummary" class="overdue-summary" style="display: none;">
+                <div class="overdue-text" id="overdueText">期限を過ぎたタスクが3件あります</div>
+                <button class="btn-expand" onclick="toggleOverdueTasks()">▼</button>
+            </div>
+            <div id="overdueTasksList" class="overdue-tasks-list" style="display: none;"></div>
+
+            <!-- 死亡日未入力メッセージ -->
+            <div id="calendarNoDateMessage" class="calendar-no-date" style="display: none;">
+                <div style="text-align: center; color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">
+                    亡くなった日を入力すると、期限が表示されます
+                </div>
+                <button class="btn-primary" onclick="goToDeathDateQuestion()">入力する</button>
+            </div>
+
+            <!-- カレンダー本体 -->
+            <div id="calendarContainer" class="calendar-container">
+                <!-- 月ナビゲーション -->
+                <div class="calendar-month-nav">
+                    <button class="month-nav-btn" onclick="changeMonth(-1)">＜</button>
+                    <span class="calendar-month-label" id="calendarMonthLabel">2026年2月</span>
+                    <button class="month-nav-btn" onclick="changeMonth(1)">＞</button>
+                </div>
+
+                <!-- カレンダーグリッド -->
+                <div class="calendar-grid">
+                    <!-- 曜日ヘッダー -->
+                    <div class="calendar-weekdays">
+                        <div class="calendar-weekday">日</div>
+                        <div class="calendar-weekday">月</div>
+                        <div class="calendar-weekday">火</div>
+                        <div class="calendar-weekday">水</div>
+                        <div class="calendar-weekday">木</div>
+                        <div class="calendar-weekday">金</div>
+                        <div class="calendar-weekday">土</div>
+                    </div>
+
+                    <!-- 日付セル -->
+                    <div class="calendar-dates" id="calendarDates">
+                        <!-- JavaScriptで動的生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 選択日のタスクリスト -->
+            <div id="selectedDateTasks" class="selected-date-tasks" style="display: none;">
+                <div class="selected-date-header" id="selectedDateHeader">2月15日（土）のタスク</div>
+                <div id="selectedDateTasksList"></div>
+            </div>
+        </div>
+
         <!-- 名前変更モーダル -->
         <div id="editNameModal" class="modal-overlay">
             <div class="modal">
@@ -1779,24 +2823,56 @@
             </div>
         </div>
 
+        <!-- フローティング相談ボタン -->
+        <button class="floating-consult-btn" id="floatingConsultBtn" onclick="openLineOA()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>相談する</span>
+        </button>
+
         <!-- フッターナビ -->
         <div class="footer-nav">
-            <button class="nav-item active" onclick="showScreen('screen-home')">
-                <div class="nav-icon">🏠</div>
+            <button class="nav-item active" onclick="switchTab('home')">
+                <div class="nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
                 <div class="nav-label">ホーム</div>
             </button>
-            <button class="nav-item" onclick="showScreen('screen-guide')">
-                <div class="nav-icon">📋</div>
+            <button class="nav-item" onclick="switchTab('guide')">
+                <div class="nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 5H7C6.46957 5 5.96086 5.21071 5.58579 5.58579C5.21071 5.96086 5 6.46957 5 7V19C5 19.5304 5.21071 20.0391 5.58579 20.4142C5.96086 20.7893 6.46957 21 7 21H17C17.5304 21 18.0391 20.7893 18.4142 20.4142C18.7893 20.0391 19 19.5304 19 19V7C19 6.46957 18.7893 5.96086 18.4142 5.58579C18.0391 5.21071 17.5304 5 17 5H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 5C9 4.46957 9.21071 3.96086 9.58579 3.58579C9.96086 3.21071 10.4696 3 11 3H13C13.5304 3 14.0391 3.21071 14.4142 3.58579C14.7893 3.96086 15 4.46957 15 5C15 5.53043 14.7893 6.03914 14.4142 6.41421C14.0391 6.78929 13.5304 7 13 7H11C10.4696 7 9.96086 6.78929 9.58579 6.41421C9.21071 6.03914 9 5.53043 9 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 12H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 16H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
                 <div class="nav-label">ガイド</div>
             </button>
-            <button class="nav-item" onclick="showScreen('screen-settings')">
-                <div class="nav-icon">⋯</div>
-                <div class="nav-label">その他</div>
+            <button class="nav-item" onclick="switchTab('concierge')">
+                <div class="nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="nav-label">相談</div>
             </button>
         </div>
     </div>
 
     <script>
+        // LINE公式アカウントURL（変更可能）
+        const LINE_OA_URL = 'https://line.me/R/ti/p/@158uksjs#~';
+
+        // アコーディオンの開閉状態を保持（メモリのみ、localStorageには保存しない）
+        window._accordionState = window._accordionState || {};
+        // スクロール位置を保持
+        window._guideScrollTop = window._guideScrollTop || 0;
+
         // データ定義（既存のものを維持）
         const questions = [
             { id: "Q-REL-01", domain: "ADMIN", text: "亡くなられた方とのご関係を教えてください", type: "single", options: [
@@ -2026,7 +3102,7 @@
             {
                 id: "hokuryu_yakuba",
                 name: "北竜町役場",
-                icon: "🏛",
+                icon: "●",
                 description: "北海道雨竜郡北竜町字和11-1",
                 phone: "0164-34-2111",
                 hours: "平日 8:30-17:15",
@@ -2035,7 +3111,7 @@
             {
                 id: "nenkin",
                 name: "年金事務所（深川）",
-                icon: "🏢",
+                icon: "●",
                 description: "北海道深川市2条18番36号",
                 phone: "0164-23-1299",
                 hours: "平日 8:30-17:15",
@@ -2044,7 +3120,7 @@
             {
                 id: "homukyoku",
                 name: "法務局・家庭裁判所（深川）",
-                icon: "⚖️",
+                icon: "●",
                 description: "北海道深川市3条2番1号",
                 phone: "0164-23-3269",
                 hours: "平日 8:30-17:15",
@@ -2053,7 +3129,7 @@
             {
                 id: "zeimusho",
                 name: "深川税務署",
-                icon: "🏢",
+                icon: "●",
                 description: "北海道深川市2条17番17号",
                 phone: "0164-23-2191",
                 hours: "平日 8:30-17:00",
@@ -2062,7 +3138,7 @@
             {
                 id: "sougisha",
                 name: "葬儀社",
-                icon: "🕊️",
+                icon: "●",
                 description: "",
                 phone: "",
                 hours: "",
@@ -2071,7 +3147,7 @@
             {
                 id: "bank",
                 name: "銀行・証券会社",
-                icon: "🏦",
+                icon: "●",
                 description: "口座のある各金融機関",
                 phone: "",
                 hours: "平日 9:00-15:00（窓口）",
@@ -2080,7 +3156,7 @@
             {
                 id: "hoken",
                 name: "保険会社・共済",
-                icon: "📋",
+                icon: "●",
                 description: "加入先の各保険会社",
                 phone: "",
                 hours: "",
@@ -2089,7 +3165,7 @@
             {
                 id: "kinmusaki",
                 name: "勤務先（自分 / 故人）",
-                icon: "💼",
+                icon: "●",
                 description: "",
                 phone: "",
                 hours: "",
@@ -2098,7 +3174,7 @@
             {
                 id: "keisatsu",
                 name: "警察署（深川）",
-                icon: "🚔",
+                icon: "●",
                 description: "北海道深川市4条8番20号",
                 phone: "0164-22-0110",
                 hours: "平日 8:30-17:15",
@@ -2107,7 +3183,7 @@
             {
                 id: "unyu",
                 name: "運輸支局（旭川）",
-                icon: "🚗",
+                icon: "●",
                 description: "北海道旭川市春光町10番地",
                 phone: "050-5540-2003",
                 hours: "平日 8:45-16:00",
@@ -2116,7 +3192,7 @@
             {
                 id: "telecom",
                 name: "携帯キャリア・通信・NHK",
-                icon: "📱",
+                icon: "●",
                 description: "",
                 phone: "",
                 hours: "",
@@ -2125,7 +3201,7 @@
             {
                 id: "jitaku",
                 name: "自宅・その他",
-                icon: "🏠",
+                icon: "●",
                 description: "自宅での確認・準備作業",
                 phone: "",
                 hours: "",
@@ -2892,36 +3968,6 @@
         let taskStatuses = {};
         let currentGuideView = 'phase';
         let currentTaskId = null;
-        let currentOnboardingStep = 0;
-
-        // オンボーディングメッセージ
-        const onboardingSteps = [
-            {
-                icon: '🕊️',
-                text: 'このたびは、大切な方を亡くされたとのこと、<br>心よりお悔やみ申し上げます。',
-                buttonText: '次へ'
-            },
-            {
-                icon: '📋',
-                text: 'ReliefNoteは、<br>これから必要な手続きを<br>一緒に整理するサービスです。',
-                buttonText: '次へ'
-            },
-            {
-                icon: '💬',
-                text: 'いくつかの質問に答えていただくと、<br>あなたに必要なタスクを<br>リストにします。',
-                buttonText: '次へ'
-            },
-            {
-                icon: '🔄',
-                text: '<span class="highlight">分からないこと</span>は<br>「分からない」で大丈夫。<br><span class="orange">後から変更できます。</span>',
-                buttonText: '次へ'
-            },
-            {
-                icon: '🤝',
-                text: '一人で抱え込まず、<br>一緒に進めていきましょう。',
-                buttonText: '質問をはじめる'
-            }
-        ];
 
         // ローカルストレージから復元
         function loadData() {
@@ -2941,6 +3987,15 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
 
+            // フローティング相談ボタンの表示制御
+            const floatingBtn = document.getElementById('floatingConsultBtn');
+            const screensWithFloatingBtn = ['screen-home', 'screen-guide', 'screen-confirm', 'screen-settings', 'screen-concierge'];
+            if (screensWithFloatingBtn.includes(screenId)) {
+                floatingBtn.classList.add('show');
+            } else {
+                floatingBtn.classList.remove('show');
+            }
+
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if (screenId === 'screen-home') {
                 document.querySelectorAll('.nav-item')[0].classList.add('active');
@@ -2949,8 +4004,25 @@
             } else if (screenId === 'screen-guide') {
                 document.querySelectorAll('.nav-item')[1].classList.add('active');
                 renderGuide();
-            } else if (screenId === 'screen-settings') {
+
+                // スクロール位置を復元
+                requestAnimationFrame(() => {
+                    const guideScreen = document.getElementById('screen-guide');
+                    if (guideScreen && window._guideScrollTop) {
+                        guideScreen.scrollTop = window._guideScrollTop;
+                    }
+                });
+            } else if (screenId === 'screen-detail') {
+                // タスク詳細画面はスクロール位置を先頭にリセット
+                requestAnimationFrame(() => {
+                    const detailScreen = document.getElementById('screen-detail');
+                    if (detailScreen) {
+                        detailScreen.scrollTop = 0;
+                    }
+                });
+            } else if (screenId === 'screen-concierge') {
                 document.querySelectorAll('.nav-item')[2].classList.add('active');
+            } else if (screenId === 'screen-settings') {
                 updateUserNameDisplay();
             } else if (screenId === 'screen-confirm') {
                 // 確認センターを表示
@@ -2959,122 +4031,90 @@
             }
         }
 
-        // オンボーディングメッセージ
-        function startOnboardingMessage() {
-            currentOnboardingStep = 0;
-            showScreen('screen-onboarding-message');
-            renderOnboardingStep();
-            setupOnboardingSwipe();
-        }
-
-        function renderOnboardingStep() {
-            const step = onboardingSteps[currentOnboardingStep];
-            const content = document.getElementById('onboardingContent');
-
-            content.innerHTML = `
-                <div class="onboarding-icon">${step.icon}</div>
-                <div class="onboarding-text">${step.text}</div>
-            `;
-            content.classList.add('onboarding-fade-in');
-            setTimeout(() => content.classList.remove('onboarding-fade-in'), 300);
-
-            // Update button text
-            document.getElementById('onboardingBtn').textContent = step.buttonText;
-
-            // Update dots
-            const dots = document.querySelectorAll('.onboarding-dots .dot');
-            dots.forEach((dot, index) => {
-                if (index === currentOnboardingStep) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-
-            // Show/hide back button
-            const backBtn = document.getElementById('onboardingBackBtn');
-            if (currentOnboardingStep === 0) {
-                backBtn.classList.add('hidden');
-            } else {
-                backBtn.classList.remove('hidden');
+        // タブ切り替え
+        function switchTab(tab) {
+            if (tab === 'home') {
+                showScreen('screen-home');
+            } else if (tab === 'guide') {
+                showScreen('screen-guide');
+            } else if (tab === 'concierge') {
+                showScreen('screen-concierge');
             }
         }
 
-        function nextOnboardingStep() {
-            if (currentOnboardingStep < onboardingSteps.length - 1) {
-                currentOnboardingStep++;
-                renderOnboardingStep();
-            } else {
-                // Last step - save completion and go to name input
-                localStorage.setItem('rn_onboarding_done', 'true');
-                showScreen('screen-name-input');
-            }
+        // LINE公式アカウントを開く
+        function openLineOA() {
+            window.open(LINE_OA_URL, '_blank');
         }
 
-        function prevOnboardingStep() {
-            if (currentOnboardingStep > 0) {
-                currentOnboardingStep--;
-                renderOnboardingStep();
-            }
-        }
-
-        function skipOnboarding() {
-            localStorage.setItem('rn_onboarding_done', 'true');
-            showScreen('screen-name-input');
-        }
-
-        // Swipe support for onboarding
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        function setupOnboardingSwipe() {
-            const container = document.getElementById('screen-onboarding-message');
-
-            container.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, { passive: true });
-
-            container.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, { passive: true });
-        }
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const diff = touchStartX - touchEndX;
-
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    // Left swipe - next
-                    nextOnboardingStep();
-                } else {
-                    // Right swipe - previous
-                    prevOnboardingStep();
-                }
-            }
+        // 電話をかける
+        function callPhone() {
+            window.location.href = 'tel:0164342111';
         }
 
         // オンボーディング（質問）
         function startOnboarding() {
-            // オンボーディング用の5問をフィルタ
+            // オンボーディング用の7問をフィルタ
             onboardingQuestions = questions.filter(q => onboardingQuestionIds.includes(q.id));
             // onboardingQuestionIds の順番通りにソート
             onboardingQuestions.sort((a, b) => {
                 return onboardingQuestionIds.indexOf(a.id) - onboardingQuestionIds.indexOf(b.id);
             });
-            currentQuestionIndex = 0;
+            // Index -1 = name input step, Index 0-6 = 7 questions (total 8 steps)
+            currentQuestionIndex = -1;
             showScreen('screen-onboarding');
             renderQuestion();
         }
 
         function renderQuestion() {
-            const q = onboardingQuestions[currentQuestionIndex];
             const card = document.getElementById('questionCard');
+
+            // Step 1/8: Name input (index -1)
+            if (currentQuestionIndex === -1) {
+                const savedName = localStorage.getItem('rn_user_name') || '';
+                let html = '<div class="name-input-form">';
+                html += '<div class="question-text">お名前を教えてください</div>';
+                html += '<div class="question-info">1 / 8 ※後から変更できます</div>';
+                html += `<input type="text" id="nameInput" class="name-input" placeholder="例：田中" maxlength="20" value="${savedName}">`;
+                html += '<div class="name-input-actions">';
+                const hasName = savedName.trim().length > 0;
+                const btnDisabled = hasName ? '' : 'disabled';
+                const btnStyle = hasName ? '' : 'style="opacity: 0.3; pointer-events: none;"';
+                html += `<button class="btn-primary" id="nameSubmitBtn" onclick="submitNameInFlow()" ${btnDisabled} ${btnStyle}>次へ</button>`;
+                html += '<button class="btn-skip-name" onclick="skipNameInFlow()">名前を入れずに始める</button>';
+                html += '</div>';
+                html += '</div>';
+                card.innerHTML = html;
+
+                // Add input listener for enabling/disabling button
+                setTimeout(() => {
+                    const nameInput = document.getElementById('nameInput');
+                    const nameSubmitBtn = document.getElementById('nameSubmitBtn');
+                    if (nameInput && nameSubmitBtn) {
+                        nameInput.addEventListener('input', () => {
+                            if (nameInput.value.trim().length > 0) {
+                                nameSubmitBtn.disabled = false;
+                                nameSubmitBtn.style.opacity = '1';
+                                nameSubmitBtn.style.pointerEvents = 'auto';
+                            } else {
+                                nameSubmitBtn.disabled = true;
+                                nameSubmitBtn.style.opacity = '0.3';
+                                nameSubmitBtn.style.pointerEvents = 'none';
+                            }
+                        });
+                    }
+                }, 0);
+                return;
+            }
+
+            // Steps 2-8/8: Questions (index 0-6)
+            const q = onboardingQuestions[currentQuestionIndex];
+            const totalSteps = onboardingQuestions.length + 1; // +1 for name input
+            const currentStep = currentQuestionIndex + 2; // +2 because index 0 is step 2
 
             let html = `<div class="domain-badge domain-${q.domain}">${domainLabels[q.domain]}</div>`;
             html += `<div class="question-text">${q.text}</div>`;
-            html += `<div class="question-info">${currentQuestionIndex + 1} / ${onboardingQuestions.length} ※後から変更できます</div>`;
+            html += `<div class="question-info">${currentStep} / ${totalSteps} ※後から変更できます</div>`;
 
             if (q.type === 'single') {
                 q.options.forEach(opt => {
@@ -3151,12 +4191,27 @@
             renderQuestion(); // 次へボタンを活性化
         }
 
+        function submitNameInFlow() {
+            const nameInput = document.getElementById('nameInput');
+            const name = nameInput.value.trim();
+            if (name) {
+                localStorage.setItem('rn_user_name', name);
+                nextQuestion(); // Move to first question
+            }
+        }
+
+        function skipNameInFlow() {
+            localStorage.setItem('rn_user_name', 'ゲスト');
+            nextQuestion(); // Move to first question
+        }
+
         function prevQuestion() {
-            if (currentQuestionIndex > 0) {
+            if (currentQuestionIndex > -1) {
                 currentQuestionIndex--;
                 renderQuestion();
             } else {
-                showScreen('screen-name-input');
+                // Already at name input step (-1), go back to splash
+                showScreen('screen-splash');
             }
         }
 
@@ -3169,7 +4224,7 @@
                 currentQuestionIndex++;
                 renderQuestion();
             } else {
-                // オンボーディング完了（5問完了）
+                // オンボーディング完了（8ステップ完了: 名前 + 7問）
                 generateTasks();
                 renderHome();
                 showScreen('screen-home');
@@ -3339,8 +4394,39 @@
 
         // ホーム画面レンダリング
         function renderHome() {
+            // 挨拶文を時間帯で切り替え
+            const hour = new Date().getHours();
+            let greeting = 'こんにちは、';
+            if (hour >= 5 && hour < 12) {
+                greeting = 'おはようございます、';
+            } else if (hour >= 12 && hour < 18) {
+                greeting = 'おつかれさまです、';
+            } else {
+                greeting = 'おつかれさまです、';
+            }
+            document.getElementById('greetingText').textContent = greeting;
+
+            // 経過週数
             const weeks = calculateWeeks();
             document.getElementById('weeksDisplay').textContent = `${weeks}週目`;
+
+            // 進捗バー計算
+            const allTasks = tasks.map(t => ({
+                ...t,
+                status: taskStatuses[t.id] || determineTaskStatus(t)
+            })).filter(t => t.status !== 'NOT_APPLICABLE');
+
+            const completedCount = allTasks.filter(t => t.status === 'DONE').length;
+            const totalCount = allTasks.length;
+            const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+            const progressContainer = document.getElementById('homeProgress');
+            progressContainer.innerHTML = `
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: ${progressPercent}%"></div>
+                </div>
+                <div class="progress-text">${completedCount}件完了 / 全${totalCount}件</div>
+            `;
 
             // 今日やること（OPEN/NEED_CONFIRMのタスクからpriority上位3件）
             // BLOCKED, DONE, NOT_APPLICABLEは除外
@@ -3352,71 +4438,113 @@
             const todayContainer = document.getElementById('todayTasks');
             if (activeTasks.length === 0) {
                 todayContainer.innerHTML = '<div style="text-align: center; color: var(--text-tertiary); padding: 32px 20px; font-size: 15px;">すべてのタスクが完了しました</div>';
-                return;
-            }
+            } else {
+                // 死亡日から期限計算
+                const deathDate = answers['Q-DOD-01'];
+                let deathDateObj = null;
+                let daysSinceDeath = 0;
 
-            // 死亡日から期限計算
-            const deathDate = answers['Q-DOD-01'];
-            let daysSinceDeath = 0;
-            if (deathDate) {
-                const death = new Date(deathDate);
-                const now = new Date();
-                const diffTime = now - death;
-                daysSinceDeath = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            }
-
-            todayContainer.innerHTML = activeTasks.map(task => {
-                const status = taskStatuses[task.id] || determineTaskStatus(task);
-                let urgencyClass = 'normal';
-                let deadlineBadge = '';
-
-                // 期限バッジ計算
-                if (task.phase === 'H24') {
-                    if (daysSinceDeath > 1) {
-                        deadlineBadge = '<span class="deadline-badge deadline-overdue">期限切れ</span>';
-                        urgencyClass = 'urgent';
+                if (deathDate) {
+                    if (deathDate.includes('-')) {
+                        const parts = deathDate.split('-');
+                        deathDateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
                     } else {
-                        deadlineBadge = '<span class="deadline-badge deadline-week">今日中</span>';
-                        urgencyClass = 'urgent';
+                        deathDateObj = new Date(deathDate);
                     }
-                } else if (task.phase === 'D7') {
-                    if (daysSinceDeath > 7) {
-                        deadlineBadge = '<span class="deadline-badge deadline-overdue">期限切れ</span>';
-                        urgencyClass = 'urgent';
-                    } else {
-                        deadlineBadge = '<span class="deadline-badge deadline-week">今週中</span>';
-                        urgencyClass = 'soon';
-                    }
-                } else if (task.phase === 'D14') {
-                    if (daysSinceDeath > 14) {
-                        deadlineBadge = '<span class="deadline-badge deadline-overdue">期限切れ</span>';
-                        urgencyClass = 'urgent';
-                    } else {
-                        deadlineBadge = '<span class="deadline-badge deadline-month">今月中</span>';
-                        urgencyClass = 'soon';
-                    }
-                } else if (task.phase === 'D49') {
-                    if (daysSinceDeath <= 49) {
-                        deadlineBadge = '<span class="deadline-badge deadline-month">49日以内</span>';
-                    }
+                    const now = new Date();
+                    const diffTime = now - deathDateObj;
+                    daysSinceDeath = Math.floor(diffTime / (1000 * 60 * 60 * 24));
                 }
 
-                // ステータスバッジ
-                let statusBadge = '';
-                if (status === 'NEED_CONFIRM') {
-                    statusBadge = '<span class="badge badge-confirm" style="margin-left: 8px;">確認が必要</span><span style="margin-left: 8px; font-size: 12px; color: var(--accent);">→ 質問に回答</span>';
-                }
+                todayContainer.innerHTML = activeTasks.map(task => {
+                    const status = taskStatuses[task.id] || determineTaskStatus(task);
+                    let urgencyClass = 'normal';
+                    let deadlineBadge = '';
 
-                return `
-                    <div class="task-card-small ${urgencyClass}" onclick="${status === 'NEED_CONFIRM' ? 'openQuestionsForTask(\'' + task.id + '\', \'screen-home\')' : 'showTaskDetail(\'' + task.id + '\')'}">
-                        <div class="task-content-small">
-                            ${deadlineBadge}
-                            <div class="task-title-small">${task.title}${statusBadge}</div>
+                    // 期限バッジ計算（新ロジック）
+                    if (deathDateObj && task.phase) {
+                        const phaseConfig = {
+                            'H24': { days: 0 },
+                            'D7': { days: 7 },
+                            'D14': { days: 14 },
+                            'D49': { days: 49 },
+                            'M3': { days: 90 },
+                            'M4': { days: 120 },
+                            'M10': { days: 300 },
+                            'Y3': { days: 1095 }
+                        };
+
+                        const config = phaseConfig[task.phase];
+                        if (config) {
+                            const deadlineDate = new Date(deathDateObj);
+                            deadlineDate.setDate(deadlineDate.getDate() + config.days);
+                            const today = new Date();
+                            today.setHours(0, 0, 0, 0);
+                            deadlineDate.setHours(0, 0, 0, 0);
+                            const daysRemaining = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
+
+                            if (daysRemaining < 0) {
+                                deadlineBadge = '<span class="deadline-badge" style="background: var(--warning-light); color: var(--warning);">期限切れ</span>';
+                                urgencyClass = 'urgent';
+                            } else if (daysRemaining <= 7) {
+                                deadlineBadge = '<span class="deadline-badge" style="background: #fff3e0; color: #e67e22;">今週中</span>';
+                                urgencyClass = 'soon';
+                            } else if (daysRemaining <= 14) {
+                                deadlineBadge = '<span class="deadline-badge" style="background: #fff8e1; color: #b8860b;">2週間以内</span>';
+                                urgencyClass = 'soon';
+                            } else if (daysRemaining <= 90) {
+                                deadlineBadge = '<span class="deadline-badge" style="background: var(--accent-light); color: var(--accent);">余裕あり</span>';
+                            }
+                            // 3ヶ月超はバッジ非表示
+                        }
+                    } else if (task.phase) {
+                        // 死亡日未回答の場合はフェーズ名を表示
+                        const phaseNames = {
+                            'H24': '当日',
+                            'D7': '7日以内',
+                            'D14': '14日以内',
+                            'D49': '49日以内',
+                            'M3': '3ヶ月以内',
+                            'M4': '4ヶ月以内',
+                            'M10': '10ヶ月以内',
+                            'Y3': '3年以内'
+                        };
+                        deadlineBadge = `<span class="deadline-badge" style="background: var(--bg-secondary); color: var(--text-secondary);">${phaseNames[task.phase] || ''}</span>`;
+                    }
+
+                    // ステータスバッジ
+                    let statusBadge = '';
+                    if (status === 'NEED_CONFIRM') {
+                        statusBadge = '<span class="badge badge-confirm" style="margin-left: 8px;">確認が必要</span><span style="margin-left: 8px; font-size: 12px; color: var(--accent);">→ 質問に回答</span>';
+                    }
+
+                    return `
+                        <div class="task-card-small ${urgencyClass}" onclick="${status === 'NEED_CONFIRM' ? 'openQuestionsForTask(\'' + task.id + '\', \'screen-home\')' : 'showTaskDetail(\'' + task.id + '\')'}">
+                            <div class="task-content-small">
+                                ${deadlineBadge}
+                                <div class="task-title-small">${task.title}${statusBadge}</div>
+                            </div>
+                            <div>＞</div>
                         </div>
-                        <div>＞</div>
-                    </div>
+                    `;
+                }).join('');
+            }
+
+            // 未回答質問の導線
+            const allQuestions = confirmQuestions;
+            const answeredCount = allQuestions.filter(q => answers[q.id]).length;
+            const unansweredCount = allQuestions.length - answeredCount;
+
+            const unansweredCard = document.getElementById('unansweredQuestionsCard');
+            if (unansweredCount > 0) {
+                unansweredCard.style.display = 'flex';
+                unansweredCard.innerHTML = `
+                    <div class="unanswered-questions-text">未回答の質問が${unansweredCount}件あります</div>
+                    <div class="unanswered-questions-action">回答する →</div>
                 `;
-            }).join('');
+            } else {
+                unansweredCard.style.display = 'none';
+            }
         }
 
         // ガイド画面レンダリング
@@ -3436,7 +4564,7 @@
             const phaseOrder = ['H24', 'D7', 'D14', 'D49', 'M3', 'M4', 'M10', 'Y3'];
             let html = '';
 
-            phaseOrder.forEach(phaseId => {
+            phaseOrder.forEach((phaseId, index) => {
                 const phaseTasks = tasks.filter(t => t.phase === phaseId).map(t => ({
                     ...t,
                     status: taskStatuses[t.id] || determineTaskStatus(t)
@@ -3447,22 +4575,37 @@
                 const incompleteTasks = phaseTasks.filter(t => t.status !== 'DONE');
                 const completedTasks = phaseTasks.filter(t => t.status === 'DONE');
 
+                // 開閉状態を復元（デフォルトは最初のフェーズのみ開く）
+                const key = 'deadline_' + phaseId;
+                const isOpen = window._accordionState[key] !== undefined ? window._accordionState[key] : (index === 0);
+                const openClass = isOpen ? ' open' : '';
+
+                // 完了したタスクの開閉状態を復元（デフォルトは閉じる）
+                const completedKey = 'completed_deadline_' + phaseId;
+                const isCompletedOpen = window._accordionState[completedKey] || false;
+                const completedOpenClass = isCompletedOpen ? ' open' : '';
+
                 html += `
-                    <div class="phase-section" onclick="togglePhase(this)">
+                    <div class="phase-section${openClass}" data-phase-id="${phaseId}" onclick="togglePhase(this)">
                         <div class="phase-header">
                             <div class="phase-title-row">
                                 <span class="phase-title">${phases[phaseId]}</span>
                                 ${incompleteTasks.length > 0 ? `<span class="task-count-badge">${incompleteTasks.length}</span>` : ''}
                             </div>
-                            <span>▼</span>
+                            <span class="phase-arrow">▼</span>
                         </div>
                         <div class="phase-tasks">
                             ${renderTaskList(incompleteTasks)}
                             ${completedTasks.length > 0 ? `
-                                <div style="padding: 16px 24px; background: var(--bg-secondary); color: var(--text-tertiary); font-size: 13px;">
-                                    完了したタスク (${completedTasks.length})
+                                <div class="completed-tasks-section${completedOpenClass}" data-completed-id="${phaseId}" onclick="event.stopPropagation(); toggleCompletedTasks(this)">
+                                    <div class="completed-tasks-header">
+                                        <span>完了したタスク (${completedTasks.length})</span>
+                                        <span class="completed-arrow">▼</span>
+                                    </div>
+                                    <div class="completed-tasks-list">
+                                        ${renderTaskList(completedTasks, true)}
+                                    </div>
                                 </div>
-                                ${renderTaskList(completedTasks, true)}
                             ` : ''}
                         </div>
                     </div>
@@ -3475,7 +4618,7 @@
         function renderGuideByDestination(container) {
             let html = '';
 
-            destinationGroups.forEach(group => {
+            destinationGroups.forEach((group, index) => {
                 // このグループに属するタスクを取得
                 const groupTasks = tasks.map(t => ({
                     ...t,
@@ -3495,37 +4638,52 @@
                 let hintCard = '';
                 if (group.id === 'hokuryu_yakuba' && incompleteTasks.length > 0) {
                     hintCard = `
-                        <div style="background: var(--accent-light); padding: 16px 20px; margin: 12px 24px; border-radius: 12px; font-size: 13px; line-height: 1.7; color: var(--text-primary);">
-                            💡 これらの手続きは役場への1回の来庁でまとめて行えます。事前に電話（0164-34-2111）で持参物を確認しましょう。
+                        <div style="background: var(--accent-light); padding: 12px 16px; margin: 0 0 12px 0; border-radius: 12px; font-size: 13px; line-height: 1.6; color: var(--text-primary);">
+                            これらの手続きは役場への1回の来庁でまとめて行えます。事前に電話（0164-34-2111）で持参物を確認しましょう。
                         </div>
                     `;
                 }
 
+                // 開閉状態を復元（デフォルトは最初のグループのみ開く）
+                const key = 'dest_' + group.id;
+                const isOpen = window._accordionState[key] !== undefined ? window._accordionState[key] : (index === 0);
+                const openClass = isOpen ? ' open' : '';
+
+                // 完了したタスクの開閉状態を復元（デフォルトは閉じる）
+                const completedKey = 'completed_dest_' + group.id;
+                const isCompletedOpen = window._accordionState[completedKey] || false;
+                const completedOpenClass = isCompletedOpen ? ' open' : '';
+
                 html += `
-                    <div class="phase-section" onclick="togglePhase(this)">
+                    <div class="phase-section${openClass}" data-phase-id="${group.id}" onclick="togglePhase(this)">
                         <div class="phase-header">
                             <div class="phase-title-row">
-                                <span style="font-size: 20px; margin-right: 8px;">${group.icon}</span>
+                                <span style="font-size: 14px; margin-right: 8px; color: var(--accent);">${group.icon}</span>
                                 <span class="phase-title">${group.name}</span>
                                 ${incompleteTasks.length > 0 ? `<span class="task-count-badge">${incompleteTasks.length}</span>` : ''}
                             </div>
-                            <span>▼</span>
+                            <span class="phase-arrow">▼</span>
                         </div>
                         ${group.description || group.phone || group.hours ? `
                             <div style="padding: 12px 24px; background: var(--bg-secondary); font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
                                 ${group.description ? `<div style="margin-bottom: 4px;">${group.description}</div>` : ''}
-                                ${group.phone ? `<div style="margin-bottom: 4px;">📞 <a href="tel:${group.phone}" style="color: var(--accent); text-decoration: none;">${group.phone}</a></div>` : ''}
-                                ${group.hours ? `<div>🕒 ${group.hours}</div>` : ''}
+                                ${group.phone ? `<div style="margin-bottom: 4px;"><a href="tel:${group.phone}" style="color: var(--accent); text-decoration: none;">${group.phone}</a></div>` : ''}
+                                ${group.hours ? `<div>${group.hours}</div>` : ''}
                             </div>
                         ` : ''}
-                        ${hintCard}
                         <div class="phase-tasks">
+                            ${hintCard}
                             ${renderTaskList(incompleteTasks, false, true)}
                             ${completedTasks.length > 0 ? `
-                                <div style="padding: 16px 24px; background: var(--bg-secondary); color: var(--text-tertiary); font-size: 13px;">
-                                    完了したタスク (${completedTasks.length})
+                                <div class="completed-tasks-section${completedOpenClass}" data-completed-id="${group.id}" onclick="event.stopPropagation(); toggleCompletedTasks(this)">
+                                    <div class="completed-tasks-header">
+                                        <span>完了したタスク (${completedTasks.length})</span>
+                                        <span class="completed-arrow">▼</span>
+                                    </div>
+                                    <div class="completed-tasks-list">
+                                        ${renderTaskList(completedTasks, true, true)}
+                                    </div>
                                 </div>
-                                ${renderTaskList(completedTasks, true, true)}
                             ` : ''}
                         </div>
                     </div>
@@ -3537,38 +4695,43 @@
 
         function renderTaskList(taskList, isDone = false, showPhaseBadge = false) {
             return taskList.map(t => {
-                let statusBadge = '';
                 let checkboxDisabled = '';
-                let bgColor = 'var(--bg-primary)';
                 let clickHandler = `showTaskDetail('${t.id}')`;
-                let phaseBadge = '';
+                let extraInfo = '';
+                let borderStyle = '';
 
-                if (showPhaseBadge) {
-                    phaseBadge = `<span class="badge-domain" style="margin-right: 8px;">${phases[t.phase]}</span>`;
+                // Extract deadline from task title
+                let taskTitle = t.title;
+                let deadlineText = '';
+                const deadlineMatch = t.title.match(/[（(]?期限[：:]\s*([^）)]+)[）)]?/);
+                if (deadlineMatch) {
+                    deadlineText = deadlineMatch[1].trim();
+                    // Remove deadline from title for cleaner display
+                    taskTitle = t.title.replace(/[（(]?期限[：:]\s*[^）)]+[）)]?/, '').trim();
                 }
 
                 if (!isDone) {
                     if (t.status === 'NEED_CONFIRM') {
-                        statusBadge = '<span class="badge badge-confirm">確認が必要</span><span style="margin-left: 8px; font-size: 12px; color: var(--accent);">→ 質問に回答</span>';
+                        extraInfo = '<div class="task-confirm-hint">→ 質問に回答してください</div>';
                         checkboxDisabled = 'disabled';
                         clickHandler = `openQuestionsForTask('${t.id}', 'screen-guide')`;
                     } else if (t.status === 'BLOCKED') {
-                        statusBadge = '<span class="badge badge-blocked">先にやることがあります</span>';
+                        extraInfo = '<div class="task-confirm-hint" style="color: var(--text-tertiary);">先にやることがあります</div>';
                         checkboxDisabled = 'disabled';
-                        bgColor = 'var(--bg-secondary)';
+                        borderStyle = 'border-color: var(--border); opacity: 0.6;';
                         clickHandler = `showBlockingTask('${t.id}')`;
-                    } else if (t.status === 'OPEN') {
-                        statusBadge = '<span class="badge badge-open">やること</span>';
                     }
-                } else {
-                    statusBadge = '<span class="badge badge-done">✓ 完了</span>';
                 }
 
                 return `
-                    <div class="task-item" style="background: ${bgColor};" onclick="event.stopPropagation(); ${clickHandler}">
+                    <div class="task-item" style="${borderStyle}" onclick="event.stopPropagation(); ${clickHandler}">
                         <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''} ${checkboxDisabled} onclick="event.stopPropagation(); toggleTaskStatus('${t.id}')">
-                        <div class="task-name ${isDone ? 'done' : ''}" style="flex: 1;">${phaseBadge}${t.title}${statusBadge}</div>
-                        <div>＞</div>
+                        <div class="task-info">
+                            <div class="task-name ${isDone ? 'done' : ''}">${taskTitle}</div>
+                            ${deadlineText ? `<div class="task-deadline">期限: ${deadlineText}</div>` : ''}
+                            ${extraInfo}
+                        </div>
+                        <div style="color: var(--text-tertiary); font-size: 18px;">›</div>
                     </div>
                 `;
             }).join('');
@@ -3587,6 +4750,26 @@
 
         function togglePhase(element) {
             element.classList.toggle('open');
+
+            // 開閉状態を保存
+            const phaseId = element.getAttribute('data-phase-id');
+            if (phaseId) {
+                const isOpen = element.classList.contains('open');
+                const key = currentGuideView === 'phase' ? 'deadline_' + phaseId : 'dest_' + phaseId;
+                window._accordionState[key] = isOpen;
+            }
+        }
+
+        function toggleCompletedTasks(element) {
+            element.classList.toggle('open');
+
+            // 開閉状態を保存
+            const completedId = element.getAttribute('data-completed-id');
+            if (completedId) {
+                const isOpen = element.classList.contains('open');
+                const key = currentGuideView === 'phase' ? 'completed_deadline_' + completedId : 'completed_dest_' + completedId;
+                window._accordionState[key] = isOpen;
+            }
         }
 
         function setGuideView(view) {
@@ -3675,11 +4858,119 @@
         }
 
         // タスク詳細表示
+        // 期限計算ヘルパー関数
+        function calculateDeadline(phase, deathDateStr) {
+            const phaseConfig = {
+                'H24': { days: 0, label: '亡くなった当日中に行う手続きです' },
+                'D7': { days: 7, label: '死亡日から7日以内に届出が必要です' },
+                'D14': { days: 14, label: '死亡日から14日以内に届出が必要です' },
+                'D49': { days: 49, label: '四十九日頃までに行う手続きです' },
+                'M3': { days: 90, label: '死亡日から3ヶ月以内に届出が必要です' },
+                'M4': { days: 120, label: '死亡日から4ヶ月以内に届出が必要です' },
+                'M10': { days: 300, label: '死亡日から10ヶ月以内に届出が必要です' },
+                'Y3': { days: 1095, label: '死亡日から3年以内に届出が必要です' }
+            };
+
+            const config = phaseConfig[phase];
+            if (!config) return null;
+
+            // 死亡日が未入力または空の場合
+            if (!deathDateStr || deathDateStr.trim() === '') {
+                return {
+                    hasDate: false,
+                    phaseLabel: config.label,
+                    phaseText: phase === 'H24' ? '死亡日当日' :
+                               phase === 'D7' ? '死亡日から7日以内' :
+                               phase === 'D14' ? '死亡日から14日以内' :
+                               phase === 'D49' ? '死亡日から49日以内' :
+                               phase === 'M3' ? '死亡日から3ヶ月以内' :
+                               phase === 'M4' ? '死亡日から4ヶ月以内' :
+                               phase === 'M10' ? '死亡日から10ヶ月以内' :
+                               '死亡日から3年以内'
+                };
+            }
+
+            // 日付をパース（ISO形式 YYYY-MM-DD や YYYY/MM/DD など対応）
+            let deathDate;
+            try {
+                // ISO形式の場合、タイムゾーン問題を避けるため手動でパース
+                if (deathDateStr.includes('-')) {
+                    const parts = deathDateStr.split('-');
+                    deathDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                } else {
+                    deathDate = new Date(deathDateStr);
+                }
+
+                // 無効な日付チェック
+                if (isNaN(deathDate.getTime())) {
+                    return {
+                        hasDate: false,
+                        phaseLabel: config.label,
+                        phaseText: phase === 'H24' ? '死亡日当日' :
+                                   phase === 'D7' ? '死亡日から7日以内' :
+                                   phase === 'D14' ? '死亡日から14日以内' :
+                                   phase === 'D49' ? '死亡日から49日以内' :
+                                   phase === 'M3' ? '死亡日から3ヶ月以内' :
+                                   phase === 'M4' ? '死亡日から4ヶ月以内' :
+                                   phase === 'M10' ? '死亡日から10ヶ月以内' :
+                                   '死亡日から3年以内'
+                    };
+                }
+            } catch (e) {
+                return {
+                    hasDate: false,
+                    phaseLabel: config.label,
+                    phaseText: phase === 'H24' ? '死亡日当日' :
+                               phase === 'D7' ? '死亡日から7日以内' :
+                               phase === 'D14' ? '死亡日から14日以内' :
+                               phase === 'D49' ? '死亡日から49日以内' :
+                               phase === 'M3' ? '死亡日から3ヶ月以内' :
+                               phase === 'M4' ? '死亡日から4ヶ月以内' :
+                               phase === 'M10' ? '死亡日から10ヶ月以内' :
+                               '死亡日から3年以内'
+                };
+            }
+
+            const deadlineDate = new Date(deathDate);
+            deadlineDate.setDate(deadlineDate.getDate() + config.days);
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const deadline = new Date(deadlineDate);
+            deadline.setHours(0, 0, 0, 0);
+
+            const diffTime = deadline - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            const year = deadlineDate.getFullYear();
+            const month = deadlineDate.getMonth() + 1;
+            const day = deadlineDate.getDate();
+            const dateStr = `${year}年${month}月${day}日`;
+
+            return {
+                hasDate: true,
+                dateStr: dateStr,
+                daysRemaining: diffDays,
+                phaseLabel: config.label,
+                isOverdue: diffDays < 0
+            };
+        }
+
         function showTaskDetail(taskId) {
+            // ガイド画面のスクロール位置を保存
+            const guideScreen = document.getElementById('screen-guide');
+            if (guideScreen) {
+                window._guideScrollTop = guideScreen.scrollTop;
+            }
+
             currentTaskId = taskId;
             const task = tasks.find(t => t.id === taskId);
             const detail = taskDetails[taskId];
             const status = taskStatuses[taskId] || determineTaskStatus(task);
+
+            // ステップ進捗状態を読み込み
+            const stepProgress = JSON.parse(localStorage.getItem('rn_step_progress') || '{}');
+            window._currentStepProgress = stepProgress[taskId] || [];
 
             let html = '';
 
@@ -3697,17 +4988,72 @@
                 statusText = 'ブロック中';
             }
 
-            html += `
-                <div class="detail-title-area">
-                    <div class="detail-task-title">${task.title}</div>
-                    <div class="detail-status-badge ${statusBadgeClass}">${statusText}</div>
-                </div>
-            `;
+            html += `<div class="detail-title-area">
+                <div class="detail-task-title">${task.title}</div>
+                <div class="detail-status-badge ${statusBadgeClass}">${statusText}</div>
+            </div>`;
 
             if (detail) {
-                // 概要カード
+                // 概要テキスト（プレーン）
                 if (detail.actionSummary) {
-                    html += `<div class="detail-summary-card">${detail.actionSummary}</div>`;
+                    html += `<div class="detail-summary-text">${detail.actionSummary}</div>`;
+                }
+
+                // 期限表示（完了済みでない場合のみ）
+                if (status !== 'DONE' && task.phase) {
+                    const savedAnswers = JSON.parse(localStorage.getItem('answers') || '{}');
+                    const deathDate = savedAnswers['Q-DOD-01'];
+
+                    // デバッグ用（開発時のみ表示）
+                    console.log('期限計算 - タスクID:', taskId, 'Phase:', task.phase, '死亡日:', deathDate);
+
+                    const deadlineInfo = calculateDeadline(task.phase, deathDate);
+
+                    if (deadlineInfo) {
+                        if (deadlineInfo.hasDate) {
+                            const isOverdue = deadlineInfo.isOverdue;
+                            const daysRemaining = deadlineInfo.daysRemaining;
+                            let remainingClass = 'detail-deadline-remaining';
+                            let remainingText = '';
+                            let wrapperClass = 'detail-deadline';
+
+                            if (isOverdue) {
+                                remainingClass += ' overdue';
+                                remainingText = `（${Math.abs(daysRemaining)}日超過）`;
+                                wrapperClass += ' overdue-warning';
+                            } else if (daysRemaining <= 7) {
+                                remainingClass += ' urgent';
+                                remainingText = `（あと${daysRemaining}日）`;
+                                wrapperClass += ' urgent-warning';
+                            } else if (daysRemaining <= 14) {
+                                remainingClass += ' soon';
+                                remainingText = `（あと${daysRemaining}日）`;
+                                wrapperClass += ' soon-warning';
+                            } else {
+                                remainingText = `（あと${daysRemaining}日）`;
+                            }
+
+                            html += `<div class="${wrapperClass}">
+                                <div class="detail-deadline-main">
+                                    <span class="detail-deadline-label">期限: </span>
+                                    <span class="detail-deadline-date">${deadlineInfo.dateStr}</span>
+                                    <span class="${remainingClass}">${remainingText}</span>
+                                </div>
+                                <div class="detail-deadline-sub">
+                                    ${isOverdue ? '期限を過ぎていますが、届出は可能です。早めに手続きしましょう。' : deadlineInfo.phaseLabel}
+                                </div>
+                            </div>`;
+                        } else {
+                            html += `<div class="detail-deadline no-date">
+                                <div class="detail-deadline-main">
+                                    <span class="detail-deadline-label">期限: </span>${deadlineInfo.phaseText}
+                                </div>
+                                <div class="detail-deadline-sub link" onclick="showScreen('screen-confirm')">
+                                    死亡日を入力すると具体的な期限が表示されます
+                                </div>
+                            </div>`;
+                        }
+                    }
                 }
 
                 // なぜ必要か
@@ -3763,9 +5109,14 @@
                                 <div class="detail-white-card">
                                     <div class="detail-steps-list">
                                         ${stepsList.map((step, index) => {
-                                            const stepText = step.replace(/^[①②③④⑤⑥⑦⑧⑨⑩]/, '').trim();
+                                            let stepText = step.replace(/^[①②③④⑤⑥⑦⑧⑨⑩]/, '').trim();
+                                            stepText = stepText.replace(/\/\s*$/, '').trim();
+                                            const isCompleted = window._currentStepProgress[index] || false;
+                                            const completedClass = isCompleted ? ' completed' : '';
                                             return `
-                                                <div class="detail-step-item">
+                                                <div class="detail-step-item${completedClass}" data-step-index="${index}">
+                                                    <input type="checkbox" class="detail-step-checkbox" ${isCompleted ? 'checked' : ''}
+                                                           onclick="toggleStepComplete('${taskId}', ${index})">
                                                     <div class="detail-step-number">${index + 1}</div>
                                                     <div class="detail-step-text">${stepText}</div>
                                                 </div>
@@ -3802,10 +5153,15 @@
                                         const parts = faqItem.split('→');
                                         if (parts.length >= 2) {
                                             const question = parts[0].trim();
-                                            const answer = parts.slice(1).join('→').trim();
+                                            let answer = parts.slice(1).join('→').trim();
+                                            // 末尾のスラッシュを除去
+                                            answer = answer.replace(/\/\s*$/, '').trim();
                                             return `
-                                                <div class="detail-faq-item" onclick="this.classList.toggle('open')">
-                                                    <div class="detail-faq-question">${question}</div>
+                                                <div class="detail-faq-item" onclick="toggleFAQ(this)">
+                                                    <div class="detail-faq-question">
+                                                        <span>${question}</span>
+                                                        <span class="detail-faq-arrow">▼</span>
+                                                    </div>
                                                     <div class="detail-faq-answer">${answer}</div>
                                                 </div>
                                             `;
@@ -3864,11 +5220,47 @@
             }
         }
 
+        function toggleStepComplete(taskId, stepIndex) {
+            const stepProgress = JSON.parse(localStorage.getItem('rn_step_progress') || '{}');
+            if (!stepProgress[taskId]) {
+                stepProgress[taskId] = [];
+            }
+
+            // チェック状態をトグル
+            stepProgress[taskId][stepIndex] = !stepProgress[taskId][stepIndex];
+            localStorage.setItem('rn_step_progress', JSON.stringify(stepProgress));
+
+            // UI更新
+            const stepItem = document.querySelector(`.detail-step-item[data-step-index="${stepIndex}"]`);
+            if (stepItem) {
+                if (stepProgress[taskId][stepIndex]) {
+                    stepItem.classList.add('completed');
+                } else {
+                    stepItem.classList.remove('completed');
+                }
+            }
+
+            // グローバル変数も更新
+            window._currentStepProgress = stepProgress[taskId];
+        }
+
+        function toggleFAQ(element) {
+            const isOpen = element.classList.contains('open');
+
+            if (isOpen) {
+                // 閉じる
+                element.classList.remove('open');
+            } else {
+                // 開く
+                element.classList.add('open');
+            }
+        }
+
         // NEED_CONFIRMタスク用: 未回答質問を取得
         function getUnansweredQuestionsForTask(taskId) {
             const task = tasks.find(t => t.id === taskId);
             if (!task || !task.requiredQuestions || task.requiredQuestions.length === 0) return [];
-            const currentAnswers = JSON.parse(localStorage.getItem('rn_answers') || '{}');
+            const currentAnswers = JSON.parse(localStorage.getItem('answers') || '{}');
             return task.requiredQuestions.filter(qId => !currentAnswers[qId]);
         }
 
@@ -4106,6 +5498,309 @@
             showScreen(confirmSourceScreen);
         }
 
+        // カレンダー機能
+        let currentCalendarYear = new Date().getFullYear();
+        let currentCalendarMonth = new Date().getMonth();
+        let selectedDate = null;
+
+        function showCalendar() {
+            // 死亡日が入力されているか確認
+            const deathDate = answers['Q-DOD-01'];
+            const noDateMessage = document.getElementById('calendarNoDateMessage');
+            const calendarContainer = document.getElementById('calendarContainer');
+            const overdueTasksSummary = document.getElementById('overdueTasksSummary');
+
+            if (!deathDate) {
+                noDateMessage.style.display = 'block';
+                calendarContainer.style.display = 'none';
+                overdueTasksSummary.style.display = 'none';
+            } else {
+                noDateMessage.style.display = 'none';
+                calendarContainer.style.display = 'block';
+
+                // 現在の年月でカレンダーを表示
+                currentCalendarYear = new Date().getFullYear();
+                currentCalendarMonth = new Date().getMonth();
+                renderCalendar();
+
+                // 期限切れタスクをチェック
+                checkOverdueTasks();
+            }
+
+            showScreen('screen-calendar');
+        }
+
+        function goToDeathDateQuestion() {
+            // Q-DOD-01に直接遷移
+            const dodQuestion = questions.find(q => q.id === 'Q-DOD-01');
+            if (dodQuestion) {
+                showFilteredQuestions(['Q-DOD-01'], 'screen-calendar', null);
+            }
+        }
+
+        function changeMonth(delta) {
+            currentCalendarMonth += delta;
+            if (currentCalendarMonth < 0) {
+                currentCalendarMonth = 11;
+                currentCalendarYear--;
+            } else if (currentCalendarMonth > 11) {
+                currentCalendarMonth = 0;
+                currentCalendarYear++;
+            }
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            // 月ラベル更新
+            const monthLabel = document.getElementById('calendarMonthLabel');
+            monthLabel.textContent = `${currentCalendarYear}年${currentCalendarMonth + 1}月`;
+
+            // カレンダーグリッドを生成
+            const datesContainer = document.getElementById('calendarDates');
+            datesContainer.innerHTML = '';
+
+            const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1);
+            const lastDay = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
+            const startDayOfWeek = firstDay.getDay();
+            const daysInMonth = lastDay.getDate();
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // 前月の日付を埋める
+            const prevMonthLastDay = new Date(currentCalendarYear, currentCalendarMonth, 0);
+            for (let i = startDayOfWeek - 1; i >= 0; i--) {
+                const day = prevMonthLastDay.getDate() - i;
+                const cell = createDateCell(day, true, null);
+                datesContainer.appendChild(cell);
+            }
+
+            // 当月の日付
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(currentCalendarYear, currentCalendarMonth, day);
+                date.setHours(0, 0, 0, 0);
+                const isToday = date.getTime() === today.getTime();
+                const isPast = date < today;
+                const cell = createDateCell(day, false, date, isToday, isPast);
+                datesContainer.appendChild(cell);
+            }
+
+            // 次月の日付を埋める
+            const totalCells = datesContainer.children.length;
+            const remainingCells = 42 - totalCells; // 6週間分
+            for (let day = 1; day <= remainingCells; day++) {
+                const cell = createDateCell(day, true, null);
+                datesContainer.appendChild(cell);
+            }
+        }
+
+        function createDateCell(day, isOtherMonth, date, isToday = false, isPast = false) {
+            const cell = document.createElement('div');
+            cell.className = 'calendar-date-cell';
+            if (isOtherMonth) cell.classList.add('other-month');
+            if (isPast && !isOtherMonth) cell.classList.add('past');
+            if (isToday) cell.classList.add('today');
+
+            const dayNumber = document.createElement('div');
+            dayNumber.className = 'calendar-date-number';
+            dayNumber.textContent = day;
+            cell.appendChild(dayNumber);
+
+            // タスクのドットインジケーター
+            if (!isOtherMonth && date) {
+                const tasksForDate = getTasksForDate(date);
+                if (tasksForDate.length > 0) {
+                    const dotsContainer = document.createElement('div');
+                    dotsContainer.className = 'calendar-date-dots';
+
+                    // タスクの状態を判定
+                    const hasOverdue = tasksForDate.some(t => {
+                        const status = taskStatuses[t.id] || determineTaskStatus(t);
+                        return status !== 'DONE' && date < new Date();
+                    });
+                    const allDone = tasksForDate.every(t => {
+                        const status = taskStatuses[t.id] || determineTaskStatus(t);
+                        return status === 'DONE';
+                    });
+
+                    // ドット数を決定
+                    const dotCount = tasksForDate.length >= 3 ? 2 : 1;
+                    for (let i = 0; i < dotCount; i++) {
+                        const dot = document.createElement('div');
+                        dot.className = 'calendar-dot';
+                        if (hasOverdue) {
+                            dot.classList.add('overdue');
+                        } else if (allDone) {
+                            dot.classList.add('done');
+                        }
+                        dotsContainer.appendChild(dot);
+                    }
+
+                    cell.appendChild(dotsContainer);
+                }
+
+                // タップイベント
+                cell.onclick = () => selectCalendarDate(date);
+            }
+
+            return cell;
+        }
+
+        function getTasksForDate(date) {
+            const deathDate = answers['Q-DOD-01'];
+            if (!deathDate) return [];
+
+            const death = new Date(deathDate);
+            const targetDate = new Date(date);
+            targetDate.setHours(0, 0, 0, 0);
+
+            return tasks.filter(task => {
+                // NOT_APPLICABLEは除外
+                const status = taskStatuses[task.id] || determineTaskStatus(task);
+                if (status === 'NOT_APPLICABLE') return false;
+
+                const deadline = getTaskDeadline(task, death);
+                if (!deadline) return false;
+
+                deadline.setHours(0, 0, 0, 0);
+                return deadline.getTime() === targetDate.getTime();
+            });
+        }
+
+        function getTaskDeadline(task, deathDate) {
+            const death = new Date(deathDate);
+            const deadline = new Date(death);
+
+            switch (task.phase) {
+                case 'H24':
+                    deadline.setDate(death.getDate() + 1);
+                    break;
+                case 'D7':
+                    deadline.setDate(death.getDate() + 7);
+                    break;
+                case 'D14':
+                    deadline.setDate(death.getDate() + 14);
+                    break;
+                case 'D49':
+                    deadline.setDate(death.getDate() + 49);
+                    break;
+                case 'M3':
+                    deadline.setMonth(death.getMonth() + 3);
+                    break;
+                case 'M4':
+                    deadline.setMonth(death.getMonth() + 4);
+                    break;
+                case 'M10':
+                    deadline.setMonth(death.getMonth() + 10);
+                    break;
+                case 'Y3':
+                    deadline.setFullYear(death.getFullYear() + 3);
+                    break;
+                default:
+                    return null;
+            }
+
+            return deadline;
+        }
+
+        function selectCalendarDate(date) {
+            selectedDate = date;
+
+            // 選択状態を更新
+            document.querySelectorAll('.calendar-date-cell').forEach(cell => {
+                cell.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+
+            // タスクリストを表示
+            const tasksForDate = getTasksForDate(date);
+            const selectedDateTasks = document.getElementById('selectedDateTasks');
+            const selectedDateHeader = document.getElementById('selectedDateHeader');
+            const selectedDateTasksList = document.getElementById('selectedDateTasksList');
+
+            // 日付ヘッダーを更新
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+            const weekday = weekdays[date.getDay()];
+            selectedDateHeader.textContent = `${month}月${day}日（${weekday}）のタスク`;
+
+            if (tasksForDate.length === 0) {
+                selectedDateTasksList.innerHTML = '<div class="selected-date-no-tasks">この日に期限のタスクはありません</div>';
+            } else {
+                selectedDateTasksList.innerHTML = renderTaskList(tasksForDate.map(t => ({
+                    ...t,
+                    status: taskStatuses[t.id] || determineTaskStatus(t)
+                })), false, true);
+            }
+
+            selectedDateTasks.style.display = 'block';
+        }
+
+        function checkOverdueTasks() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const deathDate = answers['Q-DOD-01'];
+            if (!deathDate) return;
+
+            const death = new Date(deathDate);
+
+            const overdueTasks = tasks.filter(task => {
+                const status = taskStatuses[task.id] || determineTaskStatus(task);
+                if (status === 'DONE' || status === 'NOT_APPLICABLE') return false;
+
+                const deadline = getTaskDeadline(task, death);
+                if (!deadline) return false;
+
+                deadline.setHours(0, 0, 0, 0);
+                return deadline < today;
+            });
+
+            const overdueTasksSummary = document.getElementById('overdueTasksSummary');
+            const overdueText = document.getElementById('overdueText');
+
+            if (overdueTasks.length > 0) {
+                overdueText.textContent = `期限を過ぎたタスクが${overdueTasks.length}件あります`;
+                overdueTasksSummary.style.display = 'flex';
+            } else {
+                overdueTasksSummary.style.display = 'none';
+            }
+        }
+
+        function toggleOverdueTasks() {
+            const overdueTasksList = document.getElementById('overdueTasksList');
+            const isVisible = overdueTasksList.style.display === 'block';
+
+            if (isVisible) {
+                overdueTasksList.style.display = 'none';
+            } else {
+                // 期限切れタスクを取得
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const deathDate = answers['Q-DOD-01'];
+                const death = new Date(deathDate);
+
+                const overdueTasks = tasks.filter(task => {
+                    const status = taskStatuses[task.id] || determineTaskStatus(task);
+                    if (status === 'DONE' || status === 'NOT_APPLICABLE') return false;
+
+                    const deadline = getTaskDeadline(task, death);
+                    if (!deadline) return false;
+
+                    deadline.setHours(0, 0, 0, 0);
+                    return deadline < today;
+                }).map(t => ({
+                    ...t,
+                    status: taskStatuses[t.id] || determineTaskStatus(t)
+                }));
+
+                overdueTasksList.innerHTML = renderTaskList(overdueTasks, false, true);
+                overdueTasksList.style.display = 'block';
+            }
+        }
+
         // ユーティリティ
         function showToast(message) {
             const toast = document.getElementById('toast');
@@ -4121,38 +5816,6 @@
         }
 
         // 名前入力関連
-        function goBackToOnboarding() {
-            showScreen('screen-onboarding-message');
-        }
-
-        function submitName() {
-            const nameInput = document.getElementById('nameInput');
-            const name = nameInput.value.trim();
-            if (name) {
-                localStorage.setItem('rn_user_name', name);
-                startOnboarding();
-            }
-        }
-
-        function skipNameInput() {
-            localStorage.setItem('rn_user_name', 'ゲスト');
-            startOnboarding();
-        }
-
-        // 名前入力フィールドの監視
-        document.addEventListener('DOMContentLoaded', () => {
-            const nameInput = document.getElementById('nameInput');
-            const nameSubmitBtn = document.getElementById('nameSubmitBtn');
-            if (nameInput && nameSubmitBtn) {
-                nameInput.addEventListener('input', () => {
-                    if (nameInput.value.trim().length > 0) {
-                        nameSubmitBtn.disabled = false;
-                    } else {
-                        nameSubmitBtn.disabled = true;
-                    }
-                });
-            }
-        });
 
         // ユーザー名の表示を更新
         function updateUserNameDisplay() {
@@ -4217,12 +5880,17 @@
         function confirmLogout() {
             const STORAGE_KEYS = [
                 'rn_user_name',
-                'rn_onboarding_done',
-                'rn_answers',
+                'answers',
+                'taskStatuses',
+                'rn_step_progress',
                 'rn_done_tasks',
                 'rn_task_notes'
             ];
             STORAGE_KEYS.forEach(key => localStorage.removeItem(key));
+
+            // アコーディオン状態とスクロール位置をクリア
+            window._accordionState = {};
+            window._guideScrollTop = 0;
 
             closeLogoutDialog();
             showScreen('screen-splash');
@@ -4241,8 +5909,13 @@
         }
 
         function confirmResetAnswers() {
-            localStorage.removeItem('rn_answers');
+            localStorage.removeItem('answers');
             answers = {};
+
+            // アコーディオン状態とスクロール位置もクリア
+            window._accordionState = {};
+            window._guideScrollTop = 0;
+
             closeResetDialog();
             currentQuestionIndex = 0;
             showScreen('screen-onboarding');
@@ -4255,34 +5928,29 @@
             loadData();
 
             const userName = localStorage.getItem('rn_user_name');
-            const onboardingDone = localStorage.getItem('rn_onboarding_done');
             const hasAnswers = Object.keys(answers).length > 0;
 
-            if (userName) {
-                // ログイン済み
-                if (hasAnswers) {
-                    // 回答済み → ホーム画面
-                    generateTasks();
-                    updateUserNameDisplay();
-                    renderHome();
-                    showScreen('screen-home');
-                } else {
-                    // 質問未回答 → 質問画面
-                    generateTasks();
-                    updateUserNameDisplay();
-                    startOnboarding();
-                }
+            if (userName && hasAnswers) {
+                // 名前 + 回答済み → ホーム画面
+                generateTasks();
+                updateUserNameDisplay();
+                renderHome();
+                showScreen('screen-home');
+            } else if (userName && !hasAnswers) {
+                // 名前あり、質問未回答 → 質問画面（名前入力スキップして質問から開始）
+                generateTasks();
+                updateUserNameDisplay();
+                onboardingQuestions = questions.filter(q => onboardingQuestionIds.includes(q.id));
+                onboardingQuestions.sort((a, b) => {
+                    return onboardingQuestionIds.indexOf(a.id) - onboardingQuestionIds.indexOf(b.id);
+                });
+                currentQuestionIndex = 0; // Start from first question, skip name input
+                showScreen('screen-onboarding');
+                renderQuestion();
             } else {
-                // 未ログイン
-                if (onboardingDone) {
-                    // オンボーディングメッセージは見た → 名前入力画面
-                    generateTasks();
-                    showScreen('screen-name-input');
-                } else {
-                    // 初回 → スプラッシュ画面
-                    generateTasks();
-                    showScreen('screen-splash');
-                }
+                // 初回 → スプラッシュ画面
+                generateTasks();
+                showScreen('screen-splash');
             }
         });
     </script>
