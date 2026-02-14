@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -156,7 +157,29 @@
 
         .splash-icon {
             font-size: 56px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
+        }
+
+        .splash-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .splash-logo-fallback {
+            display: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--accent);
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
         .splash-title {
@@ -164,17 +187,27 @@
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--text-primary);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
-        .splash-features {
-            display: none;
+        .splash-tagline {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .splash-message {
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 40px;
         }
 
         .btn-splash {
             width: 100%;
             max-width: 320px;
-            margin-top: 40px;
         }
 
         .splash-footer {
@@ -183,136 +216,6 @@
             font-size: 12px;
             color: var(--text-tertiary);
             text-align: center;
-        }
-
-        /* 画面0.5: オンボーディングメッセージ */
-        .onboarding-container {
-            min-height: 100vh;
-            min-height: calc(100dvh - 52px);
-            display: flex;
-            flex-direction: column;
-            padding: 20px 16px 32px;
-            background: var(--bg-warm);
-        }
-
-        .onboarding-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        .onboarding-back-btn {
-            background: none;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            color: var(--text-primary);
-            padding: 8px;
-            visibility: visible;
-        }
-
-        .onboarding-back-btn.hidden {
-            visibility: hidden;
-        }
-
-        .onboarding-skip {
-            color: var(--text-tertiary);
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .onboarding-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 8px;
-        }
-
-        .onboarding-icon {
-            font-size: 56px;
-            margin-bottom: 32px;
-        }
-
-        .onboarding-text {
-            font-size: 20px;
-            line-height: 1.6;
-            color: var(--text-primary);
-            margin-bottom: 48px;
-            max-width: 360px;
-            font-weight: 500;
-        }
-
-        .onboarding-text .highlight {
-            font-weight: 700;
-        }
-
-        .onboarding-text .orange {
-            color: var(--warning);
-        }
-
-        .onboarding-footer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 28px;
-        }
-
-        .onboarding-dots {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-        }
-
-        .onboarding-dots .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .onboarding-dots .dot.active {
-            width: 24px;
-            border-radius: 3px;
-            background: var(--accent);
-        }
-
-        .onboarding-btn {
-            width: 100%;
-            max-width: 320px;
-            padding: 16px;
-            background: var(--accent);
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .onboarding-btn:active {
-            opacity: 0.85;
-        }
-
-        .onboarding-fade-in {
-            animation: fadeInOnboarding 0.3s ease;
-        }
-
-        @keyframes fadeInOnboarding {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         /* 画面1: オンボーディング（質問） */
@@ -412,6 +315,66 @@
             text-decoration: none;
             cursor: pointer;
             font-size: 14px;
+        }
+
+        /* Name input within question flow */
+        .name-input-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 8px;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .name-input-form .question-text {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .name-input-form .question-info {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 17px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.15s;
+            font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+            background: var(--bg-primary);
+        }
+
+        .name-input:focus {
+            border-color: var(--accent);
+        }
+
+        .name-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .name-input-actions {
+            width: 100%;
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn-skip-name {
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 8px;
+            text-decoration: none;
         }
 
         /* 画面2: ホーム */
@@ -1624,83 +1587,6 @@
             max-height: 500px;
         }
 
-        /* 画面0.7: 名前入力 */
-        .name-input-screen {
-            background: var(--bg-primary);
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 16px;
-        }
-
-        .name-input-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 60px;
-        }
-
-        .name-input-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 0 24px;
-            max-width: 280px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .name-input-title {
-            text-align: center;
-            margin-bottom: 8px;
-        }
-
-        .name-input-subtitle {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .name-input {
-            width: 100%;
-            padding: 16px;
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            font-size: 17px;
-            text-align: center;
-            outline: none;
-            transition: border-color 0.15s;
-            font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-        }
-
-        .name-input:focus {
-            border-color: var(--accent);
-        }
-
-        .name-input::placeholder {
-            color: var(--text-tertiary);
-        }
-
-        .name-input-actions {
-            width: 100%;
-            margin-top: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .btn-skip-name {
-            background: none;
-            border: none;
-            color: var(--text-tertiary);
-            font-size: 14px;
-            cursor: pointer;
-            padding: 8px;
-            text-decoration: none;
-        }
-
         /* 画面6: その他（設定） */
         .settings-content {
             padding: 0;
@@ -2592,52 +2478,19 @@
         <!-- 画面0: スプラッシュ -->
         <div id="screen-splash" class="screen active">
             <div class="splash-screen">
-                <div class="splash-icon">📍</div>
+                <img
+                    src="./logo.png"
+                    alt="ReliefNote"
+                    class="splash-logo"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+                <div class="splash-logo-fallback">R</div>
                 <div class="splash-title">ReliefNote</div>
-                <button class="btn-splash btn-primary" onclick="startOnboardingMessage()">はじめる</button>
+                <div class="splash-tagline">遺族のためのGPS</div>
+                <div class="splash-message">悲しみの中でも、<br>迷わず前へ。</div>
+                <button class="btn-splash btn-primary" onclick="startOnboarding()">はじめる</button>
                 <div class="splash-footer">
                     © ReliefNote Inc.
-                </div>
-            </div>
-        </div>
-
-        <!-- 画面0.5: オンボーディングメッセージ -->
-        <div id="screen-onboarding-message" class="screen">
-            <div class="onboarding-container">
-                <div class="onboarding-header">
-                    <button class="onboarding-back-btn" id="onboardingBackBtn" onclick="prevOnboardingStep()">＜</button>
-                    <a class="onboarding-skip" onclick="skipOnboarding()">スキップ</a>
-                </div>
-                <div class="onboarding-content" id="onboardingContent">
-                    <!-- Dynamic content -->
-                </div>
-                <div class="onboarding-footer">
-                    <div class="onboarding-dots" id="onboardingDots">
-                        <span class="dot active"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                    </div>
-                    <button class="onboarding-btn" id="onboardingBtn" onclick="nextOnboardingStep()">次へ</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 画面0.7: 名前入力 -->
-        <div id="screen-name-input" class="screen">
-            <div class="name-input-screen">
-                <div class="name-input-header">
-                    <button class="back-btn" onclick="goBackToOnboarding()">＜</button>
-                </div>
-                <div class="name-input-content">
-                    <div class="heading-lg name-input-title">お名前を教えてください</div>
-                    <div class="body-sm name-input-subtitle">呼びかけに使います。ニックネームでも大丈夫です。</div>
-                    <input type="text" id="nameInput" class="name-input" placeholder="例：田中" maxlength="20">
-                    <div class="name-input-actions">
-                        <button class="btn-primary" id="nameSubmitBtn" onclick="submitName()" disabled>はじめる</button>
-                        <button class="btn-skip-name" onclick="skipNameInput()">名前を入れずに始める</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -4115,36 +3968,6 @@
         let taskStatuses = {};
         let currentGuideView = 'phase';
         let currentTaskId = null;
-        let currentOnboardingStep = 0;
-
-        // オンボーディングメッセージ
-        const onboardingSteps = [
-            {
-                icon: '🕊️',
-                text: 'このたびは、大切な方を亡くされたとのこと、<br>心よりお悔やみ申し上げます。',
-                buttonText: '次へ'
-            },
-            {
-                icon: '📋',
-                text: 'ReliefNoteは、<br>これから必要な手続きを<br>一緒に整理するサービスです。',
-                buttonText: '次へ'
-            },
-            {
-                icon: '💬',
-                text: 'いくつかの質問に答えていただくと、<br>あなたに必要なタスクを<br>リストにします。',
-                buttonText: '次へ'
-            },
-            {
-                icon: '🔄',
-                text: '<span class="highlight">分からないこと</span>は<br>「分からない」で大丈夫。<br><span class="orange">後から変更できます。</span>',
-                buttonText: '次へ'
-            },
-            {
-                icon: '🤝',
-                text: '一人で抱え込まず、<br>一緒に進めていきましょう。',
-                buttonText: '質問をはじめる'
-            }
-        ];
 
         // ローカルストレージから復元
         function loadData() {
@@ -4229,122 +4052,69 @@
             window.location.href = 'tel:0164342111';
         }
 
-        // オンボーディングメッセージ
-        function startOnboardingMessage() {
-            currentOnboardingStep = 0;
-            showScreen('screen-onboarding-message');
-            renderOnboardingStep();
-            setupOnboardingSwipe();
-        }
-
-        function renderOnboardingStep() {
-            const step = onboardingSteps[currentOnboardingStep];
-            const content = document.getElementById('onboardingContent');
-
-            content.innerHTML = `
-                <div class="onboarding-icon">${step.icon}</div>
-                <div class="onboarding-text">${step.text}</div>
-            `;
-            content.classList.add('onboarding-fade-in');
-            setTimeout(() => content.classList.remove('onboarding-fade-in'), 300);
-
-            // Update button text
-            document.getElementById('onboardingBtn').textContent = step.buttonText;
-
-            // Update dots
-            const dots = document.querySelectorAll('.onboarding-dots .dot');
-            dots.forEach((dot, index) => {
-                if (index === currentOnboardingStep) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-
-            // Show/hide back button
-            const backBtn = document.getElementById('onboardingBackBtn');
-            if (currentOnboardingStep === 0) {
-                backBtn.classList.add('hidden');
-            } else {
-                backBtn.classList.remove('hidden');
-            }
-        }
-
-        function nextOnboardingStep() {
-            if (currentOnboardingStep < onboardingSteps.length - 1) {
-                currentOnboardingStep++;
-                renderOnboardingStep();
-            } else {
-                // Last step - save completion and go to name input
-                localStorage.setItem('rn_onboarding_done', 'true');
-                showScreen('screen-name-input');
-            }
-        }
-
-        function prevOnboardingStep() {
-            if (currentOnboardingStep > 0) {
-                currentOnboardingStep--;
-                renderOnboardingStep();
-            }
-        }
-
-        function skipOnboarding() {
-            localStorage.setItem('rn_onboarding_done', 'true');
-            showScreen('screen-name-input');
-        }
-
-        // Swipe support for onboarding
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        function setupOnboardingSwipe() {
-            const container = document.getElementById('screen-onboarding-message');
-
-            container.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, { passive: true });
-
-            container.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, { passive: true });
-        }
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const diff = touchStartX - touchEndX;
-
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    // Left swipe - next
-                    nextOnboardingStep();
-                } else {
-                    // Right swipe - previous
-                    prevOnboardingStep();
-                }
-            }
-        }
-
         // オンボーディング（質問）
         function startOnboarding() {
-            // オンボーディング用の5問をフィルタ
+            // オンボーディング用の7問をフィルタ
             onboardingQuestions = questions.filter(q => onboardingQuestionIds.includes(q.id));
             // onboardingQuestionIds の順番通りにソート
             onboardingQuestions.sort((a, b) => {
                 return onboardingQuestionIds.indexOf(a.id) - onboardingQuestionIds.indexOf(b.id);
             });
-            currentQuestionIndex = 0;
+            // Index -1 = name input step, Index 0-6 = 7 questions (total 8 steps)
+            currentQuestionIndex = -1;
             showScreen('screen-onboarding');
             renderQuestion();
         }
 
         function renderQuestion() {
-            const q = onboardingQuestions[currentQuestionIndex];
             const card = document.getElementById('questionCard');
+
+            // Step 1/8: Name input (index -1)
+            if (currentQuestionIndex === -1) {
+                const savedName = localStorage.getItem('rn_user_name') || '';
+                let html = '<div class="name-input-form">';
+                html += '<div class="question-text">お名前を教えてください</div>';
+                html += '<div class="question-info">1 / 8 ※後から変更できます</div>';
+                html += `<input type="text" id="nameInput" class="name-input" placeholder="例：田中" maxlength="20" value="${savedName}">`;
+                html += '<div class="name-input-actions">';
+                const hasName = savedName.trim().length > 0;
+                const btnDisabled = hasName ? '' : 'disabled';
+                const btnStyle = hasName ? '' : 'style="opacity: 0.3; pointer-events: none;"';
+                html += `<button class="btn-primary" id="nameSubmitBtn" onclick="submitNameInFlow()" ${btnDisabled} ${btnStyle}>次へ</button>`;
+                html += '<button class="btn-skip-name" onclick="skipNameInFlow()">名前を入れずに始める</button>';
+                html += '</div>';
+                html += '</div>';
+                card.innerHTML = html;
+
+                // Add input listener for enabling/disabling button
+                setTimeout(() => {
+                    const nameInput = document.getElementById('nameInput');
+                    const nameSubmitBtn = document.getElementById('nameSubmitBtn');
+                    if (nameInput && nameSubmitBtn) {
+                        nameInput.addEventListener('input', () => {
+                            if (nameInput.value.trim().length > 0) {
+                                nameSubmitBtn.disabled = false;
+                                nameSubmitBtn.style.opacity = '1';
+                                nameSubmitBtn.style.pointerEvents = 'auto';
+                            } else {
+                                nameSubmitBtn.disabled = true;
+                                nameSubmitBtn.style.opacity = '0.3';
+                                nameSubmitBtn.style.pointerEvents = 'none';
+                            }
+                        });
+                    }
+                }, 0);
+                return;
+            }
+
+            // Steps 2-8/8: Questions (index 0-6)
+            const q = onboardingQuestions[currentQuestionIndex];
+            const totalSteps = onboardingQuestions.length + 1; // +1 for name input
+            const currentStep = currentQuestionIndex + 2; // +2 because index 0 is step 2
 
             let html = `<div class="domain-badge domain-${q.domain}">${domainLabels[q.domain]}</div>`;
             html += `<div class="question-text">${q.text}</div>`;
-            html += `<div class="question-info">${currentQuestionIndex + 1} / ${onboardingQuestions.length} ※後から変更できます</div>`;
+            html += `<div class="question-info">${currentStep} / ${totalSteps} ※後から変更できます</div>`;
 
             if (q.type === 'single') {
                 q.options.forEach(opt => {
@@ -4421,12 +4191,27 @@
             renderQuestion(); // 次へボタンを活性化
         }
 
+        function submitNameInFlow() {
+            const nameInput = document.getElementById('nameInput');
+            const name = nameInput.value.trim();
+            if (name) {
+                localStorage.setItem('rn_user_name', name);
+                nextQuestion(); // Move to first question
+            }
+        }
+
+        function skipNameInFlow() {
+            localStorage.setItem('rn_user_name', 'ゲスト');
+            nextQuestion(); // Move to first question
+        }
+
         function prevQuestion() {
-            if (currentQuestionIndex > 0) {
+            if (currentQuestionIndex > -1) {
                 currentQuestionIndex--;
                 renderQuestion();
             } else {
-                showScreen('screen-name-input');
+                // Already at name input step (-1), go back to splash
+                showScreen('screen-splash');
             }
         }
 
@@ -4439,7 +4224,7 @@
                 currentQuestionIndex++;
                 renderQuestion();
             } else {
-                // オンボーディング完了（5問完了）
+                // オンボーディング完了（8ステップ完了: 名前 + 7問）
                 generateTasks();
                 renderHome();
                 showScreen('screen-home');
@@ -6031,38 +5816,6 @@
         }
 
         // 名前入力関連
-        function goBackToOnboarding() {
-            showScreen('screen-onboarding-message');
-        }
-
-        function submitName() {
-            const nameInput = document.getElementById('nameInput');
-            const name = nameInput.value.trim();
-            if (name) {
-                localStorage.setItem('rn_user_name', name);
-                startOnboarding();
-            }
-        }
-
-        function skipNameInput() {
-            localStorage.setItem('rn_user_name', 'ゲスト');
-            startOnboarding();
-        }
-
-        // 名前入力フィールドの監視
-        document.addEventListener('DOMContentLoaded', () => {
-            const nameInput = document.getElementById('nameInput');
-            const nameSubmitBtn = document.getElementById('nameSubmitBtn');
-            if (nameInput && nameSubmitBtn) {
-                nameInput.addEventListener('input', () => {
-                    if (nameInput.value.trim().length > 0) {
-                        nameSubmitBtn.disabled = false;
-                    } else {
-                        nameSubmitBtn.disabled = true;
-                    }
-                });
-            }
-        });
 
         // ユーザー名の表示を更新
         function updateUserNameDisplay() {
@@ -6127,7 +5880,6 @@
         function confirmLogout() {
             const STORAGE_KEYS = [
                 'rn_user_name',
-                'rn_onboarding_done',
                 'answers',
                 'taskStatuses',
                 'rn_step_progress',
@@ -6176,34 +5928,29 @@
             loadData();
 
             const userName = localStorage.getItem('rn_user_name');
-            const onboardingDone = localStorage.getItem('rn_onboarding_done');
             const hasAnswers = Object.keys(answers).length > 0;
 
-            if (userName) {
-                // ログイン済み
-                if (hasAnswers) {
-                    // 回答済み → ホーム画面
-                    generateTasks();
-                    updateUserNameDisplay();
-                    renderHome();
-                    showScreen('screen-home');
-                } else {
-                    // 質問未回答 → 質問画面
-                    generateTasks();
-                    updateUserNameDisplay();
-                    startOnboarding();
-                }
+            if (userName && hasAnswers) {
+                // 名前 + 回答済み → ホーム画面
+                generateTasks();
+                updateUserNameDisplay();
+                renderHome();
+                showScreen('screen-home');
+            } else if (userName && !hasAnswers) {
+                // 名前あり、質問未回答 → 質問画面（名前入力スキップして質問から開始）
+                generateTasks();
+                updateUserNameDisplay();
+                onboardingQuestions = questions.filter(q => onboardingQuestionIds.includes(q.id));
+                onboardingQuestions.sort((a, b) => {
+                    return onboardingQuestionIds.indexOf(a.id) - onboardingQuestionIds.indexOf(b.id);
+                });
+                currentQuestionIndex = 0; // Start from first question, skip name input
+                showScreen('screen-onboarding');
+                renderQuestion();
             } else {
-                // 未ログイン
-                if (onboardingDone) {
-                    // オンボーディングメッセージは見た → 名前入力画面
-                    generateTasks();
-                    showScreen('screen-name-input');
-                } else {
-                    // 初回 → スプラッシュ画面
-                    generateTasks();
-                    showScreen('screen-splash');
-                }
+                // 初回 → スプラッシュ画面
+                generateTasks();
+                showScreen('screen-splash');
             }
         });
     </script>
