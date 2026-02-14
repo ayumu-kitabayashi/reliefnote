@@ -584,56 +584,59 @@
         }
 
         /* 今日やることセクション内のタスクカード */
-        #todayTasks .task-card-small {
+        #todayTasks .task-item {
             background: transparent;
             border: none;
             border-radius: 0;
             border-bottom: 1px solid var(--border-light);
-            padding: 14px 0;
+            padding: 12px 0;
             margin-bottom: 0;
         }
 
-        #todayTasks .task-card-small:last-child {
+        #todayTasks .task-item:last-child {
             border-bottom: none;
         }
 
-        .task-card-small.urgent,
-        .task-card-small.soon,
-        .task-card-small.normal {
-            border-left-width: 1px;
+        #todayTasks .task-checkbox {
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            margin-right: 12px;
         }
 
-        .deadline-badge {
+        #todayTasks .task-checkbox:checked::after {
+            left: 6px;
+            top: 2px;
+            width: 6px;
+            height: 11px;
+        }
+
+        #todayTasks .task-name {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        #todayTasks .task-status-hint {
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        #todayTasks .task-status-hint.need-confirm {
+            color: var(--accent);
+        }
+
+        #todayTasks .task-status-hint.blocked {
+            color: var(--text-tertiary);
+        }
+
+        #todayTasks .task-deadline-display {
             font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-weight: 500;
+            color: var(--text-tertiary);
+            margin-top: 2px;
         }
 
-        .deadline-overdue {
-            background: var(--warning-light);
+        #todayTasks .task-deadline-display.warning {
             color: var(--warning);
-        }
-
-        .deadline-week {
-            background: var(--warning-light);
-            color: var(--warning);
-        }
-
-        .deadline-month {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-        }
-
-        .task-content-small {
-            flex: 1;
-        }
-
-        .task-title-small {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            color: var(--text-primary);
         }
 
         .consultation-card {
@@ -3996,6 +3999,17 @@
                 floatingBtn.classList.remove('show');
             }
 
+            // フッターナビの表示制御
+            const footerNav = document.querySelector('.footer-nav');
+            const screensWithoutFooter = ['screen-splash', 'screen-onboarding'];
+            if (footerNav) {
+                if (screensWithoutFooter.includes(screenId)) {
+                    footerNav.style.display = 'none';
+                } else {
+                    footerNav.style.display = 'flex';
+                }
+            }
+
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if (screenId === 'screen-home') {
                 document.querySelectorAll('.nav-item')[0].classList.add('active');
@@ -4442,7 +4456,6 @@
                 // 死亡日から期限計算
                 const deathDate = answers['Q-DOD-01'];
                 let deathDateObj = null;
-                let daysSinceDeath = 0;
 
                 if (deathDate) {
                     if (deathDate.includes('-')) {
@@ -4451,17 +4464,16 @@
                     } else {
                         deathDateObj = new Date(deathDate);
                     }
-                    const now = new Date();
-                    const diffTime = now - deathDateObj;
-                    daysSinceDeath = Math.floor(diffTime / (1000 * 60 * 60 * 24));
                 }
 
                 todayContainer.innerHTML = activeTasks.map(task => {
                     const status = taskStatuses[task.id] || determineTaskStatus(task);
-                    let urgencyClass = 'normal';
-                    let deadlineBadge = '';
+                    const isDone = status === 'DONE';
 
-                    // 期限バッジ計算（新ロジック）
+                    // 期限表示計算
+                    let deadlineDisplay = '';
+                    let deadlineClass = '';
+
                     if (deathDateObj && task.phase) {
                         const phaseConfig = {
                             'H24': { days: 0 },
@@ -4483,22 +4495,25 @@
                             deadlineDate.setHours(0, 0, 0, 0);
                             const daysRemaining = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
 
+                            const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+                            const deadlineMonth = monthNames[deadlineDate.getMonth()];
+                            const deadlineDay = deadlineDate.getDate();
+
                             if (daysRemaining < 0) {
-                                deadlineBadge = '<span class="deadline-badge" style="background: var(--warning-light); color: var(--warning);">期限切れ</span>';
-                                urgencyClass = 'urgent';
+                                deadlineDisplay = `期限を${Math.abs(daysRemaining)}日超過`;
+                                deadlineClass = 'warning';
+                            } else if (daysRemaining === 0) {
+                                deadlineDisplay = `期限: 今日まで`;
+                                deadlineClass = 'warning';
                             } else if (daysRemaining <= 7) {
-                                deadlineBadge = '<span class="deadline-badge" style="background: #fff3e0; color: #e67e22;">今週中</span>';
-                                urgencyClass = 'soon';
-                            } else if (daysRemaining <= 14) {
-                                deadlineBadge = '<span class="deadline-badge" style="background: #fff8e1; color: #b8860b;">2週間以内</span>';
-                                urgencyClass = 'soon';
-                            } else if (daysRemaining <= 90) {
-                                deadlineBadge = '<span class="deadline-badge" style="background: var(--accent-light); color: var(--accent);">余裕あり</span>';
+                                deadlineDisplay = `期限: ${deadlineMonth}${deadlineDay}日まで（あと${daysRemaining}日）`;
+                                deadlineClass = 'warning';
+                            } else {
+                                deadlineDisplay = `期限: ${deadlineMonth}${deadlineDay}日まで（あと${daysRemaining}日）`;
                             }
-                            // 3ヶ月超はバッジ非表示
                         }
                     } else if (task.phase) {
-                        // 死亡日未回答の場合はフェーズ名を表示
+                        // 死亡日未回答の場合
                         const phaseNames = {
                             'H24': '当日',
                             'D7': '7日以内',
@@ -4509,22 +4524,34 @@
                             'M10': '10ヶ月以内',
                             'Y3': '3年以内'
                         };
-                        deadlineBadge = `<span class="deadline-badge" style="background: var(--bg-secondary); color: var(--text-secondary);">${phaseNames[task.phase] || ''}</span>`;
+                        deadlineDisplay = `期限: ${phaseNames[task.phase] || ''}`;
                     }
 
-                    // ステータスバッジ
-                    let statusBadge = '';
+                    // ステータス表示
+                    let statusHint = '';
                     if (status === 'NEED_CONFIRM') {
-                        statusBadge = '<span class="badge badge-confirm" style="margin-left: 8px;">確認が必要</span><span style="margin-left: 8px; font-size: 12px; color: var(--accent);">→ 質問に回答</span>';
+                        statusHint = '<div class="task-status-hint need-confirm">質問に回答すると確定します</div>';
+                    } else if (status === 'BLOCKED') {
+                        statusHint = '<div class="task-status-hint blocked">前のタスクを完了してください</div>';
                     }
+
+                    // 矢印表示（NEED_CONFIRMの場合は非表示）
+                    const showArrow = status !== 'NEED_CONFIRM';
+
+                    // クリックハンドラ
+                    const clickHandler = status === 'NEED_CONFIRM'
+                        ? `openQuestionsForTask('${task.id}', 'screen-home')`
+                        : `showTaskDetail('${task.id}')`;
 
                     return `
-                        <div class="task-card-small ${urgencyClass}" onclick="${status === 'NEED_CONFIRM' ? 'openQuestionsForTask(\'' + task.id + '\', \'screen-home\')' : 'showTaskDetail(\'' + task.id + '\')'}">
-                            <div class="task-content-small">
-                                ${deadlineBadge}
-                                <div class="task-title-small">${task.title}${statusBadge}</div>
+                        <div class="task-item" onclick="event.stopPropagation(); ${clickHandler}">
+                            <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''} ${status === 'NEED_CONFIRM' || status === 'BLOCKED' ? 'disabled' : ''} onclick="event.stopPropagation(); toggleTaskStatus('${task.id}')">
+                            <div class="task-info">
+                                <div class="task-name ${isDone ? 'done' : ''}">${task.title}</div>
+                                ${statusHint}
+                                ${deadlineDisplay ? `<div class="task-deadline-display ${deadlineClass}">${deadlineDisplay}</div>` : ''}
                             </div>
-                            <div>＞</div>
+                            ${showArrow ? '<div style="color: var(--text-tertiary); font-size: 14px;">›</div>' : ''}
                         </div>
                     `;
                 }).join('');
