@@ -4502,6 +4502,7 @@
         let taskStatuses = {};
         let currentGuideView = 'phase';
         let currentTaskId = null;
+        let confirmReturnPhase = null; // 確認センターから戻る時のスクロール先フェーズ
 
         // ローカルストレージから復元
         function loadData() {
@@ -4518,6 +4519,23 @@
 
         // 画面遷移
         function showScreen(screenId) {
+            // 画面遷移時にスクロール位置を最上部にリセット
+            window.scrollTo(0, 0);
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+
+            // app-containerのスクロールもリセット
+            const appContainer = document.querySelector('.app-container');
+            if (appContainer) {
+                appContainer.scrollTop = 0;
+            }
+
+            // 遷移先の画面要素自体のスクロールもリセット
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.scrollTop = 0;
+            }
+
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
 
@@ -6377,6 +6395,39 @@
         }
 
         // 確認センター（新実装：1画面1質問）
+        // 確認センターから戻る時にフェーズまでスクロール
+        function scrollToReturnPhase() {
+            if (!confirmReturnPhase) return;
+
+            // 少し遅延させてDOMの描画を待つ
+            setTimeout(() => {
+                // フェーズセクションを探す
+                const targetPhase = document.querySelector(`.phase-section[data-phase-id="${confirmReturnPhase}"]`);
+                if (targetPhase) {
+                    // フェーズが閉じている場合は開く
+                    if (!targetPhase.classList.contains('open')) {
+                        targetPhase.classList.add('open');
+                        // 開閉状態を保存
+                        const key = 'deadline_' + confirmReturnPhase;
+                        window._accordionState[key] = true;
+                    }
+
+                    // フェーズヘッダーが画面上部から少し下に来るようにスクロール
+                    const guideScreen = document.getElementById('screen-guide');
+                    if (guideScreen) {
+                        const headerOffset = 60; // タブの高さ分
+                        const elementPosition = targetPhase.offsetTop;
+                        const offsetPosition = elementPosition - headerOffset;
+
+                        guideScreen.scrollTop = offsetPosition;
+                    }
+                }
+
+                // リセット
+                confirmReturnPhase = null;
+            }, 100);
+        }
+
         // フェーズフィルター付き確認センター遷移関数
         function openConfirmCenterWithPhaseFilter(phaseId) {
             // そのフェーズに属するタスクを取得
@@ -6424,6 +6475,7 @@
             window._filteredReturnScreen = 'screen-guide';
             window._filteredTaskId = null;
             window._filteredPhaseId = phaseId; // フェーズIDを保存（ヘッダー表示用）
+            confirmReturnPhase = phaseId; // 戻る時のスクロール先フェーズを記憶
 
             // 確認センターを起動
             startConfirmCenter('screen-guide');
@@ -6543,6 +6595,22 @@
 
             html += `</div></div>`;
             container.innerHTML = html;
+
+            // 質問切り替え時にスクロール位置をリセット
+            // 質問エリアのスクロールをリセット
+            const questionArea = document.querySelector('.confirm-question-area');
+            if (questionArea) {
+                questionArea.scrollTop = 0;
+            }
+
+            // 画面全体のスクロールもリセット
+            window.scrollTo(0, 0);
+
+            // screen-confirm自体のスクロールもリセット
+            const confirmScreen = document.getElementById('screen-confirm');
+            if (confirmScreen) {
+                confirmScreen.scrollTop = 0;
+            }
         }
 
         function updateConfirmProgress() {
@@ -6585,6 +6653,16 @@
             renderConfirmQuestion();
         }
 
+        // 確認センター完了画面から戻る
+        function returnFromConfirmCenter() {
+            showScreen(confirmSourceScreen);
+
+            // ガイド画面に戻る場合、遷移元フェーズまでスクロール
+            if (confirmSourceScreen === 'screen-guide') {
+                scrollToReturnPhase();
+            }
+        }
+
         function nextConfirmQuestion() {
             confirmDirection = 'forward';
             if (currentConfirmIndex < confirmQuestions.length - 1) {
@@ -6614,7 +6692,7 @@
                         <div class="confirm-completion-content">
                             <div class="heading-lg" style="text-align: center; margin-bottom: 16px;">回答が完了しました</div>
                             <div class="body-sm" style="text-align: center; color: var(--text-secondary); margin-bottom: 40px;">タスクのステータスが更新されます</div>
-                            <button class="btn-primary" onclick="showScreen('${confirmSourceScreen}')">戻る</button>
+                            <button class="btn-primary" onclick="returnFromConfirmCenter()">戻る</button>
                         </div>
                     `;
                 } else {
@@ -6623,7 +6701,7 @@
                         <div class="confirm-completion-content">
                             <div class="heading-lg" style="text-align: center; margin-bottom: 16px;">確認が完了しました</div>
                             <div class="body-sm" style="text-align: center; color: var(--text-secondary); margin-bottom: 40px;">回答内容はいつでも変更できます</div>
-                            <button class="btn-primary" onclick="showScreen('${confirmSourceScreen}')">ホームへ戻る</button>
+                            <button class="btn-primary" onclick="returnFromConfirmCenter()">ホームへ戻る</button>
                         </div>
                     `;
                 }
@@ -6650,6 +6728,11 @@
                     window._filteredPhaseId = null;
                 }
                 showScreen(confirmSourceScreen);
+
+                // ガイド画面に戻る場合、遷移元フェーズまでスクロール
+                if (confirmSourceScreen === 'screen-guide') {
+                    scrollToReturnPhase();
+                }
             }
         }
 
@@ -6668,6 +6751,11 @@
                 window._filteredPhaseId = null;
             }
             showScreen(confirmSourceScreen);
+
+            // ガイド画面に戻る場合、遷移元フェーズまでスクロール
+            if (confirmSourceScreen === 'screen-guide') {
+                scrollToReturnPhase();
+            }
         }
 
         // カレンダー機能
