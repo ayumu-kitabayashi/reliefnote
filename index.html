@@ -814,33 +814,57 @@
             font-weight: 600;
         }
 
-        .btn-filter-questions {
-            margin: 12px 16px;
-            width: calc(100% - 32px);
+        .phase-unanswered-card {
             background: var(--bg-warm);
-            border: 1px solid var(--border);
-            padding: 12px 16px;
+            border: 1.5px dashed var(--border);
             border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             cursor: pointer;
             transition: opacity 0.15s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .btn-filter-questions-text {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .btn-filter-questions-action {
-            font-size: 13px;
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .btn-filter-questions:active {
+        .phase-unanswered-card:active {
             opacity: 0.7;
+        }
+
+        .phase-unanswered-icon {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            min-height: 20px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phase-unanswered-info {
+            flex: 1;
+        }
+
+        .phase-unanswered-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .phase-unanswered-count {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .phase-unanswered-arrow {
+            font-size: 18px;
+            color: var(--text-tertiary);
+            flex-shrink: 0;
         }
 
         .phase-section {
@@ -1849,32 +1873,19 @@
         }
 
         .confirm-question-slide {
-            animation: slideInRight 0.2s ease;
+            animation: fadeInSimple 0.15s ease;
         }
 
         .confirm-question-slide-left {
-            animation: slideInLeft 0.2s ease;
+            animation: fadeInSimple 0.15s ease;
         }
 
-        @keyframes slideInRight {
+        @keyframes fadeInSimple {
             from {
                 opacity: 0;
-                transform: translateX(100%);
             }
             to {
                 opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-100%);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
             }
         }
 
@@ -3030,10 +3041,6 @@
                 <button class="tab-btn" onclick="setGuideView('domain')">行き先順</button>
                 <button class="tab-btn" onclick="setGuideView('pinned')">ピン留め</button>
             </div>
-            <button class="btn-filter-questions" onclick="showScreen('screen-confirm')">
-                <span class="btn-filter-questions-text">質問に答えて、あなた専用に絞り込み</span>
-                <span class="btn-filter-questions-action">回答する ›</span>
-            </button>
             <div id="guideContent"></div>
         </div>
 
@@ -3055,7 +3062,7 @@
         <div id="screen-confirm" class="screen">
             <div class="confirm-new-header">
                 <button class="confirm-back-btn" onclick="prevConfirmQuestion()">← 戻る</button>
-                <span class="confirm-center-title">確認センター</span>
+                <span class="confirm-center-title" id="confirmCenterTitle">確認センター</span>
                 <button class="confirm-exit-btn" onclick="exitConfirmCenter()">終了</button>
             </div>
             <div class="confirm-progress-container">
@@ -4848,6 +4855,21 @@
             return false;
         }
 
+        // conditionから質問IDを抽出するヘルパー関数
+        function extractQuestionIdsFromCondition(condition, idSet) {
+            if (!condition || condition === 'true' || condition === 'null' || condition === null || condition === true) {
+                return;
+            }
+
+            // 正規表現で Q-XXX-XX 形式のIDを抽出
+            const questionIdPattern = /Q-[\w-]+/g;
+            const matches = condition.match(questionIdPattern);
+
+            if (matches) {
+                matches.forEach(id => idSet.add(id));
+            }
+        }
+
         function determineTaskStatus(task) {
             // 既にDONEなら維持
             if (taskStatuses[task.id] === 'DONE') return 'DONE';
@@ -5359,6 +5381,9 @@
                 const isCompletedOpen = window._accordionState[completedKey] || false;
                 const completedOpenClass = isCompletedOpen ? ' open' : '';
 
+                // このフェーズ内のNEED_CONFIRMタスク数をカウント
+                const needConfirmCount = incompleteTasks.filter(t => t.status === 'NEED_CONFIRM').length;
+
                 html += `
                     <div class="phase-section${openClass}" data-phase-id="${phaseId}" onclick="togglePhase(this)">
                         <div class="phase-header">
@@ -5369,6 +5394,15 @@
                             <span class="phase-arrow">▼</span>
                         </div>
                         <div class="phase-tasks">
+                            ${needConfirmCount > 0 ? `
+                                <div class="phase-unanswered-card" onclick="event.stopPropagation(); openConfirmCenterWithPhaseFilter('${phaseId}')">
+                                    <div class="phase-unanswered-icon">？</div>
+                                    <div class="phase-unanswered-info">
+                                        <div class="phase-unanswered-title">質問に答えると、あと<span class="phase-unanswered-count">${needConfirmCount}</span>件のタスクが表示されます</div>
+                                    </div>
+                                    <div class="phase-unanswered-arrow">›</div>
+                                </div>
+                            ` : ''}
                             ${renderTaskList(incompleteTasks)}
                             ${completedTasks.length > 0 ? `
                                 <div class="completed-tasks-section${completedOpenClass}" data-completed-id="${phaseId}" onclick="event.stopPropagation(); toggleCompletedTasks(this)">
@@ -6343,6 +6377,58 @@
         }
 
         // 確認センター（新実装：1画面1質問）
+        // フェーズフィルター付き確認センター遷移関数
+        function openConfirmCenterWithPhaseFilter(phaseId) {
+            // そのフェーズに属するタスクを取得
+            const phaseTasks = tasks.filter(t => t.phase === phaseId);
+
+            // それらのタスクで使われている質問IDを収集
+            const relatedQuestionIds = new Set();
+
+            phaseTasks.forEach(task => {
+                // requiredQuestionsから質問IDを追加
+                if (task.requiredQuestions && task.requiredQuestions.length > 0) {
+                    task.requiredQuestions.forEach(qid => relatedQuestionIds.add(qid));
+                }
+
+                // appliesWhenから質問IDを抽出
+                if (task.appliesWhen) {
+                    extractQuestionIdsFromCondition(task.appliesWhen, relatedQuestionIds);
+                }
+
+                // notApplicableWhenから質問IDを抽出
+                if (task.notApplicableWhen) {
+                    extractQuestionIdsFromCondition(task.notApplicableWhen, relatedQuestionIds);
+                }
+            });
+
+            // 該当する未回答質問のみをフィルタリング
+            const targetQuestions = questions.filter(q => {
+                if (!relatedQuestionIds.has(q.id)) return false;
+
+                // 未回答かどうかチェック
+                const answer = answers[q.id];
+                return !answer || (Array.isArray(answer) && answer.length === 0);
+            });
+
+            // フィルター適用済みの場合、そのフェーズの質問がすべて回答済み
+            if (targetQuestions.length === 0) {
+                showToast('このフェーズの質問はすべて回答済みです');
+                return;
+            }
+
+            // フィルタモードを設定
+            window._filteredMode = true;
+            window._filteredQuestions = targetQuestions;
+            window._filteredCurrentIndex = 0;
+            window._filteredReturnScreen = 'screen-guide';
+            window._filteredTaskId = null;
+            window._filteredPhaseId = phaseId; // フェーズIDを保存（ヘッダー表示用）
+
+            // 確認センターを起動
+            startConfirmCenter('screen-guide');
+        }
+
         function startConfirmCenter(sourceScreen = 'screen-home') {
             // フィルタモードかどうかで分岐
             if (window._filteredMode === true && window._filteredQuestions) {
@@ -6375,6 +6461,28 @@
 
             renderConfirmQuestion();
             updateConfirmProgress();
+
+            // ヘッダータイトルを更新（フェーズフィルター適用時）
+            const titleElement = document.getElementById('confirmCenterTitle');
+            if (titleElement) {
+                if (window._filteredPhaseId) {
+                    // フェーズ名マッピング
+                    const phaseNames = {
+                        'H24': '今日・葬儀まで',
+                        'D7': '7日以内',
+                        'D14': '14日以内',
+                        'D49': '四十九日まで',
+                        'M3': '3ヶ月以内',
+                        'M4': '4か月以内',
+                        'M10': '10ヶ月以内',
+                        'Y3': '3年以内'
+                    };
+                    const phaseName = phaseNames[window._filteredPhaseId] || '';
+                    titleElement.textContent = `確認センター（${phaseName}）`;
+                } else {
+                    titleElement.textContent = '確認センター';
+                }
+            }
 
             // 完了画面を非表示
             document.getElementById('confirmCompletionScreen').style.display = 'none';
@@ -6496,6 +6604,7 @@
                     window._filteredReturnScreen = null;
                     window._filteredCurrentIndex = 0;
                     window._filteredTaskId = null;
+                    window._filteredPhaseId = null;
                 }
 
                 // 完了画面のテキストを動的に変更
@@ -6538,6 +6647,7 @@
                     window._filteredReturnScreen = null;
                     window._filteredCurrentIndex = 0;
                     window._filteredTaskId = null;
+                    window._filteredPhaseId = null;
                 }
                 showScreen(confirmSourceScreen);
             }
@@ -6555,6 +6665,7 @@
                 window._filteredReturnScreen = null;
                 window._filteredCurrentIndex = 0;
                 window._filteredTaskId = null;
+                window._filteredPhaseId = null;
             }
             showScreen(confirmSourceScreen);
         }
