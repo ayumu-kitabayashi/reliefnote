@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <link rel="icon" href="./favicon.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReliefNote - 遺族のためのGPS</title>
@@ -487,6 +486,22 @@
             padding: 24px 16px;
         }
 
+        .phase-message-section {
+            padding: 0 16px;
+            margin-top: 16px;
+            margin-bottom: 20px;  /* 修正5：8px → 20px */
+        }
+
+        .phase-message-content {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
         .home-today-section {
             padding: 24px 16px 0;
         }
@@ -497,6 +512,18 @@
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 24px;
+        }
+
+        #nextPhaseTodaySection {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        #nextPhaseTodaySection .section-title {
+            margin-bottom: 8px;
         }
 
         .home-consult-section {
@@ -510,6 +537,15 @@
             color: var(--text-tertiary);
             letter-spacing: 0.5px;
             margin-bottom: 8px;
+        }
+
+        .home-section-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding: 0 16px;
         }
 
         .section-title {
@@ -985,9 +1021,38 @@
             line-height: 1.5;
         }
 
+        /* 改修B：期限表示をバッジ風に変更 */
         .task-deadline {
-            font-size: 13px;
+            display: inline-block;
+            font-size: 11px;
+            line-height: 1;
+            padding: 3px 8px;
+            border-radius: 8px;
+            margin-top: 4px;
+            /* デフォルト（余裕あり） */
+            background: var(--bg-secondary);
             color: var(--text-tertiary);
+        }
+
+        /* 7日以内 */
+        .task-deadline.soon {
+            background: #fff8e1;
+            color: #b8860b;
+            font-weight: 500;
+        }
+
+        /* 3日以内 */
+        .task-deadline.urgent {
+            background: #fff3e0;
+            color: #e65100;
+            font-weight: 500;
+        }
+
+        /* 超過・当日 */
+        .task-deadline.overdue {
+            background: #fef0ec;
+            color: var(--warning);
+            font-weight: 600;
         }
 
         .task-confirm-hint {
@@ -1037,27 +1102,56 @@
         }
 
         .detail-title-area {
-            margin-bottom: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .detail-task-title {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
             line-height: 1.4;
             color: var(--text-primary);
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
 
         .detail-status-badge {
-            display: inline-block;
-            font-size: 12px;
+            flex-shrink: 0;
+            font-size: 11px;
             padding: 4px 10px;
             border-radius: 20px;
-            margin-top: 8px;
+            font-weight: 600;
         }
 
-        .detail-status-badge.open,
+        .detail-status-badge.open {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
         .detail-status-badge.done {
-            display: none;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .detail-status-badge.overdue {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .detail-status-badge.urgent {
+            background: #fff4e6;
+            color: #e65100;
+        }
+
+        .detail-status-badge.soon {
+            background: #fffbf0;
+            color: #f57c00;
         }
 
         .detail-status-badge.confirm {
@@ -1068,6 +1162,26 @@
         .detail-status-badge.blocked {
             background: #f0f0f0;
             color: #999999;
+        }
+
+        .task-detail-destination {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0 20px 0;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .destination-label {
+            flex-shrink: 0;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        .destination-value {
+            color: var(--text-primary);
+            font-weight: 500;
         }
 
         .detail-summary-text {
@@ -1341,6 +1455,115 @@
             color: var(--text-tertiary);
         }
 
+        /* シンプルなステップリスト（アコーディオンUI用） */
+        .detail-steps-simple {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 24px 0;
+        }
+
+        .detail-step-simple {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .detail-step-simple:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-step-simple-number {
+            font-weight: 600;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .detail-step-simple-text {
+            flex: 1;
+        }
+
+        /* ステップリストとアコーディオンの区切り線 */
+        .detail-divider {
+            margin: 24px 0 8px 0;
+            border: none;
+            border-top: 1px solid var(--border-light);
+            width: 100%;
+        }
+
+        /* アコーディオンセクション */
+        .detail-accordion-section {
+            border-top: 1px solid var(--border-light);
+        }
+
+        .detail-accordion-header {
+            padding: 14px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .detail-accordion-arrow {
+            font-size: 10px;
+            margin-right: 8px;
+            transition: transform 200ms ease;
+            flex-shrink: 0;
+        }
+
+        .detail-accordion-section.open .detail-accordion-arrow {
+            transform: rotate(90deg);
+        }
+
+        .detail-accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 200ms ease;
+        }
+
+        .detail-accordion-section.open .detail-accordion-content {
+            max-height: 2000px;
+        }
+
+        .detail-accordion-inner {
+            padding: 0 0 14px 18px;
+        }
+
+        .detail-accordion-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .detail-accordion-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .detail-accordion-list li {
+            font-size: 14px;
+            line-height: 2.0;
+            color: var(--text-primary);
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .detail-accordion-list li::before {
+            content: '●';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 8px;
+            top: 7px;
+        }
+
         .detail-done-text {
             font-size: 14px;
             line-height: 1.7;
@@ -1441,6 +1664,122 @@
 
         .btn-complete:active {
             opacity: 0.85;
+        }
+
+        /* ピン留め機能 */
+        .task-detail-footer-buttons {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .task-detail-footer-buttons .btn-complete {
+            flex: 1;
+        }
+
+        .task-detail-pin-btn {
+            width: 52px;
+            height: 48px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 150ms ease;
+            border: none;
+        }
+
+        .task-detail-pin-btn.unpinned {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-tertiary);
+        }
+
+        .task-detail-pin-btn.pinned {
+            background: #fff8e1;
+            border: 1px solid #f0e0a0;
+            color: #b8860b;
+        }
+
+        .task-detail-pin-btn:active {
+            transform: scale(0.9);
+        }
+
+        .pin-remove-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b8860b;
+            opacity: 0.5;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: opacity 150ms;
+        }
+
+        .pin-remove-btn:active {
+            opacity: 1;
+        }
+
+        /* 用語解説ポップオーバー */
+        .glossary-term {
+            color: var(--text-primary);
+            border-bottom: 1px dashed var(--accent);
+            cursor: pointer;
+            transition: background 150ms;
+        }
+
+        .glossary-term:active {
+            background: var(--accent-light);
+            border-radius: 2px;
+        }
+
+        .glossary-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 400;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .glossary-popover {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 401;
+            max-width: 430px;
+            margin: 0 auto;
+            transform: translateY(100%);
+            transition: transform 200ms ease;
+        }
+
+        .glossary-popover.visible {
+            transform: translateY(0);
+        }
+
+        .glossary-popover-content {
+            background: #ffffff;
+            border-radius: 16px 16px 0 0;
+            padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+        }
+
+        .glossary-popover-term {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .glossary-popover-desc {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
         }
 
         /* 画面5: 確認センター */
@@ -1814,35 +2153,6 @@
         }
 
         /* フローティング相談ボタン */
-        .floating-consult-btn {
-            position: fixed;
-            bottom: calc(52px + 12px + env(safe-area-inset-bottom));
-            right: 16px;
-            z-index: 300;
-            height: 44px;
-            padding: 0 16px;
-            border-radius: 22px;
-            background: var(--accent);
-            color: white;
-            font-size: 13px;
-            font-weight: 600;
-            display: none;
-            align-items: center;
-            gap: 8px;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-            transition: transform 0.15s ease;
-        }
-
-        .floating-consult-btn.show {
-            display: flex;
-        }
-
-        .floating-consult-btn:active {
-            transform: scale(0.95);
-        }
-
         /* フッターナビ */
         .footer-nav {
             position: fixed;
@@ -1892,6 +2202,123 @@
 
         .nav-label {
             display: none;
+        }
+
+        /* 完了タスクを未完了に戻す確認ダイアログ */
+        .undo-task-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .undo-task-modal.show .undo-task-overlay {
+            animation: fadeIn 200ms ease forwards;
+        }
+
+        .undo-task-modal.show .undo-task-content {
+            animation: slideUp 200ms ease forwards;
+        }
+
+        .undo-task-modal.hide .undo-task-overlay {
+            animation: fadeOut 150ms ease forwards;
+        }
+
+        .undo-task-modal.hide .undo-task-content {
+            animation: slideDown 150ms ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(0); }
+            to { transform: translateY(100%); }
+        }
+
+        .undo-task-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+        }
+
+        .undo-task-content {
+            position: relative;
+            width: 100%;
+            max-width: 430px;
+            background: #ffffff;
+            border-radius: 16px 16px 0 0;
+            padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+            transform: translateY(100%);
+        }
+
+        .undo-task-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .undo-task-subtext {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .undo-task-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .undo-task-btn-cancel,
+        .undo-task-btn-confirm {
+            flex: 1;
+            height: 44px;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.15s;
+        }
+
+        .undo-task-btn-cancel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .undo-task-btn-confirm {
+            background: var(--accent);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .undo-task-btn-cancel:active,
+        .undo-task-btn-confirm:active {
+            opacity: 0.7;
         }
 
         /* ホーム画面の歯車アイコン */
@@ -2430,22 +2857,6 @@
             .settings-section {
                 padding: 14px 12px;
             }
-
-            .floating-consult-btn {
-                right: 12px;
-            }
-
-            .floating-consult-btn span:last-child {
-                display: none;
-            }
-
-            .floating-consult-btn {
-                width: 44px;
-                height: 44px;
-                border-radius: 50%;
-                padding: 0;
-                justify-content: center;
-            }
         }
 
         /* 394px〜430px（iPhone Plus/Pro Max） */
@@ -2527,10 +2938,12 @@
                 <div class="home-progress" id="homeProgress"></div>
             </div>
 
+            <!-- 次にやること -->
             <div class="home-today-section">
+                <div class="home-section-label">おくやみガイド</div>
                 <div class="home-today-card">
-                    <div class="section-title">今日やること</div>
-                    <div id="todayTasks"></div>
+                    <div class="section-title" style="font-size: 15px; font-weight: 600;">次にやること</div>
+                    <div id="nextTasks"></div>
                 </div>
             </div>
 
@@ -2563,6 +2976,7 @@
             <div class="guide-tabs">
                 <button class="tab-btn active" onclick="setGuideView('phase')">期限順</button>
                 <button class="tab-btn" onclick="setGuideView('domain')">行き先順</button>
+                <button class="tab-btn" onclick="setGuideView('pinned')">ピン留め</button>
             </div>
             <button class="btn-filter-questions" onclick="showScreen('screen-confirm')">
                 <span class="btn-filter-questions-text">質問に答えて、あなた専用に絞り込み</span>
@@ -2578,7 +2992,10 @@
             </div>
             <div class="detail-content" id="detailContent"></div>
             <div class="detail-footer">
-                <button class="btn-complete" id="completeBtn" onclick="completeCurrentTask()">完了にする</button>
+                <div class="task-detail-footer-buttons">
+                    <button class="btn-complete" id="completeBtn" onclick="completeCurrentTask()">完了にする</button>
+                    <button class="task-detail-pin-btn unpinned" id="pinBtn" onclick="togglePin(currentTaskId)"></button>
+                </div>
             </div>
         </div>
 
@@ -2828,13 +3245,6 @@
         </div>
 
         <!-- フローティング相談ボタン -->
-        <button class="floating-consult-btn" id="floatingConsultBtn" onclick="openLineOA()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>相談する</span>
-        </button>
-
         <!-- フッターナビ -->
         <div class="footer-nav">
             <button class="nav-item active" onclick="switchTab('home')">
@@ -2865,6 +3275,19 @@
                 </div>
                 <div class="nav-label">相談</div>
             </button>
+        </div>
+
+        <!-- 完了タスクを未完了に戻す確認ダイアログ -->
+        <div id="undoTaskModal" class="undo-task-modal" style="display: none;">
+            <div class="undo-task-overlay" onclick="closeUndoTaskModal()"></div>
+            <div class="undo-task-content">
+                <div class="undo-task-text">このタスクを未完了に戻しますか？</div>
+                <div class="undo-task-subtext">完了の記録が取り消されます</div>
+                <div class="undo-task-buttons">
+                    <button class="undo-task-btn-cancel" onclick="closeUndoTaskModal()">キャンセル</button>
+                    <button class="undo-task-btn-confirm" onclick="confirmUndoTask()">戻す</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -3093,6 +3516,47 @@
             M4: "4か月以内",
             M10: "10ヶ月以内",
             Y3: "3年以内"
+        };
+
+        // 用語辞書データ
+        const glossary = {
+            "死亡診断書": "医師が発行する、死亡の事実を証明する書類。死亡届の提出や保険金請求など全ての手続きの起点になります。",
+            "死亡届": "死亡の事実を市区町村に届け出る書類。届出期限は死亡を知った日から7日以内です。",
+            "火葬許可証": "死亡届を提出すると交付される、火葬を行うための許可証。これがないと火葬ができません。",
+            "埋葬許可証": "火葬後に交付される書類。納骨の際に墓地管理者に提出が必要です。",
+            "住民票の除票": "死亡により住民登録が抹消されたことを証明する書類。相続手続きで頻繁に必要になります。",
+            "世帯主変更届": "世帯主が亡くなった場合に、新しい世帯主を届け出る手続き。届出期限は14日以内です。",
+            "資格喪失届": "故人の健康保険の資格がなくなったことを届け出る手続き。保険証の返却も必要です。",
+            "葬祭費": "国民健康保険から葬儀を行った方に支給される給付金。自治体により3〜7万円程度です。",
+            "埋葬料": "社会保険（協会けんぽ等）から支給される葬儀関連の給付金。一律5万円です。",
+            "高額療養費": "1ヶ月の医療費が自己負担限度額を超えた場合に、超過分が還付される制度です。",
+            "未支給年金": "故人が受け取れなかった年金（死亡月まで）。生計同一の遺族が請求できます。",
+            "遺族基礎年金": "国民年金から支給される遺族年金。18歳年度末までの子がいる配偶者または子が対象です。",
+            "遺族厚生年金": "厚生年金から支給される遺族年金。故人の報酬比例額の3/4が支給されます。",
+            "相続放棄": "故人の財産も負債も全て引き継がないこと。死亡を知った日から3ヶ月以内に家庭裁判所に申述が必要です。",
+            "限定承認": "プラスの財産の範囲内で負債を引き継ぐ方法。相続人全員で家庭裁判所に申述が必要です。",
+            "準確定申告": "故人の1月1日〜死亡日の所得について、相続人が代わりに確定申告すること。期限は死亡から4ヶ月以内です。",
+            "遺産分割協議書": "相続人全員で遺産の分け方を合意し、書面にまとめたもの。全員の署名・実印が必要です。",
+            "法定相続情報一覧図": "法務局が認証する相続関係の証明書。戸籍の束の代わりに各機関で使え、無料で何通でも取得できます。",
+            "相続財産目録": "故人のプラスの財産とマイナスの財産を全てリスト化した書類。遺産分割協議の土台になります。",
+            "相続登記": "故人名義の不動産を相続人名義に変更する手続き。2024年4月から義務化され、期限は3年以内です。",
+            "団信": "団体信用生命保険の略。住宅ローン契約時にほぼ加入しており、死亡時にローン残債が保険金で完済されます。",
+            "基礎控除": "相続税の非課税枠。3,000万円＋600万円×法定相続人の数。この金額以下なら相続税は不要です。",
+            "忌引休暇": "親族の死亡時に取得できる休暇。法律上の義務ではなく、会社の就業規則による。配偶者5〜10日が目安です。",
+            "国民健康保険": "自営業者・無職の方等が加入する健康保険。略称は国保。市区町村が運営しています。",
+            "後期高齢者医療制度": "75歳以上の方が加入する医療保険制度。保険証は別途発行されます。",
+            "農業委員会": "農地の売買・転用・相続届出を管轄する行政機関。届出を怠ると10万円以下の過料の対象です。"
+        };
+
+        const phaseMessages = {
+            H24: "まずは、深呼吸してください。今日すべてを終わらせる必要はありません。分からないことは「分からない」のままで大丈夫です。",
+            D7: "一人で抱え込まなくて大丈夫。手続きは後からでも間に合います。今は、大切な方を送ることだけに集中してください。",
+            D14: "「こんなに色々あるの？」と感じて当然です。全部を一度にやる必要はありません。一つ終わるたびに、前に進んでいます。",
+            D49: "悲しみが波のように押し寄せる日があっても、それは自然なことです。進めない日は無理をせず。私たちはいつでも待っています。",
+            M3: "やることが増えて途方に暮れるかもしれません。全部を自分で抱えなくて大丈夫。専門家に預けることも立派な一歩です。",
+            M4: "「準確定申告」。聞き慣れない言葉だと思います。まず対象かどうかだけ確認してください。税務署に聞けばすぐ分かります。",
+            M10: "ここまで、本当によく歩いてこられました。ゴールは見えています。あと少しだけ、一緒に歩かせてください。",
+            Y3: "これが終われば、主な手続きは全て完了です。ここまで来たあなたを、どうか労ってあげてください。お疲れさまでした。"
         };
 
         const domainLabels = {
@@ -3991,15 +4455,6 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
 
-            // フローティング相談ボタンの表示制御
-            const floatingBtn = document.getElementById('floatingConsultBtn');
-            const screensWithFloatingBtn = ['screen-home', 'screen-guide', 'screen-confirm', 'screen-settings', 'screen-concierge'];
-            if (screensWithFloatingBtn.includes(screenId)) {
-                floatingBtn.classList.add('show');
-            } else {
-                floatingBtn.classList.remove('show');
-            }
-
             // フッターナビの表示制御
             const footerNav = document.querySelector('.footer-nav');
             const screensWithoutFooter = ['screen-splash', 'screen-onboarding'];
@@ -4128,7 +4583,7 @@
             const currentStep = currentQuestionIndex + 2; // +2 because index 0 is step 2
 
             let html = `<div class="domain-badge domain-${q.domain}">${domainLabels[q.domain]}</div>`;
-            html += `<div class="question-text">${q.text}</div>`;
+            html += `<div class="question-text">${markGlossaryTerms(q.text)}</div>`;
             html += `<div class="question-info">${currentStep} / ${totalSteps} ※後から変更できます</div>`;
 
             if (q.type === 'single') {
@@ -4407,6 +4862,167 @@
             return weeks;
         }
 
+        // 現在フェーズの判定
+        function getCurrentPhase(deathDateStr) {
+            if (!deathDateStr) return 'H24';
+            const parts = deathDateStr.split('-');
+            const death = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            death.setHours(0, 0, 0, 0);
+            const diffDays = Math.ceil((today - death) / (1000 * 60 * 60 * 24));
+
+            if (diffDays <= 1) return 'H24';
+            if (diffDays <= 7) return 'D7';
+            if (diffDays <= 14) return 'D14';
+            if (diffDays <= 49) return 'D49';
+            if (diffDays <= 90) return 'M3';
+            if (diffDays <= 120) return 'M4';
+            if (diffDays <= 300) return 'M10';
+            return 'Y3';
+        }
+
+        // 次フェーズの判定
+        function getNextPhase(currentPhase) {
+            const order = ['H24', 'D7', 'D14', 'D49', 'M3', 'M4', 'M10', 'Y3'];
+            const idx = order.indexOf(currentPhase);
+            if (idx < order.length - 1) return order[idx + 1];
+            return null;
+        }
+
+        // タスクの期限日を取得
+        function getTaskDeadline(task, deathDate) {
+            if (!task.phase || !deathDate) return null;
+            const phaseConfig = {
+                'H24': { days: 1 },  // 修正: 死亡日の翌日が期限
+                'D7': { days: 7 },
+                'D14': { days: 14 },
+                'D49': { days: 49 },
+                'M3': { days: 90 },
+                'M4': { days: 120 },
+                'M10': { days: 300 },
+                'Y3': { days: 1095 }
+            };
+            const config = phaseConfig[task.phase];
+            if (!config) return null;
+            const deadline = new Date(deathDate);
+            deadline.setDate(deadline.getDate() + config.days);
+            return deadline;
+        }
+
+        // タスクの期限残日数を取得
+        function getTaskRemainingDays(task) {
+            const deathDate = answers['Q-DOD-01'];
+            if (!deathDate) return null;
+            const parts = deathDate.split('-');
+            const death = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            const deadline = getTaskDeadline(task, death);
+            if (!deadline) return null;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            deadline.setHours(0, 0, 0, 0);
+            return Math.ceil((deadline - today) / (1000 * 60 * 60 * 24));
+        }
+
+        // 用語解説機能
+        function markGlossaryTerms(text) {
+            if (!text) return text;
+            let result = text;
+            const sortedTerms = Object.keys(glossary).sort((a, b) => b.length - a.length);
+
+            for (const term of sortedTerms) {
+                const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp('(?<!<[^>]*)(' + escaped + ')(?![^<]*>)', 'g');
+                let replaced = false;
+                result = result.replace(regex, (match) => {
+                    if (!replaced) {
+                        replaced = true;
+                        return '<span class="glossary-term" data-term="' + term + '">' + match + '</span>';
+                    }
+                    return match;
+                });
+            }
+            return result;
+        }
+
+        function closeGlossary() {
+            const popover = document.getElementById('glossaryPopover');
+            if (popover) {
+                popover.classList.remove('visible');
+                setTimeout(() => {
+                    popover.style.display = 'none';
+                    const overlay = document.getElementById('glossaryOverlay');
+                    if (overlay) overlay.style.display = 'none';
+                }, 200);
+            }
+        }
+
+        // 未完了に戻す機能
+        let revertTargetTaskId = null;
+
+        function showRevertModal(taskId) {
+            console.log('showRevertModal called with taskId:', taskId);
+            revertTargetTaskId = taskId;
+            document.getElementById('revertModalOverlay').style.display = 'block';
+            document.getElementById('revertModal').style.display = 'block';
+        }
+
+        function closeRevertModal() {
+            console.log('closeRevertModal called');
+            revertTargetTaskId = null;
+            document.getElementById('revertModalOverlay').style.display = 'none';
+            document.getElementById('revertModal').style.display = 'none';
+        }
+
+        // ピン留め機能
+        function getPinIcon(isPinned, size = 20) {
+            const fill = isPinned ? 'currentColor' : 'none';
+            const strokeWidth = isPinned ? '1' : '2';
+            return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${fill}" stroke="currentColor" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 17v5"/>
+                <path d="M9 11V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v7"/>
+                <path d="M5 11h14l-1.5 6h-11Z"/>
+            </svg>`;
+        }
+
+        function togglePin(taskId) {
+            let pinned = JSON.parse(localStorage.getItem('rn_pinned_tasks') || '[]');
+            if (pinned.includes(taskId)) {
+                pinned = pinned.filter(id => id !== taskId);
+            } else {
+                pinned.push(taskId);
+            }
+            localStorage.setItem('rn_pinned_tasks', JSON.stringify(pinned));
+            updatePinButtonState(taskId);
+        }
+
+        function updatePinButtonState(taskId) {
+            const btn = document.getElementById('pinBtn');
+            if (!btn) return;
+            const pinned = JSON.parse(localStorage.getItem('rn_pinned_tasks') || '[]');
+            const isPinned = pinned.includes(taskId);
+            btn.className = 'task-detail-pin-btn ' + (isPinned ? 'pinned' : 'unpinned');
+            btn.innerHTML = getPinIcon(isPinned, 20);
+        }
+
+        function removePinFromList(taskId) {
+            let pinned = JSON.parse(localStorage.getItem('rn_pinned_tasks') || '[]');
+            pinned = pinned.filter(id => id !== taskId);
+            localStorage.setItem('rn_pinned_tasks', JSON.stringify(pinned));
+
+            // フェードアウト後に再レンダリング
+            const taskCard = document.querySelector(`[data-pin-task-id="${taskId}"]`);
+            if (taskCard) {
+                taskCard.style.transition = 'opacity 200ms';
+                taskCard.style.opacity = '0';
+                setTimeout(() => {
+                    renderGuide();
+                }, 200);
+            } else {
+                renderGuide();
+            }
+        }
+
         // ホーム画面レンダリング
         function renderHome() {
             // 挨拶文を時間帯で切り替え
@@ -4431,136 +5047,180 @@
                 status: taskStatuses[t.id] || determineTaskStatus(t)
             })).filter(t => t.status !== 'NOT_APPLICABLE');
 
+            // 修正6：プログレスバーを横バーに変更
             const completedCount = allTasks.filter(t => t.status === 'DONE').length;
             const totalCount = allTasks.length;
             const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
             const progressContainer = document.getElementById('homeProgress');
             progressContainer.innerHTML = `
-                <div class="progress-bar-container">
-                    <div class="progress-bar-fill" style="width: ${progressPercent}%"></div>
+                <div class="home-progress-bar-container" style="
+                    width: 100%;
+                    height: 4px;
+                    background: var(--border-light);
+                    border-radius: 2px;
+                    overflow: hidden;
+                    margin-bottom: 6px;
+                ">
+                    <div class="home-progress-bar-fill" style="
+                        height: 100%;
+                        background: var(--accent);
+                        border-radius: 2px;
+                        transition: width 0.3s ease;
+                        width: ${progressPercent}%;
+                    "></div>
                 </div>
-                <div class="progress-text">${completedCount}件完了 / 全${totalCount}件</div>
+                <div class="home-progress-text" style="
+                    font-size: 12px;
+                    color: var(--text-tertiary);
+                ">${completedCount}件完了 / 全${totalCount}件</div>
             `;
 
-            // 今日やること（OPEN/NEED_CONFIRMのタスクからpriority上位3件）
-            // BLOCKED, DONE, NOT_APPLICABLEは除外
+            // 修正2：「次にやること」の新しいロジック
+            const deathDate = answers['Q-DOD-01'];
+
+            // 全OPEN/NEED_CONFIRMタスクを取得
             const activeTasks = tasks.filter(t => {
                 const status = taskStatuses[t.id] || determineTaskStatus(t);
                 return status === 'OPEN' || status === 'NEED_CONFIRM';
-            }).sort((a, b) => b.priority - a.priority).slice(0, 3);
+            }).map(t => ({
+                ...t,
+                status: taskStatuses[t.id] || determineTaskStatus(t),
+                remaining: getTaskRemainingDays(t)
+            }));
 
-            const todayContainer = document.getElementById('todayTasks');
-            if (activeTasks.length === 0) {
-                todayContainer.innerHTML = '<div style="text-align: center; color: var(--text-tertiary); padding: 32px 20px; font-size: 15px;">すべてのタスクが完了しました</div>';
-            } else {
-                // 死亡日から期限計算
-                const deathDate = answers['Q-DOD-01'];
-                let deathDateObj = null;
+            // 期限日の近い順にソート
+            activeTasks.sort((a, b) => {
+                const remainA = a.remaining;
+                const remainB = b.remaining;
 
-                if (deathDate) {
-                    if (deathDate.includes('-')) {
-                        const parts = deathDate.split('-');
-                        deathDateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-                    } else {
-                        deathDateObj = new Date(deathDate);
+                // 両方null → priority降順
+                if (remainA === null && remainB === null) return b.priority - a.priority;
+                // 片方null → nullを後ろ
+                if (remainA === null) return 1;
+                if (remainB === null) return -1;
+                // 両方数値 → 残日数昇順（マイナス=超過が先頭）
+                if (remainA !== remainB) return remainA - remainB;
+                // 同一残日数 → priority降順
+                return b.priority - a.priority;
+            });
+
+            const nextTasks = activeTasks.slice(0, 3);
+            const totalActiveTasks = activeTasks.length;
+
+            // タスクカードを生成する共通関数（ガイド画面と同じバッジ風UI）
+            const renderTaskCard = (task) => {
+                const isDone = task.status === 'DONE';
+                // 期限表示計算（ガイド画面と同じロジック）
+                let deadlineDisplayText = '';
+                let deadlineBadgeClass = '';
+
+                if (task.remaining !== null) {
+                    const parts = deathDate.split('-');
+                    const deathDateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                    const deadlineDate = getTaskDeadline(task, deathDateObj);
+
+                    if (deadlineDate) {
+                        const m = deadlineDate.getMonth() + 1;
+                        const d = deadlineDate.getDate();
+                        const remaining = task.remaining;
+
+                        if (remaining < 0) {
+                            // 期限超過：overdue
+                            deadlineDisplayText = `期限: ${m}/${d}（${Math.abs(remaining)}日超過）`;
+                            deadlineBadgeClass = 'overdue';
+                        } else if (remaining === 0) {
+                            // 当日：overdue
+                            deadlineDisplayText = `期限: ${m}/${d}（今日が期限）`;
+                            deadlineBadgeClass = 'overdue';
+                        } else if (remaining <= 3) {
+                            // あと1〜3日：urgent
+                            deadlineDisplayText = `期限: ${m}月${d}日まで（あと${remaining}日）`;
+                            deadlineBadgeClass = 'urgent';
+                        } else if (remaining <= 7) {
+                            // あと4〜7日：soon
+                            deadlineDisplayText = `期限: ${m}月${d}日まで（あと${remaining}日）`;
+                            deadlineBadgeClass = 'soon';
+                        } else {
+                            // あと8日以上：デフォルト
+                            deadlineDisplayText = `期限: ${m}月${d}日まで（あと${remaining}日）`;
+                            deadlineBadgeClass = '';
+                        }
                     }
+                } else if (task.phase) {
+                    // 死亡日未回答の場合
+                    const phaseNames = {
+                        'H24': '翌日まで',
+                        'D7': '7日以内',
+                        'D14': '14日以内',
+                        'D49': '49日以内',
+                        'M3': '3ヶ月以内',
+                        'M4': '4ヶ月以内',
+                        'M10': '10ヶ月以内',
+                        'Y3': '3年以内'
+                    };
+                    deadlineDisplayText = `期限: ${phaseNames[task.phase] || ''}`;
+                    deadlineBadgeClass = '';
                 }
 
-                todayContainer.innerHTML = activeTasks.map(task => {
-                    const status = taskStatuses[task.id] || determineTaskStatus(task);
-                    const isDone = status === 'DONE';
+                // ステータス表示
+                let statusHint = '';
+                if (task.status === 'NEED_CONFIRM') {
+                    statusHint = '<div class="task-status-hint need-confirm">質問に回答すると確定します</div>';
+                } else if (task.status === 'BLOCKED') {
+                    statusHint = '<div class="task-status-hint blocked">前のタスクを完了してください</div>';
+                }
 
-                    // 期限表示計算
-                    let deadlineDisplay = '';
-                    let deadlineClass = '';
+                // Priority表示（priority >= 85の場合のみ）
+                const priorityBadge = task.priority >= 85
+                    ? '<span style="display: inline-block; font-size: 10px; font-weight: 600; color: #c45a3c; background: #fef0ec; padding: 1px 6px; border-radius: 8px; margin-left: 4px;">優先</span>'
+                    : '';
 
-                    if (deathDateObj && task.phase) {
-                        const phaseConfig = {
-                            'H24': { days: 0 },
-                            'D7': { days: 7 },
-                            'D14': { days: 14 },
-                            'D49': { days: 49 },
-                            'M3': { days: 90 },
-                            'M4': { days: 120 },
-                            'M10': { days: 300 },
-                            'Y3': { days: 1095 }
-                        };
+                // 矢印表示（NEED_CONFIRMの場合は非表示）
+                const showArrow = task.status !== 'NEED_CONFIRM';
 
-                        const config = phaseConfig[task.phase];
-                        if (config) {
-                            const deadlineDate = new Date(deathDateObj);
-                            deadlineDate.setDate(deadlineDate.getDate() + config.days);
-                            const today = new Date();
-                            today.setHours(0, 0, 0, 0);
-                            deadlineDate.setHours(0, 0, 0, 0);
-                            const daysRemaining = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
+                // クリックハンドラ
+                const clickHandler = task.status === 'NEED_CONFIRM'
+                    ? `openQuestionsForTask('${task.id}', 'screen-home')`
+                    : `showTaskDetail('${task.id}')`;
 
-                            const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-                            const deadlineMonth = monthNames[deadlineDate.getMonth()];
-                            const deadlineDay = deadlineDate.getDate();
-
-                            if (daysRemaining < 0) {
-                                deadlineDisplay = `期限を${Math.abs(daysRemaining)}日超過`;
-                                deadlineClass = 'warning';
-                            } else if (daysRemaining === 0) {
-                                deadlineDisplay = `期限: 今日まで`;
-                                deadlineClass = 'warning';
-                            } else if (daysRemaining <= 7) {
-                                deadlineDisplay = `期限: ${deadlineMonth}${deadlineDay}日まで（あと${daysRemaining}日）`;
-                                deadlineClass = 'warning';
-                            } else {
-                                deadlineDisplay = `期限: ${deadlineMonth}${deadlineDay}日まで（あと${daysRemaining}日）`;
-                            }
-                        }
-                    } else if (task.phase) {
-                        // 死亡日未回答の場合
-                        const phaseNames = {
-                            'H24': '当日',
-                            'D7': '7日以内',
-                            'D14': '14日以内',
-                            'D49': '49日以内',
-                            'M3': '3ヶ月以内',
-                            'M4': '4ヶ月以内',
-                            'M10': '10ヶ月以内',
-                            'Y3': '3年以内'
-                        };
-                        deadlineDisplay = `期限: ${phaseNames[task.phase] || ''}`;
-                    }
-
-                    // ステータス表示
-                    let statusHint = '';
-                    if (status === 'NEED_CONFIRM') {
-                        statusHint = '<div class="task-status-hint need-confirm">質問に回答すると確定します</div>';
-                    } else if (status === 'BLOCKED') {
-                        statusHint = '<div class="task-status-hint blocked">前のタスクを完了してください</div>';
-                    }
-
-                    // Priority表示（priority >= 85の場合のみ）
-                    const priorityBadge = task.priority >= 85
-                        ? '<span style="display: inline-block; font-size: 10px; font-weight: 600; color: #c45a3c; background: #fef0ec; padding: 1px 6px; border-radius: 8px; margin-left: 4px;">優先</span>'
-                        : '';
-
-                    // 矢印表示（NEED_CONFIRMの場合は非表示）
-                    const showArrow = status !== 'NEED_CONFIRM';
-
-                    // クリックハンドラ
-                    const clickHandler = status === 'NEED_CONFIRM'
-                        ? `openQuestionsForTask('${task.id}', 'screen-home')`
-                        : `showTaskDetail('${task.id}')`;
-
-                    return `
-                        <div class="task-item" onclick="event.stopPropagation(); ${clickHandler}">
-                            <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''} ${status === 'NEED_CONFIRM' || status === 'BLOCKED' ? 'disabled' : ''} onclick="event.stopPropagation(); toggleTaskStatus('${task.id}')">
-                            <div class="task-info">
-                                <div class="task-name ${isDone ? 'done' : ''}">${task.title}${priorityBadge}</div>
-                                ${statusHint}
-                                ${deadlineDisplay ? `<div class="task-deadline-display ${deadlineClass}">${deadlineDisplay}</div>` : ''}
-                            </div>
-                            ${showArrow ? '<div style="color: var(--text-tertiary); font-size: 14px;">›</div>' : ''}
+                return `
+                    <div class="task-item" onclick="event.stopPropagation(); ${clickHandler}">
+                        <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''} ${task.status === 'NEED_CONFIRM' || task.status === 'BLOCKED' ? 'disabled' : ''} onclick="event.stopPropagation(); toggleTaskStatus('${task.id}')">
+                        <div class="task-info">
+                            <div class="task-name ${isDone ? 'done' : ''}">${task.title}${priorityBadge}</div>
+                            ${statusHint}
+                            ${deadlineDisplayText ? `<div class="task-deadline ${deadlineBadgeClass}">${deadlineDisplayText}</div>` : ''}
                         </div>
+                        ${showArrow ? '<div style="color: var(--text-tertiary); font-size: 14px;">›</div>' : ''}
+                    </div>
+                `;
+            };
+
+            // 修正2：「次にやること」表示
+            const nextContainer = document.getElementById('nextTasks');
+
+            if (nextTasks.length === 0) {
+                nextContainer.innerHTML = '<div style="text-align: center; color: var(--text-tertiary); padding: 32px 20px; font-size: 15px;">すべてのタスクが完了しました</div>';
+            } else {
+                let nextHTML = nextTasks.map(renderTaskCard).join('');
+
+                // 4件以上ある場合は「他○件 →」リンクを表示
+                const remainingCount = totalActiveTasks - 3;
+                if (remainingCount > 0) {
+                    nextHTML += `
+                        <div style="
+                            text-align: center;
+                            padding: 10px 0 4px;
+                            font-size: 13px;
+                            font-weight: 500;
+                            color: var(--text-secondary);
+                            cursor: pointer;
+                        " onclick="setGuideView('phase'); showScreen('screen-guide');">他 ${remainingCount}件 →</div>
                     `;
-                }).join('');
+                }
+
+                nextContainer.innerHTML = nextHTML;
             }
 
             // 未回答質問の導線
@@ -4590,6 +5250,9 @@
             } else if (currentGuideView === 'domain') {
                 // 行き先順表示
                 renderGuideByDestination(container);
+            } else if (currentGuideView === 'pinned') {
+                // ピン留め表示
+                renderGuideByPinned(container);
             }
         }
 
@@ -4739,6 +5402,145 @@
             container.innerHTML = html;
         }
 
+        function renderGuideByPinned(container) {
+            const pinnedTaskIds = JSON.parse(localStorage.getItem('rn_pinned_tasks') || '[]');
+
+            if (pinnedTaskIds.length === 0) {
+                container.innerHTML = `
+                    <div style="
+                        text-align: center;
+                        padding: 40px 20px;
+                        color: var(--text-tertiary);
+                        font-size: 14px;
+                        line-height: 1.7;
+                    ">
+                        <div style="color: var(--text-tertiary); margin-bottom: 8px;">
+                            ${getPinIcon(false, 28)}
+                        </div>
+                        ピン留めしたタスクはありません<br>
+                        <span style="font-size: 12px;">タスク詳細画面のピンボタンで追加できます</span>
+                    </div>
+                `;
+                return;
+            }
+
+            // ピン留めされたタスクを取得
+            const pinnedTasks = tasks
+                .filter(t => pinnedTaskIds.includes(t.id))
+                .map(t => ({
+                    ...t,
+                    status: taskStatuses[t.id] || determineTaskStatus(t),
+                    remaining: getTaskRemainingDays(t)
+                }));
+
+            // ソート：期限日の近い順 → priority降順
+            pinnedTasks.sort((a, b) => {
+                const remainA = a.remaining;
+                const remainB = b.remaining;
+
+                if (remainA === null && remainB === null) return b.priority - a.priority;
+                if (remainA === null) return 1;
+                if (remainB === null) return -1;
+                if (remainA !== remainB) return remainA - remainB;
+                return b.priority - a.priority;
+            });
+
+            // タスクカードを生成
+            const tasksHTML = pinnedTasks.map(t => {
+                const isDone = t.status === 'DONE';
+                let checkboxDisabled = '';
+                let clickHandler = `showTaskDetail('${t.id}')`;
+                let extraInfo = '';
+                let borderStyle = '';
+
+                // タイトルから期限を抽出
+                let taskTitle = t.title;
+                let deadlineText = '';
+                const deadlineMatch = t.title.match(/[（(]?期限[：:]\s*([^）)]+)[）)]?/);
+                if (deadlineMatch) {
+                    deadlineText = deadlineMatch[1].trim();
+                    taskTitle = t.title.replace(/[（(]?期限[：:]\s*[^）)]+[）)]?/, '').trim();
+                }
+
+                // Priority表示
+                const priorityBadge = t.priority >= 85
+                    ? '<span style="display: inline-block; font-size: 10px; font-weight: 600; color: #c45a3c; background: #fef0ec; padding: 1px 6px; border-radius: 8px; margin-left: 4px;">優先</span>'
+                    : '';
+
+                if (!isDone) {
+                    if (t.status === 'NEED_CONFIRM') {
+                        extraInfo = '<div class="task-confirm-hint">→ 質問に回答してください</div>';
+                        checkboxDisabled = 'disabled';
+                        clickHandler = `openQuestionsForTask('${t.id}', 'screen-guide')`;
+                    } else if (t.status === 'BLOCKED') {
+                        extraInfo = '<div class="task-confirm-hint" style="color: var(--text-tertiary);">先にやることがあります</div>';
+                        checkboxDisabled = 'disabled';
+                        borderStyle = 'border-color: var(--border); opacity: 0.6;';
+                        clickHandler = `showBlockingTask('${t.id}')`;
+                    }
+                }
+
+                // 期限表示（バッジ風）
+                let deadlineDisplayText = '';
+                let deadlineBadgeClass = '';
+                const deathDate = answers['Q-DOD-01'];
+
+                if (deathDate && t.phase) {
+                    const remaining = t.remaining;
+                    if (remaining !== null) {
+                        const parts = deathDate.split('-');
+                        const deathDateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                        const deadlineDate = getTaskDeadline(t, deathDateObj);
+
+                        if (deadlineDate) {
+                            const m = deadlineDate.getMonth() + 1;
+                            const d = deadlineDate.getDate();
+
+                            if (remaining < 0) {
+                                deadlineDisplayText = `期限: ${m}/${d}（${Math.abs(remaining)}日超過）`;
+                                deadlineBadgeClass = 'overdue';
+                            } else if (remaining === 0) {
+                                deadlineDisplayText = `期限: ${m}/${d}（今日が期限）`;
+                                deadlineBadgeClass = 'overdue';
+                            } else if (remaining <= 3) {
+                                deadlineDisplayText = `期限: ${m}月${d}日まで（あと${remaining}日）`;
+                                deadlineBadgeClass = 'urgent';
+                            } else if (remaining <= 7) {
+                                deadlineDisplayText = `期限: ${m}月${d}日まで（あと${remaining}日）`;
+                                deadlineBadgeClass = 'soon';
+                            } else {
+                                deadlineDisplayText = `期限: ${m}月${d}日まで（あと${remaining}日）`;
+                                deadlineBadgeClass = '';
+                            }
+                        }
+                    }
+                } else if (deadlineText) {
+                    deadlineDisplayText = `期限: ${deadlineText}`;
+                    deadlineBadgeClass = '';
+                }
+
+                return `
+                    <div class="task-item" style="${borderStyle}" data-pin-task-id="${t.id}" onclick="event.stopPropagation(); ${clickHandler}">
+                        <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''} ${checkboxDisabled} onclick="event.stopPropagation(); toggleTaskStatus('${t.id}')">
+                        <div class="task-info">
+                            <div class="task-name ${isDone ? 'done' : ''}">${taskTitle}${priorityBadge}</div>
+                            ${deadlineDisplayText ? `<div class="task-deadline ${deadlineBadgeClass}">${deadlineDisplayText}</div>` : ''}
+                            ${extraInfo}
+                        </div>
+                        <div class="pin-remove-btn" onclick="event.stopPropagation(); removePinFromList('${t.id}')">
+                            ${getPinIcon(true, 16)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div style="padding: 16px;">
+                    ${tasksHTML}
+                </div>
+            `;
+        }
+
         function renderTaskList(taskList, isDone = false, showPhaseBadge = false) {
             return taskList.map(t => {
                 let checkboxDisabled = '';
@@ -4774,12 +5576,59 @@
                     }
                 }
 
+                // 改修B：バッジ風期限表示
+                let deadlineDisplayText = '';
+                let deadlineBadgeClass = '';
+                const deathDate = answers['Q-DOD-01'];
+
+                if (deathDate && t.phase) {
+                    // 死亡日回答済み：動的なカウントダウン表示
+                    const remaining = getTaskRemainingDays(t);
+
+                    if (remaining !== null) {
+                        const parts = deathDate.split('-');
+                        const deathDateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                        const deadlineDate = getTaskDeadline(t, deathDateObj);
+
+                        if (deadlineDate) {
+                            const m = deadlineDate.getMonth() + 1;
+                            const d = deadlineDate.getDate();
+
+                            if (remaining < 0) {
+                                // 期限超過：overdue
+                                deadlineDisplayText = `期限: ${m}/${d}（${Math.abs(remaining)}日超過）`;
+                                deadlineBadgeClass = 'overdue';
+                            } else if (remaining === 0) {
+                                // 当日：overdue
+                                deadlineDisplayText = `期限: ${m}/${d}（今日が期限）`;
+                                deadlineBadgeClass = 'overdue';
+                            } else if (remaining <= 3) {
+                                // あと1〜3日：urgent
+                                deadlineDisplayText = `期限: ${m}月${d}日まで（あと${remaining}日）`;
+                                deadlineBadgeClass = 'urgent';
+                            } else if (remaining <= 7) {
+                                // あと4〜7日：soon
+                                deadlineDisplayText = `期限: ${m}月${d}日まで（あと${remaining}日）`;
+                                deadlineBadgeClass = 'soon';
+                            } else {
+                                // あと8日以上：デフォルト
+                                deadlineDisplayText = `期限: ${m}月${d}日まで（あと${remaining}日）`;
+                                deadlineBadgeClass = '';
+                            }
+                        }
+                    }
+                } else if (deadlineText) {
+                    // 死亡日未回答：従来の静的表示（デフォルトスタイル）
+                    deadlineDisplayText = `期限: ${deadlineText}`;
+                    deadlineBadgeClass = '';
+                }
+
                 return `
                     <div class="task-item" style="${borderStyle}" onclick="event.stopPropagation(); ${clickHandler}">
                         <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''} ${checkboxDisabled} onclick="event.stopPropagation(); toggleTaskStatus('${t.id}')">
                         <div class="task-info">
                             <div class="task-name ${isDone ? 'done' : ''}">${taskTitle}${priorityBadge}</div>
-                            ${deadlineText ? `<div class="task-deadline">期限: ${deadlineText}</div>` : ''}
+                            ${deadlineDisplayText ? `<div class="task-deadline ${deadlineBadgeClass}">${deadlineDisplayText}</div>` : ''}
                             ${extraInfo}
                         </div>
                         <div style="color: var(--text-tertiary); font-size: 18px;">›</div>
@@ -4847,18 +5696,19 @@
             }, 50);
         }
 
+        // 完了タスクを未完了に戻す確認ダイアログ用の変数
+        let pendingUndoTaskId = null;
+
         function toggleTaskStatus(taskId) {
+            console.log('toggleTaskStatus called with taskId:', taskId);
             const task = tasks.find(t => t.id === taskId);
-            const currentStatus = taskStatuses[taskId];
+            const currentStatus = taskStatuses[taskId] || determineTaskStatus(task);
+            console.log('Current status:', currentStatus);
 
             if (currentStatus === 'DONE') {
-                // DONE → 元のステータスに戻す
-                taskStatuses[taskId] = determineTaskStatus(task);
-                saveData();
-                // 依存タスクを再評価
-                regenerateAllTaskStatuses();
-                renderGuide();
-                renderHome();
+                // DONE → 確認ダイアログを表示
+                console.log('Status is DONE, showing revert modal');
+                showRevertModal(taskId);
             } else if (currentStatus === 'OPEN') {
                 // OPEN → DONEに変更
                 taskStatuses[taskId] = 'DONE';
@@ -4898,6 +5748,85 @@
             // NEED_CONFIRM, BLOCKEDの場合は何もしない
         }
 
+        function showUndoTaskModal() {
+            console.log('showUndoTaskModal called, pendingUndoTaskId:', pendingUndoTaskId);
+            const modal = document.getElementById('undoTaskModal');
+            console.log('Modal element:', modal);
+            if (!modal) {
+                console.error('Modal element not found!');
+                alert('モーダル要素が見つかりません'); // デバッグ用
+                return;
+            }
+
+            // モーダルを表示
+            modal.style.display = 'flex';
+            modal.style.zIndex = '10000';
+
+            // オーバーレイとコンテンツを直接表示（アニメーションなし）
+            const overlay = modal.querySelector('.undo-task-overlay');
+            const content = modal.querySelector('.undo-task-content');
+
+            if (overlay) {
+                overlay.style.opacity = '1';
+            }
+            if (content) {
+                content.style.transform = 'translateY(0)';
+            }
+
+            modal.classList.add('show');
+            console.log('Modal shown with direct styles');
+        }
+
+        function closeUndoTaskModal() {
+            const modal = document.getElementById('undoTaskModal');
+            const overlay = modal.querySelector('.undo-task-overlay');
+            const content = modal.querySelector('.undo-task-content');
+
+            // 直接非表示にする
+            if (overlay) {
+                overlay.style.opacity = '0';
+            }
+            if (content) {
+                content.style.transform = 'translateY(100%)';
+            }
+
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.classList.remove('show');
+                pendingUndoTaskId = null;
+            }, 150);
+        }
+
+        function confirmUndoTask() {
+            if (!pendingUndoTaskId) return;
+
+            const task = tasks.find(t => t.id === pendingUndoTaskId);
+            if (!task) return;
+
+            const wasInDetailScreen = document.getElementById('screen-detail').classList.contains('active');
+            const taskId = pendingUndoTaskId;
+
+            // DONE → 元のステータスに戻す
+            taskStatuses[pendingUndoTaskId] = determineTaskStatus(task);
+            saveData();
+
+            // 依存タスクを再評価
+            regenerateAllTaskStatuses();
+            renderGuide();
+            renderHome();
+
+            // タスク詳細画面が開いていた場合は再描画
+            if (wasInDetailScreen) {
+                showTaskDetail(taskId);
+            }
+
+            // モーダルを閉じる
+            closeUndoTaskModal();
+
+            // トースト通知
+            showToast('タスクを未完了に戻しました');
+        }
+
         function regenerateAllTaskStatuses() {
             // 全タスクのステータスを再評価（DONEは維持）
             tasks.forEach(task => {
@@ -4912,7 +5841,7 @@
         // 期限計算ヘルパー関数
         function calculateDeadline(phase, deathDateStr) {
             const phaseConfig = {
-                'H24': { days: 0, label: '亡くなった当日中に行う手続きです' },
+                'H24': { days: 1, label: '死亡日の翌日までに行う手続きです' },  // 修正: 死亡日の翌日が期限
                 'D7': { days: 7, label: '死亡日から7日以内に届出が必要です' },
                 'D14': { days: 14, label: '死亡日から14日以内に届出が必要です' },
                 'D49': { days: 49, label: '四十九日頃までに行う手続きです' },
@@ -4930,7 +5859,7 @@
                 return {
                     hasDate: false,
                     phaseLabel: config.label,
-                    phaseText: phase === 'H24' ? '死亡日当日' :
+                    phaseText: phase === 'H24' ? '死亡日の翌日まで' :
                                phase === 'D7' ? '死亡日から7日以内' :
                                phase === 'D14' ? '死亡日から14日以内' :
                                phase === 'D49' ? '死亡日から49日以内' :
@@ -4957,7 +5886,7 @@
                     return {
                         hasDate: false,
                         phaseLabel: config.label,
-                        phaseText: phase === 'H24' ? '死亡日当日' :
+                        phaseText: phase === 'H24' ? '死亡日の翌日まで' :
                                    phase === 'D7' ? '死亡日から7日以内' :
                                    phase === 'D14' ? '死亡日から14日以内' :
                                    phase === 'D49' ? '死亡日から49日以内' :
@@ -4971,7 +5900,7 @@
                 return {
                     hasDate: false,
                     phaseLabel: config.label,
-                    phaseText: phase === 'H24' ? '死亡日当日' :
+                    phaseText: phase === 'H24' ? '死亡日の翌日まで' :
                                phase === 'D7' ? '死亡日から7日以内' :
                                phase === 'D14' ? '死亡日から14日以内' :
                                phase === 'D49' ? '死亡日から49日以内' :
@@ -4993,10 +5922,10 @@
             const diffTime = deadline - today;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-            const year = deadlineDate.getFullYear();
             const month = deadlineDate.getMonth() + 1;
             const day = deadlineDate.getDate();
-            const dateStr = `${year}年${month}月${day}日`;
+            // タスク一覧と同じ形式に統一（M/D形式）
+            const dateStr = diffDays < 0 || diffDays === 0 ? `${month}/${day}` : `${month}月${day}日`;
 
             return {
                 hasDate: true,
@@ -5025,9 +5954,10 @@
 
             let html = '';
 
-            // タイトルエリア
+            // タイトルエリアと期限バッジ
             let statusBadgeClass = 'open';
             let statusText = 'やること';
+
             if (status === 'DONE') {
                 statusBadgeClass = 'done';
                 statusText = '完了';
@@ -5037,188 +5967,133 @@
             } else if (status === 'BLOCKED') {
                 statusBadgeClass = 'blocked';
                 statusText = 'ブロック中';
+            } else if (status === 'OPEN' && task.phase) {
+                // 期限に基づいてバッジを変更
+                const savedAnswers = JSON.parse(localStorage.getItem('answers') || '{}');
+                const deathDate = savedAnswers['Q-DOD-01'];
+                const deadlineInfo = calculateDeadline(task.phase, deathDate);
+
+                if (deadlineInfo && deadlineInfo.hasDate) {
+                    const daysRemaining = deadlineInfo.daysRemaining;
+                    if (deadlineInfo.isOverdue) {
+                        statusBadgeClass = 'overdue';
+                        statusText = `${Math.abs(daysRemaining)}日超過`;
+                    } else if (daysRemaining <= 3) {
+                        statusBadgeClass = 'urgent';
+                        statusText = `あと${daysRemaining}日`;
+                    } else if (daysRemaining <= 7) {
+                        statusBadgeClass = 'soon';
+                        statusText = `あと${daysRemaining}日`;
+                    }
+                }
             }
 
             html += `<div class="detail-title-area">
-                <div class="detail-task-title">${task.title}</div>
+                <div class="detail-task-title">${markGlossaryTerms(task.title)}</div>
                 <div class="detail-status-badge ${statusBadgeClass}">${statusText}</div>
             </div>`;
 
             if (detail) {
-                // 概要テキスト（プレーン）
-                if (detail.actionSummary) {
-                    html += `<div class="detail-summary-text">${detail.actionSummary}</div>`;
+                // 届出先・届出場所（destination が存在する場合のみ表示）
+                if (detail.destination && detail.destination.trim() !== '' && detail.destination !== '—') {
+                    html += `
+                        <div class="task-detail-destination">
+                            <span class="destination-label">届出先</span>
+                            <span class="destination-value">${markGlossaryTerms(detail.destination)}</span>
+                        </div>
+                    `;
                 }
 
-                // 期限表示（完了済みでない場合のみ）
-                if (status !== 'DONE' && task.phase) {
-                    const savedAnswers = JSON.parse(localStorage.getItem('answers') || '{}');
-                    const deathDate = savedAnswers['Q-DOD-01'];
-
-                    // デバッグ用（開発時のみ表示）
-                    console.log('期限計算 - タスクID:', taskId, 'Phase:', task.phase, '死亡日:', deathDate);
-
-                    const deadlineInfo = calculateDeadline(task.phase, deathDate);
-
-                    if (deadlineInfo) {
-                        if (deadlineInfo.hasDate) {
-                            const isOverdue = deadlineInfo.isOverdue;
-                            const daysRemaining = deadlineInfo.daysRemaining;
-                            let remainingClass = 'detail-deadline-remaining';
-                            let remainingText = '';
-                            let wrapperClass = 'detail-deadline';
-
-                            if (isOverdue) {
-                                remainingClass += ' overdue';
-                                remainingText = `（${Math.abs(daysRemaining)}日超過）`;
-                                wrapperClass += ' overdue-warning';
-                            } else if (daysRemaining <= 7) {
-                                remainingClass += ' urgent';
-                                remainingText = `（あと${daysRemaining}日）`;
-                                wrapperClass += ' urgent-warning';
-                            } else if (daysRemaining <= 14) {
-                                remainingClass += ' soon';
-                                remainingText = `（あと${daysRemaining}日）`;
-                                wrapperClass += ' soon-warning';
-                            } else {
-                                remainingText = `（あと${daysRemaining}日）`;
-                            }
-
-                            html += `<div class="${wrapperClass}">
-                                <div class="detail-deadline-main">
-                                    <span class="detail-deadline-label">期限: </span>
-                                    <span class="detail-deadline-date">${deadlineInfo.dateStr}</span>
-                                    <span class="${remainingClass}">${remainingText}</span>
+                // やること（手順）- 常に展開、シンプルな番号リスト
+                if (detail.steps && detail.steps !== '—') {
+                    const stepsList = detail.steps.split(/(?=[①②③④⑤⑥⑦⑧⑨⑩])/).filter(s => s.trim() !== '');
+                    if (stepsList.length > 0) {
+                        html += `<div class="detail-steps-simple">`;
+                        stepsList.forEach((step, index) => {
+                            let stepText = step.replace(/^[①②③④⑤⑥⑦⑧⑨⑩]/, '').trim();
+                            stepText = stepText.replace(/\/\s*$/, '').trim();
+                            html += `
+                                <div class="detail-step-simple">
+                                    <div class="detail-step-simple-number">${index + 1}.</div>
+                                    <div class="detail-step-simple-text">${markGlossaryTerms(stepText)}</div>
                                 </div>
-                                <div class="detail-deadline-sub">
-                                    ${isOverdue ? '期限を過ぎていますが、届出は可能です。早めに手続きしましょう。' : deadlineInfo.phaseLabel}
-                                </div>
-                            </div>`;
-                        } else {
-                            html += `<div class="detail-deadline no-date">
-                                <div class="detail-deadline-main">
-                                    <span class="detail-deadline-label">期限: </span>${deadlineInfo.phaseText}
-                                </div>
-                                <div class="detail-deadline-sub link" onclick="showScreen('screen-confirm')">
-                                    死亡日を入力すると具体的な期限が表示されます
-                                </div>
-                            </div>`;
-                        }
+                            `;
+                        });
+                        html += `</div>`;
+                        // ステップリストとアコーディオンの区切り線
+                        html += `<hr class="detail-divider">`;
                     }
                 }
 
-                // なぜ必要か
+                // アコーディオン: なぜ必要か（初期状態で開く）
                 if (detail.whyNeeded && detail.whyNeeded !== '—') {
                     html += `
-                        <div class="detail-section">
-                            <div class="detail-section-header">なぜ必要か</div>
-                            <div class="detail-white-card">
-                                <div class="detail-why-text">${detail.whyNeeded}</div>
+                        <div class="detail-accordion-section open" data-accordion="why">
+                            <div class="detail-accordion-header" onclick="toggleAccordion('why')">
+                                <span class="detail-accordion-arrow">▶</span>
+                                <span>なぜ必要か？</span>
+                            </div>
+                            <div class="detail-accordion-content">
+                                <div class="detail-accordion-inner">
+                                    <div class="detail-accordion-text">${markGlossaryTerms(detail.whyNeeded)}</div>
+                                </div>
                             </div>
                         </div>
                     `;
                 }
 
-                // 届出先
-                if (detail.destination && detail.destination !== '—' && detail.destination.trim() !== '') {
-                    html += `
-                        <div class="detail-section">
-                            <div class="detail-section-header">届出先</div>
-                            <div class="detail-white-card">
-                                <div class="detail-dest-name">${detail.destination}</div>
-                                ${detail.address && detail.address.trim() !== '' ? `<div class="detail-dest-address">${detail.address}</div>` : ''}
-                                ${detail.phone && detail.phone.trim() !== '' ? `<a href="tel:${detail.phone}" class="detail-dest-phone">${detail.phone}</a>` : ''}
-                                ${detail.officeHours && detail.officeHours.trim() !== '' ? `<div class="detail-dest-hours">${detail.officeHours}</div>` : ''}
-                            </div>
-                        </div>
-                    `;
-                }
-
-                // 必要なもの
+                // アコーディオン: 必要なもの
                 if (detail.requiredDocs && detail.requiredDocs !== '—') {
                     const docs = detail.requiredDocs === 'なし' ? '特になし' : detail.requiredDocs;
                     const docsList = docs.split(/[、・]/).filter(d => d.trim() !== '');
                     html += `
-                        <div class="detail-section">
-                            <div class="detail-section-header">必要なもの</div>
-                            <div class="detail-white-card">
-                                <ul class="detail-docs-list">
-                                    ${docsList.map(doc => `<li>${doc.trim()}</li>`).join('')}
-                                </ul>
+                        <div class="detail-accordion-section" data-accordion="docs">
+                            <div class="detail-accordion-header" onclick="toggleAccordion('docs')">
+                                <span class="detail-accordion-arrow">▶</span>
+                                <span>必要なもの</span>
                             </div>
-                        </div>
-                    `;
-                }
-
-                // やること（手順）
-                if (detail.steps && detail.steps !== '—') {
-                    const stepsList = detail.steps.split(/(?=[①②③④⑤⑥⑦⑧⑨⑩])/).filter(s => s.trim() !== '');
-                    if (stepsList.length > 0) {
-                        html += `
-                            <div class="detail-section">
-                                <div class="detail-section-header">やること</div>
-                                <div class="detail-white-card">
-                                    <div class="detail-steps-list">
-                                        ${stepsList.map((step, index) => {
-                                            let stepText = step.replace(/^[①②③④⑤⑥⑦⑧⑨⑩]/, '').trim();
-                                            stepText = stepText.replace(/\/\s*$/, '').trim();
-                                            const isCompleted = window._currentStepProgress[index] || false;
-                                            const completedClass = isCompleted ? ' completed' : '';
-                                            return `
-                                                <div class="detail-step-item${completedClass}" data-step-index="${index}">
-                                                    <input type="checkbox" class="detail-step-checkbox" ${isCompleted ? 'checked' : ''}
-                                                           onclick="toggleStepComplete('${taskId}', ${index})">
-                                                    <div class="detail-step-number">${index + 1}</div>
-                                                    <div class="detail-step-text">${stepText}</div>
-                                                </div>
-                                            `;
-                                        }).join('')}
-                                    </div>
+                            <div class="detail-accordion-content">
+                                <div class="detail-accordion-inner">
+                                    <ul class="detail-accordion-list">
+                                        ${docsList.map(doc => `<li>${markGlossaryTerms(doc.trim())}</li>`).join('')}
+                                    </ul>
                                 </div>
                             </div>
-                        `;
-                    }
-                }
-
-                // 完了の目安
-                if (detail.doneCondition && detail.doneCondition !== '—') {
-                    html += `
-                        <div class="detail-section">
-                            <div class="detail-section-header">完了の目安</div>
-                            <div class="detail-white-card">
-                                <div class="detail-done-text">${detail.doneCondition}</div>
-                            </div>
                         </div>
                     `;
                 }
 
-                // よくある質問
+                // アコーディオン: よくある質問
                 if (detail.faq && detail.faq !== '—') {
                     const faqList = detail.faq.split(/(?=Q\.)/).filter(f => f.trim() !== '');
                     if (faqList.length > 0) {
                         html += `
-                            <div class="detail-section">
-                                <div class="detail-section-header">よくある質問</div>
-                                <div class="detail-white-card">
-                                    ${faqList.map(faqItem => {
-                                        const parts = faqItem.split('→');
-                                        if (parts.length >= 2) {
-                                            const question = parts[0].trim();
-                                            let answer = parts.slice(1).join('→').trim();
-                                            // 末尾のスラッシュを除去
-                                            answer = answer.replace(/\/\s*$/, '').trim();
-                                            return `
-                                                <div class="detail-faq-item" onclick="toggleFAQ(this)">
-                                                    <div class="detail-faq-question">
-                                                        <span>${question}</span>
-                                                        <span class="detail-faq-arrow">▼</span>
+                            <div class="detail-accordion-section" data-accordion="faq">
+                                <div class="detail-accordion-header" onclick="toggleAccordion('faq')">
+                                    <span class="detail-accordion-arrow">▶</span>
+                                    <span>よくある質問</span>
+                                </div>
+                                <div class="detail-accordion-content">
+                                    <div class="detail-accordion-inner">
+                                        ${faqList.map(faqItem => {
+                                            const parts = faqItem.split('→');
+                                            if (parts.length >= 2) {
+                                                const question = parts[0].trim();
+                                                let answer = parts.slice(1).join('→').trim();
+                                                answer = answer.replace(/\/\s*$/, '').trim();
+                                                return `
+                                                    <div class="detail-faq-item" onclick="toggleFAQ(this)">
+                                                        <div class="detail-faq-question">
+                                                            <span>${question}</span>
+                                                            <span class="detail-faq-arrow">▼</span>
+                                                        </div>
+                                                        <div class="detail-faq-answer">${markGlossaryTerms(answer)}</div>
                                                     </div>
-                                                    <div class="detail-faq-answer">${answer}</div>
-                                                </div>
-                                            `;
-                                        }
-                                        return '';
-                                    }).join('')}
+                                                `;
+                                            }
+                                            return '';
+                                        }).join('')}
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -5239,14 +6114,31 @@
             const completeBtn = document.getElementById('completeBtn');
             completeBtn.className = 'btn-complete';
 
+            // 既存のイベントリスナーを削除
+            completeBtn.onclick = null;
+
             if (status === 'DONE') {
                 completeBtn.textContent = '完了済み ✓';
                 completeBtn.classList.add('done');
                 completeBtn.disabled = false;
+                // DONE状態の場合：モーダルを直接表示
+                completeBtn.onclick = function() {
+                    showRevertModal(taskId);
+                };
             } else if (status === 'OPEN') {
                 completeBtn.textContent = '完了にする';
                 completeBtn.classList.add('active');
                 completeBtn.disabled = false;
+                // OPEN状態の場合：完了処理を実行
+                completeBtn.onclick = function() {
+                    taskStatuses[taskId] = 'DONE';
+                    saveData();
+                    regenerateAllTaskStatuses();
+                    showScreen('screen-guide');
+                    renderGuide();
+                    renderHome();
+                    showToast('タスクを完了しました');
+                };
             } else if (status === 'BLOCKED') {
                 completeBtn.textContent = '先にやることがあります';
                 completeBtn.classList.add('done');
@@ -5259,15 +6151,45 @@
                 completeBtn.textContent = '完了にする';
                 completeBtn.classList.add('active');
                 completeBtn.disabled = false;
+                completeBtn.onclick = function() {
+                    taskStatuses[taskId] = 'DONE';
+                    saveData();
+                    regenerateAllTaskStatuses();
+                    showScreen('screen-guide');
+                    renderGuide();
+                    renderHome();
+                    showToast('タスクを完了しました');
+                };
             }
+
+            // ピンボタンの状態を初期化
+            updatePinButtonState(taskId);
 
             showScreen('screen-detail');
         }
 
         function completeCurrentTask() {
+            console.log('completeCurrentTask called');
             if (currentTaskId) {
+                const currentStatus = taskStatuses[currentTaskId] || determineTaskStatus(tasks.find(t => t.id === currentTaskId));
+                console.log('completeCurrentTask - currentTaskId:', currentTaskId, 'currentStatus:', currentStatus);
                 toggleTaskStatus(currentTaskId);
-                showScreen('screen-guide');
+
+                // DONE状態の場合はモーダルが表示されるため、画面遷移しない
+                // OPEN→DONEの場合のみ画面遷移
+                if (currentStatus !== 'DONE') {
+                    console.log('Status is not DONE, transitioning to guide screen');
+                    showScreen('screen-guide');
+                } else {
+                    console.log('Status is DONE, not transitioning (modal should be shown)');
+                }
+            }
+        }
+
+        function toggleAccordion(accordionId) {
+            const section = document.querySelector(`[data-accordion="${accordionId}"]`);
+            if (section) {
+                section.classList.toggle('open');
             }
         }
 
@@ -5353,8 +6275,16 @@
                 confirmSourceScreen = window._filteredReturnScreen || sourceScreen;
                 confirmTaskId = window._filteredTaskId || null;
             } else {
-                // 通常モード: 確認センター用の質問（オンボーディング済み7問を除く残り19問）
-                confirmQuestions = questions.filter(q => !onboardingQuestionIds.includes(q.id));
+                // 通常モード: オンボーディング7問のうち未回答のものも含め、残り19問と合わせて表示
+                confirmQuestions = questions.filter(q => {
+                    if (onboardingQuestionIds.includes(q.id)) {
+                        // オンボーディング質問は「未回答」の場合のみ確認センターに含める
+                        const answer = answers[q.id];
+                        return !answer || (Array.isArray(answer) && answer.length === 0);
+                    }
+                    // オンボーディング以外の19問は常に含める
+                    return true;
+                });
 
                 // 最初の未回答質問を探す
                 const firstUnansweredIndex = confirmQuestions.findIndex(q => !answers[q.id] || answers[q.id].length === 0);
@@ -5373,8 +6303,11 @@
             document.getElementById('confirmCompletionScreen').style.display = 'none';
             document.getElementById('confirmQuestionArea').style.display = 'block';
 
-            // 画面5を表示
-            showScreen('screen-confirm');
+            // 画面5を表示（既にscreen-confirmにいる場合はスキップ）
+            const currentScreen = document.querySelector('.screen.active');
+            if (!currentScreen || currentScreen.id !== 'screen-confirm') {
+                showScreen('screen-confirm');
+            }
         }
 
         function renderConfirmQuestion() {
@@ -5386,7 +6319,7 @@
             let html = `<div class="${slideClass}">`;
             html += `<div class="question-card">`;
             html += `<div class="domain-badge domain-${q.domain}">${domainLabels[q.domain]}</div>`;
-            html += `<div class="question-text">${q.text}</div>`;
+            html += `<div class="question-text">${markGlossaryTerms(q.text)}</div>`;
             html += `<div class="question-info">※後から変更できます</div>`;
 
             if (q.type === 'single') {
@@ -5935,7 +6868,8 @@
                 'taskStatuses',
                 'rn_step_progress',
                 'rn_done_tasks',
-                'rn_task_notes'
+                'rn_task_notes',
+                'rn_pinned_tasks'
             ];
             STORAGE_KEYS.forEach(key => localStorage.removeItem(key));
 
@@ -6003,7 +6937,84 @@
                 generateTasks();
                 showScreen('screen-splash');
             }
+
+            // 「戻す」ボタンのイベントリスナー
+            document.getElementById('revertConfirmBtn').onclick = function() {
+                console.log('revertConfirmBtn clicked, revertTargetTaskId:', revertTargetTaskId);
+                if (!revertTargetTaskId) return;
+
+                // taskStatusesから削除してOPENに戻す
+                delete taskStatuses[revertTargetTaskId];
+                saveData();
+
+                // モーダルを閉じる
+                closeRevertModal();
+
+                // ルールエンジンを再実行してUI再描画
+                if (typeof regenerateAllTaskStatuses === 'function') {
+                    regenerateAllTaskStatuses();
+                }
+                if (typeof renderGuide === 'function') renderGuide();
+                if (typeof renderHome === 'function') renderHome();
+
+                // タスク詳細画面が表示中なら再描画
+                const detailScreen = document.getElementById('screen-detail');
+                if (detailScreen && detailScreen.classList.contains('active')) {
+                    if (typeof showTaskDetail === 'function') {
+                        showTaskDetail(revertTargetTaskId);
+                    }
+                }
+
+                showToast('タスクを未完了に戻しました');
+            };
+        });
+
+        // 用語解説ポップオーバーのイベントリスナー
+        document.addEventListener('click', function(e) {
+            const term = e.target.closest('.glossary-term');
+            if (term) {
+                e.preventDefault();
+                e.stopPropagation();
+                const key = term.dataset.term;
+                const desc = glossary[key];
+                if (desc) {
+                    document.getElementById('glossaryPopoverTerm').textContent = key;
+                    document.getElementById('glossaryPopoverDesc').textContent = desc;
+                    document.getElementById('glossaryOverlay').style.display = 'block';
+                    const popover = document.getElementById('glossaryPopover');
+                    popover.style.display = 'block';
+                    requestAnimationFrame(() => {
+                        popover.classList.add('visible');
+                    });
+                }
+                return;
+            }
+
+            // オーバーレイまたはポップオーバー外タップで閉じる
+            if (e.target.id === 'glossaryOverlay' || (!e.target.closest('.glossary-popover') && document.getElementById('glossaryPopover').classList.contains('visible'))) {
+                closeGlossary();
+            }
         });
     </script>
+
+    <!-- 用語解説ポップオーバー -->
+    <div id="glossaryPopover" class="glossary-popover" style="display:none;">
+        <div class="glossary-popover-content">
+            <div class="glossary-popover-term" id="glossaryPopoverTerm"></div>
+            <div class="glossary-popover-desc" id="glossaryPopoverDesc"></div>
+        </div>
+    </div>
+    <div id="glossaryOverlay" class="glossary-overlay" style="display:none;"></div>
+
+    <!-- 未完了に戻す確認モーダル -->
+    <div id="revertModalOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.3); z-index:9998;" onclick="closeRevertModal()"></div>
+    <div id="revertModal" style="display:none; position:fixed; bottom:0; left:50%; transform:translateX(-50%); max-width:430px; width:100%; background:#fff; border-radius:16px 16px 0 0; padding:24px 20px calc(24px + env(safe-area-inset-bottom)); z-index:9999; box-shadow:0 -4px 20px rgba(0,0,0,0.1);">
+        <div style="text-align:center; font-size:15px; font-weight:600; color:#1a1a1a;">このタスクを未完了に戻しますか？</div>
+        <div style="text-align:center; font-size:13px; color:#6b6b6b; margin-top:4px;">完了の記録が取り消されます</div>
+        <div style="display:flex; gap:8px; margin-top:16px;">
+            <button onclick="closeRevertModal()" style="flex:1; height:44px; background:#fafafa; border:1px solid #e8e8e6; border-radius:10px; font-size:14px; color:#6b6b6b; cursor:pointer;">キャンセル</button>
+            <button id="revertConfirmBtn" style="flex:1; height:44px; background:#3F453F; border:none; border-radius:10px; font-size:14px; font-weight:600; color:#fff; cursor:pointer;">戻す</button>
+        </div>
+    </div>
 </body>
 </html>
