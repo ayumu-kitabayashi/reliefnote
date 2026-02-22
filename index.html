@@ -4519,22 +4519,28 @@
 
         // 画面遷移
         function showScreen(screenId) {
-            // 画面遷移時にスクロール位置を最上部にリセット
+            // ===== スクロールリセット（包括的） =====
+            // 方法1: window
             window.scrollTo(0, 0);
+
+            // 方法2: document
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
 
-            // app-containerのスクロールもリセット
+            // 方法3: app-container
             const appContainer = document.querySelector('.app-container');
-            if (appContainer) {
-                appContainer.scrollTop = 0;
-            }
+            if (appContainer) appContainer.scrollTop = 0;
 
-            // 遷移先の画面要素自体のスクロールもリセット
-            const targetScreen = document.getElementById(screenId);
-            if (targetScreen) {
-                targetScreen.scrollTop = 0;
-            }
+            // 方法4: 全ての.screen要素
+            document.querySelectorAll('.screen').forEach(function(s) {
+                s.scrollTop = 0;
+            });
+
+            // 方法5: 全てのスクロール可能な要素を強制リセット
+            document.querySelectorAll('.detail-content, .settings-content, .confirm-question-area, .knowledge-content, #guideContent, #screen-home, #screen-guide, #screen-detail, #screen-confirm, #screen-settings, #screen-concierge').forEach(function(el) {
+                if (el) el.scrollTop = 0;
+            });
+            // ===== スクロールリセット（ここまで） =====
 
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
@@ -6399,33 +6405,72 @@
         function scrollToReturnPhase() {
             if (!confirmReturnPhase) return;
 
-            // 少し遅延させてDOMの描画を待つ
-            setTimeout(() => {
-                // フェーズセクションを探す
-                const targetPhase = document.querySelector(`.phase-section[data-phase-id="${confirmReturnPhase}"]`);
-                if (targetPhase) {
-                    // フェーズが閉じている場合は開く
-                    if (!targetPhase.classList.contains('open')) {
-                        targetPhase.classList.add('open');
-                        // 開閉状態を保存
-                        const key = 'deadline_' + confirmReturnPhase;
-                        window._accordionState[key] = true;
+            var targetPhaseId = confirmReturnPhase;
+            confirmReturnPhase = null;
+
+            console.log('scrollToReturnPhase: Returning to phase:', targetPhaseId);
+
+            // requestAnimationFrame を2回ネストして確実にDOM描画を待つ
+            requestAnimationFrame(function() {
+                requestAnimationFrame(function() {
+                    // data-phase-id で探す
+                    var target = document.querySelector('.phase-section[data-phase-id="' + targetPhaseId + '"]');
+
+                    console.log('scrollToReturnPhase: Found target by data-phase-id:', target);
+
+                    // data-phase-id がなければ、フェーズ名テキストで探すフォールバック
+                    if (!target) {
+                        var phaseNames = {
+                            'H24': '今日・葬儀まで',
+                            'D7': '7日以内',
+                            'D14': '14日以内',
+                            'D49': '四十九日まで',
+                            'M3': '3ヶ月以内',
+                            'M4': '4か月以内',
+                            'M10': '10ヶ月以内',
+                            'Y3': '3年以内'
+                        };
+                        var phaseName = phaseNames[targetPhaseId];
+                        if (phaseName) {
+                            var allPhaseTitles = document.querySelectorAll('.phase-title');
+                            for (var i = 0; i < allPhaseTitles.length; i++) {
+                                if (allPhaseTitles[i].textContent.trim().indexOf(phaseName) !== -1) {
+                                    target = allPhaseTitles[i].closest('.phase-section');
+                                    console.log('scrollToReturnPhase: Found target by phase name:', target);
+                                    break;
+                                }
+                            }
+                        }
                     }
 
-                    // フェーズヘッダーが画面上部から少し下に来るようにスクロール
-                    const guideScreen = document.getElementById('screen-guide');
-                    if (guideScreen) {
-                        const headerOffset = 60; // タブの高さ分
-                        const elementPosition = targetPhase.offsetTop;
-                        const offsetPosition = elementPosition - headerOffset;
+                    if (target) {
+                        // フェーズを開く
+                        if (!target.classList.contains('open')) {
+                            target.classList.add('open');
+                            // 開閉状態を保存
+                            var key = 'deadline_' + targetPhaseId;
+                            window._accordionState[key] = true;
+                        }
 
-                        guideScreen.scrollTop = offsetPosition;
+                        // スクロール（scrollIntoViewを使用）
+                        target.scrollIntoView({ behavior: 'instant', block: 'start' });
+
+                        // ヘッダー分を補正（guide-header + guide-tabs の高さ約120px）
+                        var currentScroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+                        window.scrollTo(0, currentScroll - 120);
+
+                        // app-containerがスクロールコンテナの場合も対応
+                        var appContainer = document.querySelector('.app-container');
+                        if (appContainer && appContainer.scrollTop > 0) {
+                            appContainer.scrollTop = appContainer.scrollTop - 120;
+                        }
+
+                        console.log('scrollToReturnPhase: Scrolled to phase');
+                    } else {
+                        console.log('scrollToReturnPhase: Phase section not found for:', targetPhaseId);
                     }
-                }
-
-                // リセット
-                confirmReturnPhase = null;
-            }, 100);
+                });
+            });
         }
 
         // フェーズフィルター付き確認センター遷移関数
@@ -6476,6 +6521,7 @@
             window._filteredTaskId = null;
             window._filteredPhaseId = phaseId; // フェーズIDを保存（ヘッダー表示用）
             confirmReturnPhase = phaseId; // 戻る時のスクロール先フェーズを記憶
+            console.log('openConfirmCenterWithPhaseFilter: Setting confirmReturnPhase to:', phaseId);
 
             // 確認センターを起動
             startConfirmCenter('screen-guide');
@@ -6596,21 +6642,31 @@
             html += `</div></div>`;
             container.innerHTML = html;
 
-            // 質問切り替え時にスクロール位置をリセット
-            // 質問エリアのスクロールをリセット
-            const questionArea = document.querySelector('.confirm-question-area');
-            if (questionArea) {
-                questionArea.scrollTop = 0;
-            }
-
-            // 画面全体のスクロールもリセット
+            // ===== 質問切り替え時にスクロール位置をリセット（包括的） =====
+            // 方法1: window
             window.scrollTo(0, 0);
 
-            // screen-confirm自体のスクロールもリセット
+            // 方法2: document
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+
+            // 方法3: app-container
+            const appContainer = document.querySelector('.app-container');
+            if (appContainer) appContainer.scrollTop = 0;
+
+            // 方法4: 確認センター画面
             const confirmScreen = document.getElementById('screen-confirm');
-            if (confirmScreen) {
-                confirmScreen.scrollTop = 0;
-            }
+            if (confirmScreen) confirmScreen.scrollTop = 0;
+
+            // 方法5: 質問エリア
+            const questionArea = document.querySelector('.confirm-question-area');
+            if (questionArea) questionArea.scrollTop = 0;
+
+            // 方法6: 全てのスクロール可能な要素
+            document.querySelectorAll('.screen, .detail-content, .settings-content, .confirm-question-area, .knowledge-content').forEach(function(el) {
+                if (el) el.scrollTop = 0;
+            });
+            // ===== スクロールリセット（ここまで） =====
         }
 
         function updateConfirmProgress() {
@@ -6658,6 +6714,7 @@
             showScreen(confirmSourceScreen);
 
             // ガイド画面に戻る場合、遷移元フェーズまでスクロール
+            console.log('returnFromConfirmCenter: confirmSourceScreen =', confirmSourceScreen, ', confirmReturnPhase =', confirmReturnPhase);
             if (confirmSourceScreen === 'screen-guide') {
                 scrollToReturnPhase();
             }
@@ -6730,6 +6787,7 @@
                 showScreen(confirmSourceScreen);
 
                 // ガイド画面に戻る場合、遷移元フェーズまでスクロール
+                console.log('prevConfirmQuestion: confirmSourceScreen =', confirmSourceScreen, ', confirmReturnPhase =', confirmReturnPhase);
                 if (confirmSourceScreen === 'screen-guide') {
                     scrollToReturnPhase();
                 }
@@ -6753,6 +6811,7 @@
             showScreen(confirmSourceScreen);
 
             // ガイド画面に戻る場合、遷移元フェーズまでスクロール
+            console.log('exitConfirmCenter: confirmSourceScreen =', confirmSourceScreen, ', confirmReturnPhase =', confirmReturnPhase);
             if (confirmSourceScreen === 'screen-guide') {
                 scrollToReturnPhase();
             }
