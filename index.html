@@ -2391,7 +2391,7 @@
 
         /* エリア1: 感情的メッセージ */
         .concierge-hero {
-            margin-bottom: 24px;
+            margin-bottom: 32px;
         }
 
         .concierge-hero-main {
@@ -2417,7 +2417,7 @@
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            margin-bottom: 24px;
+            margin-bottom: 0;
             transition: opacity 0.15s;
         }
 
@@ -2443,6 +2443,14 @@
         .concierge-line-subtitle {
             font-size: 12px;
             color: rgba(255, 255, 255, 0.7);
+        }
+
+        .concierge-line-note {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            text-align: center;
+            margin-top: 12px;
+            margin-bottom: 32px;
         }
 
         /* エリア3: 担当者紹介 */
@@ -3162,18 +3170,9 @@
                     </div>
                 </div>
 
-                <!-- エリア3: 担当者紹介 -->
-                <div class="concierge-staff-card">
-                    <div class="concierge-staff-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                    </div>
-                    <div class="concierge-staff-info">
-                        <div class="concierge-staff-name">北林 歩</div>
-                        <div class="concierge-staff-role">遺族支援コンシェルジュ</div>
-                    </div>
+                <!-- 補足テキスト -->
+                <div class="concierge-line-note">
+                    LINEから電話・チャットどちらでもご相談いただけます
                 </div>
 
                 <!-- エリア4: 相談例 -->
@@ -3201,13 +3200,6 @@
                             <div class="concierge-topic-text">家族で手続きをどう分担すればいいか</div>
                         </div>
                     </div>
-                </div>
-
-                <!-- エリア5: 利用者の声 -->
-                <div class="concierge-testimonial-card">
-                    <div class="concierge-testimonial-quote">"</div>
-                    <div class="concierge-testimonial-text">人に相談できることが一番ありがたかった</div>
-                    <div class="concierge-testimonial-source">ユーザーインタビューより</div>
                 </div>
             </div>
         </div>
@@ -4556,9 +4548,9 @@
                 }
             }
 
-            // フローティング相談ボタンの表示制御
+            // フローティング相談ボタンの表示制御（コンシェルジュ画面では非表示）
             const floatingBtn = document.getElementById('floatingConsultBtn');
-            const screensWithFloatingBtn = ['screen-home', 'screen-guide', 'screen-confirm', 'screen-settings', 'screen-concierge'];
+            const screensWithFloatingBtn = ['screen-home', 'screen-guide', 'screen-confirm', 'screen-settings'];
             if (floatingBtn) {
                 if (screensWithFloatingBtn.includes(screenId)) {
                     floatingBtn.classList.add('show');
@@ -5405,8 +5397,15 @@
                 const isCompletedOpen = window._accordionState[completedKey] || false;
                 const completedOpenClass = isCompletedOpen ? ' open' : '';
 
-                // このフェーズ内のNEED_CONFIRMタスク数をカウント
-                const needConfirmCount = incompleteTasks.filter(t => t.status === 'NEED_CONFIRM').length;
+                // このフェーズ内のNEED_CONFIRMタスク数をカウント（リアルタイムで再計算）
+                let needConfirmCount = 0;
+                phaseTasks.forEach(function(task) {
+                    // キャッシュではなく、最新の回答データでステータスを再計算
+                    const currentStatus = determineTaskStatus(task);
+                    if (currentStatus === 'NEED_CONFIRM') {
+                        needConfirmCount++;
+                    }
+                });
 
                 html += `
                     <div class="phase-section${openClass}" data-phase-id="${phaseId}" onclick="togglePhase(this)">
