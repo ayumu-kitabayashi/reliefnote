@@ -622,7 +622,7 @@
         }
 
         /* 今日やることセクション内のタスクカード */
-        #todayTasks .task-item {
+        #nextTasks .task-item {
             background: transparent;
             border: none;
             border-radius: 0;
@@ -631,49 +631,49 @@
             margin-bottom: 0;
         }
 
-        #todayTasks .task-item:last-child {
+        #nextTasks .task-item:last-child {
             border-bottom: none;
         }
 
-        #todayTasks .task-checkbox {
+        #nextTasks .task-checkbox {
             width: 22px;
             height: 22px;
             min-width: 22px;
             margin-right: 12px;
         }
 
-        #todayTasks .task-checkbox:checked::after {
+        #nextTasks .task-checkbox:checked::after {
             left: 6px;
             top: 2px;
             width: 6px;
             height: 11px;
         }
 
-        #todayTasks .task-name {
+        #nextTasks .task-name {
             font-size: 14px;
             line-height: 1.5;
         }
 
-        #todayTasks .task-status-hint {
+        #nextTasks .task-status-hint {
             font-size: 12px;
             margin-top: 2px;
         }
 
-        #todayTasks .task-status-hint.need-confirm {
+        #nextTasks .task-status-hint.need-confirm {
             color: var(--accent);
         }
 
-        #todayTasks .task-status-hint.blocked {
+        #nextTasks .task-status-hint.blocked {
             color: var(--text-tertiary);
         }
 
-        #todayTasks .task-deadline-display {
+        #nextTasks .task-deadline-display {
             font-size: 11px;
             color: var(--text-tertiary);
             margin-top: 2px;
         }
 
-        #todayTasks .task-deadline-display.warning {
+        #nextTasks .task-deadline-display.warning {
             color: var(--warning);
         }
 
@@ -2391,7 +2391,7 @@
 
         /* エリア1: 感情的メッセージ */
         .concierge-hero {
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
 
         .concierge-hero-main {
@@ -2399,7 +2399,14 @@
             font-weight: bold;
             color: var(--text-primary);
             line-height: 1.5;
-            margin-bottom: 8px;
+            margin-bottom: 0;
+        }
+
+        .concierge-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-top: 8px;
         }
 
         .concierge-hero-sub {
@@ -2410,14 +2417,16 @@
 
         /* エリア2: LINEで相談するボタン */
         .concierge-line-button {
-            background: var(--accent);
-            border-radius: 12px;
-            padding: 16px 20px;
+            background: #4CAF50;
+            border-radius: 16px;
+            padding: 20px;
             display: flex;
             align-items: center;
             gap: 12px;
             cursor: pointer;
             margin-bottom: 0;
+            border: none;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
             transition: opacity 0.15s;
         }
 
@@ -2434,23 +2443,23 @@
         }
 
         .concierge-line-title {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 17px;
+            font-weight: 700;
             color: #ffffff;
             margin-bottom: 2px;
         }
 
         .concierge-line-subtitle {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .concierge-line-note {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-tertiary);
             text-align: center;
             margin-top: 12px;
-            margin-bottom: 32px;
+            margin-bottom: 40px;
         }
 
         /* エリア3: 担当者紹介 */
@@ -2501,17 +2510,22 @@
         }
 
         .concierge-topics-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
+            display: none;
+        }
+
+        .consult-examples-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            margin-bottom: 6px;
+            margin-top: 40px;
         }
 
         .concierge-topics-card {
             background: var(--bg-primary);
             border: 1px solid var(--border-light);
             border-radius: 12px;
-            padding: 14px 16px;
+            padding: 16px 20px;
         }
 
         .concierge-topic-item {
@@ -2522,10 +2536,9 @@
         }
 
         .concierge-topic-bullet {
-            font-size: 6px;
-            color: var(--accent);
+            font-size: 13px;
+            color: var(--text-primary);
             flex-shrink: 0;
-            margin-top: 8px;
         }
 
         .concierge-topic-text {
@@ -3154,7 +3167,7 @@
                 <!-- エリア1: 感情的メッセージ -->
                 <div class="concierge-hero">
                     <div class="concierge-hero-main">一人で抱え込まないでください。</div>
-                    <div class="concierge-hero-sub">手続きのことも、気持ちのことも、<br>いつでもご相談ください。</div>
+                    <div class="concierge-subtitle">手続きのことも、気持ちのことも、いつでもご相談ください。</div>
                 </div>
 
                 <!-- エリア2: LINEで相談するボタン -->
@@ -3178,26 +3191,19 @@
                 <!-- エリア4: 相談例 -->
                 <div class="concierge-topics-section">
                     <div class="concierge-topics-title">こんなことを相談できます</div>
+                    <div class="consult-examples-label">相談例</div>
                     <div class="concierge-topics-card">
                         <div class="concierge-topic-item">
-                            <div class="concierge-topic-bullet">●</div>
+                            <div class="concierge-topic-bullet">・</div>
                             <div class="concierge-topic-text">何から手をつければいいか分からない</div>
                         </div>
                         <div class="concierge-topic-item">
-                            <div class="concierge-topic-bullet">●</div>
+                            <div class="concierge-topic-bullet">・</div>
                             <div class="concierge-topic-text">役場の手続きで必要な書類を教えてほしい</div>
                         </div>
                         <div class="concierge-topic-item">
-                            <div class="concierge-topic-bullet">●</div>
-                            <div class="concierge-topic-text">相続のことを誰に相談すればいいか</div>
-                        </div>
-                        <div class="concierge-topic-item">
-                            <div class="concierge-topic-bullet">●</div>
+                            <div class="concierge-topic-bullet">・</div>
                             <div class="concierge-topic-text">気持ちの整理がつかず辛い</div>
-                        </div>
-                        <div class="concierge-topic-item">
-                            <div class="concierge-topic-bullet">●</div>
-                            <div class="concierge-topic-text">家族で手続きをどう分担すればいいか</div>
                         </div>
                     </div>
                 </div>
@@ -4930,21 +4936,25 @@
                 }
             }
 
-            // Step 4: どちらにも合致しない場合 → fallbackStatus
-            let status = task.fallbackStatus || 'NEED_CONFIRM';
-
-            // Step 5: depends_onを評価（fallbackStatusの場合も適用）
-            if (task.dependsOn && task.dependsOn.length > 0) {
-                const hasIncompleteDepends = task.dependsOn.some(depId => {
-                    const depStatus = taskStatuses[depId];
-                    return depStatus !== 'DONE';
+            // Step 4: フォールバック
+            // 必要な質問が全て回答済みなのにどの条件にもマッチしない場合
+            // → タスクは該当しない = NOT_APPLICABLE
+            // 未回答の質問がある場合のみ NEED_CONFIRM
+            let allRequiredAnswered = true;
+            if (task.requiredQuestions && task.requiredQuestions.length > 0) {
+                task.requiredQuestions.forEach(function(qid) {
+                    const answer = answers[qid];
+                    if (answer === null || answer === undefined || answer === '') {
+                        allRequiredAnswered = false;
+                    }
                 });
-                if (hasIncompleteDepends) {
-                    status = 'BLOCKED';
-                }
             }
 
-            return status;
+            if (allRequiredAnswered) {
+                return 'NOT_APPLICABLE';
+            } else {
+                return 'NEED_CONFIRM';
+            }
         }
 
         function generateTasks() {
@@ -5069,14 +5079,12 @@
         let revertTargetTaskId = null;
 
         function showRevertModal(taskId) {
-            console.log('showRevertModal called with taskId:', taskId);
             revertTargetTaskId = taskId;
             document.getElementById('revertModalOverlay').style.display = 'block';
             document.getElementById('revertModal').style.display = 'block';
         }
 
         function closeRevertModal() {
-            console.log('closeRevertModal called');
             revertTargetTaskId = null;
             document.getElementById('revertModalOverlay').style.display = 'none';
             document.getElementById('revertModal').style.display = 'none';
@@ -5398,10 +5406,14 @@
                 const completedOpenClass = isCompletedOpen ? ' open' : '';
 
                 // このフェーズ内のNEED_CONFIRMタスク数をカウント（リアルタイムで再計算）
+                // 元のtasks配列から直接フィルタリングして、最新のステータスで判定
                 let needConfirmCount = 0;
-                phaseTasks.forEach(function(task) {
+                const phaseTasksForCount = tasks.filter(t => t.phase === phaseId);
+
+                phaseTasksForCount.forEach(function(task) {
                     // キャッシュではなく、最新の回答データでステータスを再計算
                     const currentStatus = determineTaskStatus(task);
+
                     if (currentStatus === 'NEED_CONFIRM') {
                         needConfirmCount++;
                     }
@@ -5827,14 +5839,11 @@
         let pendingUndoTaskId = null;
 
         function toggleTaskStatus(taskId) {
-            console.log('toggleTaskStatus called with taskId:', taskId);
             const task = tasks.find(t => t.id === taskId);
             const currentStatus = taskStatuses[taskId] || determineTaskStatus(task);
-            console.log('Current status:', currentStatus);
 
             if (currentStatus === 'DONE') {
                 // DONE → 確認ダイアログを表示
-                console.log('Status is DONE, showing revert modal');
                 showRevertModal(taskId);
             } else if (currentStatus === 'OPEN') {
                 // OPEN → DONEに変更
@@ -5876,12 +5885,8 @@
         }
 
         function showUndoTaskModal() {
-            console.log('showUndoTaskModal called, pendingUndoTaskId:', pendingUndoTaskId);
             const modal = document.getElementById('undoTaskModal');
-            console.log('Modal element:', modal);
             if (!modal) {
-                console.error('Modal element not found!');
-                alert('モーダル要素が見つかりません'); // デバッグ用
                 return;
             }
 
@@ -5901,7 +5906,6 @@
             }
 
             modal.classList.add('show');
-            console.log('Modal shown with direct styles');
         }
 
         function closeUndoTaskModal() {
@@ -6303,19 +6307,14 @@
         }
 
         function completeCurrentTask() {
-            console.log('completeCurrentTask called');
             if (currentTaskId) {
                 const currentStatus = taskStatuses[currentTaskId] || determineTaskStatus(tasks.find(t => t.id === currentTaskId));
-                console.log('completeCurrentTask - currentTaskId:', currentTaskId, 'currentStatus:', currentStatus);
                 toggleTaskStatus(currentTaskId);
 
                 // DONE状態の場合はモーダルが表示されるため、画面遷移しない
                 // OPEN→DONEの場合のみ画面遷移
                 if (currentStatus !== 'DONE') {
-                    console.log('Status is not DONE, transitioning to guide screen');
                     showScreen('screen-guide');
-                } else {
-                    console.log('Status is DONE, not transitioning (modal should be shown)');
                 }
             }
         }
@@ -6407,15 +6406,11 @@
             var targetPhaseId = confirmReturnPhase;
             confirmReturnPhase = null;
 
-            console.log('scrollToReturnPhase: Returning to phase:', targetPhaseId);
-
             // requestAnimationFrame を2回ネストして確実にDOM描画を待つ
             requestAnimationFrame(function() {
                 requestAnimationFrame(function() {
                     // data-phase-id で探す
                     var target = document.querySelector('.phase-section[data-phase-id="' + targetPhaseId + '"]');
-
-                    console.log('scrollToReturnPhase: Found target by data-phase-id:', target);
 
                     // data-phase-id がなければ、フェーズ名テキストで探すフォールバック
                     if (!target) {
@@ -6435,7 +6430,6 @@
                             for (var i = 0; i < allPhaseTitles.length; i++) {
                                 if (allPhaseTitles[i].textContent.trim().indexOf(phaseName) !== -1) {
                                     target = allPhaseTitles[i].closest('.phase-section');
-                                    console.log('scrollToReturnPhase: Found target by phase name:', target);
                                     break;
                                 }
                             }
@@ -6463,10 +6457,6 @@
                         if (appContainer && appContainer.scrollTop > 0) {
                             appContainer.scrollTop = appContainer.scrollTop - 120;
                         }
-
-                        console.log('scrollToReturnPhase: Scrolled to phase');
-                    } else {
-                        console.log('scrollToReturnPhase: Phase section not found for:', targetPhaseId);
                     }
                 });
             });
@@ -6520,7 +6510,6 @@
             window._filteredTaskId = null;
             window._filteredPhaseId = phaseId; // フェーズIDを保存（ヘッダー表示用）
             confirmReturnPhase = phaseId; // 戻る時のスクロール先フェーズを記憶
-            console.log('openConfirmCenterWithPhaseFilter: Setting confirmReturnPhase to:', phaseId);
 
             // 確認センターを起動
             startConfirmCenter('screen-guide');
@@ -6713,7 +6702,6 @@
             showScreen(confirmSourceScreen);
 
             // ガイド画面に戻る場合、遷移元フェーズまでスクロール
-            console.log('returnFromConfirmCenter: confirmSourceScreen =', confirmSourceScreen, ', confirmReturnPhase =', confirmReturnPhase);
             if (confirmSourceScreen === 'screen-guide') {
                 scrollToReturnPhase();
             }
@@ -6786,7 +6774,6 @@
                 showScreen(confirmSourceScreen);
 
                 // ガイド画面に戻る場合、遷移元フェーズまでスクロール
-                console.log('prevConfirmQuestion: confirmSourceScreen =', confirmSourceScreen, ', confirmReturnPhase =', confirmReturnPhase);
                 if (confirmSourceScreen === 'screen-guide') {
                     scrollToReturnPhase();
                 }
@@ -6810,7 +6797,6 @@
             showScreen(confirmSourceScreen);
 
             // ガイド画面に戻る場合、遷移元フェーズまでスクロール
-            console.log('exitConfirmCenter: confirmSourceScreen =', confirmSourceScreen, ', confirmReturnPhase =', confirmReturnPhase);
             if (confirmSourceScreen === 'screen-guide') {
                 scrollToReturnPhase();
             }
@@ -6983,42 +6969,6 @@
                 deadline.setHours(0, 0, 0, 0);
                 return deadline.getTime() === targetDate.getTime();
             });
-        }
-
-        function getTaskDeadline(task, deathDate) {
-            const death = new Date(deathDate);
-            const deadline = new Date(death);
-
-            switch (task.phase) {
-                case 'H24':
-                    deadline.setDate(death.getDate() + 1);
-                    break;
-                case 'D7':
-                    deadline.setDate(death.getDate() + 7);
-                    break;
-                case 'D14':
-                    deadline.setDate(death.getDate() + 14);
-                    break;
-                case 'D49':
-                    deadline.setDate(death.getDate() + 49);
-                    break;
-                case 'M3':
-                    deadline.setMonth(death.getMonth() + 3);
-                    break;
-                case 'M4':
-                    deadline.setMonth(death.getMonth() + 4);
-                    break;
-                case 'M10':
-                    deadline.setMonth(death.getMonth() + 10);
-                    break;
-                case 'Y3':
-                    deadline.setFullYear(death.getFullYear() + 3);
-                    break;
-                default:
-                    return null;
-            }
-
-            return deadline;
         }
 
         function selectCalendarDate(date) {
@@ -7196,24 +7146,14 @@
         }
 
         function confirmLogout() {
-            const STORAGE_KEYS = [
-                'rn_user_name',
-                'answers',
-                'taskStatuses',
-                'rn_step_progress',
-                'rn_done_tasks',
-                'rn_task_notes',
-                'rn_pinned_tasks'
-            ];
-            STORAGE_KEYS.forEach(key => localStorage.removeItem(key));
+            // localStorage を完全にクリア
+            localStorage.clear();
 
-            // アコーディオン状態とスクロール位置をクリア
-            window._accordionState = {};
-            window._guideScrollTop = 0;
-
+            // モーダルを閉じてからリロード
             closeLogoutDialog();
-            showScreen('screen-splash');
-            showToast('ログアウトしました');
+
+            // ページをリロードして全てのメモリ上の変数もリセット
+            location.reload();
         }
 
         // 回答リセット関連
@@ -7228,18 +7168,19 @@
         }
 
         function confirmResetAnswers() {
+            // 回答データとタスク状態を削除
             localStorage.removeItem('answers');
-            answers = {};
+            localStorage.removeItem('taskStatuses');
+            localStorage.removeItem('rn_step_progress');
+            localStorage.removeItem('rn_done_tasks');
+            localStorage.removeItem('rn_task_notes');
+            localStorage.removeItem('rn_pinned_tasks');
 
-            // アコーディオン状態とスクロール位置もクリア
-            window._accordionState = {};
-            window._guideScrollTop = 0;
-
+            // モーダルを閉じてからリロード
             closeResetDialog();
-            currentQuestionIndex = 0;
-            showScreen('screen-onboarding');
-            renderQuestion();
-            showToast('回答をリセットしました');
+
+            // ページをリロードして全てのメモリ上の変数もリセット
+            location.reload();
         }
 
         // 初期化
@@ -7274,7 +7215,6 @@
 
             // 「戻す」ボタンのイベントリスナー
             document.getElementById('revertConfirmBtn').onclick = function() {
-                console.log('revertConfirmBtn clicked, revertTargetTaskId:', revertTargetTaskId);
                 if (!revertTargetTaskId) return;
 
                 // taskStatusesから削除してOPENに戻す
