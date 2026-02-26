@@ -15,8 +15,8 @@
             --text-tertiary: #999999;
             --accent: #3F453F;
             --accent-light: #ededed;
-            --warning: #c45a3c;
-            --warning-light: #fef0ec;
+            --warning: #C05621;
+            --warning-light: #FFF5E6;
             --border: #e8e8e8;
             --border-light: #f0f0f0;
         }
@@ -515,6 +515,17 @@
             margin-bottom: 24px;
         }
 
+        .phase-message-home {
+            background: #F9F9F6;
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #888888;
+            text-align: center;
+            line-height: 1.6;
+        }
+
         #nextPhaseTodaySection {
             background: var(--bg-primary);
             border: 1px solid var(--border-light);
@@ -937,6 +948,14 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        .phase-message-guide {
+            font-size: 13px;
+            color: #888888;
+            padding: 8px 16px;
+            margin-bottom: 12px;
+            line-height: 1.6;
         }
 
         .completed-tasks-section {
@@ -3025,6 +3044,7 @@
             <!-- 次にやること -->
             <div class="home-today-section">
                 <div class="home-section-label">おくやみガイド</div>
+                <div id="phaseMessageHome" class="phase-message-home"></div>
                 <div class="home-today-card">
                     <div class="section-title" style="font-size: 15px; font-weight: 600;">次にやること</div>
                     <div id="nextTasks"></div>
@@ -3470,7 +3490,7 @@
             {id:"RN-D14-05", title:"介護保険の届出と精算をする", domain:"HEALTH", phase:"D14", priority:70, dependsOn:[], requiredQuestions:["Q-CARE-01"], ruleType:"CONFIRMED", appliesWhen:"Q-CARE-01=='YES'", notApplicableWhen:"Q-CARE-01=='NO'", fallbackStatus:"NEED_CONFIRM"},
             {id:"RN-D14-06", title:"故人の年金を止める【届出期限14日】", domain:"PENSION", phase:"D14", priority:90, dependsOn:["RN-D7-06"], requiredQuestions:["Q-PEN-01"], ruleType:"CONFIRMED", appliesWhen:"Q-PEN-01=='YES'", notApplicableWhen:"Q-PEN-01=='NO'", fallbackStatus:"NEED_CONFIRM"},
             {id:"RN-D14-07", title:"まだ届いていない年金を受け取る", domain:"PENSION", phase:"D14", priority:75, dependsOn:["RN-D14-06"], requiredQuestions:["Q-PEN-01"], ruleType:"CONFIRMED", appliesWhen:"Q-PEN-01=='YES'", notApplicableWhen:"Q-PEN-01=='NO'", fallbackStatus:"NEED_CONFIRM"},
-            {id:"RN-D14-08", title:"遺族年金をもらえるか確認する", domain:"PENSION", phase:"D14", priority:85, dependsOn:["RN-D7-06"], requiredQuestions:["Q-SPOUSE-01", "Q-CHILD-U18-01", "Q-PEN-EMP-01", "Q-PEN-01"], ruleType:"CONFIRMED", appliesWhen:"Q-SPOUSE-01=='YES'", notApplicableWhen:"Q-SPOUSE-01=='NO'", fallbackStatus:"NEED_CONFIRM"},
+            {id:"RN-D14-08", title:"遺族年金をもらえるか確認する", domain:"PENSION", phase:"D14", priority:85, dependsOn:["RN-D7-06"], requiredQuestions:["Q-SPOUSE-01", "Q-CHILD-U18-01", "Q-PEN-EMP-01", "Q-PEN-01"], ruleType:"CONFIRMED", appliesWhen:"Q-SPOUSE-01=='YES'||Q-CHILD-U18-01=='YES'||Q-PEN-EMP-01=='YES'||Q-PEN-01=='YES'", notApplicableWhen:"Q-SPOUSE-01=='NO'&&Q-CHILD-U18-01=='NO'&&Q-PEN-EMP-01=='NO'&&Q-PEN-01=='NO'", fallbackStatus:"NEED_CONFIRM"},
             {id:"RN-D14-09", title:"銀行に届け出る", domain:"FINANCE", phase:"D14", priority:88, dependsOn:["RN-D7-06", "RN-D7-10"], requiredQuestions:["Q-FIN-01"], ruleType:"CONFIRMED", appliesWhen:"Q-FIN-01.containsAny('BANK')", notApplicableWhen:"Q-FIN-01=='NONE'", fallbackStatus:"NEED_CONFIRM"},
             {id:"RN-D14-10", title:"証券会社に届け出る", domain:"FINANCE", phase:"D14", priority:75, dependsOn:["RN-D7-06"], requiredQuestions:["Q-FIN-01"], ruleType:"CONFIRMED", appliesWhen:"Q-FIN-01.containsAny('SECURITIES')", notApplicableWhen:"Q-FIN-01=='NONE'", fallbackStatus:"NEED_CONFIRM"},
             {id:"RN-D14-11", title:"生命保険の保険金を請求する", domain:"INSURANCE", phase:"D14", priority:85, dependsOn:["RN-D7-06"], requiredQuestions:["Q-INS-01"], ruleType:"CONFIRMED", appliesWhen:"Q-INS-01.containsAny('LIFE','MEDICAL','COOP')", notApplicableWhen:"Q-INS-01=='NONE'", fallbackStatus:"NEED_CONFIRM"},
@@ -3545,14 +3565,60 @@
         };
 
         const phaseMessages = {
-            H24: "まずは、深呼吸してください。今日すべてを終わらせる必要はありません。分からないことは「分からない」のままで大丈夫です。",
-            D7: "一人で抱え込まなくて大丈夫。手続きは後からでも間に合います。今は、大切な方を送ることだけに集中してください。",
-            D14: "「こんなに色々あるの？」と感じて当然です。全部を一度にやる必要はありません。一つ終わるたびに、前に進んでいます。",
-            D49: "悲しみが波のように押し寄せる日があっても、それは自然なことです。進めない日は無理をせず。私たちはいつでも待っています。",
-            M3: "やることが増えて途方に暮れるかもしれません。全部を自分で抱えなくて大丈夫。専門家に預けることも立派な一歩です。",
-            M4: "「準確定申告」。聞き慣れない言葉だと思います。まず対象かどうかだけ確認してください。税務署に聞けばすぐ分かります。",
-            M10: "ここまで、本当によく歩いてこられました。ゴールは見えています。あと少しだけ、一緒に歩かせてください。",
-            Y3: "これが終われば、主な手続きは全て完了です。ここまで来たあなたを、どうか労ってあげてください。お疲れさまでした。"
+            H24: "まずは、深呼吸してください。\n今日すべてを終わらせる必要はありません。\nわからないことは「わからない」のままで大丈夫です。",
+            D7: "ひとりで抱え込まなくて大丈夫です。\n手続きは後からでも間に合います。\n今は、大切な方を送ることに集中してください。",
+            D14: "「こんなにあるの？」と感じるのは当然です。\n全部を一度にやる必要はありません。\nひとつ終わるたびに、確実に前に進んでいます。",
+            D49: "悲しみが波のように押し寄せる日があっても、それは自然なことです。\n進めない日は、無理をしないでください。\nいつでもここで待っています。",
+            M3: "やることが増えて途方に暮れるかもしれません。\n全部を自分で抱えなくて大丈夫です。\n専門家にまかせることも、立派な一歩です。",
+            M4: "聞き慣れない手続きが出てきます。\nまずは「自分に関係があるか」だけ確認すれば大丈夫です。\nわからなければ、窓口に聞けばすぐわかります。",
+            M10: "ここまで、本当によく歩いてこられました。\nゴールは見えています。\nあと少しだけ、一緒に進みましょう。",
+            Y3: "これが終われば、主な手続きはすべて完了です。\nここまで来たご自身を、どうか労ってあげてください。\nお疲れさまでした。"
+        };
+
+        // 1行メッセージ（UI表示用）
+        const phaseMessagesOneLine = {
+            H24: "ひとつずつで大丈夫です。",
+            D7: "大切な方を送ることに集中してください。",
+            D14: "ひとつ終わるたびに、前に進んでいます。",
+            D49: "進めない日は、無理をしないでください。",
+            M3: "専門家にまかせることも、立派な一歩です。",
+            M4: "「自分に関係があるか」だけ確認すれば大丈夫です。",
+            M10: "ゴールは見えています。あと少しです。",
+            Y3: "ここまで来たご自身を、どうか労ってください。"
+        };
+
+        const parentTasks = [
+            {id: "P_T_H24", title: "当日〜24時間にやること", domain: "ALL", phase: "H24", isContainer: true, defaultStatus: "OPEN"},
+            {id: "P_T_D7", title: "7日以内にやること", domain: "ALL", phase: "D7", isContainer: true, defaultStatus: "OPEN"},
+            {id: "P_T_D14", title: "14日以内にやること", domain: "ALL", phase: "D14", isContainer: true, defaultStatus: "OPEN"},
+            {id: "P_T_D49", title: "49日以内にやること", domain: "ALL", phase: "D49", isContainer: true, defaultStatus: "OPEN"},
+            {id: "P_T_M3", title: "3か月以内にやること", domain: "ALL", phase: "M3", isContainer: true, defaultStatus: "OPEN"},
+            {id: "P_T_M4", title: "4か月以内にやること", domain: "ALL", phase: "M4", isContainer: true, defaultStatus: "OPEN"},
+            {id: "P_T_M10", title: "10か月以内にやること", domain: "ALL", phase: "M10", isContainer: true, defaultStatus: "OPEN"},
+            {id: "P_T_Y3", title: "3年以内にやること", domain: "ALL", phase: "Y3", isContainer: true, defaultStatus: "OPEN"}
+        ];
+
+        const completionMessages = {
+            1: "最初の一歩を踏み出しました。その調子です。",
+            5: "5つ終わりました。着実に進んでいます。",
+            10: "10のタスクを終えました。よく頑張っています。",
+            20: "20のタスクを終えました。大きな山を越えています。",
+            phaseComplete: "このフェーズのタスクをすべて終えました。お疲れさまでした。",
+            allComplete: "すべての手続きが完了しました。\n長い道のりを最後まで歩ききったあなたに、心から敬意を表します。\nお疲れさまでした。"
+        };
+
+        const deadlineReminders = {
+            days7: "「{task_title}」の届出期限まであと7日です。確認してみましょう。",
+            days3: "「{task_title}」の届出期限まであと3日です。お手続きはお済みですか？",
+            today: "「{task_title}」の届出期限は今日です。難しい場合は、窓口にご相談ください。",
+            overdue: "「{task_title}」の届出期限を過ぎています。まだ届出できる場合がほとんどです。窓口にご確認ください。"
+        };
+
+        const supportMessages = {
+            inactive7days: "お手続きの状況はいかがですか？\n少しずつで大丈夫です。続きはいつでもここから始められます。",
+            inactive14days: "お忙しい日々が続いているかもしれません。\n期限が近いタスクがあれば、お知らせします。\nお気持ちが向いたときに、いつでも戻ってきてください。",
+            multipleOverdue: "期限を過ぎた手続きがいくつかあります。\n多くの手続きは期限を過ぎても届出できます。\nまずは1つだけ、取りかかってみませんか？",
+            firstDay: "最初の一歩が一番大変です。\n一番上のタスクから順番に進めるだけで大丈夫です。"
         };
 
         const domainLabels = {
@@ -5100,6 +5166,18 @@
             const totalCount = allTasks.length;
             const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
+            // 励ましメッセージ
+            let encouragementMsg = '';
+            if (completedCount >= 20) {
+                encouragementMsg = '大きな山を越えています。';
+            } else if (completedCount >= 10) {
+                encouragementMsg = 'よく頑張っています。';
+            } else if (completedCount >= 5) {
+                encouragementMsg = '着実に進んでいます。';
+            } else if (completedCount >= 1) {
+                encouragementMsg = '最初の一歩を踏み出しました。';
+            }
+
             const progressContainer = document.getElementById('homeProgress');
             progressContainer.innerHTML = `
                 <div class="home-progress-bar-container" style="
@@ -5122,10 +5200,43 @@
                     font-size: 12px;
                     color: var(--text-tertiary);
                 ">${completedCount}件完了 / 全${totalCount}件</div>
+                ${encouragementMsg ? `<div style="font-size: 12px; color: #718096; margin-top: 4px;">${encouragementMsg}</div>` : ''}
             `;
 
-            // 修正2：「次にやること」の新しいロジック
+            // 現在フェーズを判定してフェーズメッセージを表示
             const deathDate = answers['Q-DOD-01'];
+            let currentPhase = 'H24';
+
+            if (deathDate) {
+                const parts = deathDate.split('-');
+                const deathDateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                const today = new Date();
+                const elapsedDays = Math.floor((today - deathDateObj) / (1000 * 60 * 60 * 24));
+
+                if (elapsedDays >= 301) {
+                    currentPhase = 'Y3';
+                } else if (elapsedDays >= 121) {
+                    currentPhase = 'M10';
+                } else if (elapsedDays >= 91) {
+                    currentPhase = 'M4';
+                } else if (elapsedDays >= 50) {
+                    currentPhase = 'M3';
+                } else if (elapsedDays >= 15) {
+                    currentPhase = 'D49';
+                } else if (elapsedDays >= 8) {
+                    currentPhase = 'D14';
+                } else if (elapsedDays >= 1) {
+                    currentPhase = 'D7';
+                } else {
+                    currentPhase = 'H24';
+                }
+            }
+
+            const phaseMessageContainer = document.getElementById('phaseMessageHome');
+            const phaseMsg = phaseMessagesOneLine[currentPhase] || '';
+            phaseMessageContainer.textContent = phaseMsg;
+
+            // 修正2：「次にやること」の新しいロジック
 
             // 全OPEN/NEED_CONFIRMタスクを取得
             const activeTasks = tasks.filter(t => {
@@ -5361,6 +5472,7 @@
                             <span class="phase-arrow">▼</span>
                         </div>
                         <div class="phase-tasks">
+                            ${phaseMessagesOneLine[phaseId] ? `<div class="phase-message-guide">${phaseMessagesOneLine[phaseId]}</div>` : ''}
                             ${needConfirmCount > 0 ? `
                                 <div class="phase-unanswered-card" onclick="event.stopPropagation(); openConfirmCenterWithPhaseFilter('${phaseId}')">
                                     <div class="phase-unanswered-icon">？</div>
@@ -5782,26 +5894,46 @@
                 taskStatuses[taskId] = 'DONE';
                 saveData();
 
-                // 完了数をカウント
+                // 完了数をカウント（DONEのみ、NOT_APPLICABLEは除外）
                 const doneCount = Object.values(taskStatuses).filter(s => s === 'DONE').length;
 
                 // トースト通知
                 let message = '';
-                if (doneCount === 1) {
-                    message = '最初の一歩を踏み出しました。その調子です。';
+
+                // フェーズ内全完了チェック（最優先）
+                const phaseId = task.phase;
+                const phaseTasks = tasks.filter(t => t.phase === phaseId);
+                const phaseDisplayTasks = phaseTasks.filter(t => {
+                    const status = taskStatuses[t.id] || determineTaskStatus(t);
+                    return status !== 'NOT_APPLICABLE';
+                });
+                const phaseAllDone = phaseDisplayTasks.length > 0 && phaseDisplayTasks.every(t => {
+                    const status = taskStatuses[t.id] || determineTaskStatus(t);
+                    return status === 'DONE';
+                });
+
+                // 全タスク完了チェック
+                const allDisplayTasks = tasks.filter(t => {
+                    const status = taskStatuses[t.id] || determineTaskStatus(t);
+                    return status !== 'NOT_APPLICABLE';
+                });
+                const allTasksDone = allDisplayTasks.length > 0 && allDisplayTasks.every(t => {
+                    const status = taskStatuses[t.id] || determineTaskStatus(t);
+                    return status === 'DONE';
+                });
+
+                if (allTasksDone) {
+                    message = completionMessages.allComplete;
+                } else if (phaseAllDone) {
+                    message = completionMessages.phaseComplete;
+                } else if (doneCount === 1) {
+                    message = completionMessages[1];
                 } else if (doneCount === 5) {
-                    message = '5つ完了しました。着実に進んでいます。';
+                    message = completionMessages[5];
                 } else if (doneCount === 10) {
-                    message = '10個のタスクを終えました。よく頑張っています。';
-                } else {
-                    // フェーズ内全完了チェック
-                    const phaseId = task.phase;
-                    const phaseTasks = tasks.filter(t => t.phase === phaseId);
-                    const phaseTaskStatuses = phaseTasks.map(t => taskStatuses[t.id] || determineTaskStatus(t));
-                    const phaseAllDone = phaseTaskStatuses.every(s => s === 'DONE' || s === 'NOT_APPLICABLE');
-                    if (phaseAllDone) {
-                        message = 'このフェーズのタスクをすべて完了しました。お疲れさまでした。';
-                    }
+                    message = completionMessages[10];
+                } else if (doneCount === 20) {
+                    message = completionMessages[20];
                 }
 
                 if (message) {
