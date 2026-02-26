@@ -516,14 +516,11 @@
         }
 
         .phase-message-home {
-            background: #F9F9F6;
-            border-radius: 8px;
-            padding: 10px 16px;
-            margin-bottom: 12px;
-            font-size: 13px;
+            font-size: 12px;
             color: #888888;
-            text-align: center;
-            line-height: 1.6;
+            font-weight: 400;
+            margin-top: 4px;
+            line-height: 1.5;
         }
 
         #nextPhaseTodaySection {
@@ -3043,8 +3040,7 @@
 
             <!-- 次にやること -->
             <div class="home-today-section">
-                <div class="home-section-label">おくやみガイド</div>
-                <div id="phaseMessageHome" class="phase-message-home"></div>
+                <div class="home-section-label" id="guideSectionHeader">おくやみガイド</div>
                 <div class="home-today-card">
                     <div class="section-title" style="font-size: 15px; font-weight: 600;">次にやること</div>
                     <div id="nextTasks"></div>
@@ -3058,6 +3054,7 @@
                 <div class="consult-card" onclick="showScreen('screen-concierge')">
                     <div class="consult-main-text">一人で抱え込まないでください</div>
                     <div class="consult-sub-text">手続きや気持ちのこと、いつでもご相談ください</div>
+                    <div style="font-size: 12px; color: #999; margin-top: 4px;">担当: 北林 歩</div>
                     <button class="consult-button">相談する</button>
                 </div>
             </div>
@@ -3190,6 +3187,20 @@
                     <div class="concierge-subtitle">手続きのことも、気持ちのことも、いつでもご相談ください。</div>
                 </div>
 
+                <!-- 担当者名 -->
+                <div style="display: flex; align-items: center; gap: 10px; margin: 16px 0 8px 0;">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: #E8E6E1; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="8" r="4" fill="#666"/>
+                            <path d="M5 20c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="#666" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div style="font-size: 14px; color: #333; font-weight: 500;">北林 歩</div>
+                        <div style="font-size: 11px; color: #999;">あなたの担当サポーター</div>
+                    </div>
+                </div>
+
                 <!-- エリア2: LINEで相談するボタン -->
                 <div class="concierge-line-button" onclick="openLineOA()">
                     <div class="concierge-line-icon">
@@ -3205,7 +3216,7 @@
 
                 <!-- 補足テキスト -->
                 <div class="concierge-line-note">
-                    LINEから電話・チャットどちらでもご相談いただけます
+                    北林が直接お返事します。お気軽にどうぞ。
                 </div>
 
                 <!-- エリア4: 相談例 -->
@@ -3226,6 +3237,7 @@
                             <div class="concierge-topic-text">気持ちの整理がつかず辛い</div>
                         </div>
                     </div>
+                    <div style="font-size: 13px; color: #999; text-align: center; margin-top: 20px;">どんな小さなことでも構いません。</div>
                 </div>
             </div>
         </div>
@@ -5232,9 +5244,14 @@
                 }
             }
 
-            const phaseMessageContainer = document.getElementById('phaseMessageHome');
+            // フェーズメッセージを「おくやみガイド」セクションヘッダー内に統合表示
+            const guideSectionHeader = document.getElementById('guideSectionHeader');
             const phaseMsg = phaseMessagesOneLine[currentPhase] || '';
-            phaseMessageContainer.textContent = phaseMsg;
+            if (phaseMsg) {
+                guideSectionHeader.innerHTML = `おくやみガイド<div class="phase-message-home">${phaseMsg}</div>`;
+            } else {
+                guideSectionHeader.textContent = 'おくやみガイド';
+            }
 
             // 修正2：「次にやること」の新しいロジック
 
@@ -5472,7 +5489,6 @@
                             <span class="phase-arrow">▼</span>
                         </div>
                         <div class="phase-tasks">
-                            ${phaseMessagesOneLine[phaseId] ? `<div class="phase-message-guide">${phaseMessagesOneLine[phaseId]}</div>` : ''}
                             ${needConfirmCount > 0 ? `
                                 <div class="phase-unanswered-card" onclick="event.stopPropagation(); openConfirmCenterWithPhaseFilter('${phaseId}')">
                                     <div class="phase-unanswered-icon">？</div>
