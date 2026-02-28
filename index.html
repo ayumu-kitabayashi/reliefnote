@@ -221,18 +221,47 @@
 
         /* 画面1: オンボーディング（質問） */
         .question-header {
-            padding: 20px 16px;
-            display: flex;
-            align-items: center;
+            padding: 16px 16px 0;
         }
 
-        .back-btn {
+        .question-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .question-header-top .back-btn {
             background: none;
             border: none;
             font-size: 18px;
             cursor: pointer;
             color: var(--text-primary);
             padding: 8px;
+            margin-left: -8px;
+        }
+
+        .question-step-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            white-space: nowrap;
+        }
+
+        .question-progress-track {
+            width: 100%;
+            height: 2px;
+            background: var(--border-light);
+            border-radius: 1px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .question-progress-bar {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 1px;
+            transition: width 0.3s ease;
         }
 
         .question-card {
@@ -3013,7 +3042,13 @@
         <!-- 画面1: オンボーディング（質問） -->
         <div id="screen-onboarding" class="screen">
             <div class="question-header">
-                <button class="back-btn" onclick="prevQuestion()">＜</button>
+                <div class="question-header-top">
+                    <button class="back-btn" onclick="prevQuestion()" id="onboardingBackBtn">← 戻る</button>
+                    <span class="question-step-text" id="onboardingStepText">1 / 8</span>
+                </div>
+                <div class="question-progress-track">
+                    <div class="question-progress-bar" id="onboardingProgressFill" style="width: 12.5%"></div>
+                </div>
             </div>
             <div class="question-card" id="questionCard"></div>
         </div>
@@ -3185,32 +3220,6 @@
                             <div class="qa-question">Q. 準確定申告とは？ <span>▼</span></div>
                             <div class="qa-answer">亡くなった方の所得税の確定申告を、相続人が代わりに行うことです。死亡から4ヶ月以内に税務署へ申告します。</div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- 家族共有セクション -->
-                <div class="settings-section">
-                    <div class="settings-section-title">共有</div>
-                    <div id="family-share-btn" onclick="shareWithFamily()" style="
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        padding: 16px 0;
-                        border-bottom: 1px solid var(--border-light);
-                        cursor: pointer;
-                    ">
-                        <div style="display:flex; align-items:center; gap:12px;">
-                            <span style="font-size:18px;">👨‍👩‍👧</span>
-                            <div>
-                                <div style="font-size:15px; color:var(--text-primary); font-weight:500;">家族と共有する</div>
-                                <div style="font-size:12px; color:var(--text-tertiary); margin-top:2px;">進捗状況を家族が確認できます</div>
-                            </div>
-                        </div>
-                        <span style="color:#CCC; font-size:14px;">›</span>
-                    </div>
-                    <div style="padding: 8px 0 4px; font-size: 11px; color: #BBB; line-height: 1.6;">
-                        ※ ボタンを押した時点の進捗が共有されます。<br>
-                        最新の状態を共有するには再度押してください。
                     </div>
                 </div>
 
@@ -4700,13 +4709,31 @@
 
         function renderQuestion() {
             const card = document.getElementById('questionCard');
+            const totalSteps = onboardingQuestions.length + 1; // 名前入力 + 7問 = 8
+
+            // --- プログレスバーとステップ表示を更新 ---
+            const stepText = document.getElementById('onboardingStepText');
+            const progressFill = document.getElementById('onboardingProgressFill');
+            const backBtn = document.getElementById('onboardingBackBtn');
+
+            if (stepText && progressFill) {
+                // index -1 → step 1, index 0 → step 2, ... index 6 → step 8
+                const currentStep = currentQuestionIndex + 2;
+                stepText.textContent = currentStep + ' / ' + totalSteps;
+                progressFill.style.width = (currentStep / totalSteps * 100) + '%';
+            }
+
+            // 名前入力画面では戻るボタンを非表示
+            if (backBtn) {
+                backBtn.style.visibility = (currentQuestionIndex === -1) ? 'hidden' : 'visible';
+            }
 
             // Step 1/8: Name input (index -1)
             if (currentQuestionIndex === -1) {
                 const savedName = localStorage.getItem('rn_user_name') || '';
                 let html = '<div class="name-input-form">';
                 html += '<div class="question-text">お名前を教えてください</div>';
-                html += '<div class="question-info">1 / 8 ※後から変更できます</div>';
+                html += '<div class="question-info">設定画面からいつでも変更できます</div>';
                 html += `<input type="text" id="nameInput" class="name-input" placeholder="例：田中" maxlength="20" value="${savedName}">`;
                 html += '<div class="name-input-actions">';
                 const hasName = savedName.trim().length > 0;
@@ -4741,12 +4768,10 @@
 
             // Steps 2-8/8: Questions (index 0-6)
             const q = onboardingQuestions[currentQuestionIndex];
-            const totalSteps = onboardingQuestions.length + 1; // +1 for name input
-            const currentStep = currentQuestionIndex + 2; // +2 because index 0 is step 2
 
             let html = `<div class="domain-badge domain-${q.domain}">${domainLabels[q.domain]}</div>`;
             html += `<div class="question-text">${markGlossaryTerms(q.text)}</div>`;
-            html += `<div class="question-info">${currentStep} / ${totalSteps} ※後から変更できます</div>`;
+            html += '<div class="question-info">※ あとから変更できます</div>';
 
             if (q.type === 'single') {
                 q.options.forEach(opt => {
@@ -4857,9 +4882,16 @@
                 renderQuestion();
             } else {
                 // オンボーディング完了（8ステップ完了: 名前 + 7問）
-                generateTasks();
-                renderHome();
-                showScreen('screen-home');
+                // プログレスを100%にしてから遷移
+                const progressFill = document.getElementById('onboardingProgressFill');
+                if (progressFill) progressFill.style.width = '100%';
+
+                // 少しの間100%を見せてから遷移
+                setTimeout(function() {
+                    generateTasks();
+                    renderHome();
+                    showScreen('screen-home');
+                }, 300);
             }
         }
 
