@@ -3030,7 +3030,7 @@
                 >
                 <div class="splash-logo-fallback">R</div>
                 <div class="splash-title" id="splashTitle">ReliefNote</div>
-                <div class="splash-tagline" id="splashTagline">遺族のためのGPS</div>
+                <div class="splash-tagline" id="splashTagline">北竜町 おくやみ手続きナビ</div>
                 <div class="splash-message">悲しみの中でも、<br>迷わず前へ。</div>
                 <button class="btn-splash btn-primary" onclick="startOnboarding()">はじめる</button>
                 <div class="splash-footer">
@@ -3608,136 +3608,76 @@
             Y3: "3年以内"
         };
 
-        // チャネル定義
-        const CHANNELS = {
-            hokuryu: {
-                name: 'ReliefNote',
-                subtitle: '北竜町 おくやみ手続きナビ',
-                presetAnswers: {},
-                destinations: {
-                    ADMIN:   { name: '北竜町役場 1F 住民課', address: '北海道雨竜郡北竜町字和11-1', phone: '0164-34-2111', hours: '平日 8:30-17:15' },
-                    PENSION: { name: '深川年金事務所', address: '北海道深川市2条18番36号', phone: '0164-23-1299／0570-05-1165', hours: '平日 8:30-17:15' },
-                    LEGAL:   { name: '旭川地方法務局深川支局', address: '北海道深川市3条2番1号', phone: '0164-23-3269', hours: '平日 8:30-17:15' },
-                    COURT:   { name: '旭川家庭裁判所深川支部', address: '北海道深川市3条2番1号', phone: '0164-23-3269', hours: '平日 8:30-17:00' },
-                    TAX:     { name: '深川税務署', address: '北海道深川市2条17番17号', phone: '0164-23-2191', hours: '平日 8:30-17:00' },
-                    POLICE:  { name: '深川警察署', address: '北海道深川市4条8番20号', phone: '0164-22-0110', hours: '平日 8:30-17:15' },
-                    TRANSPORT: { name: '旭川運輸支局', address: '北海道旭川市春光町10番地', phone: '050-5540-2003', hours: '平日 8:45-16:00' }
-                }
-            },
-            funeral: {
-                name: 'ReliefNote',
-                subtitle: '遺族のためのGPS',
-                presetAnswers: {
-                    'Q-FUN-STATUS-01': 'ARRANGING',
-                    'Q-AGRI-01': 'NO'
-                },
-                destinations: {
-                    ADMIN:   { name: 'お住まいの市区町村役場', address: null, phone: null, hours: '平日 8:30-17:15（一般的な開庁時間）' },
-                    PENSION: { name: '最寄りの年金事務所', address: null, phone: '0570-05-1165（ねんきんダイヤル）', hours: '平日 8:30-17:15' },
-                    LEGAL:   { name: '最寄りの法務局', address: null, phone: null, hours: '平日 8:30-17:15' },
-                    COURT:   { name: '最寄りの家庭裁判所', address: null, phone: null, hours: '平日 8:30-17:00' },
-                    TAX:     { name: '最寄りの税務署', address: null, phone: null, hours: '平日 8:30-17:00' },
-                    POLICE:  { name: '最寄りの警察署', address: null, phone: null, hours: null },
-                    TRANSPORT: { name: '最寄りの運輸支局', address: null, phone: null, hours: '平日 8:45-16:00' }
-                }
-            }
-        };
-
-        // タスクと届出先タイプのマッピング
-        const TASK_DESTINATION_MAP = {
-            'RN-H24-03': null,
-            'RN-D7-01':  null,
-            'RN-D7-02':  null,
-            'RN-D7-06':  'ADMIN',
-            'RN-D7-07':  null,
-            'RN-D7-11':  'ADMIN',
-            'RN-D7-13':  'ADMIN',
-            'RN-D14-01': 'ADMIN',
-            'RN-D14-02': 'ADMIN',
-            'RN-D14-03': 'ADMIN',
-            'RN-D14-04': 'ADMIN',
-            'RN-D14-05': 'ADMIN',
-            'RN-D14-06': 'PENSION',
-            'RN-D14-07': 'PENSION',
-            'RN-D14-08': 'PENSION',
-            'RN-D14-09': null,
-            'RN-D14-16': null,
-            'RN-D14-18': 'ADMIN',
-            'RN-D14-22': 'ADMIN',
-            'RN-D14-23': 'ADMIN',
-            'RN-D14-24': 'ADMIN',
-            'RN-M3-01':  'COURT',
-            'RN-M3-03':  'ADMIN',
-            'RN-M3-05':  'LEGAL',
-            'RN-M3-12':  'ADMIN',
-            'RN-M4-01':  'TAX',
-            'RN-M10-01': 'TAX',
-            'RN-M10-05': null,
-            'RN-M10-07': 'TRANSPORT',
-            'RN-M10-08': 'POLICE',
-            'RN-Y3-01':  'LEGAL'
-        };
-
-        // チャネルに基づくテキスト置換マップを生成
-        function getChannelReplacementMap() {
-            const ch = window.currentChannel;
-            if (!ch || window.currentChannelId === 'hokuryu') return {};
-            const hokuryu = CHANNELS.hokuryu;
-            const map = {};
-            for (const [type, dest] of Object.entries(hokuryu.destinations)) {
-                if (ch.destinations[type]) {
-                    map[dest.name] = ch.destinations[type].name;
-                }
-            }
-            return map;
-        }
-
-        // 北竜町固有テキストをチャネルに応じて置換
-        function replaceChannelText(text) {
-            if (!text || window.currentChannelId === 'hokuryu') return text;
-            const map = getChannelReplacementMap();
-            let result = text;
-            // 長い文字列から置換（部分一致の誤置換を防止）
-            const sorted = Object.entries(map).sort((a, b) => b[0].length - a[0].length);
-            for (const [from, to] of sorted) {
-                result = result.replace(new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), to);
-            }
-            return result;
-        }
-
-        // タスクIDからチャネル定義に基づいて届出先情報を解決
-        function resolveDestination(taskId, detail) {
-            const destType = TASK_DESTINATION_MAP[taskId];
-            const ch = window.currentChannel;
-
-            // 複合届出先（"/"を含む）はテキスト置換で対応
-            if (detail.destination && detail.destination.includes('/')) {
-                return {
-                    name: replaceChannelText(detail.destination),
-                    address: detail.address ? replaceChannelText(detail.address) : null,
-                    phone: detail.phone ? replaceChannelText(detail.phone) : null,
-                    hours: detail.officeHours ? replaceChannelText(detail.officeHours) : null
-                };
-            }
-
-            // マッピングがありチャネル定義に届出先がある場合
-            if (destType && ch && ch.destinations[destType]) {
-                const resolved = ch.destinations[destType];
-                return {
-                    name: resolved.name,
-                    address: resolved.address,
-                    phone: resolved.phone,
-                    hours: resolved.hours
-                };
-            }
-
-            // マッピングなし：テキスト置換のみ
-            return {
-                name: replaceChannelText(detail.destination),
-                address: detail.address ? replaceChannelText(detail.address) : null,
-                phone: detail.phone ? replaceChannelText(detail.phone) : null,
-                hours: detail.officeHours ? replaceChannelText(detail.officeHours) : null
-            };
+        // 葬儀社チャネル用テキスト置換関数
+        function applyFuneralChannel(text) {
+            if (!text || window.currentChannelId !== 'funeral') return text;
+            return text
+                // 役場系（順番重要：長い文字列から先に置換）
+                .replace(/北竜町役場\s*1F\s*住民課/g, 'お住まいの市区町村役場')
+                .replace(/北竜町農業委員会（役場内）/g, 'お住まいの市区町村の農業委員会')
+                .replace(/北竜町役場/g, 'お住まいの市区町村役場')
+                .replace(/北竜町の水道→役場/g, '水道→お住まいの市区町村')
+                // 年金系
+                .replace(/年金事務所（深川年金事務所）/g, '最寄りの年金事務所')
+                .replace(/深川年金事務所：北海道深川市2条18番36号/g, '')
+                .replace(/深川年金事務所/g, '最寄りの年金事務所')
+                // 法務局系
+                .replace(/旭川地方法務局深川支局：北海道深川市3条2番1号/g, '')
+                .replace(/旭川地方法務局深川支局/g, '最寄りの法務局')
+                // 裁判所系
+                .replace(/旭川家庭裁判所深川支部：北海道深川市3条2番1号/g, '')
+                .replace(/旭川家庭裁判所深川支部/g, '最寄りの家庭裁判所')
+                // 税務署系
+                .replace(/深川税務署：北海道深川市2条17番17号/g, '')
+                .replace(/深川税務署/g, '最寄りの税務署')
+                // 警察系
+                .replace(/深川警察署：北海道深川市4条8番20号/g, '')
+                .replace(/深川警察署/g, '最寄りの警察署')
+                // 運輸支局系
+                .replace(/旭川運輸支局：北海道旭川市春光町10番地/g, '')
+                .replace(/旭川運輸支局/g, '最寄りの運輸支局')
+                // 住宅系
+                .replace(/町営住宅/g, '公営住宅')
+                // 銀行系（北竜町固有の記述）
+                .replace(/\{要確認：北空知信金、JAきたそらち、北洋銀行深川支店、ゆうちょ銀行等\}/g, '')
+                .replace(/\{要確認：北空知信金、JAきたそらち等\}/g, '')
+                .replace(/\{要確認：各銀行の電話番号\}/g, '')
+                // 葬儀社系（北竜町固有の記述）
+                .replace(/\{要確認：北竜町近隣の葬儀社\}/g, '')
+                .replace(/\{要確認：葬儀社の電話番号\}/g, '')
+                .replace(/\{要確認：葬儀社\}/g, '')
+                .replace(/\{要確認：火葬場\}/g, '')
+                // キャリアショップ系
+                .replace(/\{要確認：深川市のキャリアショップ。北竜町にはショップなし。電話\/オンライン手続き推奨\}/g, '')
+                // 北竜町固有の電話番号を除去
+                .replace(/0164-34-2111（役場）/g, '')
+                .replace(/0164-34-2111/g, '')
+                .replace(/0164-23-1299／0570-05-1165/g, '0570-05-1165（ねんきんダイヤル）')
+                .replace(/0164-23-3269/g, '')
+                .replace(/0164-23-2191/g, '')
+                .replace(/0164-22-0110/g, '')
+                .replace(/050-5540-2003/g, '')
+                // 北竜町固有の住所を除去
+                .replace(/北海道雨竜郡北竜町字和11-1（町営住宅）/g, '')
+                .replace(/北海道雨竜郡北竜町字和11-1（本籍が北竜町の場合）/g, '')
+                .replace(/北海道雨竜郡北竜町字和11-1/g, '')
+                .replace(/北海道深川市2条18番36号/g, '')
+                .replace(/北海道深川市3条2番1号/g, '')
+                .replace(/北海道深川市2条17番17号/g, '')
+                .replace(/北海道深川市4条8番20号/g, '')
+                .replace(/北海道旭川市春光町10番地/g, '')
+                // FAQ内の固有記述
+                .replace(/北竜町役場（0164-34-2111）に相談/g, 'お住まいの市区町村役場に相談')
+                .replace(/住民課に事前連絡すれば各課を案内してもらえます/g, '事前に電話すれば各課を案内してもらえる役場が多いです')
+                // office_hours の差し替え
+                .replace(/平日 8:30-17:15（時間外・休日は当直窓口で届出のみ可）/g, '平日 8:30-17:15（一般的な開庁時間）')
+                .replace(/平日 8:30-17:15（役場）/g, '平日 8:30-17:15（一般的な開庁時間）')
+                .replace(/役場：平日 8:30-17:15／管理会社：営業時間内/g, '役場：平日 8:30-17:15（一般的な開庁時間）／管理会社：営業時間内')
+                .replace(/平日 9:00-15:00（窓口）/g, '平日 9:00-15:00（一般的な窓口時間）')
+                // 空文字列のクリーンアップ（置換で空になった行のコロンや改行を整理）
+                .replace(/：\s*\n/g, '\n')
+                .replace(/\n\s*\n/g, '\n')
+                .trim();
         }
 
         // 用語辞書データ
@@ -4726,25 +4666,22 @@
         // チャネル初期化
         function initChannel() {
             const params = new URLSearchParams(window.location.search);
-            let channelId = params.get('ch');
-            if (!channelId || !CHANNELS[channelId]) {
-                channelId = localStorage.getItem('reliefnote_channel') || 'hokuryu';
+            let ch = params.get('ch');
+            if (ch && (ch === 'hokuryu' || ch === 'funeral')) {
+                localStorage.setItem('reliefnote_channel', ch);
+            } else {
+                ch = localStorage.getItem('reliefnote_channel') || 'hokuryu';
             }
-            if (!CHANNELS[channelId]) channelId = 'hokuryu';
-            localStorage.setItem('reliefnote_channel', channelId);
-            window.currentChannel = CHANNELS[channelId];
-            window.currentChannelId = channelId;
+            window.currentChannelId = ch;
         }
 
-        // プリセット回答の適用（新規ユーザーのみ）
+        // プリセット回答の適用（新規ユーザーかつfuneralチャネルのみ）
         function applyPresetAnswers() {
+            if (window.currentChannelId !== 'funeral') return;
             const existing = localStorage.getItem('answers');
             if (existing) return; // 既存ユーザーは上書きしない
-            const presets = window.currentChannel.presetAnswers;
-            if (!presets || Object.keys(presets).length === 0) return;
-            for (const [qId, value] of Object.entries(presets)) {
-                answers[qId] = value;
-            }
+            answers['Q-FUN-STATUS-01'] = 'ARRANGING';
+            answers['Q-AGRI-01'] = 'NO';
             saveData();
         }
 
@@ -4867,11 +4804,11 @@
 
         // オンボーディング（質問）
         function startOnboarding() {
-            // オンボーディング用の7問をフィルタ（プリセット済み質問は除外）
-            const presets = window.currentChannel ? window.currentChannel.presetAnswers : {};
+            // オンボーディング用の質問をフィルタ（funeralチャネルのプリセット済み質問は除外）
+            const presetIds = window.currentChannelId === 'funeral' ? ['Q-FUN-STATUS-01', 'Q-AGRI-01'] : [];
             onboardingQuestions = questions.filter(q => {
                 if (!onboardingQuestionIds.includes(q.id)) return false;
-                if (presets && presets[q.id] !== undefined) return false; // プリセット済みはスキップ
+                if (presetIds.includes(q.id)) return false; // プリセット済みはスキップ
                 return true;
             });
             // onboardingQuestionIds の順番通りにソート
@@ -6514,13 +6451,24 @@
             }
 
             if (detail) {
-                // 届出先・届出場所（チャネルに基づき動的解決）
-                const resolved = resolveDestination(taskId, detail);
-                if (resolved.name && resolved.name.trim() !== '' && resolved.name !== '—') {
+                // チャネルに応じたテキスト置換を全フィールドに適用
+                const chDest = applyFuneralChannel(detail.destination);
+                const chAddress = applyFuneralChannel(detail.address);
+                const chPhone = applyFuneralChannel(detail.phone);
+                const chHours = applyFuneralChannel(detail.officeHours);
+                const chSummary = applyFuneralChannel(detail.actionSummary);
+                const chWhyNeeded = applyFuneralChannel(detail.whyNeeded);
+                const chSteps = applyFuneralChannel(detail.steps);
+                const chDocs = applyFuneralChannel(detail.requiredDocs);
+                const chFaq = applyFuneralChannel(detail.faq);
+                const chDone = applyFuneralChannel(detail.doneCondition);
+
+                // 届出先・届出場所（destination が存在する場合のみ表示）
+                if (chDest && chDest.trim() !== '' && chDest !== '—') {
                     // 「/」で分割して改行表示
-                    const destinations = resolved.name.includes('/')
-                        ? resolved.name.split('/').map(s => s.trim()).filter(s => s !== '')
-                        : [resolved.name];
+                    const destinations = chDest.includes('/')
+                        ? chDest.split('/').map(s => s.trim()).filter(s => s !== '')
+                        : [chDest];
 
                     html += `
                         <div class="task-detail-destination">
@@ -6528,17 +6476,16 @@
                             <div class="destination-values">
                                 ${destinations.map(dest => `<div class="destination-value">${markGlossaryTerms(dest)}</div>`).join('')}
                             </div>
-                            ${resolved.address ? `<div class="detail-dest-address">${resolved.address}</div>` : ''}
-                            ${resolved.phone ? `<div class="detail-dest-phone"><a href="tel:${resolved.phone.split(/[／\/（]/)[0].replace(/[^0-9+-]/g, '')}" style="color: var(--accent); text-decoration: none;">${resolved.phone}</a></div>` : ''}
-                            ${resolved.hours ? `<div class="detail-dest-hours">${resolved.hours}</div>` : ''}
+                            ${chAddress && chAddress.trim() !== '' ? `<div class="detail-dest-address">${chAddress}</div>` : ''}
+                            ${chPhone && chPhone.trim() !== '' ? `<div class="detail-dest-phone"><a href="tel:${chPhone.split(/[／\/（]/)[0].replace(/[^0-9+-]/g, '')}" style="color: var(--accent); text-decoration: none;">${chPhone}</a></div>` : ''}
+                            ${chHours && chHours.trim() !== '' ? `<div class="detail-dest-hours">${chHours}</div>` : ''}
                         </div>
                     `;
                 }
 
-                // やること（手順）- 常に展開、シンプルな番号リスト（チャネルテキスト置換適用）
-                const resolvedSteps = replaceChannelText(detail.steps);
-                if (resolvedSteps && resolvedSteps !== '—') {
-                    const stepsList = resolvedSteps.split(/(?=[①②③④⑤⑥⑦⑧⑨⑩])/).filter(s => s.trim() !== '');
+                // やること（手順）- 常に展開、シンプルな番号リスト
+                if (chSteps && chSteps !== '—') {
+                    const stepsList = chSteps.split(/(?=[①②③④⑤⑥⑦⑧⑨⑩])/).filter(s => s.trim() !== '');
                     if (stepsList.length > 0) {
                         html += `<div class="detail-steps-simple">`;
                         stepsList.forEach((step, index) => {
@@ -6558,7 +6505,7 @@
                 }
 
                 // アコーディオン: なぜ必要か（初期状態で開く）
-                if (detail.whyNeeded && detail.whyNeeded !== '—') {
+                if (chWhyNeeded && chWhyNeeded !== '—') {
                     html += `
                         <div class="detail-accordion-section open" data-accordion="why">
                             <div class="detail-accordion-header" onclick="toggleAccordion('why')">
@@ -6567,7 +6514,7 @@
                             </div>
                             <div class="detail-accordion-content">
                                 <div class="detail-accordion-inner">
-                                    <div class="detail-accordion-text">${markGlossaryTerms(detail.whyNeeded)}</div>
+                                    <div class="detail-accordion-text">${markGlossaryTerms(chWhyNeeded)}</div>
                                 </div>
                             </div>
                         </div>
@@ -6575,8 +6522,8 @@
                 }
 
                 // アコーディオン: 必要なもの
-                if (detail.requiredDocs && detail.requiredDocs !== '—') {
-                    const docs = detail.requiredDocs === 'なし' ? '特になし' : detail.requiredDocs;
+                if (chDocs && chDocs !== '—') {
+                    const docs = chDocs === 'なし' ? '特になし' : chDocs;
                     const docsList = docs.split(/[、・]/).filter(d => d.trim() !== '');
                     html += `
                         <div class="detail-accordion-section" data-accordion="docs">
@@ -6595,10 +6542,9 @@
                     `;
                 }
 
-                // アコーディオン: よくある質問（チャネルテキスト置換適用）
-                const resolvedFaq = replaceChannelText(detail.faq);
-                if (resolvedFaq && resolvedFaq !== '—') {
-                    const faqList = resolvedFaq.split(/(?=Q\.)/).filter(f => f.trim() !== '');
+                // アコーディオン: よくある質問
+                if (chFaq && chFaq !== '—') {
+                    const faqList = chFaq.split(/(?=Q\.)/).filter(f => f.trim() !== '');
                     if (faqList.length > 0) {
                         html += `
                             <div class="detail-accordion-section" data-accordion="faq">
@@ -8193,12 +8139,12 @@
             loadData();
             applyPresetAnswers();
 
-            // スプラッシュ画面のタイトルをチャネルに合わせて更新
-            if (window.currentChannel) {
-                const splashTitle = document.getElementById('splashTitle');
-                const splashTagline = document.getElementById('splashTagline');
-                if (splashTitle) splashTitle.textContent = window.currentChannel.name;
-                if (splashTagline) splashTagline.textContent = window.currentChannel.subtitle;
+            // スプラッシュ画面のサブタイトルをチャネルに合わせて更新
+            const splashTagline = document.getElementById('splashTagline');
+            if (splashTagline) {
+                splashTagline.textContent = window.currentChannelId === 'funeral'
+                    ? '遺族のためのGPS'
+                    : '北竜町 おくやみ手続きナビ';
             }
 
             const userName = localStorage.getItem('rn_user_name');
@@ -8214,10 +8160,10 @@
                 // 名前あり、質問未回答 → 質問画面（名前入力スキップして質問から開始）
                 generateTasks();
                 updateUserNameDisplay();
-                const presets = window.currentChannel ? window.currentChannel.presetAnswers : {};
+                const presetIds = window.currentChannelId === 'funeral' ? ['Q-FUN-STATUS-01', 'Q-AGRI-01'] : [];
                 onboardingQuestions = questions.filter(q => {
                     if (!onboardingQuestionIds.includes(q.id)) return false;
-                    if (presets && presets[q.id] !== undefined) return false;
+                    if (presetIds.includes(q.id)) return false;
                     return true;
                 });
                 onboardingQuestions.sort((a, b) => {
