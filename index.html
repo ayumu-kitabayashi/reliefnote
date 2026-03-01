@@ -3608,76 +3608,95 @@
             Y3: "3年以内"
         };
 
-        // 葬儀社チャネル用テキスト置換関数
-        function applyFuneralChannel(text) {
+        // 葬儀社チャネル用：タスクIDごとの destination/address/phone/office_hours オーバーライド
+        const FUNERAL_OVERRIDES = {
+            'RN-H24-03': { destination: '葬儀社／自宅／安置施設', address: null, phone: null, office_hours: '24時間対応' },
+            'RN-D7-01':  { destination: '葬儀社', address: null, phone: null, office_hours: '24時間対応' },
+            'RN-D7-02':  { destination: '葬儀社事務所または自宅', address: null, phone: null, office_hours: '葬儀社の営業時間' },
+            'RN-D7-06':  { destination: 'お住まいの市区町村役場', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-D7-07':  { destination: '火葬場', address: null, phone: null, office_hours: '火葬場の営業時間内' },
+            'RN-D7-11':  { destination: 'お住まいの市区町村役場', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-D7-13':  { destination: 'お住まいの市区町村役場', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-D14-01': { destination: 'お住まいの市区町村役場', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-D14-02': { destination: '国保・後期高齢者：お住まいの市区町村役場／社保：故人の勤務先', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-D14-03': { destination: '国保・後期高齢者：お住まいの市区町村役場／社保：協会けんぽ支部等', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-D14-04': { destination: '国保・後期高齢者：お住まいの市区町村役場／社保：協会けんぽ支部等', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-D14-05': { destination: 'お住まいの市区町村役場', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-D14-06': { destination: '最寄りの年金事務所／国民年金のみはお住まいの市区町村役場でも可', address: null, phone: '0570-05-1165（ねんきんダイヤル）', office_hours: '平日 8:30-17:15' },
+            'RN-D14-07': { destination: '最寄りの年金事務所／国民年金はお住まいの市区町村役場', address: null, phone: '0570-05-1165（ねんきんダイヤル）', office_hours: '平日 8:30-17:15' },
+            'RN-D14-08': { destination: '最寄りの年金事務所', address: null, phone: '0570-05-1165（ねんきんダイヤル）', office_hours: '平日 8:30-17:15' },
+            'RN-D14-09': { destination: '各銀行の窓口', address: null, phone: null, office_hours: '平日 9:00-15:00（一般的な窓口時間）' },
+            'RN-D14-16': { destination: '各キャリアショップ等', address: null, phone: null, office_hours: '10:00〜19:00（一般的な営業時間）' },
+            'RN-D14-18': { destination: '民間：管理会社・大家／公営住宅：お住まいの市区町村役場', address: null, phone: null, office_hours: '役場：平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-D14-22': { destination: 'お住まいの市区町村役場', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-D14-23': { destination: '国保：お住まいの市区町村役場／ご自身の勤務先', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-D14-24': { destination: 'お住まいの市区町村役場', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-M3-01':  { destination: '最寄りの家庭裁判所', address: null, phone: null, office_hours: '平日 8:30-17:00' },
+            'RN-M3-03':  { destination: '故人の本籍地の市区町村役場／広域交付で最寄り役場も可', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-M3-05':  { destination: '最寄りの法務局', address: null, phone: null, office_hours: '平日 8:30-17:15' },
+            'RN-M3-12':  { destination: 'お住まいの市区町村の農業委員会', address: null, phone: null, office_hours: '平日 8:30-17:15（一般的な開庁時間）' },
+            'RN-M4-01':  { destination: '最寄りの税務署', address: null, phone: null, office_hours: '平日 8:30-17:00' },
+            'RN-M10-01': { destination: '最寄りの税務署', address: null, phone: null, office_hours: '平日 8:30-17:00' },
+            'RN-M10-05': { destination: '各銀行の窓口', address: null, phone: null, office_hours: '平日 9:00-15:00（一般的な窓口時間）' },
+            'RN-M10-07': { destination: '普通車：最寄りの運輸支局／軽：軽自動車検査協会', address: null, phone: null, office_hours: '平日 8:45-16:00' },
+            'RN-M10-08': { destination: '最寄りの警察署', address: null, phone: null, office_hours: '平日 8:30-17:15' },
+            'RN-Y3-01':  { destination: '最寄りの法務局', address: null, phone: null, office_hours: '平日 8:30-17:15' }
+        };
+
+        // 葬儀社チャネル用：destination/address/phone/office_hours の表示値を返す
+        function getTaskDetailDisplay(taskId, originalDetail) {
+            if (window.currentChannelId === 'funeral' && FUNERAL_OVERRIDES[taskId]) {
+                const ov = FUNERAL_OVERRIDES[taskId];
+                return {
+                    destination: ov.destination,
+                    address: ov.address,
+                    phone: ov.phone,
+                    office_hours: ov.office_hours
+                };
+            }
+            return {
+                destination: originalDetail.destination,
+                address: originalDetail.address,
+                phone: originalDetail.phone,
+                office_hours: originalDetail.officeHours
+            };
+        }
+
+        // 葬儀社チャネル用：steps/faq等テキスト内の北竜町固有文字列を置換
+        function applyFuneralText(text) {
             if (!text || window.currentChannelId !== 'funeral') return text;
             return text
-                // 役場系（順番重要：長い文字列から先に置換）
+                // steps 内の固有テキスト
+                .replace(/北竜町役場1F住民課へ行く/g, 'お住まいの市区町村役場へ行く')
                 .replace(/北竜町役場\s*1F\s*住民課/g, 'お住まいの市区町村役場')
                 .replace(/北竜町農業委員会（役場内）/g, 'お住まいの市区町村の農業委員会')
                 .replace(/北竜町役場/g, 'お住まいの市区町村役場')
                 .replace(/北竜町の水道→役場/g, '水道→お住まいの市区町村')
-                // 年金系
-                .replace(/年金事務所（深川年金事務所）/g, '最寄りの年金事務所')
-                .replace(/深川年金事務所：北海道深川市2条18番36号/g, '')
                 .replace(/深川年金事務所/g, '最寄りの年金事務所')
-                // 法務局系
-                .replace(/旭川地方法務局深川支局：北海道深川市3条2番1号/g, '')
                 .replace(/旭川地方法務局深川支局/g, '最寄りの法務局')
-                // 裁判所系
-                .replace(/旭川家庭裁判所深川支部：北海道深川市3条2番1号/g, '')
                 .replace(/旭川家庭裁判所深川支部/g, '最寄りの家庭裁判所')
-                // 税務署系
-                .replace(/深川税務署：北海道深川市2条17番17号/g, '')
                 .replace(/深川税務署/g, '最寄りの税務署')
-                // 警察系
-                .replace(/深川警察署：北海道深川市4条8番20号/g, '')
                 .replace(/深川警察署/g, '最寄りの警察署')
-                // 運輸支局系
-                .replace(/旭川運輸支局：北海道旭川市春光町10番地/g, '')
                 .replace(/旭川運輸支局/g, '最寄りの運輸支局')
-                // 住宅系
                 .replace(/町営住宅/g, '公営住宅')
-                // 銀行系（北竜町固有の記述）
-                .replace(/\{要確認：北空知信金、JAきたそらち、北洋銀行深川支店、ゆうちょ銀行等\}/g, '')
-                .replace(/\{要確認：北空知信金、JAきたそらち等\}/g, '')
-                .replace(/\{要確認：各銀行の電話番号\}/g, '')
-                // 葬儀社系（北竜町固有の記述）
-                .replace(/\{要確認：北竜町近隣の葬儀社\}/g, '')
-                .replace(/\{要確認：葬儀社の電話番号\}/g, '')
-                .replace(/\{要確認：葬儀社\}/g, '')
-                .replace(/\{要確認：火葬場\}/g, '')
-                // キャリアショップ系
-                .replace(/\{要確認：深川市のキャリアショップ。北竜町にはショップなし。電話\/オンライン手続き推奨\}/g, '')
-                // 北竜町固有の電話番号を除去
-                .replace(/0164-34-2111（役場）/g, '')
-                .replace(/0164-34-2111/g, '')
-                .replace(/0164-23-1299／0570-05-1165/g, '0570-05-1165（ねんきんダイヤル）')
-                .replace(/0164-23-3269/g, '')
-                .replace(/0164-23-2191/g, '')
-                .replace(/0164-22-0110/g, '')
-                .replace(/050-5540-2003/g, '')
-                // 北竜町固有の住所を除去
-                .replace(/北海道雨竜郡北竜町字和11-1（町営住宅）/g, '')
-                .replace(/北海道雨竜郡北竜町字和11-1（本籍が北竜町の場合）/g, '')
+                // faq 内の固有テキスト
+                .replace(/北竜町役場（0164-34-2111）に相談してください/g, 'お住まいの市区町村役場に相談してください')
+                .replace(/北竜町役場（0164-34-2111）に相談/g, 'お住まいの市区町村役場に相談')
+                .replace(/住民課に事前連絡すれば各課を案内してもらえます/g, '事前に電話すれば各課を案内してもらえる役場が多いです')
+                // 住所・電話番号の除去（steps/faq内に埋め込まれている場合）
                 .replace(/北海道雨竜郡北竜町字和11-1/g, '')
                 .replace(/北海道深川市2条18番36号/g, '')
                 .replace(/北海道深川市3条2番1号/g, '')
                 .replace(/北海道深川市2条17番17号/g, '')
                 .replace(/北海道深川市4条8番20号/g, '')
                 .replace(/北海道旭川市春光町10番地/g, '')
-                // FAQ内の固有記述
-                .replace(/北竜町役場（0164-34-2111）に相談/g, 'お住まいの市区町村役場に相談')
-                .replace(/住民課に事前連絡すれば各課を案内してもらえます/g, '事前に電話すれば各課を案内してもらえる役場が多いです')
-                // office_hours の差し替え
-                .replace(/平日 8:30-17:15（時間外・休日は当直窓口で届出のみ可）/g, '平日 8:30-17:15（一般的な開庁時間）')
-                .replace(/平日 8:30-17:15（役場）/g, '平日 8:30-17:15（一般的な開庁時間）')
-                .replace(/役場：平日 8:30-17:15／管理会社：営業時間内/g, '役場：平日 8:30-17:15（一般的な開庁時間）／管理会社：営業時間内')
-                .replace(/平日 9:00-15:00（窓口）/g, '平日 9:00-15:00（一般的な窓口時間）')
-                // 空文字列のクリーンアップ（置換で空になった行のコロンや改行を整理）
-                .replace(/：\s*\n/g, '\n')
-                .replace(/\n\s*\n/g, '\n')
-                .trim();
+                .replace(/0164-34-2111/g, '')
+                .replace(/0164-23-1299／0570-05-1165/g, '0570-05-1165（ねんきんダイヤル）')
+                .replace(/0164-23-1299/g, '')
+                .replace(/0164-23-3269/g, '')
+                .replace(/0164-23-2191/g, '')
+                .replace(/0164-22-0110/g, '')
+                .replace(/050-5540-2003/g, '');
         }
 
         // 用語辞書データ
@@ -6451,24 +6470,24 @@
             }
 
             if (detail) {
-                // チャネルに応じたテキスト置換を全フィールドに適用
-                const chDest = applyFuneralChannel(detail.destination);
-                const chAddress = applyFuneralChannel(detail.address);
-                const chPhone = applyFuneralChannel(detail.phone);
-                const chHours = applyFuneralChannel(detail.officeHours);
-                const chSummary = applyFuneralChannel(detail.actionSummary);
-                const chWhyNeeded = applyFuneralChannel(detail.whyNeeded);
-                const chSteps = applyFuneralChannel(detail.steps);
-                const chDocs = applyFuneralChannel(detail.requiredDocs);
-                const chFaq = applyFuneralChannel(detail.faq);
-                const chDone = applyFuneralChannel(detail.doneCondition);
+                // destination/address/phone/office_hours はオーバーライドマップで解決
+                const disp = getTaskDetailDisplay(taskId, detail);
+                // テキストフィールドは applyFuneralText() で置換
+                const chSummary = applyFuneralText(detail.actionSummary);
+                const chWhyNeeded = applyFuneralText(detail.whyNeeded);
+                const chSteps = applyFuneralText(detail.steps);
+                const chDocs = applyFuneralText(detail.requiredDocs);
+                const chFaq = applyFuneralText(detail.faq);
+                const chDone = applyFuneralText(detail.doneCondition);
 
                 // 届出先・届出場所（destination が存在する場合のみ表示）
-                if (chDest && chDest.trim() !== '' && chDest !== '—') {
-                    // 「/」で分割して改行表示
-                    const destinations = chDest.includes('/')
-                        ? chDest.split('/').map(s => s.trim()).filter(s => s !== '')
-                        : [chDest];
+                if (disp.destination && disp.destination.trim() !== '' && disp.destination !== '—') {
+                    // 「／」「/」で分割して改行表示
+                    const destinations = disp.destination.includes('／')
+                        ? disp.destination.split('／').map(s => s.trim()).filter(s => s !== '')
+                        : disp.destination.includes('/')
+                            ? disp.destination.split('/').map(s => s.trim()).filter(s => s !== '')
+                            : [disp.destination];
 
                     html += `
                         <div class="task-detail-destination">
@@ -6476,9 +6495,9 @@
                             <div class="destination-values">
                                 ${destinations.map(dest => `<div class="destination-value">${markGlossaryTerms(dest)}</div>`).join('')}
                             </div>
-                            ${chAddress && chAddress.trim() !== '' ? `<div class="detail-dest-address">${chAddress}</div>` : ''}
-                            ${chPhone && chPhone.trim() !== '' ? `<div class="detail-dest-phone"><a href="tel:${chPhone.split(/[／\/（]/)[0].replace(/[^0-9+-]/g, '')}" style="color: var(--accent); text-decoration: none;">${chPhone}</a></div>` : ''}
-                            ${chHours && chHours.trim() !== '' ? `<div class="detail-dest-hours">${chHours}</div>` : ''}
+                            ${disp.address ? `<div class="detail-dest-address">${disp.address}</div>` : ''}
+                            ${disp.phone ? `<div class="detail-dest-phone"><a href="tel:${disp.phone.split(/[／\/（]/)[0].replace(/[^0-9+-]/g, '')}" style="color: var(--accent); text-decoration: none;">${disp.phone}</a></div>` : ''}
+                            ${disp.office_hours ? `<div class="detail-dest-hours">${disp.office_hours}</div>` : ''}
                         </div>
                     `;
                 }
