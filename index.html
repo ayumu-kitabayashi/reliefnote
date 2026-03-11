@@ -3436,6 +3436,779 @@
                 font-size: 28px;
             }
         }
+
+        /* ── NEED_CONFIRM 統合セクション ── */
+        .need-confirm-section {
+            background: #FFFFFF;
+            border: 1.5px solid #E2DDD5;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 16px 16px 8px;
+        }
+
+        .need-confirm-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            background: #F9F6F2;
+            border-bottom: 1px solid #E8E5E1;
+        }
+
+        .need-confirm-header-icon {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 50%;
+            background: rgba(58, 63, 50, 0.08);
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .need-confirm-header-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .need-confirm-header-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .need-confirm-header-sub {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 1px;
+        }
+
+        .need-confirm-header-count {
+            margin-left: auto;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .need-confirm-list {
+            padding: 0;
+        }
+
+        .need-confirm-item {
+            display: flex;
+            align-items: center;
+            padding: 13px 16px;
+            border-bottom: 1px solid #F0EDE9;
+            cursor: pointer;
+            transition: background 0.12s ease;
+            gap: 12px;
+        }
+
+        .need-confirm-item:last-child {
+            border-bottom: none;
+        }
+
+        .need-confirm-item:active {
+            background: #F5F3F0;
+        }
+
+        .need-confirm-item-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .need-confirm-item-name {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .need-confirm-item-action {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+
+        .need-confirm-item-action:active {
+            background: var(--accent-light);
+            border-color: var(--accent);
+        }
+
+        .need-confirm-item.uncertain {
+            background: #FFF8F0;
+            border-bottom: 1px solid #EDE8E0;
+            align-items: flex-start;
+        }
+
+        .need-confirm-item-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        .need-confirm-item-phone {
+            display: inline-block;
+            font-size: 12px;
+            color: var(--accent);
+            text-decoration: none;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .confirm-sheet-skip-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 8px;
+            font-size: 14px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+        }
+
+        .confirm-sheet-skip-note {
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        /* ── タスク詳細 確認バナー ── */
+        .detail-confirm-banner {
+            background: #FFF8F0;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin: 0 16px 16px;
+        }
+
+        .detail-confirm-banner-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .detail-confirm-banner-btn {
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: 600;
+            background: none;
+            border: none;
+            padding: 0;
+            margin-top: 8px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .detail-confirm-banner-btn:active {
+            opacity: 0.6;
+        }
+
+        /* ── 確認ボトムシート ── */
+        .confirm-sheet-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 1100;
+        }
+
+        .confirm-sheet-overlay.show {
+            display: flex;
+        }
+
+        .confirm-sheet {
+            background: var(--bg-primary);
+            border-radius: 16px 16px 0 0;
+            padding: 16px 20px;
+            max-width: 430px;
+            width: 100%;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            animation: slideUp 0.3s ease;
+            max-height: 85vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .confirm-sheet-handle {
+            width: 36px;
+            height: 4px;
+            background: #D0CEC9;
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
+
+        .confirm-sheet-task-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .confirm-sheet-context {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .confirm-sheet-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 20px 0;
+        }
+
+        .confirm-sheet-question {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .confirm-sheet-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .confirm-sheet-option {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            font-size: 15px;
+            color: var(--text-primary);
+            text-align: center;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+
+        .confirm-sheet-option:active {
+            opacity: 0.7;
+        }
+
+        .confirm-sheet-option.uncertain {
+            color: var(--text-tertiary);
+            border-style: dashed;
+        }
+
+        .confirm-sheet-option.selected {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .confirm-sheet-option.selected.uncertain {
+            border-style: dashed;
+        }
+
+        .confirm-sheet-multi-hint {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: 4px;
+        }
+
+        .confirm-sheet-submit {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 16px;
+            cursor: pointer;
+            background: var(--accent);
+            color: #FFFFFF;
+            border: none;
+            transition: opacity 0.15s;
+        }
+
+        .confirm-sheet-submit:active {
+            opacity: 0.7;
+        }
+
+        .confirm-sheet-submit:disabled {
+            background: var(--bg-secondary);
+            color: var(--text-tertiary);
+            border: 1px solid var(--border);
+            cursor: not-allowed;
+        }
+
+        .confirm-sheet-hint {
+            background: #F5F3F0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 16px;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        /* ── ボトムシート ガイダンスビュー ── */
+        .confirm-sheet-unknown-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .confirm-sheet-unknown-body {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .confirm-sheet-phone-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .confirm-sheet-phone-btn:active {
+            opacity: 0.8;
+        }
+
+        .confirm-sheet-close-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .confirm-sheet-close-btn:active {
+            opacity: 0.7;
+        }
+
+        /* ── ホーム画面 NEED_CONFIRM セクション ── */
+        .need-confirm-section.home-compact {
+            margin: 16px 0 0;
+        }
+
+        .need-confirm-section.home-compact .need-confirm-header {
+            padding: 12px 16px;
+        }
+
+        /* ── フィードバックtoast ── */
+        @keyframes confirmFadeInUp {
+            from { opacity: 0; transform: translate(-50%, 10px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        /* ── 一括確認バナー（ホーム画面） ── */
+        .bulk-confirm-banner {
+            margin: 12px 16px;
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+
+        .bulk-confirm-banner:active {
+            opacity: 0.7;
+        }
+
+        .bulk-confirm-banner-left {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .bulk-confirm-banner-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .bulk-confirm-banner-sub {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .bulk-confirm-banner-btn {
+            background: var(--accent);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: opacity 0.15s;
+        }
+
+        .bulk-confirm-banner-btn:active {
+            opacity: 0.8;
+        }
+
+        /* ── 一括確認ウィザード画面 ── */
+        .bulk-confirm-screen {
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: var(--bg-warm);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bulk-confirm-header {
+            padding: 16px 16px 12px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .bulk-confirm-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            padding: 8px;
+            margin: -8px;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .bulk-confirm-progress-text {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .bulk-confirm-progress-track {
+            width: 100%;
+            height: 2px;
+            background: var(--border-light);
+            border-radius: 1px;
+            overflow: hidden;
+        }
+
+        .bulk-confirm-progress-bar {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 1px;
+            transition: width 0.3s ease;
+        }
+
+        .bulk-confirm-body {
+            flex: 1;
+            padding: 24px 16px;
+            overflow-y: auto;
+        }
+
+        .bulk-confirm-card {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            padding: 24px 20px;
+            animation: fadeInScreen 0.2s ease;
+        }
+
+        .bulk-confirm-affected { margin-bottom: 20px; }
+
+        .bulk-confirm-affected-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .bulk-confirm-affected-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .bulk-confirm-affected-item {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding-left: 12px;
+            position: relative;
+        }
+
+        .bulk-confirm-affected-item::before {
+            content: '・';
+            position: absolute;
+            left: 0;
+        }
+
+        .bulk-confirm-question {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.5;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .bulk-confirm-multi-hint {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+        }
+
+        .bulk-confirm-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bulk-confirm-submit {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 16px;
+            cursor: pointer;
+            background: var(--accent);
+            color: #FFFFFF;
+            border: none;
+        }
+
+        .bulk-confirm-submit:disabled {
+            background: var(--bg-secondary);
+            color: var(--text-tertiary);
+            border: 1px solid var(--border);
+            cursor: not-allowed;
+        }
+
+        .bulk-confirm-hint {
+            background: #F5F3F0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .bulk-confirm-skip {
+            text-align: center;
+            margin-top: 20px;
+            padding: 8px;
+            font-size: 14px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+        }
+
+        /* ── 一括確認 フィードバック ── */
+        .bulk-confirm-feedback {
+            text-align: center;
+            padding: 32px 16px;
+            animation: fadeInScreen 0.2s ease;
+        }
+
+        .bulk-confirm-feedback-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .bulk-confirm-feedback-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .bulk-confirm-feedback-item {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 2;
+        }
+
+        .bulk-confirm-feedback-item.added { color: var(--accent); }
+        .bulk-confirm-feedback-item.removed { color: var(--text-tertiary); }
+
+        .bulk-confirm-feedback-message {
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ── 一括確認 完了画面 ── */
+        .bulk-confirm-complete {
+            text-align: center;
+            padding: 60px 24px;
+        }
+
+        .bulk-confirm-complete-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 32px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .bulk-confirm-complete-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .bulk-confirm-complete-summary {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+
+        .bulk-confirm-complete-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+            line-height: 2;
+        }
+
+        .bulk-confirm-complete-label { color: var(--text-secondary); }
+
+        .bulk-confirm-complete-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* ── オンボーディング完了後 分岐画面 ── */
+        .onboard-confirm-screen {
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: var(--bg-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+        }
+
+        .onboard-confirm-content {
+            text-align: center;
+            max-width: 320px;
+            width: 100%;
+        }
+
+        .onboard-confirm-title {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.5;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+        }
+
+        .onboard-confirm-summary {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+
+        .onboard-confirm-summary-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            line-height: 2.2;
+        }
+
+        .onboard-confirm-summary-icon {
+            font-size: 14px;
+            color: var(--accent);
+            width: 20px;
+            text-align: center;
+        }
+
+        .onboard-confirm-summary-label {
+            flex: 1;
+            text-align: left;
+            color: var(--text-secondary);
+        }
+
+        .onboard-confirm-summary-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .onboard-confirm-desc {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .onboard-confirm-later {
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .onboard-confirm-later-note {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
@@ -3795,6 +4568,35 @@
                 <div class="modal-title">名前を変更</div>
                 <input type="text" id="editNameInput" class="modal-input" placeholder="名前を入力" maxlength="20">
                 <button class="btn-primary" onclick="saveEditedName()">保存</button>
+            </div>
+        </div>
+
+        <!-- 一括確認ウィザード -->
+        <div class="screen" id="screen-bulk-confirm">
+            <div class="bulk-confirm-screen">
+                <div class="bulk-confirm-header">
+                    <button class="bulk-confirm-close" id="bulkConfirmClose" onclick="closeBulkConfirm()">✕</button>
+                    <div class="bulk-confirm-progress-text" id="bulkConfirmProgressText"></div>
+                    <div class="bulk-confirm-progress-track">
+                        <div class="bulk-confirm-progress-bar" id="bulkConfirmProgressBar"></div>
+                    </div>
+                </div>
+                <div class="bulk-confirm-body" id="bulkConfirmBody"></div>
+            </div>
+        </div>
+
+        <!-- オンボーディング完了後 分岐画面 -->
+        <div class="screen" id="screen-onboard-confirm">
+            <div class="onboard-confirm-screen">
+                <div class="onboard-confirm-content" id="onboardConfirmContent"></div>
+            </div>
+        </div>
+
+        <!-- 確認ボトムシート -->
+        <div id="confirmSheetOverlay" class="confirm-sheet-overlay" onclick="closeConfirmSheet(event)">
+            <div class="confirm-sheet" id="confirmSheet" onclick="event.stopPropagation()">
+                <div class="confirm-sheet-handle"></div>
+                <div id="confirmSheetContent"></div>
             </div>
         </div>
 
@@ -4506,6 +5308,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 console.log('[ReliefNote] データバージョン変更検出:', stored, '->', DATA_VERSION);
                 localStorage.removeItem('answers');
                 localStorage.removeItem('taskStatuses');
+                localStorage.removeItem('confirmStatuses');
                 localStorage.removeItem('rn_step_progress');
                 localStorage.setItem('rn_data_version', DATA_VERSION);
             }
@@ -4669,12 +5472,18 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     rhs = '';
                 }
 
-                // 未回答 → UNKNOWN（ただし == NONE は確定的にfalse）
+                // 未回答 → UNKNOWN
                 if (isUnanswered(answer)) {
                     return ['UNKNOWN', p];
                 }
 
                 const ansArr = Array.isArray(answer) ? answer : [answer];
+
+                // 「わからない」(UNKNOWN)回答 → 条件結果を不確定にする
+                // ただし == UNKNOWN や in [...;UNKNOWN] など UNKNOWN自体との比較は確定
+                const isUnknownAnswer = Array.isArray(answer)
+                    ? answer.length === 1 && answer[0] === 'UNKNOWN'
+                    : answer === 'UNKNOWN';
 
                 switch (op.value) {
                     case '==':
@@ -4685,18 +5494,24 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         return [answer !== rhs, p];
                     case 'in':
                         if (Array.isArray(rhs)) {
+                            // UNKNOWNがリストに含まれていればそのまま評価、含まれていなければ不確定
+                            if (isUnknownAnswer && !rhs.includes('UNKNOWN')) return ['UNKNOWN', p];
                             if (Array.isArray(answer)) return [rhs.some(v => answer.includes(v)), p];
                             return [rhs.includes(answer), p];
                         }
                         return [answer === rhs, p];
                     case 'contains':
+                        if (isUnknownAnswer && rhs !== 'UNKNOWN') return ['UNKNOWN', p];
                         return [ansArr.includes(rhs), p];
                     case 'contains_any':
+                        if (isUnknownAnswer && Array.isArray(rhs) && !rhs.includes('UNKNOWN')) return ['UNKNOWN', p];
                         if (Array.isArray(rhs)) return [rhs.some(v => ansArr.includes(v)), p];
                         return [ansArr.includes(rhs), p];
                     case 'does_not_contain':
+                        if (isUnknownAnswer && rhs !== 'UNKNOWN') return ['UNKNOWN', p];
                         return [!ansArr.includes(rhs), p];
                     case 'does_not_contain_any':
+                        if (isUnknownAnswer && Array.isArray(rhs) && !rhs.includes('UNKNOWN')) return ['UNKNOWN', p];
                         if (Array.isArray(rhs)) return [!rhs.some(v => ansArr.includes(v)), p];
                         return [!ansArr.includes(rhs), p];
                     default:
@@ -5308,6 +6123,34 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         let answers = {};
         let currentQuestionIndex = 0;
         let taskStatuses = {};
+        let confirmStatuses = {}; // NEED_CONFIRM | SKIPPED | UNCERTAIN
+        const CONFIRM_HINTS = {
+            'Q-DIG-01': '故人のスマホや請求書を確認してみてください',
+            'Q-FUN-STATUS-01': '葬儀社に連絡したか思い出してみてください',
+            'Q-ADMIN-DN-01': '死亡届を役場に出したかどうかです',
+            'Q-REL-01': 'あなたと故人との関係（配偶者・子など）です',
+            'Q-EMP-01': 'あなたが現在お勤めかどうかです',
+            'Q-DECEASED-EMP-01': '故人が亡くなった時点でお仕事をしていたかです',
+            'Q-HOUSEHOLD-01': '住民票の世帯主が故人だったかです',
+            'Q-HI-01': '故人の保険証を確認してみてください',
+            'Q-DEPENDENT-01': '故人の保険証に扶養家族の記載があるか確認してみてください',
+            'Q-PEN-01': '年金証書や年金振込の通帳記録を確認してみてください',
+            'Q-PEN-EMP-01': '故人が会社員や公務員だった時期があるかです',
+            'Q-SPOUSE-01': '故人に配偶者がいるかです',
+            'Q-CHILD-U18-01': '18歳以下のお子さんがいるかです',
+            'Q-CARE-01': '介護保険証が手元にあれば該当します',
+            'Q-FIN-01': '故人の通帳やカードを探してみてください',
+            'Q-INS-01': '保険証券や通帳の引落し記録を確認してみてください',
+            'Q-INS-DAMAGE-01': '自動車保険・火災保険の証券を探してみてください',
+            'Q-UTIL-01': '電気・ガス・水道の請求書を確認してみてください',
+            'Q-RENT-01': '賃貸契約書を確認してみてください',
+            'Q-AGRI-01': '固定資産税の通知書で農地の有無を確認できます',
+            'Q-LOAN-01': '通帳のローン引落しを確認してみてください',
+            'Q-TAX-01': '確定申告書の控えや源泉徴収票を探してみてください',
+            'Q-RE-01': '固定資産税の通知書で確認できます',
+            'Q-CAR-01': '車検証を確認してみてください',
+            'Q-LICENSE-01': '故人の財布や書類を確認してみてください'
+        };
         let currentGuideView = 'phase';
         let currentTaskId = null;
         let confirmReturnPhase = null; // 確認センターから戻る時のスクロール先フェーズ
@@ -5321,13 +6164,16 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         function loadData() {
             const savedAnswers = localStorage.getItem('answers');
             const savedStatuses = localStorage.getItem('taskStatuses');
+            const savedConfirmStatuses = localStorage.getItem('confirmStatuses');
             if (savedAnswers) answers = JSON.parse(savedAnswers);
             if (savedStatuses) taskStatuses = JSON.parse(savedStatuses);
+            if (savedConfirmStatuses) confirmStatuses = JSON.parse(savedConfirmStatuses);
         }
 
         function saveData() {
             localStorage.setItem('answers', JSON.stringify(answers));
             localStorage.setItem('taskStatuses', JSON.stringify(taskStatuses));
+            localStorage.setItem('confirmStatuses', JSON.stringify(confirmStatuses));
         }
 
         // チャネル初期化
@@ -5382,7 +6228,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
             // フッターナビの表示制御
             const footerNav = document.querySelector('.footer-nav');
-            const screensWithoutFooter = ['screen-splash', 'screen-onboarding'];
+            const screensWithoutFooter = ['screen-splash', 'screen-onboarding', 'screen-bulk-confirm', 'screen-onboard-confirm'];
             if (footerNav) {
                 if (screensWithoutFooter.includes(screenId)) {
                     footerNav.style.display = 'none';
@@ -5671,7 +6517,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 setTimeout(function() {
                     generateTasks();
                     renderHome();
-                    showScreen('screen-home');
+                    // NEED_CONFIRMタスクがあればオンボーディング確認画面を表示
+                    const ncIds = tasks.filter(function(t) { return taskStatuses[t.id] === 'NEED_CONFIRM'; }).map(function(t) { return t.id; });
+                    if (ncIds.length > 0) {
+                        showOnboardConfirmScreen(ncIds);
+                    } else {
+                        showScreen('screen-home');
+                    }
                 }, 300);
             }
         }
@@ -5736,19 +6588,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             // Step 3: applies_when を評価
             const awResult = task.appliesWhen ? evaluateCondition(task.appliesWhen, answers) : true;
             if (awResult === true) {
-                // rule_type に応じてステータスを決定
-                let status;
-                if (task.ruleType === 'GENERAL') {
-                    status = 'OPEN';
-                } else {
-                    // CONFIRMED, POSSIBLE: required_questionsが全て回答済みならOPEN、未回答があればNEED_CONFIRM
-                    const hasUnansweredRQ = task.requiredQuestions && task.requiredQuestions.length > 0 &&
-                        task.requiredQuestions.some(qId => {
-                            const ans = answers[qId];
-                            return ans === undefined || ans === null || ans === '';
-                        });
-                    status = hasUnansweredRQ ? 'NEED_CONFIRM' : 'OPEN';
-                }
+                // applies_when が確定的に true → タスクは該当確定 → OPEN
+                // (OR条件で一部の質問だけ回答済みでも、条件成立なら OPEN)
+                let status = 'OPEN';
 
                 // depends_on を評価（BLOCKED判定）
                 if (hasDependencyBlocking(task)) {
@@ -6001,7 +6843,78 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             return '確認が必要です';
         }
 
+        function getUncertainHintForTask(task) {
+            if (!task.requiredQuestions || task.requiredQuestions.length === 0) return { hint: '', phone: '', destName: '' };
+            // 最初の required_question のヒントを取得
+            const qId = task.requiredQuestions[0];
+            const hint = CONFIRM_HINTS[qId] || '';
+            // 電話番号を取得
+            const detail = taskDetails[task.id];
+            let phone = '';
+            let destName = '';
+            if (detail) {
+                const disp = getTaskDetailDisplay(task.id, detail);
+                if (disp && disp.phone && !disp.phone.startsWith('{')) {
+                    phone = disp.phone.split(/[／\/（]/)[0].replace(/[^0-9+-]/g, '');
+                    destName = disp.destination || '問い合わせ先';
+                }
+            }
+            return { hint: hint, phone: phone, destName: destName };
+        }
+
+        function renderNeedConfirmItem(t) {
+            var title = t.title.replace(/[（(]?期限[：:]\s*[^）)]+[）)]?/, '').trim();
+            var cs = confirmStatuses[t.id];
+            if (cs === 'UNCERTAIN') {
+                var info = getUncertainHintForTask(t);
+                var phoneHtml = info.phone
+                    ? '<a href="tel:' + info.phone + '" class="need-confirm-item-phone" onclick="event.stopPropagation()">📞 ' + info.destName + 'に電話で確認</a>'
+                    : '';
+                return '<div class="need-confirm-item uncertain" onclick="event.stopPropagation(); showTaskDetail(\'' + t.id + '\')">' +
+                    '<div class="need-confirm-item-body">' +
+                        '<div class="need-confirm-item-name">' + title + '</div>' +
+                        (info.hint ? '<div class="need-confirm-item-hint">💡 ' + info.hint + '</div>' : '') +
+                        phoneHtml +
+                    '</div>' +
+                    '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')">確認 →</button>' +
+                '</div>';
+            }
+            return '<div class="need-confirm-item" onclick="event.stopPropagation(); showTaskDetail(\'' + t.id + '\')">' +
+                '<div class="need-confirm-item-body">' +
+                    '<div class="need-confirm-item-name">' + title + '</div>' +
+                '</div>' +
+                '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')">確認 →</button>' +
+            '</div>';
+        }
+
         // ホーム画面レンダリング
+        function buildNeedConfirmSectionHtml(taskList, compact) {
+            // UNCERTAIN を上に、NEED_CONFIRM/SKIPPED を下にソート
+            var sorted = taskList.slice().sort(function(a, b) {
+                var aU = confirmStatuses[a.id] === 'UNCERTAIN' ? 0 : 1;
+                var bU = confirmStatuses[b.id] === 'UNCERTAIN' ? 0 : 1;
+                return aU - bU;
+            });
+            var taskIds = sorted.map(function(t) { return t.id; });
+            var taskIdsJson = JSON.stringify(taskIds).replace(/"/g, '&quot;');
+            var returnScreen = compact ? 'screen-home' : 'screen-guide';
+            let html = '<div class="need-confirm-section' + (compact ? ' home-compact' : '') + '">' +
+                '<div class="need-confirm-header" onclick="startBulkConfirm(' + taskIdsJson + ', &quot;' + returnScreen + '&quot;'  + ')" style="cursor: pointer;">' +
+                    '<div class="need-confirm-header-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg></div>' +
+                    '<div class="need-confirm-header-text">' +
+                        '<div class="need-confirm-header-title">確認が必要な手続き</div>' +
+                        (compact ? '' : '<div class="need-confirm-header-sub">質問に答えると、必要かどうかわかります</div>') +
+                    '</div>' +
+                    '<div class="need-confirm-header-count">' + sorted.length + '件</div>' +
+                '</div>' +
+                '<div class="need-confirm-list">';
+            sorted.forEach(function(t) {
+                html += renderNeedConfirmItem(t);
+            });
+            html += '</div></div>';
+            return html;
+        }
+
         function renderHome() {
             // 挨拶文を時間帯で切り替え
             const hour = new Date().getHours();
@@ -6115,6 +7028,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 return b.priority - a.priority;
             });
 
+            // OPEN と NEED_CONFIRM を分離
+            const openTasks = activeTasks.filter(t => t.status === 'OPEN');
+            const needConfirmTasks = activeTasks.filter(t => t.status === 'NEED_CONFIRM');
             const totalActiveTasks = activeTasks.length;
 
             // 修正2：「次にやること」表示（1件フォーカス）
@@ -6122,8 +7038,18 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
             if (totalActiveTasks === 0) {
                 nextContainer.innerHTML = '<div style="text-align: center; color: var(--text-tertiary); padding: 32px 20px; font-size: 15px;">すべてのタスクが完了しました</div>';
+            } else if (openTasks.length === 0) {
+                // OPENタスクなし、NEED_CONFIRMのみ
+                const ncSlice = needConfirmTasks.slice(0, 5);
+                let nextHTML = buildNeedConfirmSectionHtml(ncSlice, true);
+                nextHTML += `
+                    <div style="text-align: center; font-size: 13px; color: var(--text-tertiary); margin-top: 12px; cursor: pointer;" onclick="setGuideView('phase'); showScreen('screen-guide');">
+                        すべてのタスクを見る
+                    </div>
+                `;
+                nextContainer.innerHTML = nextHTML;
             } else {
-                const mainTask = activeTasks[0];
+                const mainTask = openTasks[0];
 
                 // メインタスクの期限表示計算
                 let deadlineDisplayText = '';
@@ -6185,11 +7111,6 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     ? mainDisp.destination.split(/[／\/]/).map(s => s.trim()).filter(s => s !== '')[0]
                     : '';
 
-                // クリックハンドラ
-                const mainClickHandler = mainTask.status === 'NEED_CONFIRM'
-                    ? `openQuestionsForTask('${mainTask.id}', 'screen-home')`
-                    : `showTaskDetail('${mainTask.id}')`;
-
                 // メインカード（1件目）
                 let nextHTML = `
                     <div style="
@@ -6198,17 +7119,16 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         border-radius: 14px;
                         padding: 20px;
                         cursor: pointer;
-                    " onclick="event.stopPropagation(); ${mainClickHandler}">
+                    " onclick="event.stopPropagation(); showTaskDetail('${mainTask.id}')">
                         <div style="font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.5px; margin-bottom: 8px;">まずはこれから</div>
                         <div style="font-size: 17px; font-weight: 700; color: var(--text-primary); line-height: 1.5;">${mainTask.title}</div>
                         ${deadlineDisplayText ? `<div class="task-deadline ${deadlineBadgeClass}" style="margin-top: 8px;">${deadlineDisplayText}</div>` : ''}
                         ${destinationText ? `<div style="font-size: 12px; color: var(--text-tertiary); margin-top: 6px;">届出先: ${destinationText}</div>` : ''}
-                        ${mainTask.status === 'NEED_CONFIRM' ? `<div class="task-status-hint need-confirm" style="margin-top: 8px;">${getNeedConfirmHint(mainTask)}</div>` : ''}
                     </div>
                 `;
 
-                // サブカード（2件目・3件目）
-                const subTasks = activeTasks.slice(1, 3);
+                // サブカード（2件目・3件目）— OPENタスクのみ
+                const subTasks = openTasks.slice(1, 3);
                 subTasks.forEach((subTask, idx) => {
                     // サブタスクの期限表示計算
                     let subDeadlineText = '';
@@ -6244,10 +7164,6 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         subBadgeClass = '';
                     }
 
-                    const subClickHandler = subTask.status === 'NEED_CONFIRM'
-                        ? `openQuestionsForTask('${subTask.id}', 'screen-home')`
-                        : `showTaskDetail('${subTask.id}')`;
-
                     nextHTML += `
                         <div style="
                             background: var(--bg-primary);
@@ -6260,12 +7176,17 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                             align-items: center;
                             justify-content: space-between;
                             gap: 8px;
-                        " onclick="event.stopPropagation(); ${subClickHandler}">
+                        " onclick="event.stopPropagation(); showTaskDetail('${subTask.id}')">
                             <div style="font-size: 14px; font-weight: 500; color: var(--text-secondary); line-height: 1.4; flex: 1; min-width: 0;">${subTask.title}</div>
                             ${subDeadlineText ? `<div class="task-deadline ${subBadgeClass}" style="font-size: 11px; flex-shrink: 0;">${subDeadlineText}</div>` : ''}
                         </div>
                     `;
                 });
+
+                // Group B: NEED_CONFIRMタスク（最大2件）
+                if (needConfirmTasks.length > 0) {
+                    nextHTML += buildNeedConfirmSectionHtml(needConfirmTasks.slice(0, 2), true);
+                }
 
                 // 「すべてのタスクを見る」リンク
                 nextHTML += `
@@ -6283,20 +7204,26 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 nextContainer.innerHTML = nextHTML;
             }
 
-            // 未回答質問の導線
-            const allQuestions = confirmQuestions;
-            const answeredCount = allQuestions.filter(q => answers[q.id]).length;
-            const unansweredCount = allQuestions.length - answeredCount;
-
+            // 一括確認バナー（NEED_CONFIRMタスクがある場合）
             const unansweredCard = document.getElementById('unansweredQuestionsCard');
-            if (unansweredCount > 0) {
+            const allNeedConfirmIds = tasks.filter(t => taskStatuses[t.id] === 'NEED_CONFIRM').map(t => t.id);
+            if (allNeedConfirmIds.length > 0) {
+                const bulkQCount = buildBulkConfirmQuestions(allNeedConfirmIds).length;
+                const bulkMinutes = Math.max(1, Math.ceil(bulkQCount * 20 / 60));
                 unansweredCard.style.display = 'flex';
+                unansweredCard.className = 'bulk-confirm-banner';
+                unansweredCard.onclick = function() { startBulkConfirm(allNeedConfirmIds, 'screen-home'); };
                 unansweredCard.innerHTML = `
-                    <div class="unanswered-questions-text">未回答の質問が${unansweredCount}件あります</div>
-                    <div class="unanswered-questions-action">回答する →</div>
+                    <div class="bulk-confirm-banner-left">
+                        <div class="bulk-confirm-banner-title">未確認の手続きがあります</div>
+                        <div class="bulk-confirm-banner-sub">${allNeedConfirmIds.length}件・約${bulkMinutes}分で完了</div>
+                    </div>
+                    <button class="bulk-confirm-banner-btn">まとめて確認</button>
                 `;
             } else {
                 unansweredCard.style.display = 'none';
+                unansweredCard.className = 'unanswered-questions-card';
+                unansweredCard.onclick = null;
             }
         }
 
@@ -6451,17 +7378,19 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                             </div>
                             <div class="phase-tasks guide-task-list">
                                 <div class="phase-tasks-inner">
-                                    ${needConfirmCount > 0 ? `
-                                        <div class="phase-unanswered-card" onclick="event.stopPropagation(); openConfirmCenterWithPhaseFilter('${phaseId}')" style="margin: 12px 16px;">
-                                            <div class="phase-unanswered-icon">？</div>
-                                            <div class="phase-unanswered-info">
-                                                <div class="phase-unanswered-title">質問に答えると、あと<span class="phase-unanswered-count">${needConfirmCount}</span>件のタスクが表示されます</div>
-                                            </div>
-                                            <div class="phase-unanswered-arrow">›</div>
-                                        </div>
-                                    ` : ''}
                                     ${reviewLinkHtml}
-                                    ${renderTaskList(incompleteTasks, false, false, true)}
+                                    ${(() => {
+                                        const groupA = incompleteTasks.filter(t => t.status !== 'NEED_CONFIRM');
+                                        const groupB = incompleteTasks.filter(t => t.status === 'NEED_CONFIRM');
+                                        let out = '';
+                                        if (groupA.length > 0) {
+                                            out += renderTaskList(groupA, false, false, true);
+                                        }
+                                        if (groupB.length > 0) {
+                                            out += buildNeedConfirmSectionHtml(groupB, false);
+                                        }
+                                        return out;
+                                    })()}
                                     ${completedTasks.length > 0 ? `
                                         <div class="completed-tasks-section${completedOpenClass}" data-completed-id="${phaseId}" onclick="event.stopPropagation(); toggleCompletedTasks(this)">
                                             <div class="completed-tasks-header">
@@ -7359,8 +8288,19 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     `;
                 }
 
-                // ── hero ブロック終了 → body ブロック開始 ──
-                html += `</div><div class="detail-body">`;
+                // ── hero ブロック終了 ──
+                html += `</div>`;
+
+                // NEED_CONFIRM: 確認バナー
+                if (status === 'NEED_CONFIRM') {
+                    html += `<div class="detail-confirm-banner">
+                        <div class="detail-confirm-banner-text">この手続きがあなたに必要か確認しましょう</div>
+                        <div class="detail-confirm-banner-btn" onclick="openConfirmSheet('${taskId}')">いま確認する →</div>
+                    </div>`;
+                }
+
+                // ── body ブロック開始 ──
+                html += `<div class="detail-body">`;
 
                 // やること（手順）- 新UI（プログレスバー + 縦ライン + 展開補足）
                 window._currentStepCount = 0;
@@ -7605,10 +8545,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 completeBtn.classList.add('active');
                 completeBtn.disabled = false;
                 completeBtn.onclick = function() {
-                    const unansweredForBtn = getUnansweredQuestionsForTask(taskId);
-                    if (unansweredForBtn.length > 0) {
-                        showFilteredQuestions(unansweredForBtn, 'screen-detail', taskId);
-                    }
+                    openConfirmSheet(taskId);
                 };
             } else {
                 completeBtn.textContent = '完了にする';
@@ -7766,7 +8703,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             const task = tasks.find(t => t.id === taskId);
             if (!task || !task.requiredQuestions || task.requiredQuestions.length === 0) return [];
             const currentAnswers = JSON.parse(localStorage.getItem('answers') || '{}');
-            return task.requiredQuestions.filter(qId => !currentAnswers[qId]);
+            return task.requiredQuestions.filter(qId => {
+                const ans = currentAnswers[qId];
+                if (!ans) return true;
+                if (ans === 'UNKNOWN') return true;
+                if (Array.isArray(ans) && ans.length === 1 && ans[0] === 'UNKNOWN') return true;
+                return false;
+            });
         }
 
         // NEED_CONFIRMタスクをタップ時の処理
@@ -7779,6 +8722,685 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             }
             // 未回答の質問だけをフィルタして確認センターを開く
             showFilteredQuestions(unanswered, returnScreen, taskId);
+        }
+
+        // ── 確認ボトムシート ──
+
+        function openConfirmSheet(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            // 未回答または UNKNOWN 回答の required_questions を取得
+            const unansweredIds = (task.requiredQuestions || []).filter(qId => {
+                const ans = answers[qId];
+                if (ans === undefined || ans === null || ans === '' || (Array.isArray(ans) && ans.length === 0)) return true;
+                // UNKNOWN回答もNEED_CONFIRMの原因なので再質問対象
+                if (ans === 'UNKNOWN') return true;
+                if (Array.isArray(ans) && ans.length === 1 && ans[0] === 'UNKNOWN') return true;
+                return false;
+            });
+
+            if (unansweredIds.length === 0) {
+                showTaskDetail(taskId);
+                return;
+            }
+
+            // 最初の未回答質問を取得
+            const questionId = unansweredIds[0];
+            const question = questions.find(q => q.id === questionId);
+            if (!question) return;
+
+            window._confirmSheetTaskId = taskId;
+            window._confirmSheetQuestionId = questionId;
+
+            // 回答前のステータスを記録（フィードバック用）
+            window._confirmSheetPrevStatuses = {};
+            tasks.forEach(t => { window._confirmSheetPrevStatuses[t.id] = taskStatuses[t.id]; });
+
+            // 選択肢を構築
+            let optionsHtml = '';
+            if (question.type === 'single') {
+                const uncertainValues = ['UNKNOWN'];
+                const normalOpts = question.options.filter(o => !uncertainValues.includes(o.value));
+                const uncertainOpts = question.options.filter(o => uncertainValues.includes(o.value));
+
+                normalOpts.forEach(opt => {
+                    optionsHtml += `<button class="confirm-sheet-option" onclick="answerConfirmSheet('${questionId}', '${opt.value}')">${opt.label}</button>`;
+                });
+                uncertainOpts.forEach(opt => {
+                    optionsHtml += `<button class="confirm-sheet-option uncertain" onclick="answerConfirmSheetUnknown('${questionId}', '${opt.value}', '${taskId}')">${opt.label}</button>`;
+                });
+            } else if (question.type === 'multi') {
+                const exclusiveVals = question.exclusiveOptions || [];
+                optionsHtml += `<div class="confirm-sheet-multi-hint">あてはまるものをすべて選んでください</div>`;
+                question.options.forEach(opt => {
+                    const isUncertain = opt.value === 'UNKNOWN' || opt.value === 'NONE';
+                    optionsHtml += `<button class="confirm-sheet-option${isUncertain ? ' uncertain' : ''}" id="csopt-${opt.value}" onclick="toggleConfirmSheetMulti('${questionId}', '${opt.value}', ${JSON.stringify(exclusiveVals).replace(/"/g, '&quot;')})">${opt.label}</button>`;
+                });
+                optionsHtml += `<button class="confirm-sheet-submit" id="confirmSheetSubmit" disabled onclick="submitConfirmSheetMulti('${questionId}')">決定する</button>`;
+            } else if (question.type === 'date') {
+                optionsHtml = `
+                    <input type="date" id="confirmSheetDateInput" style="width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; margin-bottom: 8px;">
+                    <button class="confirm-sheet-option" style="background: var(--accent); color: white; border-color: var(--accent);" onclick="answerConfirmSheetDate('${questionId}')">回答する</button>
+                `;
+            }
+
+            // FAQヒント
+            let hintHtml = '';
+            const detail = taskDetails[taskId];
+            if (detail && detail.faq) {
+                const faqText = applyFuneralText(detail.faq);
+                const faqLine = faqText.split('\n').find(line => line.trim().startsWith('Q.'));
+                if (faqLine) {
+                    const items = faqLine.trim().split(/\s*\/\s*/);
+                    const formatted = items.join('\n\n');
+                    hintHtml = `<div class="confirm-sheet-hint">${formatted}</div>`;
+                }
+            }
+
+            const contentHtml = `
+                <div class="confirm-sheet-task-name">${task.title}</div>
+                <div class="confirm-sheet-context">について確認させてください</div>
+                <div class="confirm-sheet-divider"></div>
+                <div class="confirm-sheet-question">${question.text}</div>
+                <div class="confirm-sheet-options">${optionsHtml}</div>
+                ${hintHtml}
+                <div class="confirm-sheet-skip-link" onclick="skipConfirmSheet('${taskId}')">あとで確認する</div>
+            `;
+
+            document.getElementById('confirmSheetContent').innerHTML = contentHtml;
+            // multi_select用の選択状態初期化
+            window._confirmSheetMultiSelected = [];
+            document.getElementById('confirmSheetOverlay').classList.add('show');
+        }
+
+        function toggleConfirmSheetMulti(questionId, value, exclusiveVals) {
+            const selected = window._confirmSheetMultiSelected || [];
+            const idx = selected.indexOf(value);
+            const isExclusive = exclusiveVals.includes(value);
+
+            if (idx >= 0) {
+                selected.splice(idx, 1);
+            } else {
+                if (isExclusive) {
+                    // 排他選択肢：他をすべて外す
+                    selected.length = 0;
+                    selected.push(value);
+                } else {
+                    // 通常選択肢：排他選択肢を外す
+                    exclusiveVals.forEach(ev => {
+                        const ei = selected.indexOf(ev);
+                        if (ei >= 0) selected.splice(ei, 1);
+                    });
+                    selected.push(value);
+                }
+            }
+            window._confirmSheetMultiSelected = selected;
+
+            // UIを更新
+            const question = questions.find(q => q.id === questionId);
+            if (question) {
+                question.options.forEach(opt => {
+                    const btn = document.getElementById('csopt-' + opt.value);
+                    if (btn) {
+                        if (selected.includes(opt.value)) {
+                            btn.classList.add('selected');
+                        } else {
+                            btn.classList.remove('selected');
+                        }
+                    }
+                });
+            }
+            // 決定するボタンの有効/無効を切り替え
+            const submitBtn = document.getElementById('confirmSheetSubmit');
+            if (submitBtn) {
+                submitBtn.disabled = selected.length === 0;
+            }
+        }
+
+        function submitConfirmSheetMulti(questionId) {
+            const selected = window._confirmSheetMultiSelected || [];
+            if (selected.length === 0) return;
+            answers[questionId] = selected;
+            saveData();
+            // UNKNOWN のみ選択 → ガイダンスビューに遷移
+            if (selected.length === 1 && selected[0] === 'UNKNOWN') {
+                const taskId = window._confirmSheetTaskId;
+                regenerateAllTaskStatuses();
+                showConfirmSheetGuidance(taskId);
+                return;
+            }
+            processConfirmSheetAnswer();
+        }
+
+        function answerConfirmSheet(questionId, value) {
+            answers[questionId] = value;
+            saveData();
+            processConfirmSheetAnswer();
+        }
+
+        function answerConfirmSheetUnknown(questionId, value, taskId) {
+            answers[questionId] = value;
+            saveData();
+            regenerateAllTaskStatuses();
+            // ガイダンスビューに切り替え（ボトムシートは閉じない）
+            showConfirmSheetGuidance(taskId);
+        }
+
+        function answerConfirmSheetDate(questionId) {
+            const input = document.getElementById('confirmSheetDateInput');
+            if (!input || !input.value) return;
+            answers[questionId] = input.value;
+            saveData();
+            processConfirmSheetAnswer();
+        }
+
+        function processConfirmSheetAnswer() {
+            const prevStatuses = window._confirmSheetPrevStatuses || {};
+            regenerateAllTaskStatuses();
+            // 回答によりステータスが変わったタスクの confirmStatuses をクリア
+            tasks.forEach(t => {
+                const prev = prevStatuses[t.id];
+                const curr = taskStatuses[t.id];
+                if (prev !== curr && curr !== 'NEED_CONFIRM') {
+                    delete confirmStatuses[t.id];
+                }
+            });
+            closeConfirmSheetDirect();
+
+            // 影響を受けたタスクをカウント
+            let openedCount = 0;
+            let removedCount = 0;
+            let changedCount = 0;
+            tasks.forEach(t => {
+                const prev = prevStatuses[t.id];
+                const curr = taskStatuses[t.id];
+                if (prev !== curr) {
+                    changedCount++;
+                    if (curr === 'OPEN' && prev === 'NEED_CONFIRM') openedCount++;
+                    if (curr === 'NOT_APPLICABLE' && prev !== 'NOT_APPLICABLE') removedCount++;
+                }
+            });
+
+            // フィードバックtoast
+            let msg = '';
+            if (changedCount === 0) {
+                msg = '回答を保存しました';
+            } else if (changedCount === 1) {
+                const taskId = window._confirmSheetTaskId;
+                const newStatus = taskStatuses[taskId];
+                if (newStatus === 'OPEN') {
+                    msg = '✓ この手続きが必要です。リストに追加しました';
+                } else if (newStatus === 'NOT_APPLICABLE') {
+                    msg = '✓ この手続きは不要です';
+                } else {
+                    msg = '回答を保存しました';
+                }
+            } else {
+                msg = `✓ ${changedCount}つの手続きが確定しました`;
+            }
+            showConfirmFeedback(msg);
+            rerenderCurrentScreen();
+        }
+
+        function showConfirmFeedback(message) {
+            const existing = document.getElementById('confirm-feedback-toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'confirm-feedback-toast';
+            toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--accent);color:white;padding:10px 20px;border-radius:24px;font-size:14px;font-weight:500;z-index:999;animation:confirmFadeInUp 0.3s ease;white-space:nowrap;max-width:90%;text-align:center;';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 1500);
+        }
+
+        function showConfirmSheetGuidance(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            const detail = taskDetails[taskId];
+            if (!task) return;
+
+            let html = `
+                <div class="confirm-sheet-unknown-title">大丈夫です。確認する方法があります。</div>
+            `;
+
+            // FAQを解析して表示
+            if (detail && detail.faq) {
+                const faqText = applyFuneralText(detail.faq);
+                const faqLines = faqText.split('\n').filter(line => line.trim().startsWith('Q.'));
+                if (faqLines.length > 0) {
+                    const firstLine = faqLines[0];
+                    const parts = firstLine.split('→');
+                    if (parts.length >= 2) {
+                        const q = parts[0].replace(/^Q\./, '').trim();
+                        const a = parts.slice(1).join('→').trim();
+                        html += `<div class="confirm-sheet-unknown-body"><strong>${q}</strong><br>${a}</div>`;
+                    }
+                }
+            }
+
+            // 電話ボタン
+            const disp = detail ? getTaskDetailDisplay(taskId, detail) : null;
+            if (disp && disp.phone) {
+                const phoneNumber = disp.phone.split(/[／\/（]/)[0].replace(/[^0-9+-]/g, '');
+                const destName = disp.destination || '問い合わせ先';
+                html += `<a href="tel:${phoneNumber}" class="confirm-sheet-phone-btn">📞 ${destName}に電話する</a>`;
+            }
+
+            html += `<button class="confirm-sheet-close-btn" onclick="uncertainConfirmSheet('${taskId}')">あとで確認する</button>`;
+
+            document.getElementById('confirmSheetContent').innerHTML = html;
+        }
+
+        function skipConfirmSheet(taskId) {
+            confirmStatuses[taskId] = 'SKIPPED';
+            saveData();
+            closeConfirmSheetDirect();
+            rerenderCurrentScreen();
+        }
+
+        function uncertainConfirmSheet(taskId) {
+            confirmStatuses[taskId] = 'UNCERTAIN';
+            // 同じ質問に依存する全 NEED_CONFIRM タスクも UNCERTAIN に
+            const questionId = window._confirmSheetQuestionId;
+            if (questionId) {
+                tasks.forEach(function(t) {
+                    if (t.id !== taskId && taskStatuses[t.id] === 'NEED_CONFIRM' &&
+                        t.requiredQuestions && t.requiredQuestions.includes(questionId)) {
+                        confirmStatuses[t.id] = 'UNCERTAIN';
+                    }
+                });
+            }
+            saveData();
+            closeConfirmSheetDirect();
+            rerenderCurrentScreen();
+        }
+
+        function closeConfirmSheet(event) {
+            if (event && event.target.id === 'confirmSheetOverlay') {
+                closeConfirmSheetDirect();
+            }
+        }
+
+        function closeConfirmSheetDirect() {
+            document.getElementById('confirmSheetOverlay').classList.remove('show');
+            window._confirmSheetTaskId = null;
+            window._confirmSheetQuestionId = null;
+        }
+
+        function rerenderCurrentScreen() {
+            const activeScreen = document.querySelector('.screen.active');
+            if (!activeScreen) return;
+            if (activeScreen.id === 'screen-home') {
+                renderHome();
+            } else if (activeScreen.id === 'screen-guide') {
+                renderGuide();
+            } else if (activeScreen.id === 'screen-detail' && currentTaskId) {
+                showTaskDetail(currentTaskId);
+            }
+        }
+
+        // ── 一括確認ウィザード ──
+
+        var _bulkConfirmQuestions = [];
+        var _bulkConfirmIndex = 0;
+        var _bulkConfirmReturnScreen = 'screen-home';
+        var _bulkConfirmInitStatuses = {};
+
+        function buildBulkConfirmQuestions(targetTaskIds) {
+            var questionMap = {};
+            targetTaskIds.forEach(function(taskId) {
+                var task = tasks.find(function(t) { return t.id === taskId; });
+                if (!task || !task.requiredQuestions) return;
+                task.requiredQuestions.forEach(function(qId) {
+                    var ans = answers[qId];
+                    var isUnanswered = ans === undefined || ans === null || ans === '' ||
+                        (Array.isArray(ans) && ans.length === 0) ||
+                        ans === 'UNKNOWN' ||
+                        (Array.isArray(ans) && ans.length === 1 && ans[0] === 'UNKNOWN');
+                    if (!isUnanswered) return;
+                    if (!questionMap[qId]) {
+                        var q = questions.find(function(qq) { return qq.id === qId; });
+                        if (!q) return;
+                        questionMap[qId] = {
+                            questionId: qId,
+                            questionText: q.text,
+                            answerType: q.type,
+                            options: q.options,
+                            exclusiveOptions: q.exclusiveOptions || [],
+                            affectedTaskIds: [],
+                            affectedTaskNames: []
+                        };
+                    }
+                    if (questionMap[qId].affectedTaskIds.indexOf(taskId) < 0) {
+                        questionMap[qId].affectedTaskIds.push(taskId);
+                        questionMap[qId].affectedTaskNames.push(
+                            task.title.replace(/[（(]?期限[：:]\s*[^）)]+[）)]?/, '').trim()
+                        );
+                    }
+                });
+            });
+            var list = Object.values(questionMap);
+            list.sort(function(a, b) { return b.affectedTaskIds.length - a.affectedTaskIds.length; });
+            return list;
+        }
+
+        function startBulkConfirm(targetTaskIds, returnScreen) {
+            _bulkConfirmReturnScreen = returnScreen || 'screen-home';
+            _bulkConfirmQuestions = buildBulkConfirmQuestions(targetTaskIds);
+            _bulkConfirmIndex = 0;
+            _bulkConfirmInitStatuses = {};
+            tasks.forEach(function(t) { _bulkConfirmInitStatuses[t.id] = taskStatuses[t.id]; });
+            if (_bulkConfirmQuestions.length === 0) {
+                showBulkConfirmComplete();
+                showScreen('screen-bulk-confirm');
+                return;
+            }
+            renderBulkConfirmCard(_bulkConfirmIndex);
+            showScreen('screen-bulk-confirm');
+        }
+
+        function renderBulkConfirmCard(index) {
+            var q = _bulkConfirmQuestions[index];
+            var total = _bulkConfirmQuestions.length;
+            document.getElementById('bulkConfirmProgressText').textContent = (index + 1) + ' / ' + total;
+            document.getElementById('bulkConfirmProgressBar').style.width = ((index + 1) / total * 100) + '%';
+
+            var affectedHtml = '';
+            if (q.affectedTaskIds.length > 1) {
+                affectedHtml = '<div class="bulk-confirm-affected">' +
+                    '<div class="bulk-confirm-affected-label">この質問で' + q.affectedTaskIds.length + 'つの手続きが確定します</div>' +
+                    '<div class="bulk-confirm-affected-list">' +
+                    q.affectedTaskNames.map(function(name) {
+                        return '<div class="bulk-confirm-affected-item">' + name + '</div>';
+                    }).join('') +
+                    '</div></div>';
+            }
+
+            var optionsHtml = '';
+            if (q.answerType === 'single') {
+                var uncertainValues = ['UNKNOWN'];
+                var normalOpts = q.options.filter(function(o) { return uncertainValues.indexOf(o.value) < 0; });
+                var uncertainOpts = q.options.filter(function(o) { return uncertainValues.indexOf(o.value) >= 0; });
+                normalOpts.forEach(function(opt) {
+                    optionsHtml += '<button class="confirm-sheet-option" onclick="answerBulkConfirm(\'' + q.questionId + '\', \'' + opt.value + '\')">' + opt.label + '</button>';
+                });
+                uncertainOpts.forEach(function(opt) {
+                    optionsHtml += '<button class="confirm-sheet-option uncertain" onclick="answerBulkConfirm(\'' + q.questionId + '\', \'' + opt.value + '\')">' + opt.label + '</button>';
+                });
+            } else if (q.answerType === 'multi') {
+                var exVals = JSON.stringify(q.exclusiveOptions).replace(/"/g, '&quot;');
+                optionsHtml += '<div class="bulk-confirm-multi-hint">あてはまるものをすべて選んでください</div>';
+                q.options.forEach(function(opt) {
+                    var isU = opt.value === 'UNKNOWN' || opt.value === 'NONE';
+                    optionsHtml += '<button class="confirm-sheet-option' + (isU ? ' uncertain' : '') + '" id="bcopt-' + opt.value + '" onclick="toggleBulkConfirmMulti(\'' + q.questionId + '\', \'' + opt.value + '\', ' + exVals + ')">' + opt.label + '</button>';
+                });
+                optionsHtml += '<button class="bulk-confirm-submit" id="bulkConfirmSubmit" disabled onclick="submitBulkConfirmMulti(\'' + q.questionId + '\')">決定する</button>';
+            } else if (q.answerType === 'date') {
+                optionsHtml = '<input type="date" id="bulkConfirmDateInput" style="width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; margin-bottom: 8px;">' +
+                    '<button class="confirm-sheet-option" style="background: var(--accent); color: white; border-color: var(--accent);" onclick="answerBulkConfirmDate(\'' + q.questionId + '\')">回答する</button>';
+            }
+
+            var hintText = CONFIRM_HINTS[q.questionId] || '';
+            var hintHtml = hintText ? '<div class="bulk-confirm-hint">' + hintText + '</div>' : '';
+
+            var html = '<div class="bulk-confirm-card">' +
+                affectedHtml +
+                '<div class="bulk-confirm-question">' + q.questionText + '</div>' +
+                '<div class="bulk-confirm-options">' + optionsHtml + '</div>' +
+                hintHtml +
+                '<div class="bulk-confirm-skip" onclick="skipBulkConfirm()">あとで確認する</div>' +
+                '</div>';
+
+            document.getElementById('bulkConfirmBody').innerHTML = html;
+            window._bulkConfirmMultiSelected = [];
+        }
+
+        function answerBulkConfirm(questionId, value) {
+            var prevStatuses = {};
+            tasks.forEach(function(t) { prevStatuses[t.id] = taskStatuses[t.id]; });
+            answers[questionId] = value;
+            saveData();
+            regenerateAllTaskStatuses();
+            // confirmStatuses クリア
+            tasks.forEach(function(t) {
+                if (prevStatuses[t.id] !== taskStatuses[t.id] && taskStatuses[t.id] !== 'NEED_CONFIRM') {
+                    delete confirmStatuses[t.id];
+                }
+            });
+            saveData();
+            showBulkConfirmFeedback(prevStatuses);
+        }
+
+        function toggleBulkConfirmMulti(questionId, value, exclusiveVals) {
+            var selected = window._bulkConfirmMultiSelected || [];
+            var idx = selected.indexOf(value);
+            var isExclusive = exclusiveVals.indexOf(value) >= 0;
+            if (idx >= 0) {
+                selected.splice(idx, 1);
+            } else {
+                if (isExclusive) {
+                    selected.length = 0;
+                    selected.push(value);
+                } else {
+                    exclusiveVals.forEach(function(ev) {
+                        var ei = selected.indexOf(ev);
+                        if (ei >= 0) selected.splice(ei, 1);
+                    });
+                    selected.push(value);
+                }
+            }
+            window._bulkConfirmMultiSelected = selected;
+            var q = _bulkConfirmQuestions[_bulkConfirmIndex];
+            q.options.forEach(function(opt) {
+                var btn = document.getElementById('bcopt-' + opt.value);
+                if (btn) {
+                    if (selected.indexOf(opt.value) >= 0) {
+                        btn.classList.add('selected');
+                    } else {
+                        btn.classList.remove('selected');
+                    }
+                }
+            });
+            var submitBtn = document.getElementById('bulkConfirmSubmit');
+            if (submitBtn) submitBtn.disabled = selected.length === 0;
+        }
+
+        function submitBulkConfirmMulti(questionId) {
+            var selected = window._bulkConfirmMultiSelected || [];
+            if (selected.length === 0) return;
+            var prevStatuses = {};
+            tasks.forEach(function(t) { prevStatuses[t.id] = taskStatuses[t.id]; });
+            answers[questionId] = selected;
+            saveData();
+            regenerateAllTaskStatuses();
+            tasks.forEach(function(t) {
+                if (prevStatuses[t.id] !== taskStatuses[t.id] && taskStatuses[t.id] !== 'NEED_CONFIRM') {
+                    delete confirmStatuses[t.id];
+                }
+            });
+            saveData();
+            showBulkConfirmFeedback(prevStatuses);
+        }
+
+        function answerBulkConfirmDate(questionId) {
+            var input = document.getElementById('bulkConfirmDateInput');
+            if (!input || !input.value) return;
+            var prevStatuses = {};
+            tasks.forEach(function(t) { prevStatuses[t.id] = taskStatuses[t.id]; });
+            answers[questionId] = input.value;
+            saveData();
+            regenerateAllTaskStatuses();
+            tasks.forEach(function(t) {
+                if (prevStatuses[t.id] !== taskStatuses[t.id] && taskStatuses[t.id] !== 'NEED_CONFIRM') {
+                    delete confirmStatuses[t.id];
+                }
+            });
+            saveData();
+            showBulkConfirmFeedback(prevStatuses);
+        }
+
+        function skipBulkConfirm() {
+            var q = _bulkConfirmQuestions[_bulkConfirmIndex];
+            q.affectedTaskIds.forEach(function(tid) {
+                if (taskStatuses[tid] === 'NEED_CONFIRM') {
+                    confirmStatuses[tid] = 'SKIPPED';
+                }
+            });
+            saveData();
+            _bulkConfirmIndex++;
+            if (_bulkConfirmIndex >= _bulkConfirmQuestions.length) {
+                showBulkConfirmComplete();
+            } else {
+                renderBulkConfirmCard(_bulkConfirmIndex);
+            }
+        }
+
+        function showBulkConfirmFeedback(prevStatuses) {
+            var addedTasks = [];
+            var removedTasks = [];
+            tasks.forEach(function(t) {
+                var prev = prevStatuses[t.id];
+                var curr = taskStatuses[t.id];
+                if (prev === curr) return;
+                if (curr === 'OPEN' || curr === 'BLOCKED') {
+                    addedTasks.push(t.title.replace(/[（(]?期限[：:]\s*[^）)]+[）)]?/, '').trim());
+                } else if (curr === 'NOT_APPLICABLE') {
+                    removedTasks.push(t.title.replace(/[（(]?期限[：:]\s*[^）)]+[）)]?/, '').trim());
+                }
+            });
+
+            if (addedTasks.length === 0 && removedTasks.length === 0) {
+                _bulkConfirmIndex++;
+                if (_bulkConfirmIndex >= _bulkConfirmQuestions.length) {
+                    showBulkConfirmComplete();
+                } else {
+                    renderBulkConfirmCard(_bulkConfirmIndex);
+                }
+                return;
+            }
+
+            var html = '<div class="bulk-confirm-feedback"><div class="bulk-confirm-feedback-icon">✓</div>';
+            if (addedTasks.length > 0 && removedTasks.length === 0) {
+                html += '<div class="bulk-confirm-feedback-title">' + addedTasks.length + 'つの手続きが必要です</div>';
+                addedTasks.forEach(function(name) {
+                    html += '<div class="bulk-confirm-feedback-item added">● ' + name + ' → 追加</div>';
+                });
+            } else if (removedTasks.length > 0 && addedTasks.length === 0) {
+                html += '<div class="bulk-confirm-feedback-title">' + removedTasks.length + 'つの手続きが不要とわかりました</div>';
+                removedTasks.forEach(function(name) {
+                    html += '<div class="bulk-confirm-feedback-item removed">─ ' + name + ' → 除外</div>';
+                });
+                html += '<div class="bulk-confirm-feedback-message">やることが減りました</div>';
+            } else {
+                html += '<div class="bulk-confirm-feedback-title">' + (addedTasks.length + removedTasks.length) + 'つの手続きが確定しました</div>';
+                addedTasks.forEach(function(name) {
+                    html += '<div class="bulk-confirm-feedback-item added">● ' + name + ' → 追加</div>';
+                });
+                removedTasks.forEach(function(name) {
+                    html += '<div class="bulk-confirm-feedback-item removed">─ ' + name + ' → 除外</div>';
+                });
+            }
+            html += '</div>';
+
+            document.getElementById('bulkConfirmBody').innerHTML = html;
+            setTimeout(function() {
+                _bulkConfirmIndex++;
+                if (_bulkConfirmIndex >= _bulkConfirmQuestions.length) {
+                    showBulkConfirmComplete();
+                } else {
+                    renderBulkConfirmCard(_bulkConfirmIndex);
+                }
+            }, 1200);
+        }
+
+        function showBulkConfirmComplete() {
+            var openCount = 0;
+            var remainCount = 0;
+            var removedCount = 0;
+            tasks.forEach(function(t) {
+                var init = _bulkConfirmInitStatuses[t.id];
+                var curr = taskStatuses[t.id];
+                if (curr === 'OPEN' || curr === 'BLOCKED') {
+                    if (init === 'NEED_CONFIRM') openCount++;
+                }
+                if (curr === 'NEED_CONFIRM') remainCount++;
+                if (curr === 'NOT_APPLICABLE' && init === 'NEED_CONFIRM') removedCount++;
+            });
+
+            var html = '<div class="bulk-confirm-complete">' +
+                '<div class="bulk-confirm-complete-icon">✓</div>' +
+                '<div class="bulk-confirm-complete-title">確認が終わりました</div>' +
+                '<div class="bulk-confirm-complete-summary">' +
+                    '<div class="bulk-confirm-complete-row"><span class="bulk-confirm-complete-label">● やること</span><span class="bulk-confirm-complete-value">→ ' + openCount + '件</span></div>' +
+                    '<div class="bulk-confirm-complete-row"><span class="bulk-confirm-complete-label">○ 確認が必要</span><span class="bulk-confirm-complete-value">→ ' + remainCount + '件</span></div>' +
+                    '<div class="bulk-confirm-complete-row"><span class="bulk-confirm-complete-label">─ 該当なし</span><span class="bulk-confirm-complete-value">→ ' + removedCount + '件</span></div>' +
+                '</div>' +
+                '<button class="btn-primary" onclick="finishBulkConfirm()">ホーム画面に戻る</button>' +
+                '</div>';
+
+            document.getElementById('bulkConfirmBody').innerHTML = html;
+            document.getElementById('bulkConfirmProgressText').textContent = '';
+            document.getElementById('bulkConfirmProgressBar').style.width = '100%';
+        }
+
+        function closeBulkConfirm() {
+            saveData();
+            showScreen(_bulkConfirmReturnScreen);
+            renderHome();
+            renderGuide();
+        }
+
+        function finishBulkConfirm() {
+            saveData();
+            showScreen('screen-home');
+            renderHome();
+            renderGuide();
+        }
+
+        // オンボーディング完了後の確認画面
+        function showOnboardConfirmScreen(ncIds) {
+            const bulkQuestions = buildBulkConfirmQuestions(ncIds);
+            const qCount = bulkQuestions.length;
+            const bulkMinutes = Math.max(1, Math.ceil(qCount * 20 / 60));
+            const openCount = tasks.filter(function(t) {
+                var s = taskStatuses[t.id];
+                return s === 'OPEN' || s === 'BLOCKED';
+            }).length;
+            const content = document.getElementById('onboardConfirmContent');
+            content.innerHTML = `
+                <div style="text-align: center; padding: 60px 24px 40px;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">&#10003;</div>
+                    <div class="onboard-confirm-title">あなたの手続きリストができました</div>
+                    <div class="onboard-confirm-sub" style="font-size: 14px; color: var(--text-secondary); margin-top: 8px; line-height: 1.6;">
+                        確認が必要な手続きが<strong>${ncIds.length}件</strong>あります。<br>
+                        いくつかの質問に答えると、あなたに必要な手続きが確定します。
+                    </div>
+                </div>
+                <div class="onboard-confirm-summary">
+                    <div class="onboard-confirm-summary-row">
+                        <span>やること</span>
+                        <span>${openCount}件</span>
+                    </div>
+                    <div class="onboard-confirm-summary-row">
+                        <span>確認が必要な手続き</span>
+                        <span>${ncIds.length}件</span>
+                    </div>
+                    <div class="onboard-confirm-summary-row">
+                        <span>所要時間の目安</span>
+                        <span>約${bulkMinutes}分</span>
+                    </div>
+                </div>
+                <div style="padding: 0 24px 40px;">
+                    <button class="btn-primary" style="width: 100%; padding: 16px; font-size: 16px;" onclick="startBulkConfirm(${JSON.stringify(ncIds).replace(/"/g, '&quot;')}, 'screen-home')">いま確認する（${ncIds.length}件・約${bulkMinutes}分）</button>
+                    <div class="onboard-confirm-later" onclick="showScreen('screen-home')">あとで確認する</div>
+                </div>
+            `;
+            showScreen('screen-onboard-confirm');
         }
 
         // フィルタ付き確認センター表示
@@ -8689,6 +10311,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             // 回答データとタスク状態を削除
             localStorage.removeItem('answers');
             localStorage.removeItem('taskStatuses');
+            localStorage.removeItem('confirmStatuses');
             localStorage.removeItem('rn_step_progress');
             localStorage.removeItem('rn_done_tasks');
             localStorage.removeItem('rn_task_notes');
@@ -9359,6 +10982,36 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 showToast('タスクを未完了に戻しました');
             };
         });
+
+        // 確認ボトムシートのスワイプダウン閉じ
+        (function() {
+            var sheet = document.querySelector('#confirmSheet');
+            if (!sheet) return;
+            var startY = 0, currentY = 0, isDragging = false;
+            sheet.addEventListener('touchstart', function(e) {
+                if (sheet.scrollTop <= 0) {
+                    startY = e.touches[0].clientY;
+                    isDragging = true;
+                }
+            }, { passive: true });
+            sheet.addEventListener('touchmove', function(e) {
+                if (!isDragging) return;
+                currentY = e.touches[0].clientY;
+                var diff = currentY - startY;
+                if (diff > 0) {
+                    sheet.style.transform = 'translateY(' + diff + 'px)';
+                }
+            }, { passive: true });
+            sheet.addEventListener('touchend', function() {
+                if (!isDragging) return;
+                var diff = currentY - startY;
+                if (diff > 100) {
+                    closeConfirmSheetDirect();
+                }
+                sheet.style.transform = '';
+                startY = 0; currentY = 0; isDragging = false;
+            });
+        })();
 
         // 用語解説ポップオーバーのイベントリスナー
         document.addEventListener('click', function(e) {
