@@ -6419,7 +6419,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         // チャネルパラメータの永続化（イベントログ用）
         (function persistEventChannel() {
             try {
-                var urlChannel = new URLSearchParams(window.location.search).get('channel');
+                var params = new URLSearchParams(window.location.search);
+                var urlChannel = params.get('ch') || params.get('channel');
                 if (urlChannel) {
                     localStorage.setItem('relief_note_channel', urlChannel);
                 }
@@ -6433,7 +6434,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         // イベントログ記録関数（Supabase送信 + localStorageフォールバック）
         function logEvent(eventType, eventData) {
             try {
-                var channel = new URLSearchParams(window.location.search).get('channel')
+                var _params = new URLSearchParams(window.location.search);
+                var channel = _params.get('ch') || _params.get('channel')
                     || localStorage.getItem('relief_note_channel')
                     || 'direct';
                 var userId = localStorage.getItem('rn_user_name') || 'anonymous';
