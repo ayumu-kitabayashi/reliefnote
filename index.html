@@ -6904,6 +6904,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
                 // 少しの間100%を見せてから遷移
                 setTimeout(function() {
+                    logEvent('profile_completed', {
+                        answers_count: Object.keys(answers).length
+                    });
                     generateTasks();
                     renderHome();
                     // NEED_CONFIRMタスクがあればオンボーディング確認画面を表示
@@ -8585,7 +8588,21 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             showScreen(detailReturnScreen || 'screen-guide');
         }
 
+        var _taskStartedThisSession = {};
+
         function showTaskDetail(taskId) {
+            // イベントログ: task_started（セッション内重複防止）
+            try {
+                if (!_taskStartedThisSession[taskId]) {
+                    _taskStartedThisSession[taskId] = true;
+                    var t = tasks.find(function(tk) { return tk.id === taskId; });
+                    logEvent('task_started', {
+                        task_id: taskId,
+                        task_name: t ? t.title : taskId
+                    });
+                }
+            } catch (e) {}
+
             // 現在アクティブな画面を記憶し、スクロール位置を保存
             if (!showTaskDetail._skipStack) {
                 const activeScreen = document.querySelector('.screen.active');
