@@ -4004,21 +4004,66 @@
         }
 
         .bulk-confirm-header {
-            padding: 16px 16px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
             background: var(--bg-primary);
             border-bottom: 1px solid var(--border-light);
+            z-index: 10;
+        }
+
+        .bulk-confirm-back {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .bulk-confirm-back:active {
+            background: #F0EEEB;
+        }
+
+        .bulk-confirm-back.hidden {
+            visibility: hidden;
         }
 
         .bulk-confirm-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: none;
             border: none;
-            font-size: 20px;
-            color: var(--text-tertiary);
+            font-size: 18px;
+            color: var(--text-secondary);
             cursor: pointer;
-            padding: 8px;
-            margin: -8px;
-            min-width: 44px;
-            min-height: 44px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .bulk-confirm-close:active {
+            background: #F0EEEB;
+        }
+
+        .bulk-confirm-progress {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 0 12px;
         }
 
         .bulk-confirm-progress-text {
@@ -4026,7 +4071,6 @@
             font-size: 13px;
             color: var(--text-tertiary);
             font-weight: 500;
-            margin-bottom: 8px;
         }
 
         .bulk-confirm-progress-track {
@@ -4747,11 +4791,14 @@
         <div class="screen" id="screen-bulk-confirm">
             <div class="bulk-confirm-screen">
                 <div class="bulk-confirm-header">
-                    <button class="bulk-confirm-close" id="bulkConfirmClose" onclick="closeBulkConfirm()">✕</button>
-                    <div class="bulk-confirm-progress-text" id="bulkConfirmProgressText"></div>
-                    <div class="bulk-confirm-progress-track">
-                        <div class="bulk-confirm-progress-bar" id="bulkConfirmProgressBar"></div>
+                    <button class="bulk-confirm-back hidden" id="bulkConfirmBack" onclick="goBackBulkConfirm()">‹</button>
+                    <div class="bulk-confirm-progress">
+                        <div class="bulk-confirm-progress-text" id="bulkConfirmProgressText"></div>
+                        <div class="bulk-confirm-progress-track">
+                            <div class="bulk-confirm-progress-bar" id="bulkConfirmProgressBar"></div>
+                        </div>
                     </div>
+                    <button class="bulk-confirm-close" id="bulkConfirmClose" onclick="closeBulkConfirm()">✕</button>
                 </div>
                 <div class="bulk-confirm-body" id="bulkConfirmBody"></div>
             </div>
@@ -9418,6 +9465,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             var total = _bulkConfirmQuestions.length;
             document.getElementById('bulkConfirmProgressText').textContent = (index + 1) + ' / ' + total;
             document.getElementById('bulkConfirmProgressBar').style.width = ((index + 1) / total * 100) + '%';
+            updateBulkBackButton();
 
             var affectedHtml = '';
             if (q.affectedTaskIds.length > 1) {
@@ -9430,27 +9478,34 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     '</div></div>';
             }
 
+            var existingAnswer = answers[q.questionId];
             var optionsHtml = '';
             if (q.answerType === 'single') {
                 var uncertainValues = ['UNKNOWN'];
                 var normalOpts = q.options.filter(function(o) { return uncertainValues.indexOf(o.value) < 0; });
                 var uncertainOpts = q.options.filter(function(o) { return uncertainValues.indexOf(o.value) >= 0; });
                 normalOpts.forEach(function(opt) {
-                    optionsHtml += '<button class="confirm-sheet-option" onclick="answerBulkConfirm(\'' + q.questionId + '\', \'' + opt.value + '\')">' + opt.label + '</button>';
+                    var selectedClass = (existingAnswer === opt.value) ? ' selected' : '';
+                    optionsHtml += '<button class="confirm-sheet-option' + selectedClass + '" onclick="answerBulkConfirm(\'' + q.questionId + '\', \'' + opt.value + '\')">' + opt.label + '</button>';
                 });
                 uncertainOpts.forEach(function(opt) {
-                    optionsHtml += '<button class="confirm-sheet-option uncertain" onclick="answerBulkConfirm(\'' + q.questionId + '\', \'' + opt.value + '\')">' + opt.label + '</button>';
+                    var selectedClass = (existingAnswer === opt.value) ? ' selected' : '';
+                    optionsHtml += '<button class="confirm-sheet-option uncertain' + selectedClass + '" onclick="answerBulkConfirm(\'' + q.questionId + '\', \'' + opt.value + '\')">' + opt.label + '</button>';
                 });
             } else if (q.answerType === 'multi') {
                 var exVals = JSON.stringify(q.exclusiveOptions).replace(/"/g, '&quot;');
                 optionsHtml += '<div class="bulk-confirm-multi-hint">あてはまるものをすべて選んでください</div>';
+                var prevSelected = Array.isArray(existingAnswer) ? existingAnswer : [];
                 q.options.forEach(function(opt) {
                     var isU = opt.value === 'UNKNOWN' || opt.value === 'NONE';
-                    optionsHtml += '<button class="confirm-sheet-option' + (isU ? ' uncertain' : '') + '" id="bcopt-' + opt.value + '" onclick="toggleBulkConfirmMulti(\'' + q.questionId + '\', \'' + opt.value + '\', ' + exVals + ')">' + opt.label + '</button>';
+                    var selClass = (prevSelected.indexOf(opt.value) >= 0) ? ' selected' : '';
+                    optionsHtml += '<button class="confirm-sheet-option' + (isU ? ' uncertain' : '') + selClass + '" id="bcopt-' + opt.value + '" onclick="toggleBulkConfirmMulti(\'' + q.questionId + '\', \'' + opt.value + '\', ' + exVals + ')">' + opt.label + '</button>';
                 });
-                optionsHtml += '<button class="bulk-confirm-submit" id="bulkConfirmSubmit" disabled onclick="submitBulkConfirmMulti(\'' + q.questionId + '\')">決定する</button>';
+                var submitDisabled = prevSelected.length === 0 ? ' disabled' : '';
+                optionsHtml += '<button class="bulk-confirm-submit" id="bulkConfirmSubmit"' + submitDisabled + ' onclick="submitBulkConfirmMulti(\'' + q.questionId + '\')">決定する</button>';
             } else if (q.answerType === 'date') {
-                optionsHtml = '<input type="date" id="bulkConfirmDateInput" style="width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; margin-bottom: 8px;">' +
+                var dateVal = (typeof existingAnswer === 'string' && existingAnswer.match(/^\d{4}-\d{2}-\d{2}$/)) ? existingAnswer : '';
+                optionsHtml = '<input type="date" id="bulkConfirmDateInput" value="' + dateVal + '" style="width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; margin-bottom: 8px;">' +
                     '<button class="confirm-sheet-option" style="background: var(--accent); color: white; border-color: var(--accent);" onclick="answerBulkConfirmDate(\'' + q.questionId + '\')">回答する</button>';
             }
 
@@ -9466,7 +9521,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 '</div>';
 
             document.getElementById('bulkConfirmBody').innerHTML = html;
-            window._bulkConfirmMultiSelected = [];
+            window._bulkConfirmMultiSelected = Array.isArray(existingAnswer) ? existingAnswer.slice() : [];
         }
 
         function answerBulkConfirm(questionId, value) {
@@ -9554,6 +9609,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         function skipBulkConfirm() {
+            // スキップフィードバック中は戻るボタンを非表示
+            var backBtn = document.getElementById('bulkConfirmBack');
+            if (backBtn) backBtn.classList.add('hidden');
             var q = _bulkConfirmQuestions[_bulkConfirmIndex];
             q.affectedTaskIds.forEach(function(tid) {
                 if (taskStatuses[tid] === 'NEED_CONFIRM') {
@@ -9581,6 +9639,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         function showBulkConfirmFeedback(prevStatuses) {
+            // フィードバック中は戻るボタンを非表示
+            var backBtn = document.getElementById('bulkConfirmBack');
+            if (backBtn) backBtn.classList.add('hidden');
             var addedTasks = [];
             var removedTasks = [];
             tasks.forEach(function(t) {
@@ -9704,6 +9765,26 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             document.getElementById('bulkConfirmBody').innerHTML = html;
             document.getElementById('bulkConfirmProgressText').textContent = '';
             document.getElementById('bulkConfirmProgressBar').style.width = '100%';
+            // 完了画面では戻るボタンを非表示
+            var backBtn = document.getElementById('bulkConfirmBack');
+            if (backBtn) backBtn.classList.add('hidden');
+        }
+
+        function goBackBulkConfirm() {
+            if (_bulkConfirmIndex > 0) {
+                _bulkConfirmIndex--;
+                renderBulkConfirmCard(_bulkConfirmIndex);
+            }
+        }
+
+        function updateBulkBackButton() {
+            var backBtn = document.getElementById('bulkConfirmBack');
+            if (!backBtn) return;
+            if (_bulkConfirmIndex === 0) {
+                backBtn.classList.add('hidden');
+            } else {
+                backBtn.classList.remove('hidden');
+            }
         }
 
         function closeBulkConfirm() {
