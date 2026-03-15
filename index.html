@@ -1816,19 +1816,24 @@
             align-items: flex-start;
             gap: 12px;
             padding: 10px 0;
+            position: relative;
         }
 
-        /* ステップ間コネクタ（縦線） */
-        .step-connector {
+        /* 縦線：step-itemの::afterで描画（詳細展開時に自動伸長） */
+        .step-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 12.5px;
+            top: 37px;
+            bottom: 0;
             width: 1.5px;
-            height: 8px;
             background: #E0DCD6;
-            margin-left: 12.25px;
+            pointer-events: none;
         }
 
-        .step-connector.done {
+        .step-item.completed:not(:last-child)::after {
             background: var(--accent);
-            opacity: 0.3;
+            opacity: 0.4;
         }
 
         /* ステップ番号（丸バッジ） */
@@ -2027,19 +2032,21 @@
             color: var(--text-primary);
             display: flex;
             align-items: center;
+            justify-content: space-between;
             cursor: pointer;
             user-select: none;
         }
 
         .detail-accordion-arrow {
             font-size: 10px;
-            margin-right: 8px;
-            transition: transform 200ms ease;
+            margin-left: auto;
             flex-shrink: 0;
+            transition: transform 200ms ease;
+            color: var(--text-tertiary);
         }
 
         .detail-accordion-section.open .detail-accordion-arrow {
-            transform: rotate(90deg);
+            transform: rotate(180deg);
         }
 
         .detail-accordion-content {
@@ -2053,7 +2060,7 @@
         }
 
         .detail-accordion-inner {
-            padding: 0 0 14px 18px;
+            padding: 0 0 14px 0;
         }
 
         .detail-accordion-text {
@@ -8573,11 +8580,6 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         }
                         const expandedClass = isExpanded ? ' expanded' : '';
 
-                        // コネクタ（最初のステップ以外の前に挿入）
-                        if (index > 0) {
-                            const prevDone = stepProg[index - 1] === true;
-                            html += `<div class="step-connector${prevDone ? ' done' : ''}"></div>`;
-                        }
                         html += `
                             <div class="step-item${stateClass}${noDetailClass}${expandedClass}" data-step-index="${index}">
                                 <div class="step-indicator" onclick="event.stopPropagation(); toggleStepCheck('${taskId}', ${index}, ${stepShort.length})"><span class="step-number-text">${index + 1}</span></div>
@@ -8613,10 +8615,6 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                             let stepText = step.replace(/^[①②③④⑤⑥⑦⑧⑨⑩]/, '').trim();
                             stepText = stepText.replace(/\/\s*$/, '').trim();
                             const isChecked = stepProg[index] === true;
-                            if (index > 0) {
-                                const prevDone = stepProg[index - 1] === true;
-                                html += `<div class="step-connector${prevDone ? ' done' : ''}"></div>`;
-                            }
                             html += `
                                 <div class="step-item${isChecked ? ' completed' : ''} no-detail" data-step-index="${index}">
                                     <div class="step-indicator" onclick="event.stopPropagation(); toggleStepCheck('${taskId}', ${index}, ${stepsList.length})"><span class="step-number-text">${index + 1}</span></div>
@@ -8662,8 +8660,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     html += `
                         <div class="detail-accordion-section open" data-accordion="docs">
                             <div class="detail-accordion-header" onclick="toggleAccordion('docs')">
-                                <span class="detail-accordion-arrow">▶</span>
                                 <span>必要なもの</span>
+                                <span class="detail-accordion-arrow">▾</span>
                             </div>
                             <div class="detail-accordion-content">
                                 <div class="detail-accordion-inner">
@@ -8682,8 +8680,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     html += `
                         <div class="detail-accordion-section${whyOpenClass}" data-accordion="why">
                             <div class="detail-accordion-header" onclick="toggleAccordion('why')">
-                                <span class="detail-accordion-arrow">▶</span>
                                 <span>なぜ必要か？</span>
+                                <span class="detail-accordion-arrow">▾</span>
                             </div>
                             <div class="detail-accordion-content">
                                 <div class="detail-accordion-inner">
@@ -8701,8 +8699,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         html += `
                             <div class="detail-accordion-section" data-accordion="faq">
                                 <div class="detail-accordion-header" onclick="toggleAccordion('faq')">
-                                    <span class="detail-accordion-arrow">▶</span>
                                     <span>よくある質問</span>
+                                    <span class="detail-accordion-arrow">▾</span>
                                 </div>
                                 <div class="detail-accordion-content">
                                     <div class="detail-accordion-inner">
@@ -8957,16 +8955,6 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     item.classList.add('upcoming');
                     // upcomingは展開を閉じる
                     item.classList.remove('expanded');
-                }
-            });
-
-            // コネクタの色を更新
-            const connectors = document.querySelectorAll('.step-connector');
-            connectors.forEach(function(conn, i) {
-                if (stepProgress[taskId][i]) {
-                    conn.classList.add('done');
-                } else {
-                    conn.classList.remove('done');
                 }
             });
 
