@@ -522,7 +522,7 @@
         .phase-message-section {
             padding: 0 16px;
             margin-top: 16px;
-            margin-bottom: 20px;  /* 修正5：8px → 20px */
+            margin-bottom: 20px;
         }
 
         .phase-message-content {
@@ -687,10 +687,8 @@
         }
 
         #nextTasks .task-checkbox:checked::after {
-            left: 6px;
-            top: 2px;
-            width: 6px;
-            height: 11px;
+            width: 5px;
+            height: 10px;
         }
 
         #nextTasks .task-name {
@@ -1226,7 +1224,7 @@
             transition: all 0.2s ease;
             margin-top: 1px;
             padding: 0;
-            box-sizing: content-box;
+            box-sizing: border-box;
         }
         .task-checkbox::before {
             content: '';
@@ -1246,13 +1244,13 @@
         .task-checkbox:checked::after {
             content: '';
             position: absolute;
-            left: 5.5px;
-            top: 2px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -60%) rotate(45deg);
             width: 4px;
             height: 8px;
             border: solid white;
             border-width: 0 1.5px 1.5px 0;
-            transform: rotate(45deg);
         }
 
         .task-info {
@@ -2228,6 +2226,67 @@
         .btn-blocked-dep-label {
             color: var(--text-secondary);
             font-size: 13px;
+        }
+
+        /* 依存先タスク完了 → 元タスク復帰のオーバーレイ */
+        .dep-complete-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: depOverlayIn 300ms ease-out;
+        }
+        @keyframes depOverlayIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .dep-complete-overlay .dep-check-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #3A3F32;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            animation: depCheckPop 400ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes depCheckPop {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .dep-complete-overlay .dep-check-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke: #fff;
+            stroke-width: 3;
+            fill: none;
+        }
+        .dep-complete-overlay .dep-complete-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary, #1a1a1a);
+            margin-bottom: 6px;
+            text-align: center;
+            padding: 0 24px;
+        }
+        .dep-complete-overlay .dep-return-text {
+            font-size: 13px;
+            color: var(--text-secondary, #6b6b6b);
+            text-align: center;
+            padding: 0 24px;
+        }
+        .dep-complete-overlay.dep-overlay-out {
+            animation: depOverlayOut 250ms ease-in forwards;
+        }
+        @keyframes depOverlayOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
         }
 
         /* ピン留め機能 */
@@ -5718,11 +5777,11 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         return r.text();
                     }).then(parseCSV))
                 );
-                console.log('[ReliefNote] CSVデータをfetchで読み込みました');
+                console.log('[RN] CSV fetched');
             } catch (fetchErr) {
-                console.warn('[ReliefNote] fetch失敗、インラインCSVにフォールバック:', fetchErr.message);
+                console.warn('[RN] fetch failed, using inline CSV:', fetchErr.message);
                 results = CSV_KEYS.map(key => parseCSV(INLINE_CSV[key]));
-                console.log('[ReliefNote] インラインCSVから読み込みました');
+                console.log('[RN] inline CSV loaded');
             }
             return {
                 rawTasks: results[0],
@@ -5741,12 +5800,12 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         function checkDataVersion() {
             const stored = localStorage.getItem('rn_data_version');
             if (stored !== DATA_VERSION) {
-                console.log('[ReliefNote] データバージョン変更検出:', stored, '->', DATA_VERSION);
+                console.log('[RN] version changed:', stored, '->', DATA_VERSION);
                 localStorage.removeItem('answers');
                 localStorage.removeItem('taskStatuses');
                 localStorage.removeItem('confirmStatuses');
                 localStorage.removeItem('rn_step_progress');
-                localStorage.setItem('rn_data_version', DATA_VERSION);
+                safeSetItem('rn_data_version', DATA_VERSION);
             }
         }
 
@@ -6094,7 +6153,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 const shortArr = splitSteps(tc.steps_short).map(stripNumbering);
                 const detailArr = splitSteps(tc.steps_detail).map(stripNumbering);
                 if (shortArr.length > 0 && detailArr.length > 0 && shortArr.length !== detailArr.length) {
-                    console.warn(`[ReliefNote] steps_short(${shortArr.length}) と steps_detail(${detailArr.length}) の件数不一致: ${tc.task_id}`);
+                    console.warn(`[RN] steps_short(${shortArr.length}) と steps_detail(${detailArr.length}) の件数不一致: ${tc.task_id}`);
                 }
                 taskStepsData[tc.task_id] = {
                     steps_short: shortArr,
@@ -6143,7 +6202,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         const sLen = taskStepsData[taskId].steps_short.length;
                         const dLen = taskStepsData[taskId].steps_detail.length;
                         if (sLen > 0 && dLen > 0 && sLen !== dLen) {
-                            console.warn(`[ReliefNote] locale override後 steps_short(${sLen}) と steps_detail(${dLen}) の件数不一致: ${taskId}`);
+                            console.warn(`[RN] locale override後 steps_short(${sLen}) と steps_detail(${dLen}) の件数不一致: ${taskId}`);
                         }
                     }
                 });
@@ -6197,17 +6256,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         // ====== 整合性チェック（console.log） ======
         function runIntegrityChecks() {
-            console.log('[ReliefNote] データ読み込み完了');
-            console.log(`  tasks: ${tasks.length}件`);
-            console.log(`  questions: ${questions.length}件`);
-            console.log(`  phases: ${Object.keys(phases).length}件`);
-            console.log(`  taskContent: ${Object.keys(taskDetails).length}件`);
-            console.log(`  taskStepsData: ${Object.keys(taskStepsData).length}件`);
-            console.log(`  localeOverrides: ${Object.keys(localeOverrideMap).length}タスク分`);
-            console.log(`  channelOverrides: ${channelOverridesRaw.length}件`);
-            console.log(`  messages: ${Object.keys(completionMessages).length + Object.keys(deadlineReminders).length + Object.keys(supportMessages).length}件`);
+            console.log(`[RN] loaded: tasks=${tasks.length} q=${questions.length} phases=${Object.keys(phases).length} content=${Object.keys(taskDetails).length} steps=${Object.keys(taskStepsData).length} lo=${Object.keys(localeOverrideMap).length} ch=${channelOverridesRaw.length}`);
 
-            console.log('[ReliefNote] 整合性チェック');
+            console.log('[RN] integrity check');
             const taskIds = new Set(tasks.map(t => t.id));
             const questionIds = new Set(questions.map(q => q.id));
             let errors = 0;
@@ -6223,7 +6274,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     });
                 }
             });
-            if (errors === 0) console.log('  ✓ 全 rule の required_questions が questions に存在');
+            if (errors === 0) console.log('  ✓ required_questions OK');
 
             // 全 depends_on が tasks に存在
             let depErrors = 0;
@@ -6237,7 +6288,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     });
                 }
             });
-            if (depErrors === 0) console.log('  ✓ 全 depends_on が tasks に存在');
+            if (depErrors === 0) console.log('  ✓ depends_on OK');
             errors += depErrors;
 
             // 全 locale_override の task_id が tasks に存在
@@ -6248,7 +6299,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     loErrors++;
                 }
             });
-            if (loErrors === 0) console.log('  ✓ 全 locale_override の task_id が tasks に存在');
+            if (loErrors === 0) console.log('  ✓ locale_override OK');
             errors += loErrors;
 
             // taskDetails の task_id が tasks に存在
@@ -6259,17 +6310,16 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     tdErrors++;
                 }
             });
-            if (tdErrors === 0) console.log('  ✓ 全 taskContent の task_id が tasks に存在');
+            if (tdErrors === 0) console.log('  ✓ taskContent OK');
             errors += tdErrors;
 
             if (errors === 0) {
-                console.log('[ReliefNote] ✓ 整合性チェック完了（エラーなし）');
+                console.log('[RN] ✓ integrity OK');
             } else {
-                console.error(`[ReliefNote] ✗ 整合性チェック完了（${errors}件のエラー）`);
+                console.error(`[RN] ✗ 整合性チェック完了（${errors}件のエラー）`);
             }
 
-            // 依存関係デバッグ: RN-D7-06 と依存先タスクの状態を出力
-            console.log('[ReliefNote] 依存関係デバッグ:');
+            console.log('[RN] dep debug:');
             const d706 = tasks.find(t => t.id === 'RN-D7-06');
             if (d706) {
                 console.log(`  RN-D7-06: autoDoneWhen="${d706.autoDoneWhen}", appliesWhen="${d706.appliesWhen}"`);
@@ -6611,7 +6661,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 if (savedStatuses) taskStatuses = JSON.parse(savedStatuses);
                 if (savedConfirmStatuses) confirmStatuses = JSON.parse(savedConfirmStatuses);
             } catch (e) {
-                console.warn('[ReliefNote] loadData: JSON.parse failed, resetting:', e);
+                console.warn('[RN] loadData: JSON.parse failed, resetting:', e);
                 answers = {};
                 taskStatuses = {};
                 confirmStatuses = {};
@@ -6619,9 +6669,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         function saveData() {
-            localStorage.setItem('answers', JSON.stringify(answers));
-            localStorage.setItem('taskStatuses', JSON.stringify(taskStatuses));
-            localStorage.setItem('confirmStatuses', JSON.stringify(confirmStatuses));
+            safeSetItem('answers', JSON.stringify(answers));
+            safeSetItem('taskStatuses', JSON.stringify(taskStatuses));
+            safeSetItem('confirmStatuses', JSON.stringify(confirmStatuses));
         }
 
         // チャネル初期化（UIチャネル + イベントログ用チャネルを統一管理）
@@ -6629,7 +6679,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             const params = new URLSearchParams(window.location.search);
             let ch = params.get('ch') || params.get('channel');
             if (ch && (ch === 'hokuryu' || ch === 'funeral')) {
-                localStorage.setItem('relief_note_channel', ch);
+                safeSetItem('relief_note_channel', ch);
             } else {
                 ch = localStorage.getItem('relief_note_channel') || 'direct';
             }
@@ -6687,7 +6737,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 });
 
                 // フォールバック：localStorageにも保存（オフライン対策）
-                var logs = JSON.parse(localStorage.getItem('relief_note_event_logs') || '[]');
+                var logs = safeParseJSON(localStorage.getItem('relief_note_event_logs'), []);
                 logs.push({
                     id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
                     user_id: userId,
@@ -6698,7 +6748,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 if (logs.length > 1000) {
                     logs = logs.slice(logs.length - 1000);
                 }
-                localStorage.setItem('relief_note_event_logs', JSON.stringify(logs));
+                safeSetItem('relief_note_event_logs', JSON.stringify(logs));
                 console.log('[EVENT]', eventType, data);
             } catch (e) {
                 console.warn('[EVENT ERROR]', e);
@@ -6708,7 +6758,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         // デバッグ用ログ閲覧画面
         function renderDebugLogScreen() {
             var logs = [];
-            try { logs = JSON.parse(localStorage.getItem('relief_note_event_logs') || '[]'); } catch(e) {}
+            try { logs = safeParseJSON(localStorage.getItem('relief_note_event_logs'), []); } catch(e) {}
             logs.sort(function(a, b) { return b.created_at < a.created_at ? -1 : b.created_at > a.created_at ? 1 : 0; });
 
             var html = '<div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:100%;padding:16px;background:#F5F5F5;min-height:100vh;">';
@@ -6740,12 +6790,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     Object.keys(eventData).forEach(function(k) { if (k !== 'channel') detail[k] = eventData[k]; });
                     var detailStr = Object.keys(detail).length > 0 ? JSON.stringify(detail) : '';
                     // HTMLエスケープ
-                    detailStr = detailStr.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                    var esc = function(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); };
+                    detailStr = esc(detailStr);
                     html += '<tr>';
-                    html += '<td style="padding:6px;border:1px solid #DDD;white-space:nowrap;">' + timeStr + '</td>';
-                    html += '<td style="padding:6px;border:1px solid #DDD;white-space:nowrap;font-weight:600;">' + (log.event_type || '') + '</td>';
-                    html += '<td style="padding:6px;border:1px solid #DDD;white-space:nowrap;">' + (log.user_id || '') + '</td>';
-                    html += '<td style="padding:6px;border:1px solid #DDD;white-space:nowrap;">' + ch + '</td>';
+                    html += '<td style="padding:6px;border:1px solid #DDD;white-space:nowrap;">' + esc(timeStr) + '</td>';
+                    html += '<td style="padding:6px;border:1px solid #DDD;white-space:nowrap;font-weight:600;">' + esc(log.event_type) + '</td>';
+                    html += '<td style="padding:6px;border:1px solid #DDD;white-space:nowrap;">' + esc(log.user_id) + '</td>';
+                    html += '<td style="padding:6px;border:1px solid #DDD;white-space:nowrap;">' + esc(ch) + '</td>';
                     html += '<td style="padding:6px;border:1px solid #DDD;word-break:break-all;max-width:300px;font-size:12px;color:#666;">' + detailStr + '</td>';
                     html += '</tr>';
                 });
@@ -6756,7 +6807,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         function downloadEventLogCSV() {
             try {
-                var logs = JSON.parse(localStorage.getItem('relief_note_event_logs') || '[]');
+                var logs = safeParseJSON(localStorage.getItem('relief_note_event_logs'), []);
                 var bom = '\uFEFF';
                 var csvRows = ['id,created_at,event_type,user_id,channel,event_data'];
                 logs.forEach(function(log) {
@@ -6904,6 +6955,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         // タブ切り替え
         function switchTab(tab) {
+            _returnToTaskId = null;
             if (tab === 'home') {
                 showScreen('screen-home');
             } else if (tab === 'guide') {
@@ -7198,14 +7250,14 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             const nameInput = document.getElementById('nameInput');
             const name = nameInput.value.trim();
             if (name) {
-                localStorage.setItem('rn_user_name', name);
+                safeSetItem('rn_user_name', name);
                 logEvent('user_registered', { name: name });
                 nextQuestion(); // Move to first question
             }
         }
 
         function skipNameInFlow() {
-            localStorage.setItem('rn_user_name', 'ゲスト');
+            safeSetItem('rn_user_name', 'ゲスト');
             logEvent('user_registered', { name: 'ゲスト' });
             nextQuestion(); // Move to first question
         }
@@ -7213,6 +7265,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         function prevQuestion() {
             if (currentQuestionIndex > -1) {
                 currentQuestionIndex--;
+                safeSetItem('rn_onboarding_index', String(currentQuestionIndex));
                 renderQuestion();
             } else {
                 // Already at name input step (-1), go back to splash
@@ -7227,6 +7280,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         function nextQuestion() {
             if (currentQuestionIndex < onboardingQuestions.length - 1) {
                 currentQuestionIndex++;
+                safeSetItem('rn_onboarding_index', String(currentQuestionIndex));
                 renderQuestion();
             } else {
                 // オンボーディング完了（8ステップ完了: 名前 + 7問）
@@ -7235,6 +7289,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 if (progressFill) progressFill.style.width = '100%';
 
                 // 少しの間100%を見せてから遷移
+                localStorage.removeItem('rn_onboarding_index');
                 setTimeout(function() {
                     logEvent('profile_completed', {
                         answers_count: Object.keys(answers).length
@@ -7526,29 +7581,29 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         function togglePin(taskId) {
-            let pinned = JSON.parse(localStorage.getItem('rn_pinned_tasks') || '[]');
+            let pinned = safeParseJSON(localStorage.getItem('rn_pinned_tasks'), []);
             if (pinned.includes(taskId)) {
                 pinned = pinned.filter(id => id !== taskId);
             } else {
                 pinned.push(taskId);
             }
-            localStorage.setItem('rn_pinned_tasks', JSON.stringify(pinned));
+            safeSetItem('rn_pinned_tasks', JSON.stringify(pinned));
             updatePinButtonState(taskId);
         }
 
         function updatePinButtonState(taskId) {
             const btn = document.getElementById('pinBtn');
             if (!btn) return;
-            const pinned = JSON.parse(localStorage.getItem('rn_pinned_tasks') || '[]');
+            const pinned = safeParseJSON(localStorage.getItem('rn_pinned_tasks'), []);
             const isPinned = pinned.includes(taskId);
             btn.className = 'task-detail-pin-btn ' + (isPinned ? 'pinned' : 'unpinned');
             btn.innerHTML = getPinIcon(isPinned, 20);
         }
 
         function removePinFromList(taskId) {
-            let pinned = JSON.parse(localStorage.getItem('rn_pinned_tasks') || '[]');
+            let pinned = safeParseJSON(localStorage.getItem('rn_pinned_tasks'), []);
             pinned = pinned.filter(id => id !== taskId);
-            localStorage.setItem('rn_pinned_tasks', JSON.stringify(pinned));
+            safeSetItem('rn_pinned_tasks', JSON.stringify(pinned));
 
             // フェードアウト後に再レンダリング
             const taskCard = document.querySelector(`[data-pin-task-id="${taskId}"]`);
@@ -7976,6 +8031,29 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             initGuideSwipe();
         }
 
+        // デバウンスラッパー: 短時間の連続呼び出しを1回にまとめる
+        (function() {
+            var _renderHomeTimer = null;
+            var _originalRenderHome = renderHome;
+            renderHome = function() {
+                if (_renderHomeTimer) clearTimeout(_renderHomeTimer);
+                _renderHomeTimer = setTimeout(function() {
+                    _renderHomeTimer = null;
+                    _originalRenderHome();
+                }, 16);
+            };
+
+            var _renderGuideTimer = null;
+            var _originalRenderGuide = renderGuide;
+            renderGuide = function() {
+                if (_renderGuideTimer) clearTimeout(_renderGuideTimer);
+                _renderGuideTimer = setTimeout(function() {
+                    _renderGuideTimer = null;
+                    _originalRenderGuide();
+                }, 16);
+            };
+        })();
+
         function renderGuideByPhase(container) {
             const phaseOrder = ['H24', 'D7', 'D14', 'D49', 'M3', 'M4', 'M10', 'Y3'];
 
@@ -8251,7 +8329,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         function renderGuideByPinned(container) {
-            const pinnedTaskIds = JSON.parse(localStorage.getItem('rn_pinned_tasks') || '[]');
+            const pinnedTaskIds = safeParseJSON(localStorage.getItem('rn_pinned_tasks'), []);
 
             if (pinnedTaskIds.length === 0) {
                 container.innerHTML = `
@@ -8377,7 +8455,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
                 return `
                     <div class="task-item" style="${borderStyle}" data-pin-task-id="${t.id}" onclick="event.stopPropagation(); ${clickHandler}">
-                        <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''} ${checkboxDisabled} onclick="event.stopPropagation(); toggleTaskStatus('${t.id}')">
+                        <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''} ${checkboxDisabled} onclick="event.stopPropagation(); toggleTaskStatusFromCheckbox('${t.id}', event)">
                         <div class="task-info">
                             <div class="task-name ${isDone ? 'done' : ''}">${taskTitle}${priorityBadge}</div>
                             ${deadlineDisplayText ? `<div class="task-deadline ${deadlineBadgeClass}">${deadlineDisplayText}</div>` : ''}
@@ -8479,7 +8557,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
                 return `
                     <div class="task-item${blockedClass}" style="${itemStyle}" onclick="event.stopPropagation(); ${clickHandler}">
-                        <input type="checkbox" class="task-checkbox" ${isCompleted ? 'checked' : ''} ${checkboxDisabled} onclick="event.stopPropagation(); toggleTaskStatus('${t.id}')">
+                        <input type="checkbox" class="task-checkbox" ${isCompleted ? 'checked' : ''} ${checkboxDisabled} onclick="event.stopPropagation(); toggleTaskStatusFromCheckbox('${t.id}', event)">
                         <div class="task-info">
                             <div class="task-name ${isCompleted ? 'done' : ''}">${taskTitle}${priorityBadge}</div>
                             ${deadlineDisplayText ? `<div class="task-deadline ${deadlineBadgeClass}">${deadlineDisplayText}</div>` : ''}
@@ -8614,6 +8692,56 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         // 完了タスクを未完了に戻す確認ダイアログ用の変数
         let pendingUndoTaskId = null;
 
+        // BLOCKED依存先タスク完了後に戻る先のタスクID
+        var _returnToTaskId = null;
+        var _depReturnInProgress = false;
+
+        // 依存先タスク完了後の復帰遷移（オーバーレイ付き）
+        function performDepReturn(completedTaskId, returnId) {
+            if (_depReturnInProgress) return;
+            _depReturnInProgress = true;
+            var overlay;
+            try {
+                var completedTask = tasks.find(function(t) { return t.id === completedTaskId; });
+                var returnTask = tasks.find(function(t) { return t.id === returnId; });
+                var completedName = completedTask ? completedTask.title : 'タスク';
+                var returnName = returnTask ? returnTask.title : '元のタスク';
+
+                overlay = document.createElement('div');
+                overlay.className = 'dep-complete-overlay';
+                overlay.innerHTML =
+                    '<div class="dep-check-icon">' +
+                        '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>' +
+                    '</div>' +
+                    '<div class="dep-complete-text">' + escapeHtml(completedName) + ' 完了</div>' +
+                    '<div class="dep-return-text">' + escapeHtml(returnName) + ' に戻ります…</div>';
+                document.body.appendChild(overlay);
+
+                setTimeout(function() {
+                    overlay.classList.add('dep-overlay-out');
+                    setTimeout(function() {
+                        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                        _depReturnInProgress = false;
+                        showTaskDetail(returnId);
+                    }, 250);
+                }, 1200);
+            } catch (e) {
+                if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                _depReturnInProgress = false;
+                showTaskDetail(returnId);
+            }
+        }
+
+        // チェックボックスからの呼び出し用ラッパー（DONE/AUTO_DONEの場合にネイティブ切替を防ぐ）
+        function toggleTaskStatusFromCheckbox(taskId, evt) {
+            var task = tasks.find(function(t) { return t.id === taskId; });
+            var status = taskStatuses[taskId] || determineTaskStatus(task);
+            if (status === 'DONE' || status === 'AUTO_DONE') {
+                if (evt) evt.preventDefault();
+            }
+            toggleTaskStatus(taskId);
+        }
+
         function toggleTaskStatus(taskId) {
             const task = tasks.find(t => t.id === taskId);
             const currentStatus = taskStatuses[taskId] || determineTaskStatus(task);
@@ -8635,9 +8763,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 // 全ステップもdoneにする
                 const stepsData = taskStepsData[taskId];
                 if (stepsData && stepsData.steps_short && stepsData.steps_short.length > 0) {
-                    const stepProgress = JSON.parse(localStorage.getItem('rn_step_progress') || '{}');
+                    const stepProgress = safeParseJSON(localStorage.getItem('rn_step_progress'), {});
                     stepProgress[taskId] = new Array(stepsData.steps_short.length).fill(true);
-                    localStorage.setItem('rn_step_progress', JSON.stringify(stepProgress));
+                    safeSetItem('rn_step_progress', JSON.stringify(stepProgress));
                 }
 
                 saveData();
@@ -8757,6 +8885,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             // DONE → 元のステータスに戻す
             taskStatuses[pendingUndoTaskId] = determineTaskStatus(task);
 
+            // ステップ進捗もリセット
+            try {
+                var stepProgress = safeParseJSON(localStorage.getItem('rn_step_progress'), {});
+                delete stepProgress[pendingUndoTaskId];
+                safeSetItem('rn_step_progress', JSON.stringify(stepProgress));
+            } catch (e) {}
+
             saveData();
 
             // 依存タスクを再評価
@@ -8764,9 +8899,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             renderGuide();
             renderHome();
 
-            // タスク詳細画面が開いていた場合は再描画
+            // タスク詳細画面が開いていた場合は再描画（スタック操作をスキップ）
             if (wasInDetailScreen) {
+                var savedY = window.scrollY;
+                showTaskDetail._skipStack = true;
                 showTaskDetail(taskId);
+                showTaskDetail._skipStack = false;
+                requestAnimationFrame(function() { window.scrollTo(0, savedY); });
             }
 
             // モーダルを閉じる
@@ -8796,7 +8935,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 });
             }
             if (changes.length > 0) {
-                console.log(`[ReliefNote] regenerateAllTaskStatuses: ${passes}パス, ${changes.length}件変更`);
+                console.log(`[RN] regenerateAllTaskStatuses: ${passes}パス, ${changes.length}件変更`);
                 changes.forEach(c => console.log('  ' + c));
             }
             // 依存関係デバッグ（毎回出力）
@@ -8908,6 +9047,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         function goBackFromDetail() {
+            _returnToTaskId = null;
             if (detailNavStack.length > 0) {
                 // スタックから前のタスクに戻る
                 const prev = detailNavStack.pop();
@@ -8923,6 +9063,12 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         var _taskStartedThisSession = {};
 
         function showTaskDetail(taskId) {
+            if (!taskId) return;
+            var _task = tasks.find(function(tk) { return tk.id === taskId; });
+            if (!_task) {
+                console.warn('[showTaskDetail] task not found:', taskId);
+                return;
+            }
             // イベントログ: task_started（セッション内重複防止）
             try {
                 if (!_taskStartedThisSession[taskId]) {
@@ -8957,7 +9103,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             const status = taskStatuses[taskId] || determineTaskStatus(task);
 
             // ステップ進捗状態を読み込み
-            const stepProgress = JSON.parse(localStorage.getItem('rn_step_progress') || '{}');
+            const stepProgress = safeParseJSON(localStorage.getItem('rn_step_progress'), {});
             window._currentStepProgress = stepProgress[taskId] || [];
 
             let html = '';
@@ -8980,7 +9126,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 statusText = 'ブロック中';
             } else if (status === 'OPEN' && task.phase) {
                 // 期限に基づいてバッジを変更
-                const savedAnswers = JSON.parse(localStorage.getItem('answers') || '{}');
+                const savedAnswers = safeParseJSON(localStorage.getItem('answers'), {});
                 const deathDate = savedAnswers['Q-DOD-01'];
                 const deadlineInfo = calculateDeadline(task.phase, deathDate, getTaskDueDays(task));
 
@@ -9346,14 +9492,17 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 completeBtn.classList.add('active');
                 completeBtn.disabled = false;
                 completeBtn.onclick = function() {
-                    taskStatuses[taskId] = 'DONE';
-                    saveData();
-                    logEvent('task_completed', { task_id: taskId, task_name: task ? task.title : taskId, completion_method: 'manual' });
-                    regenerateAllTaskStatuses();
+                    var capturedReturnId = _returnToTaskId;
+                    _returnToTaskId = null;
+                    toggleTaskStatus(taskId);
+                    if (capturedReturnId) {
+                        var rt = tasks.find(function(t) { return t.id === capturedReturnId; });
+                        if (rt) {
+                            performDepReturn(taskId, capturedReturnId);
+                            return;
+                        }
+                    }
                     showScreen('screen-guide');
-                    renderGuide();
-                    renderHome();
-                    showToast('タスクを完了しました');
                 };
             } else if (status === 'BLOCKED') {
                 // 完了ボタンを非表示にし、未解決の依存タスクごとにボタンを表示
@@ -9371,7 +9520,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         const btn = document.createElement('button');
                         btn.className = 'btn-blocked-dep';
                         btn.innerHTML = '<span class="btn-blocked-dep-title">' + depTask.title + '</span><span class="btn-blocked-dep-label">を先に完了してください</span>';
-                        btn.onclick = function() { showTaskDetail(depId); };
+                        btn.onclick = function() { _returnToTaskId = taskId; showTaskDetail(depId); };
                         blockedContainer.appendChild(btn);
                     });
                     completeBtn.parentNode.insertBefore(blockedContainer, completeBtn);
@@ -9393,14 +9542,17 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 completeBtn.classList.add('active');
                 completeBtn.disabled = false;
                 completeBtn.onclick = function() {
-                    taskStatuses[taskId] = 'DONE';
-                    saveData();
-                    logEvent('task_completed', { task_id: taskId, task_name: task ? task.title : taskId, completion_method: 'manual' });
-                    regenerateAllTaskStatuses();
+                    var capturedReturnId = _returnToTaskId;
+                    _returnToTaskId = null;
+                    toggleTaskStatus(taskId);
+                    if (capturedReturnId) {
+                        var rt = tasks.find(function(t) { return t.id === capturedReturnId; });
+                        if (rt) {
+                            performDepReturn(taskId, capturedReturnId);
+                            return;
+                        }
+                    }
                     showScreen('screen-guide');
-                    renderGuide();
-                    renderHome();
-                    showToast('タスクを完了しました');
                 };
             }
 
@@ -9431,14 +9583,14 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         function toggleStepComplete(taskId, stepIndex) {
-            const stepProgress = JSON.parse(localStorage.getItem('rn_step_progress') || '{}');
+            const stepProgress = safeParseJSON(localStorage.getItem('rn_step_progress'), {});
             if (!stepProgress[taskId]) {
                 stepProgress[taskId] = [];
             }
 
             // チェック状態をトグル
             stepProgress[taskId][stepIndex] = !stepProgress[taskId][stepIndex];
-            localStorage.setItem('rn_step_progress', JSON.stringify(stepProgress));
+            safeSetItem('rn_step_progress', JSON.stringify(stepProgress));
 
             // UI更新
             const stepItem = document.querySelector(`.detail-step-item[data-step-index="${stepIndex}"]`);
@@ -9488,14 +9640,14 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         function toggleStepCheck(taskId, stepIndex, totalSteps) {
-            const stepProgress = JSON.parse(localStorage.getItem('rn_step_progress') || '{}');
+            const stepProgress = safeParseJSON(localStorage.getItem('rn_step_progress'), {});
             if (!stepProgress[taskId]) {
                 stepProgress[taskId] = [];
             }
 
             // チェック状態をトグル
             stepProgress[taskId][stepIndex] = !stepProgress[taskId][stepIndex];
-            localStorage.setItem('rn_step_progress', JSON.stringify(stepProgress));
+            safeSetItem('rn_step_progress', JSON.stringify(stepProgress));
 
             // グローバル変数も更新
             window._currentStepProgress = stepProgress[taskId];
@@ -9546,6 +9698,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 const currentStatus = taskStatuses[taskId] || determineTaskStatus(tasks.find(t => t.id === taskId));
                 if (currentStatus === 'OPEN' || currentStatus === 'NEED_CONFIRM') {
                     var autoTask = tasks.find(function(t) { return t.id === taskId; });
+                    var _capturedReturnId = _returnToTaskId;
+                    _returnToTaskId = null;
                     setTimeout(function() {
                         taskStatuses[taskId] = 'DONE';
                         saveData();
@@ -9554,6 +9708,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         renderGuide();
                         renderHome();
                         showToast('すべてのステップが完了しました');
+                        if (_capturedReturnId) {
+                            var rt = tasks.find(function(t) { return t.id === _capturedReturnId; });
+                            if (rt) {
+                                performDepReturn(taskId, _capturedReturnId);
+                                return;
+                            }
+                        }
                         showScreen('screen-guide');
                     }, 500);
                 }
@@ -9576,7 +9737,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         function getUnansweredQuestionsForTask(taskId) {
             const task = tasks.find(t => t.id === taskId);
             if (!task || !task.requiredQuestions || task.requiredQuestions.length === 0) return [];
-            const currentAnswers = JSON.parse(localStorage.getItem('answers') || '{}');
+            const currentAnswers = safeParseJSON(localStorage.getItem('answers'), {});
             return task.requiredQuestions.filter(qId => {
                 const ans = currentAnswers[qId];
                 if (!ans) return true;
@@ -9972,6 +10133,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             _bulkConfirmIndex = 0;
             _bulkConfirmInitStatuses = {};
             tasks.forEach(function(t) { _bulkConfirmInitStatuses[t.id] = taskStatuses[t.id]; });
+            // ウィザード状態を保存（リロード復元用）
+            safeSetItem('rn_bulk_confirm_state', JSON.stringify({
+                targetTaskIds: targetTaskIds,
+                returnScreen: returnScreen || 'screen-home',
+                index: 0,
+                active: true
+            }));
             if (_bulkConfirmQuestions.length === 0) {
                 showBulkConfirmComplete();
                 showScreen('screen-bulk-confirm');
@@ -9992,6 +10160,12 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             document.getElementById('bulkConfirmProgressText').textContent = (index + 1) + ' / ' + total;
             document.getElementById('bulkConfirmProgressBar').style.width = ((index + 1) / total * 100) + '%';
             updateBulkBackButton();
+            // ウィザード進行位置を保存（リロード復元用）
+            var bcState = safeParseJSON(localStorage.getItem('rn_bulk_confirm_state'), null);
+            if (bcState) {
+                bcState.index = index;
+                safeSetItem('rn_bulk_confirm_state', JSON.stringify(bcState));
+            }
 
             var affectedHtml = '';
             if (q.affectedTaskIds.length > 1) {
@@ -10315,6 +10489,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         function closeBulkConfirm() {
             saveData();
+            localStorage.removeItem('rn_bulk_confirm_state');
             showScreen(_bulkConfirmReturnScreen);
             renderHome();
             renderGuide();
@@ -10322,6 +10497,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         function finishBulkConfirm() {
             saveData();
+            localStorage.removeItem('rn_bulk_confirm_state');
             showScreen('screen-home');
             renderHome();
             renderGuide();
@@ -11224,7 +11400,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             const input = document.getElementById('editNameInput');
             const newName = input.value.trim();
             if (newName) {
-                localStorage.setItem('rn_user_name', newName);
+                safeSetItem('rn_user_name', newName);
                 updateUserNameDisplay();
                 closeEditNameModal();
                 showToast('名前を変更しました');
@@ -11287,6 +11463,28 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
             // ページをリロードして全てのメモリ上の変数もリセット
             location.reload();
+        }
+
+        // ========== ストレージ安全ヘルパー ==========
+
+        // localStorage.setItem の安全ラッパー（QuotaExceededError 対策）
+        function safeSetItem(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch (e) {
+                console.warn('[STORAGE ERROR]', key, e);
+            }
+        }
+
+        // JSON.parse の安全ラッパー（不正JSON対策）
+        function safeParseJSON(str, fallback) {
+            if (!str) return fallback;
+            try {
+                return JSON.parse(str);
+            } catch (e) {
+                console.warn('[STORAGE ERROR] JSON.parse failed:', e);
+                return fallback;
+            }
         }
 
         // ========== 家族共有機能 ==========
@@ -11870,7 +12068,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 buildMasterData(rawData);
                 runIntegrityChecks();
             } catch (err) {
-                console.error('[ReliefNote] CSVデータの読み込みに失敗しました:', err);
+                console.error('[RN] CSVデータの読み込みに失敗しました:', err);
                 // エラー時はリトライボタンを表示
                 const splashTagline = document.getElementById('splashTagline');
                 if (splashTagline) {
@@ -11896,7 +12094,25 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             const userName = localStorage.getItem('rn_user_name');
             const hasAnswers = Object.keys(answers).length > 0;
 
-            if (userName && hasAnswers) {
+            // ウィザード復元チェック（リロード時）
+            var savedBulkState = safeParseJSON(localStorage.getItem('rn_bulk_confirm_state'), null);
+            if (savedBulkState && savedBulkState.active && userName && hasAnswers) {
+                try {
+                    generateTasks();
+                    updateUserNameDisplay();
+                    renderHome();
+                    startBulkConfirm(savedBulkState.targetTaskIds, savedBulkState.returnScreen);
+                    // 保存されたindexまで進める
+                    if (savedBulkState.index > 0 && savedBulkState.index < _bulkConfirmQuestions.length) {
+                        _bulkConfirmIndex = savedBulkState.index;
+                        renderBulkConfirmCard(_bulkConfirmIndex);
+                    }
+                } catch (e) {
+                    console.warn('[RN] ウィザード復元に失敗、ホーム画面にフォールバック:', e);
+                    localStorage.removeItem('rn_bulk_confirm_state');
+                    showScreen('screen-home');
+                }
+            } else if (userName && hasAnswers) {
                 // 名前 + 回答済み → ホーム画面
                 generateTasks();
                 updateUserNameDisplay();
@@ -11915,7 +12131,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 onboardingQuestions.sort((a, b) => {
                     return onboardingQuestionIds.indexOf(a.id) - onboardingQuestionIds.indexOf(b.id);
                 });
-                currentQuestionIndex = 0; // Start from first question, skip name input
+                var savedOnbIdx = localStorage.getItem('rn_onboarding_index');
+                currentQuestionIndex = (savedOnbIdx !== null && Number(savedOnbIdx) >= 0 && Number(savedOnbIdx) < onboardingQuestions.length) ? Number(savedOnbIdx) : 0;
                 showScreen('screen-onboarding');
                 renderQuestion();
             } else {
@@ -11928,8 +12145,18 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             document.getElementById('revertConfirmBtn').onclick = function() {
                 if (!revertTargetTaskId) return;
 
+                // closeRevertModal() が revertTargetTaskId をnullにするため先に退避
+                var targetId = revertTargetTaskId;
+
                 // taskStatusesから削除してOPENに戻す
-                delete taskStatuses[revertTargetTaskId];
+                delete taskStatuses[targetId];
+
+                // ステップ進捗もリセット
+                try {
+                    var stepProgress = safeParseJSON(localStorage.getItem('rn_step_progress'), {});
+                    delete stepProgress[targetId];
+                    safeSetItem('rn_step_progress', JSON.stringify(stepProgress));
+                } catch (e) {}
 
                 saveData();
 
@@ -11943,16 +12170,35 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 if (typeof renderGuide === 'function') renderGuide();
                 if (typeof renderHome === 'function') renderHome();
 
-                // タスク詳細画面が表示中なら再描画
-                const detailScreen = document.getElementById('screen-detail');
+                // タスク詳細画面が表示中なら再描画（スタック操作をスキップ）
+                var detailScreen = document.getElementById('screen-detail');
                 if (detailScreen && detailScreen.classList.contains('active')) {
                     if (typeof showTaskDetail === 'function') {
-                        showTaskDetail(revertTargetTaskId);
+                        var savedY = window.scrollY;
+                        showTaskDetail._skipStack = true;
+                        showTaskDetail(targetId);
+                        showTaskDetail._skipStack = false;
+                        requestAnimationFrame(function() { window.scrollTo(0, savedY); });
                     }
                 }
 
                 showToast('タスクを未完了に戻しました');
             };
+        });
+
+        // マルチタブ同期: 別タブで answers / taskStatuses / confirmStatuses が変更されたら反映
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'rn_answers' || e.key === 'rn_task_statuses' || e.key === 'rn_confirm_statuses') {
+                loadData();
+                if (typeof regenerateAllTaskStatuses === 'function') regenerateAllTaskStatuses();
+                // 現在表示中の画面を再描画
+                var activeScreen = document.querySelector('.screen.active');
+                if (activeScreen) {
+                    var sid = activeScreen.id;
+                    if (sid === 'screen-home' && typeof renderHome === 'function') renderHome();
+                    else if (sid === 'screen-guide' && typeof renderGuide === 'function') renderGuide();
+                }
+            }
         });
 
         // 確認ボトムシートのスワイプダウン閉じ
