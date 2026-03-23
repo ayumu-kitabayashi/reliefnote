@@ -6445,6 +6445,10 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         function getMapSearchQuery(disp) {
             var dest = (disp.destination || '').trim();
 
+            // 0. 最優先：マップ検索不適な destination を先に判定
+            if (dest.includes('自宅')) return '';
+            if (dest.includes('故人の')) return '';
+
             // 1. 部分一致キーワードマッピング（優先度順）
             var mappings = [
                 // 電話・ウェブ手続き系（マップ検索不適）→ 非表示
@@ -6532,12 +6536,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 if (dest.includes(mappings[i].match)) return mappings[i].keyword;
             }
 
-            // 2. 「自宅」「故人の」を含む場合はマップ検索不要 → 空文字
-            if (dest.includes('自宅') || dest.includes('故人の')) {
-                return '';
-            }
-
-            // 3. 汎用接頭辞を除去してキーワード化
+            // 2. 汎用接頭辞を除去してキーワード化
             var cleaned = dest
                 .replace(/^各/, '')
                 .replace(/^ご利用の/, '')
