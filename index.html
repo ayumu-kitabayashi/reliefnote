@@ -323,6 +323,8 @@
             flex: 1;
             padding: 0 24px;
             min-height: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .q-header {
@@ -4823,6 +4825,79 @@
             color: var(--text-primary);
         }
 
+        /* ── タスク生成中画面 ── */
+        .generating-screen {
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: var(--bg-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+        }
+        .generating-content {
+            text-align: center;
+            max-width: 300px;
+        }
+        .generating-icon {
+            display: inline-block;
+            margin-bottom: 24px;
+            animation: generatingSpin 2s linear infinite;
+        }
+        @keyframes generatingSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .generating-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: generatingFadeIn 0.5s ease forwards;
+        }
+        .generating-steps {
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .generating-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        .generating-step.visible {
+            animation: generatingStepIn 0.4s ease forwards;
+        }
+        .generating-step-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .generating-step-check svg {
+            width: 12px;
+            height: 12px;
+        }
+        @keyframes generatingFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes generatingStepIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* ── オンボーディング完了後 分岐画面 ── */
         .onboard-confirm-screen {
             min-height: 100vh;
@@ -4836,57 +4911,164 @@
 
         .onboard-confirm-content {
             text-align: center;
-            max-width: 320px;
+            max-width: 340px;
             width: 100%;
         }
 
+        /* チェックアイコン */
+        .onboard-confirm-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: ocIconPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+        }
+        .onboard-confirm-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+        @keyframes ocIconPop {
+            to { opacity: 1; transform: scale(1); }
+        }
+
         .onboard-confirm-title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             line-height: 1.5;
             color: var(--text-primary);
-            margin-bottom: 32px;
+            margin-bottom: 8px;
+            opacity: 0;
+            animation: ocFadeUp 0.4s ease 0.4s forwards;
         }
 
-        .onboard-confirm-summary {
+        .onboard-confirm-sub {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: ocFadeUp 0.4s ease 0.5s forwards;
+        }
+
+        @keyframes ocFadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* メインの数値カード */
+        .onboard-confirm-hero {
             background: var(--bg-primary);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin-bottom: 24px;
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: ocFadeUp 0.4s ease 0.6s forwards;
         }
-
-        .onboard-confirm-summary-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 16px;
-            line-height: 2.2;
-        }
-
-        .onboard-confirm-summary-icon {
-            font-size: 14px;
+        .onboard-confirm-hero-number {
+            font-size: 40px;
+            font-weight: 800;
             color: var(--accent);
-            width: 20px;
-            text-align: center;
+            line-height: 1.2;
         }
-
-        .onboard-confirm-summary-label {
-            flex: 1;
-            text-align: left;
-            color: var(--text-secondary);
-        }
-
-        .onboard-confirm-summary-value {
+        .onboard-confirm-hero-unit {
+            font-size: 16px;
             font-weight: 600;
             color: var(--text-primary);
         }
-
-        .onboard-confirm-desc {
-            font-size: 14px;
-            line-height: 1.8;
+        .onboard-confirm-hero-label {
+            font-size: 13px;
             color: var(--text-secondary);
-            margin-bottom: 32px;
+            margin-top: 4px;
+        }
+
+        /* 確認が必要なカード */
+        .onboard-confirm-action-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 28px;
+            text-align: left;
+            opacity: 0;
+            animation: ocFadeUp 0.4s ease 0.7s forwards;
+        }
+        .onboard-confirm-action-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .onboard-confirm-action-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--warning-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .onboard-confirm-action-badge svg {
+            width: 16px;
+            height: 16px;
+            color: var(--warning);
+        }
+        .onboard-confirm-action-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .onboard-confirm-action-desc {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            padding-left: 42px;
+        }
+        .onboard-confirm-action-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding-left: 42px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+        .onboard-confirm-action-meta svg {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+        }
+
+        /* ボタンエリア */
+        .onboard-confirm-actions {
+            opacity: 0;
+            animation: ocFadeUp 0.4s ease 0.8s forwards;
+        }
+        .onboard-confirm-btn-primary {
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .onboard-confirm-btn-primary svg {
+            width: 18px;
+            height: 18px;
         }
 
         .onboard-confirm-later {
@@ -6655,6 +6837,13 @@
             </div>
         </div>
 
+        <!-- タスク生成中画面 -->
+        <div class="screen" id="screen-generating">
+            <div class="generating-screen">
+                <div class="generating-content" id="generatingContent"></div>
+            </div>
+        </div>
+
         <!-- オンボーディング完了後 分岐画面 -->
         <div class="screen" id="screen-onboard-confirm">
             <div class="onboard-confirm-screen">
@@ -7143,7 +7332,14 @@
                 created_at: now.toISOString()
             };
             var logs = JSON.parse(localStorage.getItem('relief_note_grief_logs') || '[]');
-            logs.push(log);
+            var todayStr = log.date;
+            var existingIndex = logs.findIndex(function(l) { return l.date === todayStr; });
+            if (existingIndex >= 0) {
+                log.id = logs[existingIndex].id;
+                logs[existingIndex] = log;
+            } else {
+                logs.push(log);
+            }
             localStorage.setItem('relief_note_grief_logs', JSON.stringify(logs));
 
             if (typeof logEvent === 'function') {
@@ -9788,7 +9984,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
             // フッターナビの表示制御
             const footerNav = document.querySelector('.footer-nav');
-            const screensWithoutFooter = ['screen-splash', 'screen-onboarding', 'screen-bulk-confirm', 'screen-onboard-confirm', 'screen-terms', 'screen-privacy', 'screen-grief-article'];
+            const screensWithoutFooter = ['screen-splash', 'screen-onboarding', 'screen-bulk-confirm', 'screen-onboard-confirm', 'screen-generating', 'screen-terms', 'screen-privacy', 'screen-grief-article'];
             if (footerNav) {
                 if (screensWithoutFooter.includes(screenId)) {
                     footerNav.style.display = 'none';
@@ -10228,19 +10424,73 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
                 localStorage.removeItem('rn_onboarding_index');
                 setTimeout(function() {
-                    logEvent('profile_completed', {
-                        answers_count: Object.keys(answers).length
-                    });
-                    generateTasks();
-                    renderHome();
-                    const ncIds = tasks.filter(function(t) { return taskStatuses[t.id] === 'NEED_CONFIRM'; }).map(function(t) { return t.id; });
-                    if (ncIds.length > 0) {
-                        showOnboardConfirmScreen(ncIds);
-                    } else {
-                        showScreen('screen-home');
-                    }
+                    showGeneratingScreen();
                 }, 300);
             }
+        }
+
+        function showGeneratingScreen() {
+            var container = document.getElementById('generatingContent');
+            container.innerHTML =
+                '<div class="generating-icon">' +
+                    '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="' + 'var(--accent)' + '" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+                        '<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>' +
+                        '<rect x="9" y="3" width="6" height="4" rx="1"/>' +
+                        '<path d="M9 12l2 2 4-4"/>' +
+                    '</svg>' +
+                '</div>' +
+                '<div class="generating-title">あなたの回答をもとに<br>手続きリストを作成しています...</div>' +
+                '<div class="generating-steps">' +
+                    '<div class="generating-step" id="genStep0">' +
+                        '<span class="generating-step-check"><svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 6 5 8.5 9.5 3.5"/></svg></span>' +
+                        '<span>回答内容を確認中...</span>' +
+                    '</div>' +
+                    '<div class="generating-step" id="genStep1">' +
+                        '<span class="generating-step-check"><svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 6 5 8.5 9.5 3.5"/></svg></span>' +
+                        '<span>該当する手続きを判定中...</span>' +
+                    '</div>' +
+                    '<div class="generating-step" id="genStep2">' +
+                        '<span class="generating-step-check"><svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 6 5 8.5 9.5 3.5"/></svg></span>' +
+                        '<span>手続きリストを作成中...</span>' +
+                    '</div>' +
+                    '<div class="generating-step" id="genStep3">' +
+                        '<span class="generating-step-check"><svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 6 5 8.5 9.5 3.5"/></svg></span>' +
+                        '<span>完了！</span>' +
+                    '</div>' +
+                '</div>';
+
+            showScreen('screen-generating');
+
+            // ステップを順次表示
+            var stepDelays = [500, 1200, 1900, 2500];
+            stepDelays.forEach(function(delay, i) {
+                setTimeout(function() {
+                    var step = document.getElementById('genStep' + i);
+                    if (step) step.classList.add('visible');
+                }, delay);
+            });
+
+            // 裏でタスク生成を実行（最初のステップ表示後）
+            setTimeout(function() {
+                logEvent('profile_completed', {
+                    answers_count: Object.keys(answers).length
+                });
+                generateTasks();
+                renderHome();
+            }, 600);
+
+            // アニメーション完了後に遷移
+            setTimeout(function() {
+                var icon = container.querySelector('.generating-icon');
+                if (icon) icon.style.animation = 'none';
+
+                var ncIds = tasks.filter(function(t) { return taskStatuses[t.id] === 'NEED_CONFIRM'; }).map(function(t) { return t.id; });
+                if (ncIds.length > 0) {
+                    showOnboardConfirmScreen(ncIds);
+                } else {
+                    showScreen('screen-home');
+                }
+            }, 3000);
         }
 
         function showExitOnboardingDialog() {
@@ -13523,30 +13773,37 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             }).length;
             const content = document.getElementById('onboardConfirmContent');
             content.innerHTML = `
-                <div style="text-align: center; padding: 60px 24px 40px;">
-                    <div style="font-size: 48px; margin-bottom: 16px;">&#10003;</div>
-                    <div class="onboard-confirm-title">あなたの手続きリストができました</div>
-                    <div class="onboard-confirm-sub" style="font-size: 14px; color: var(--text-secondary); margin-top: 8px; line-height: 1.6;">
-                        確認が必要な手続きが<strong>${ncIds.length}件</strong>あります。<br>
-                        いくつかの質問に答えると、あなたに必要な手続きが確定します。
+                <div class="onboard-confirm-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="onboard-confirm-title">あなた専用の<br>手続きリストができました</div>
+                <div class="onboard-confirm-sub">回答をもとに、必要な手続きをまとめました</div>
+
+                <div class="onboard-confirm-hero">
+                    <span class="onboard-confirm-hero-number">${openCount}</span>
+                    <span class="onboard-confirm-hero-unit">件</span>
+                    <div class="onboard-confirm-hero-label">あなたの「やること」リスト</div>
+                </div>
+
+                <div class="onboard-confirm-action-card">
+                    <div class="onboard-confirm-action-header">
+                        <div class="onboard-confirm-action-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                        <div class="onboard-confirm-action-title">あと${ncIds.length}件の確認が必要です</div>
+                    </div>
+                    <div class="onboard-confirm-action-desc">あなたに当てはまるか判断できなかった手続きがあります。かんたんな質問に答えて確定しましょう。</div>
+                    <div class="onboard-confirm-action-meta">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span>約${bulkMinutes}分で完了</span>
                     </div>
                 </div>
-                <div class="onboard-confirm-summary">
-                    <div class="onboard-confirm-summary-row">
-                        <span>やること</span>
-                        <span>${openCount}件</span>
-                    </div>
-                    <div class="onboard-confirm-summary-row">
-                        <span>確認が必要な手続き</span>
-                        <span>${ncIds.length}件</span>
-                    </div>
-                    <div class="onboard-confirm-summary-row">
-                        <span>所要時間の目安</span>
-                        <span>約${bulkMinutes}分</span>
-                    </div>
-                </div>
-                <div style="padding: 0 0 40px;">
-                    <button class="btn-primary" style="width: 100%; height: auto; padding: 16px 24px; font-size: 15px; display: flex; align-items: center; justify-content: center;" onclick="startBulkConfirm(${JSON.stringify(ncIds).replace(/"/g, '&quot;')}, 'screen-home')">いま確認する（${ncIds.length}件・約${bulkMinutes}分）</button>
+
+                <div class="onboard-confirm-actions">
+                    <button class="onboard-confirm-btn-primary" onclick="startBulkConfirm(${JSON.stringify(ncIds).replace(/"/g, '&quot;')}, 'screen-home')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                        いま確認する
+                    </button>
                     <div class="onboard-confirm-later" onclick="showScreen('screen-home')">あとで確認する</div>
                 </div>
             `;
