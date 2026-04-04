@@ -364,12 +364,12 @@
         }
 
         .q-body {
-            flex: 1;
+            flex: none;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 0;
-            padding: 8px 0;
+            padding: 32px 0 24px;
         }
         .q-text {
             font-size: clamp(24px, 6.5vw, 28px);
@@ -655,15 +655,15 @@
 
         .home-header {
             background: var(--bg-primary);
-            padding: 32px 16px 12px;
-            margin-bottom: 12px;
+            padding: 16px 16px 16px;
+            margin-bottom: 0;
             border-bottom: 1px solid var(--border-light);
         }
 
         .header-top {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
         }
 
         .model-badge {
@@ -677,7 +677,7 @@
         .header-greeting {
             font-size: 13px;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 1px;
         }
 
         .header-name {
@@ -693,11 +693,11 @@
             font-size: 17px;
             font-weight: 600;
             color: var(--text-secondary);
-            padding: 6px 0;
+            padding: 5px 0;
         }
 
         .home-progress {
-            margin-top: 20px;
+            margin-top: 12px;
         }
 
         .progress-bar-container {
@@ -775,7 +775,7 @@
         }
 
         .home-today-section {
-            padding: 8px 16px 0;
+            padding: 16px 16px 0;
         }
 
         .home-today-card {
@@ -783,7 +783,7 @@
             border: 1px solid var(--border-light);
             border-radius: 12px;
             padding: 16px;
-            margin-bottom: 24px;
+            margin-bottom: 0;
         }
 
         .phase-message-home {
@@ -797,10 +797,10 @@
         .home-message {
             font-size: 13px;
             font-weight: 400;
-            color: var(--text-secondary, #6B7280);
+            color: var(--text-tertiary);
             line-height: 1.5;
             text-align: left;
-            margin: 8px 0 0 0;
+            margin: 10px 0 0 0;
             padding: 0;
         }
 
@@ -820,10 +820,10 @@
         .home-care-team-card {
             display: flex;
             align-items: center;
-            padding: 16px;
+            padding: 14px 16px;
             background: #FFFFFF;
             border-radius: 12px;
-            margin: 0 16px 12px;
+            margin: 12px 16px 0;
             cursor: pointer;
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -876,10 +876,10 @@
         .home-healing-card {
             display: flex;
             align-items: center;
-            padding: 16px;
+            padding: 14px 16px;
             background: #FFFFFF;
             border-radius: 12px;
-            margin: 0 16px 12px;
+            margin: 16px 16px 12px;
             cursor: pointer;
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -893,7 +893,7 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background: #F0FDF4;
+            background: #F2F4F0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -904,7 +904,7 @@
         .healing-icon svg {
             width: 22px;
             height: 22px;
-            stroke: #4ADE80;
+            stroke: var(--accent);
             fill: none;
         }
 
@@ -3188,11 +3188,11 @@
         }
         .home-expert-entry-icon {
             width: 42px; height: 42px; border-radius: 50%;
-            background: linear-gradient(135deg, #E8F0FE, #F0E8FE);
+            background: #F2F4F0;
             display: flex; align-items: center; justify-content: center;
             margin-right: 12px; flex-shrink: 0;
         }
-        .home-expert-entry-icon svg { width: 20px; height: 20px; stroke: #5B6ABF; }
+        .home-expert-entry-icon svg { width: 20px; height: 20px; stroke: var(--accent); }
         .home-expert-entry-body { flex: 1; }
         .home-expert-entry-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
         .home-expert-entry-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
@@ -3450,12 +3450,29 @@
             align-items: center;
             justify-content: center;
             gap: 3px;
-            padding: 4px 0;
+            padding: 8px 0 6px;
             cursor: pointer;
             border: none;
             background: none;
             -webkit-tap-highlight-color: transparent;
             position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 32px;
+            height: 2px;
+            border-radius: 0 0 2px 2px;
+            background: var(--accent);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item.active::before {
+            transform: translateX(-50%) scaleX(1);
         }
 
         .nav-icon {
@@ -3464,42 +3481,30 @@
             justify-content: center;
             width: 24px;
             height: 24px;
-            border-radius: 12px;
-            transition: background 0.2s ease;
-        }
-
-        .nav-item.active .nav-icon {
-            background: var(--accent-light);
-            width: 48px;
-            border-radius: 14px;
-            padding: 2px 0;
         }
 
         .nav-icon svg {
-            width: 24px;
-            height: 24px;
-            transition: all 0.2s ease;
+            width: 22px;
+            height: 22px;
         }
 
         .nav-item .nav-icon svg path {
             fill: none;
-            stroke: #999999;
+            stroke: #bbb;
             stroke-width: 1.5;
-            transition: all 0.2s ease;
+            transition: stroke 0.2s ease;
         }
 
         .nav-item.active .nav-icon svg path {
-            fill: none;
             stroke: var(--accent);
-            stroke-width: 2;
+            stroke-width: 1.8;
         }
 
         .nav-label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 400;
-            color: #999999;
-            letter-spacing: 0.3px;
-            transition: all 0.2s ease;
+            color: #bbb;
+            transition: color 0.2s ease;
         }
 
         .nav-item.active .nav-label {
@@ -4154,59 +4159,51 @@
 
         /* ── NEED_CONFIRM 統合セクション ── */
         .need-confirm-section {
-            background: #FFFFFF;
-            border: 1.5px solid #E2DDD5;
-            border-radius: 12px;
-            overflow: hidden;
-            margin: 16px 16px 8px;
+            margin: 24px 16px 8px;
+            background: #F7F7F5;
+            border-radius: 14px;
+            padding: 18px 16px;
         }
 
         .need-confirm-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 14px 16px;
-            background: #F9F6F2;
-            border-bottom: 1px solid #E8E5E1;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
         .need-confirm-header-icon {
-            width: 28px;
-            height: 28px;
-            min-width: 28px;
-            border-radius: 50%;
-            background: rgba(58, 63, 50, 0.08);
-            color: var(--accent);
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: none;
         }
 
         .need-confirm-header-text {
-            flex: 1;
-            min-width: 0;
+            display: none;
         }
 
         .need-confirm-header-title {
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 700;
             color: var(--text-primary);
         }
 
         .need-confirm-header-sub {
-            font-size: 12px;
-            color: var(--text-tertiary);
-            margin-top: 1px;
+            display: none;
         }
 
         .need-confirm-header-count {
-            margin-left: auto;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            background: #EEEEE9;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .need-confirm-desc {
             font-size: 13px;
-            color: var(--text-tertiary);
-            font-weight: 500;
-            white-space: nowrap;
+            color: var(--text-secondary);
+            margin: 0 0 14px;
+            line-height: 1.5;
         }
 
         .need-confirm-list {
@@ -4216,11 +4213,11 @@
         .need-confirm-item {
             display: flex;
             align-items: center;
-            padding: 13px 16px;
-            border-bottom: 1px solid #F0EDE9;
+            padding: 11px 0;
+            border-bottom: 1px solid #EAEAE6;
             cursor: pointer;
-            transition: background 0.12s ease;
-            gap: 12px;
+            gap: 10px;
+            transition: opacity 0.1s;
         }
 
         .need-confirm-item:last-child {
@@ -4228,7 +4225,7 @@
         }
 
         .need-confirm-item:active {
-            background: #F5F3F0;
+            opacity: 0.6;
         }
 
         .need-confirm-item-body {
@@ -4237,7 +4234,7 @@
         }
 
         .need-confirm-item-name {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 400;
             color: var(--text-primary);
             line-height: 1.4;
@@ -4245,34 +4242,22 @@
 
         .need-confirm-item-action {
             background: none;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 6px 14px;
-            min-height: 44px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--accent);
+            border: none;
+            padding: 0;
             cursor: pointer;
-            white-space: nowrap;
             flex-shrink: 0;
-            transition: all 0.15s;
-        }
-
-        .need-confirm-item-action:active {
-            background: var(--accent-light);
-            border-color: var(--accent);
+            display: flex;
+            align-items: center;
         }
 
         .need-confirm-item.uncertain {
-            background: #FFF8F0;
-            border-bottom: 1px solid #EDE8E0;
             align-items: flex-start;
         }
 
         .need-confirm-item-hint {
             font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 4px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
             line-height: 1.5;
         }
 
@@ -4281,7 +4266,7 @@
             font-size: 12px;
             color: var(--accent);
             text-decoration: none;
-            margin-top: 4px;
+            margin-top: 2px;
             font-weight: 500;
         }
 
@@ -4538,9 +4523,8 @@
         .need-confirm-section.home-compact {
             margin: 16px 0 0;
         }
-
-        .need-confirm-section.home-compact .need-confirm-header {
-            padding: 12px 16px;
+        .need-confirm-section.home-compact .need-confirm-bulk-action {
+            padding: 0;
         }
 
         /* ── フィードバックtoast ── */
@@ -4604,25 +4588,37 @@
             opacity: 0.8;
         }
 
+        .need-confirm-more {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            padding: 10px 0 2px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .need-confirm-more:active {
+            opacity: 0.6;
+        }
+
         .need-confirm-bulk-action {
-            padding: 4px 16px 14px 16px;
+            padding: 10px 0 0;
         }
 
         .need-confirm-bulk-btn {
             width: 100%;
-            padding: 12px 16px;
+            padding: 13px 16px;
             background: var(--accent);
-            color: #FFFFFF;
+            color: #fff;
             border: none;
             border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: opacity 0.15s;
         }
 
         .need-confirm-bulk-btn:active {
-            opacity: 0.85;
+            opacity: 0.8;
         }
 
         /* ── 一括確認ウィザード（q-screen共有、固有スタイルのみ） ── */
@@ -4659,26 +4655,6 @@
             left: 0;
         }
 
-        .bulk-confirm-submit {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            margin-top: 16px;
-            cursor: pointer;
-            background: var(--accent);
-            color: #FFFFFF;
-            border: none;
-        }
-
-        .bulk-confirm-submit:disabled {
-            background: var(--bg-secondary);
-            color: var(--text-tertiary);
-            border: 1px solid var(--border);
-            cursor: not-allowed;
-        }
-
         .bulk-confirm-hint {
             background: #F5F3F0;
             padding: 12px 16px;
@@ -4689,21 +4665,12 @@
             line-height: 1.6;
         }
 
-        .bulk-confirm-skip {
-            text-align: center;
-            margin-top: 20px;
-            padding: 8px;
-            font-size: 14px;
-            color: var(--text-tertiary);
-            cursor: pointer;
-        }
-
         /* ── 一括確認 フィードバック ── */
         .bulk-feedback {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 32px 24px 24px;
+            padding: 40px 0 24px;
             gap: 20px;
             animation: fadeInScreen 0.2s ease;
         }
@@ -4810,7 +4777,7 @@
         /* ── 一括確認 完了画面 ── */
         .bulk-confirm-complete {
             text-align: center;
-            padding: 60px 24px;
+            padding: 40px 0;
         }
 
         .bulk-confirm-complete-icon {
@@ -5056,32 +5023,142 @@
             flex: 1;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            padding: 20px 16px calc(80px + env(safe-area-inset-bottom));
+            padding: 16px 16px calc(80px + env(safe-area-inset-bottom));
         }
 
         /* セクション共通 */
         .grief-section-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--text-primary);
-            margin: 28px 0 12px 0;
+            margin: 0 0 10px 0;
         }
-        .grief-section-title:first-child { margin-top: 0; }
         .grief-record-desc {
             font-size: 15px;
-            color: var(--text-secondary);
-            margin: 0 0 14px 0;
-            line-height: 1.6;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 12px 0;
+            line-height: 1.4;
         }
 
         .grief-record-section {
-            margin-bottom: 8px;
+            margin-bottom: 0;
         }
         .mood-tracker-section {
-            margin-top: 32px;
+            margin-top: 28px;
         }
         .grief-content-section {
-            margin-top: 32px;
+            margin-top: 28px;
+        }
+
+        /* 記録の成果セクション */
+        .grief-incentive-section {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 14px;
+            padding: 18px;
+            margin-top: 20px;
+        }
+        .grief-incentive-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 4px 0;
+        }
+        .grief-incentive-count {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 0 0 16px 0;
+        }
+        .grief-incentive-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .grief-incentive-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .grief-incentive-item.locked {
+            color: var(--text-tertiary);
+        }
+        .grief-incentive-item.unlocked {
+            color: var(--text-primary);
+        }
+        .grief-incentive-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* カレンダープレビュー */
+        .mood-calendar-section {
+            margin-top: 28px;
+        }
+        .grief-calendar-preview {
+            position: relative;
+        }
+        .grief-calendar-preview .mood-calendar {
+            display: grid !important;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .grief-calendar-preview .grief-preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* 月間ふりかえりプレビュー */
+        .grief-monthly-section {
+            margin-top: 20px;
+        }
+        .grief-monthly-preview {
+            position: relative;
+        }
+        .grief-monthly-preview .grief-monthly-card {
+            filter: blur(4px);
+            pointer-events: none;
+            user-select: none;
+        }
+        .grief-monthly-preview .grief-preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            background: rgba(255,255,255,0.4);
+            border-radius: 16px;
+        }
+        .grief-trend-section {
+            margin-top: 20px;
+        }
+        .grief-history-section {
+            margin-top: 20px;
         }
 
         /* 気分セレクター */
@@ -5116,7 +5193,7 @@
         .mood-selector.has-selection .mood-btn:not(.selected) {
             opacity: 0.5;
         }
-        .mood-emoji { font-size: 32px; line-height: 1; }
+        .mood-emoji { font-size: 32px; line-height: 1; display: flex; align-items: center; justify-content: center; }
         .mood-label { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
         .mood-btn.selected .mood-label { color: var(--accent); font-weight: 600; }
 
@@ -5124,18 +5201,18 @@
         .grief-body-check {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 16px;
         }
         .grief-body-check-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 16px;
+            padding: 12px 16px;
             background: var(--bg-primary);
             border: 1.5px solid var(--border-light);
             border-radius: 12px;
-            min-height: 56px;
+            min-height: 48px;
         }
         .grief-body-check-label {
             font-size: 15px;
@@ -5147,17 +5224,17 @@
             gap: 6px;
         }
         .grief-body-check-options button {
-            padding: 10px 20px;
+            padding: 8px 18px;
             border: 1.5px solid var(--border-light);
             border-radius: 10px;
             background: var(--bg-primary);
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             color: var(--text-secondary);
             cursor: pointer;
             font-family: inherit;
             transition: all 0.15s;
-            min-height: 44px;
+            min-height: 40px;
         }
         .grief-body-check-options button.selected-yes {
             border-color: #34D399;
@@ -5192,22 +5269,21 @@
             color: var(--text-secondary);
         }
         .grief-consent-note {
-            font-size: 12.5px;
-            line-height: 1.6;
-            color: var(--text-secondary);
-            margin: 0 0 20px 32px;
-            opacity: 0.85;
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--text-tertiary);
+            margin: 4px 0 16px 32px;
         }
 
         /* テキストエリア */
         .grief-textarea {
             width: 100%;
-            min-height: 100px;
-            padding: 14px 16px;
-            margin-top: 20px;
+            min-height: 80px;
+            padding: 12px 14px;
+            margin-top: 16px;
             border: 1.5px solid var(--border-light);
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1.6;
             resize: vertical;
             box-sizing: border-box;
@@ -5224,22 +5300,23 @@
             text-align: right;
             font-size: 12px;
             color: var(--text-tertiary);
-            margin: 4px 0 16px 0;
+            margin: 4px 0 12px 0;
         }
 
         /* 今日の記録ステータス */
         .grief-today-status {
             background: var(--accent-light);
-            border: 1px solid var(--accent);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
+            border-radius: 14px;
+            padding: 20px 16px;
+            margin-bottom: 0;
             text-align: center;
         }
         .grief-today-status-emoji {
             font-size: 36px;
             line-height: 1;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: center;
         }
         .grief-today-status-text {
             font-size: 14px;
@@ -5249,7 +5326,7 @@
         .grief-today-status-link {
             font-size: 13px;
             color: var(--accent);
-            margin-top: 8px;
+            margin-top: 10px;
             display: inline-block;
             cursor: pointer;
         }
@@ -5329,41 +5406,13 @@
             flex-shrink: 0;
         }
 
-        /* 初回ガイダンス */
-        .grief-first-guide {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .grief-first-guide-text {
-            font-size: 14px;
-            line-height: 1.7;
-            color: var(--text-secondary);
-            margin: 0;
-        }
-        .grief-first-guide-close {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: none;
-            border: none;
-            color: var(--text-tertiary);
-            font-size: 18px;
-            cursor: pointer;
-            padding: 4px 8px;
-            line-height: 1;
-        }
-
         /* 月間ふりかえり */
         .grief-monthly-card {
             background: var(--bg-primary);
             border: 1px solid var(--border-light);
             border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 18px;
+            margin-bottom: 0;
         }
         .grief-monthly-title {
             font-size: 15px;
@@ -5429,7 +5478,7 @@
 
         /* 呼吸エクササイズ */
         .grief-breathing-section {
-            margin-top: 32px;
+            margin-top: 28px;
         }
         .grief-breathing-card {
             background: var(--bg-primary);
@@ -5504,10 +5553,9 @@
         /* 記録後のケア提案 */
         .grief-care-suggestion {
             background: var(--accent-light);
-            border: 1px solid var(--accent);
             border-radius: 12px;
-            padding: 16px;
-            margin-top: 16px;
+            padding: 14px 16px;
+            margin-top: 14px;
             text-align: center;
             display: none;
         }
@@ -5594,7 +5642,7 @@
             min-width: 40px;
             flex-shrink: 0;
         }
-        .mood-history-emoji { font-size: 22px; flex-shrink: 0; }
+        .mood-history-emoji { font-size: 22px; flex-shrink: 0; display: flex; align-items: center; }
         .mood-history-detail {
             flex: 1;
             min-width: 0;
@@ -5922,8 +5970,8 @@
                     </svg>
                 </div>
                 <div class="care-team-content">
-                    <p class="care-team-title">あなた専用の遺族支援チーム</p>
-                    <p class="care-team-sub">手続きのことも、気持ちのことも</p>
+                    <p class="care-team-title">遺族支援チーム</p>
+                    <p class="care-team-sub">手続きの相談・サポートを受けられます</p>
                 </div>
                 <span class="care-team-arrow">›</span>
             </div>
@@ -5962,7 +6010,7 @@
                 </div>
                 <div class="home-expert-entry-body">
                     <p class="home-expert-entry-title">専門家に相談する</p>
-                    <p class="home-expert-entry-sub">司法書士・税理士・弁護士など</p>
+                    <p class="home-expert-entry-sub">士業の専門家を探せます</p>
                 </div>
                 <span class="home-expert-entry-arrow">&#8250;</span>
             </div>
@@ -6591,7 +6639,7 @@
             <div class="q-screen">
                 <div class="q-screen-inner">
                     <div class="q-header">
-                        <button class="q-back hidden" id="bulkConfirmBack" onclick="goBackBulkConfirm()">
+                        <button class="q-back" id="bulkConfirmBack" style="visibility:hidden" onclick="goBackBulkConfirm()">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                         </button>
                         <div class="q-progress-bar">
@@ -6659,51 +6707,24 @@
                     </button>
                 </div>
                 <div class="grief-screen-body">
-                    <!-- 初回ガイダンス -->
-                    <div id="griefFirstGuide" style="display:none;"></div>
-
-                    <!-- 保健師見守りステータス -->
-                    <div id="griefNurseStatus" style="display:none;"></div>
-
                     <!-- 今日の記録ステータス -->
                     <div id="griefTodayStatus" style="display:none;"></div>
 
                     <!-- 気分記録 -->
                     <div class="grief-record-section" id="griefRecordSection">
-                        <p class="grief-record-desc">今の気持ちに近いものを選んでください</p>
-                        <div class="mood-selector">
-                            <button class="mood-btn" data-mood="1" onclick="selectMood(1)">
-                                <span class="mood-emoji">😢</span>
-                                <span class="mood-label">つらい</span>
-                            </button>
-                            <button class="mood-btn" data-mood="2" onclick="selectMood(2)">
-                                <span class="mood-emoji">😔</span>
-                                <span class="mood-label">沈んでいる</span>
-                            </button>
-                            <button class="mood-btn" data-mood="3" onclick="selectMood(3)">
-                                <span class="mood-emoji">😐</span>
-                                <span class="mood-label">ふつう</span>
-                            </button>
-                            <button class="mood-btn" data-mood="4" onclick="selectMood(4)">
-                                <span class="mood-emoji">🙂</span>
-                                <span class="mood-label">少し穏やか</span>
-                            </button>
-                            <button class="mood-btn" data-mood="5" onclick="selectMood(5)">
-                                <span class="mood-emoji">😌</span>
-                                <span class="mood-label">穏やか</span>
-                            </button>
-                        </div>
+                        <p class="grief-record-desc">今の気持ちは？</p>
+                        <div class="mood-selector" id="moodSelectorButtons"></div>
 
                         <div class="grief-body-check">
                             <div class="grief-body-check-item">
-                                <span class="grief-body-check-label">眠れていますか？</span>
+                                <span class="grief-body-check-label">睡眠</span>
                                 <div class="grief-body-check-options" id="griefSleep">
                                     <button onclick="selectBodyCheck('griefSleep', true, this)">はい</button>
                                     <button onclick="selectBodyCheck('griefSleep', false, this)">いいえ</button>
                                 </div>
                             </div>
                             <div class="grief-body-check-item">
-                                <span class="grief-body-check-label">食事はとれていますか？</span>
+                                <span class="grief-body-check-label">食事</span>
                                 <div class="grief-body-check-options" id="griefMeal">
                                     <button onclick="selectBodyCheck('griefMeal', true, this)">はい</button>
                                     <button onclick="selectBodyCheck('griefMeal', false, this)">いいえ</button>
@@ -6712,7 +6733,7 @@
                         </div>
 
                         <textarea class="grief-textarea" id="griefTextarea"
-                            placeholder="今日のこと、思い出、何でも（任意）"
+                            placeholder="ひとこと日記（任意）"
                             maxlength="500"
                             oninput="updateGriefCharCount(this)"></textarea>
                         <p class="grief-char-count"><span id="grief-char-current">0</span>/500</p>
@@ -6721,7 +6742,7 @@
                             <input type="checkbox" id="griefConsentCheck" onchange="onGriefConsentChange(this)">
                             <span class="grief-consent-label">保健師さんにも見守ってもらう</span>
                         </label>
-                        <p class="grief-consent-note">ONにすると、町の保健師があなたの体調を見守り、必要に応じて声をかけます。記録の内容が共有されます。</p>
+                        <p class="grief-consent-note">記録が保健師に共有され、必要時に声をかけてもらえます</p>
 
                         <button class="grief-save-btn" onclick="saveGriefLog()" id="grief-save-btn" disabled>記録する</button>
                         <div class="grief-care-suggestion" id="griefCareSuggestion">
@@ -6730,14 +6751,32 @@
                         </div>
                     </div>
 
-                    <!-- これまでの記録 -->
-                    <div class="mood-tracker-section">
-                        <h3 class="grief-section-title">これまでの記録</h3>
-                        <div id="griefMonthlyCard"></div>
-                        <div id="griefTrendMsg"></div>
+                    <!-- 記録の成果 -->
+                    <div id="griefIncentiveSection"></div>
+
+                    <!-- 気分カレンダー -->
+                    <div class="mood-calendar-section">
+                        <h3 class="grief-section-title">気分カレンダー</h3>
                         <div class="mood-calendar" id="mood-calendar"></div>
+                    </div>
+
+                    <!-- 月間ふりかえり -->
+                    <div class="grief-monthly-section">
+                        <div id="griefMonthlyCard"></div>
+                    </div>
+
+                    <!-- 週間トレンド -->
+                    <div class="grief-trend-section">
+                        <div id="griefTrendMsg"></div>
+                    </div>
+
+                    <!-- 記録履歴 -->
+                    <div class="grief-history-section">
                         <div id="mood-history"></div>
                     </div>
+
+                    <!-- 保健師見守りステータス -->
+                    <div id="griefNurseStatus" style="display:none;"></div>
 
                     <!-- 呼吸エクササイズ -->
                     <div class="grief-breathing-section">
@@ -6746,7 +6785,7 @@
                             <div class="breathing-circle" id="breathingCircle">
                                 <span id="breathingLabel">深呼吸</span>
                             </div>
-                            <p class="breathing-instruction">気持ちが落ち着かないとき、ゆっくり呼吸するだけで体がリラックスします。</p>
+                            <p class="breathing-instruction">ゆっくり呼吸して、ひと息つきましょう</p>
                             <span class="breathing-start-text" id="breathingStartText">タップして始める</span>
                             <p class="breathing-counter" id="breathingCounter" style="display:none;"></p>
                         </div>
@@ -7010,6 +7049,48 @@
             }
         ];
 
+        // ====== きょうのきもち：気分SVGアイコン ======
+        function moodSvg(mood, size) {
+            var s = size || 32;
+            var faces = {
+                1: '<svg width="'+s+'" height="'+s+'" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">'
+                  + '<circle cx="16" cy="16" r="15" fill="#E8D5D5" stroke="#C4A0A0" stroke-width="1.2"/>'
+                  + '<ellipse cx="11" cy="14" rx="1.5" ry="2" fill="#C4A0A0"/>'
+                  + '<ellipse cx="21" cy="14" rx="1.5" ry="2" fill="#C4A0A0"/>'
+                  + '<path d="M10 22c1.5-2.5 4-3.5 6-3.5s4.5 1 6 3.5" stroke="#C4A0A0" stroke-width="1.5" stroke-linecap="round" fill="none"/>'
+                  + '<path d="M8 10c1-2 2.5-2.5 4-2" stroke="#C4A0A0" stroke-width="1.2" stroke-linecap="round" fill="none"/>'
+                  + '<path d="M24 10c-1-2-2.5-2.5-4-2" stroke="#C4A0A0" stroke-width="1.2" stroke-linecap="round" fill="none"/>'
+                  + '<line x1="9" y1="18" x2="7" y2="22" stroke="#C4A0A0" stroke-width="1" stroke-linecap="round"/>'
+                  + '<line x1="23" y1="18" x2="25" y2="22" stroke="#C4A0A0" stroke-width="1" stroke-linecap="round"/>'
+                  + '</svg>',
+                2: '<svg width="'+s+'" height="'+s+'" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">'
+                  + '<circle cx="16" cy="16" r="15" fill="#E0D8CC" stroke="#B5A888" stroke-width="1.2"/>'
+                  + '<ellipse cx="11" cy="14" rx="1.5" ry="2" fill="#B5A888"/>'
+                  + '<ellipse cx="21" cy="14" rx="1.5" ry="2" fill="#B5A888"/>'
+                  + '<path d="M11 22c1.2-1.8 3-2.5 5-2.5s3.8.7 5 2.5" stroke="#B5A888" stroke-width="1.5" stroke-linecap="round" fill="none"/>'
+                  + '</svg>',
+                3: '<svg width="'+s+'" height="'+s+'" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">'
+                  + '<circle cx="16" cy="16" r="15" fill="#DDD" stroke="#AAA" stroke-width="1.2"/>'
+                  + '<ellipse cx="11" cy="14" rx="1.5" ry="2" fill="#AAA"/>'
+                  + '<ellipse cx="21" cy="14" rx="1.5" ry="2" fill="#AAA"/>'
+                  + '<line x1="11" y1="21" x2="21" y2="21" stroke="#AAA" stroke-width="1.5" stroke-linecap="round"/>'
+                  + '</svg>',
+                4: '<svg width="'+s+'" height="'+s+'" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">'
+                  + '<circle cx="16" cy="16" r="15" fill="#D5E5D8" stroke="#88B598" stroke-width="1.2"/>'
+                  + '<ellipse cx="11" cy="14" rx="1.5" ry="2" fill="#88B598"/>'
+                  + '<ellipse cx="21" cy="14" rx="1.5" ry="2" fill="#88B598"/>'
+                  + '<path d="M11 20c1.2 1.8 3 2.5 5 2.5s3.8-.7 5-2.5" stroke="#88B598" stroke-width="1.5" stroke-linecap="round" fill="none"/>'
+                  + '</svg>',
+                5: '<svg width="'+s+'" height="'+s+'" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">'
+                  + '<circle cx="16" cy="16" r="15" fill="#CCE0D5" stroke="#6DA888" stroke-width="1.2"/>'
+                  + '<path d="M8.5 14c0.5-1 1.5-1.5 2.5-1.5s2 0.5 2.5 1.5" stroke="#6DA888" stroke-width="1.3" stroke-linecap="round" fill="none"/>'
+                  + '<path d="M18.5 14c0.5-1 1.5-1.5 2.5-1.5s2 0.5 2.5 1.5" stroke="#6DA888" stroke-width="1.3" stroke-linecap="round" fill="none"/>'
+                  + '<path d="M10 19c1.5 2.5 3.5 3.5 6 3.5s4.5-1 6-3.5" stroke="#6DA888" stroke-width="1.5" stroke-linecap="round" fill="none"/>'
+                  + '</svg>'
+            };
+            return faces[mood] || faces[3];
+        }
+
         // ====== きょうのきもち：気分記録 ======
         let _selectedMood = null;
         let _griefReturnScreen = 'screen-home';
@@ -7153,6 +7234,7 @@
             var sb = document.getElementById('grief-save-btn');
             if (sb) { sb.disabled = true; sb.classList.remove('active'); }
 
+            renderIncentiveProgress();
             renderMoodCalendar();
             renderMoodHistory();
             renderGriefTrendMsg();
@@ -7161,16 +7243,82 @@
             renderTodayStatus();
         }
 
+        // ====== 記録の成果（インセンティブ可視化） ======
+        function renderIncentiveProgress() {
+            var container = document.getElementById('griefIncentiveSection');
+            if (!container) return;
+            var logs = JSON.parse(localStorage.getItem('relief_note_grief_logs') || '[]');
+            var count = logs.length;
+
+            var items = [
+                { label: '記録後のアドバイス', threshold: 1 },
+                { label: '週間トレンド', threshold: 2 },
+                { label: '気分カレンダー', threshold: 5 },
+                { label: '月間ふりかえり', threshold: 5 }
+            ];
+
+            var html = '<div class="grief-incentive-section">'
+                + '<p class="grief-incentive-title">記録の成果</p>'
+                + '<p class="grief-incentive-count">これまで ' + count + ' 回記録しました</p>'
+                + '<div class="grief-incentive-list">';
+
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var unlocked = count >= item.threshold;
+                var cls = unlocked ? 'unlocked' : 'locked';
+                var icon = unlocked
+                    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'
+                    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+                var suffix = '';
+                if (unlocked) {
+                    suffix = '（' + item.threshold + '回〜）';
+                } else {
+                    var remaining = item.threshold - count;
+                    suffix = '（あと ' + remaining + ' 回）';
+                }
+                html += '<div class="grief-incentive-item ' + cls + '">'
+                    + '<span class="grief-incentive-icon">' + icon + '</span>'
+                    + '<span>' + item.label + suffix + '</span>'
+                    + '</div>';
+            }
+
+            html += '</div></div>';
+            container.innerHTML = html;
+        }
+
         // ====== 気分トラッカー ======
         function renderMoodCalendar() {
             var container = document.getElementById('mood-calendar');
             if (!container) return;
+            var section = container.closest('.mood-calendar-section');
             var logs = JSON.parse(localStorage.getItem('relief_note_grief_logs') || '[]');
 
-            // 記録5件未満はカレンダー非表示
+            // 記録5件未満はプレビュー表示
             if (logs.length < 5) {
-                container.style.display = 'none';
+                container.style.display = '';
+                if (section) {
+                    section.querySelector('.grief-calendar-preview-wrap')?.remove();
+                    var remaining = 5 - logs.length;
+                    var wrap = document.createElement('div');
+                    wrap.className = 'grief-calendar-preview grief-calendar-preview-wrap';
+                    var previewHtml = '<div class="mood-calendar" style="display:grid;">';
+                    for (var p = 0; p < 30; p++) {
+                        previewHtml += '<div class="mood-calendar-day">'
+                            + '<span class="mood-calendar-date" style="visibility:hidden;">0</span>'
+                            + '<div class="mood-calendar-dot" style="background:var(--border-light);"></div>'
+                            + '</div>';
+                    }
+                    previewHtml += '</div>';
+                    previewHtml += '<div class="grief-preview-overlay">あと ' + remaining + ' 回記録すると<br>ここに気持ちの変化が見えます</div>';
+                    wrap.innerHTML = previewHtml;
+                    container.style.display = 'none';
+                    section.appendChild(wrap);
+                }
                 return;
+            }
+            if (section) {
+                var oldWrap = section.querySelector('.grief-calendar-preview-wrap');
+                if (oldWrap) oldWrap.remove();
             }
             container.style.display = '';
 
@@ -7202,7 +7350,6 @@
                 container.innerHTML = '<p style="font-size:14px;color:var(--text-tertiary);text-align:center;padding:16px 0;">まだ記録がありません</p>';
                 return;
             }
-            var emojiMap = { 1: '😢', 2: '😔', 3: '😐', 4: '🙂', 5: '😌' };
             var labelMap = { 1: 'つらい', 2: '沈んでいる', 3: 'ふつう', 4: '少し穏やか', 5: '穏やか' };
             container.innerHTML = recent.map(function(log, idx) {
                 var d = new Date(log.date);
@@ -7224,7 +7371,7 @@
                 return '<div>'
                     + '<div class="mood-history-item"' + clickHandler + '>'
                     + '<span class="mood-history-date">' + dateLabel + '</span>'
-                    + '<span class="mood-history-emoji">' + (emojiMap[log.mood] || '😐') + '</span>'
+                    + '<span class="mood-history-emoji">' + moodSvg(log.mood, 24) + '</span>'
                     + '<div class="mood-history-detail">'
                     + moodLabel
                     + noteHtml
@@ -7288,13 +7435,26 @@
 
         function showGriefScreen() {
             restoreGriefConsent();
-            renderFirstGuide();
-            renderNurseStatus();
+            // SVGアイコンで気分ボタンを描画
+            var moodLabels = { 1: 'つらい', 2: '沈んでいる', 3: 'ふつう', 4: '少し穏やか', 5: '穏やか' };
+            var selectorEl = document.getElementById('moodSelectorButtons');
+            if (selectorEl && !selectorEl.hasChildNodes()) {
+                var btnHtml = '';
+                for (var m = 1; m <= 5; m++) {
+                    btnHtml += '<button class="mood-btn" data-mood="' + m + '" onclick="selectMood(' + m + ')">'
+                        + '<span class="mood-emoji">' + moodSvg(m, 32) + '</span>'
+                        + '<span class="mood-label">' + moodLabels[m] + '</span>'
+                        + '</button>';
+                }
+                selectorEl.innerHTML = btnHtml;
+            }
             renderTodayStatus();
+            renderIncentiveProgress();
             renderMoodCalendar();
-            renderMoodHistory();
-            renderGriefTrendMsg();
             renderMonthlyCard();
+            renderGriefTrendMsg();
+            renderMoodHistory();
+            renderNurseStatus();
             renderGriefContentCards();
             // ケア提案を非表示にリセット
             var suggestion = document.getElementById('griefCareSuggestion');
@@ -7316,10 +7476,9 @@
                 if (logs[i].date === today) { todayLog = logs[i]; break; }
             }
             if (todayLog) {
-                var emojiMap = { 1: '😢', 2: '😔', 3: '😐', 4: '🙂', 5: '😌' };
                 var labelMap = { 1: 'つらい', 2: '沈んでいる', 3: 'ふつう', 4: '少し穏やか', 5: '穏やか' };
                 container.innerHTML = '<div class="grief-today-status">'
-                    + '<div class="grief-today-status-emoji">' + (emojiMap[todayLog.mood] || '😐') + '</div>'
+                    + '<div class="grief-today-status-emoji">' + moodSvg(todayLog.mood, 40) + '</div>'
                     + '<p class="grief-today-status-text">今日は「' + (labelMap[todayLog.mood] || '') + '」と記録しました</p>'
                     + '<span class="grief-today-status-link" onclick="showGriefRecordForm()">もう一度記録する</span>'
                     + '</div>';
@@ -7555,31 +7714,6 @@
             }
         }
 
-        // ====== 初回ガイダンス ======
-        function renderFirstGuide() {
-            var container = document.getElementById('griefFirstGuide');
-            if (!container) return;
-            var dismissed = localStorage.getItem('relief_note_grief_guide_dismissed');
-            if (dismissed) {
-                container.style.display = 'none';
-                return;
-            }
-            container.innerHTML = '<div class="grief-first-guide">'
-                + '<button class="grief-first-guide-close" onclick="dismissFirstGuide()">&times;</button>'
-                + '<p class="grief-first-guide-text">'
-                + '気持ちを記録すると、自分の変化に気づけるようになります。'
-                + '「保健師さんにも見守ってもらう」をONにすると、つらい日が続いたとき保健師さんが声をかけてくれます。'
-                + '</p>'
-                + '</div>';
-            container.style.display = '';
-        }
-
-        function dismissFirstGuide() {
-            localStorage.setItem('relief_note_grief_guide_dismissed', '1');
-            var container = document.getElementById('griefFirstGuide');
-            if (container) container.style.display = 'none';
-        }
-
         // ====== 保健師見守りステータス ======
         function renderNurseStatus() {
             var container = document.getElementById('griefNurseStatus');
@@ -7617,7 +7751,18 @@
             var logs = JSON.parse(localStorage.getItem('relief_note_grief_logs') || '[]');
 
             if (logs.length < 5) {
-                container.innerHTML = '';
+                var remaining = 5 - logs.length;
+                container.innerHTML = '<div class="grief-monthly-preview">'
+                    + '<div class="grief-monthly-card">'
+                    + '<p class="grief-monthly-title">?月のふりかえり</p>'
+                    + '<div class="grief-monthly-stats">'
+                    + '<div class="grief-monthly-stat"><div class="grief-monthly-stat-num">-</div><div class="grief-monthly-stat-label">記録した日</div></div>'
+                    + '<div class="grief-monthly-stat"><div class="grief-monthly-stat-num">-</div><div class="grief-monthly-stat-label">穏やかな日</div></div>'
+                    + '<div class="grief-monthly-stat"><div class="grief-monthly-stat-num">-</div><div class="grief-monthly-stat-label">平均気分</div></div>'
+                    + '</div>'
+                    + '</div>'
+                    + '<div class="grief-preview-overlay">あと ' + remaining + ' 回記録すると<br>月間ふりかえりが見えます</div>'
+                    + '</div>';
                 return;
             }
 
@@ -10487,14 +10632,14 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         (info.hint ? '<div class="need-confirm-item-hint">💡 ' + info.hint + '</div>' : '') +
                         phoneHtml +
                     '</div>' +
-                    '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')">確認 →</button>' +
+                    '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>' +
                 '</div>';
             }
             return '<div class="need-confirm-item" onclick="event.stopPropagation(); showTaskDetail(\'' + t.id + '\')">' +
                 '<div class="need-confirm-item-body">' +
                     '<div class="need-confirm-item-name">' + title + '</div>' +
                 '</div>' +
-                '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')">確認 →</button>' +
+                '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>' +
             '</div>';
         }
 
@@ -10509,40 +10654,48 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             var taskIds = sorted.map(function(t) { return t.id; });
             var taskIdsJson = JSON.stringify(taskIds).replace(/"/g, '&quot;');
             var returnScreen = compact ? 'screen-home' : 'screen-guide';
-            let html = '<div class="need-confirm-section' + (compact ? ' home-compact' : '') + '">' +
-                '<div class="need-confirm-header">' +
-                    '<div class="need-confirm-header-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg></div>' +
-                    '<div class="need-confirm-header-text">' +
+            if (compact) {
+                // ホーム画面: カード型。個別アイテムは出さず、件数+CTAのみ
+                var allIds = tasks.map(function(t) { return t.id; });
+                var homeBulkQuestions = buildBulkConfirmQuestions(allIds);
+                var homeBulkMinutes = homeBulkQuestions.length > 0 ? Math.max(1, Math.ceil(homeBulkQuestions.length * 8 / 60)) : 0;
+                let html = '<div class="need-confirm-section home-compact">' +
+                    '<div class="need-confirm-header">' +
                         '<div class="need-confirm-header-title">確認が必要な手続き</div>' +
-                        (compact ? '' : '<div class="need-confirm-header-sub">質問に答えると、必要かどうかわかります</div>') +
+                        '<div class="need-confirm-header-count">' + sorted.length + '件</div>' +
                     '</div>' +
+                    '<p class="need-confirm-desc">いくつかの質問に答えるだけで、あなたに必要な手続きが分かります</p>';
+                if (homeBulkQuestions.length > 0) {
+                    html += '<div class="need-confirm-bulk-action">' +
+                        '<button class="need-confirm-bulk-btn" onclick="event.stopPropagation(); startBulkConfirmFromHome()">まとめて確認する（約' + homeBulkMinutes + '分）</button>' +
+                    '</div>';
+                }
+                html += '</div>';
+                return html;
+            }
+
+            // ガイド画面: カード内にアイテムリスト + まとめて確認ボタン
+            var bulkQuestions = buildBulkConfirmQuestions(taskIds);
+            var bulkMinutes = bulkQuestions.length > 0 ? Math.max(1, Math.ceil(bulkQuestions.length * 8 / 60)) : 0;
+            let html = '<div class="need-confirm-section">' +
+                '<div class="need-confirm-header">' +
+                    '<div class="need-confirm-header-title">確認が必要な手続き</div>' +
                     '<div class="need-confirm-header-count">' + sorted.length + '件</div>' +
                 '</div>';
+            var maxShow = 3;
             html += '<div class="need-confirm-list">';
-            sorted.forEach(function(t) {
-                html += renderNeedConfirmItem(t);
+            sorted.forEach(function(t, idx) {
+                var hidden = idx >= maxShow ? ' style="display:none;" data-nc-extra' : '';
+                html += '<div' + hidden + '>' + renderNeedConfirmItem(t) + '</div>';
             });
+            if (sorted.length > maxShow) {
+                html += '<div class="need-confirm-more" onclick="this.style.display=\'none\';this.parentNode.querySelectorAll(\'[data-nc-extra]\').forEach(function(e){e.style.display=\'\';})">他 ' + (sorted.length - maxShow) + ' 件を表示</div>';
+            }
             html += '</div>';
-            // まとめて確認ボタン（リスト下部に配置）
-            if (compact) {
-                // ホーム画面: 全フェーズ横断スコープ
-                var allNcIds = tasks.filter(function(t) { return taskStatuses[t.id] === 'NEED_CONFIRM'; }).map(function(t) { return t.id; });
-                var homeBulkQuestions = buildBulkConfirmQuestions(allNcIds);
-                if (homeBulkQuestions.length > 0) {
-                    var homeBulkMinutes = Math.max(1, Math.ceil(homeBulkQuestions.length * 20 / 60));
-                    html += '<div class="need-confirm-bulk-action">' +
-                        '<button class="need-confirm-bulk-btn" onclick="event.stopPropagation(); startBulkConfirmFromHome()">まとめて確認（<span class="bulk-confirm-time">約' + homeBulkMinutes + '分</span>）</button>' +
-                    '</div>';
-                }
-            } else {
-                // ガイド画面: フェーズスコープ
-                var bulkQuestions = buildBulkConfirmQuestions(taskIds);
-                if (bulkQuestions.length > 0) {
-                    var bulkMinutes = Math.max(1, Math.ceil(bulkQuestions.length * 20 / 60));
-                    html += '<div class="need-confirm-bulk-action">' +
-                        '<button class="need-confirm-bulk-btn" onclick="event.stopPropagation(); startBulkConfirm(' + taskIdsJson + ', &quot;screen-guide&quot;)">まとめて確認（<span class="bulk-confirm-time">約' + bulkMinutes + '分</span>）</button>' +
-                    '</div>';
-                }
+            if (bulkQuestions.length > 0) {
+                html += '<div class="need-confirm-bulk-action">' +
+                    '<button class="need-confirm-bulk-btn" onclick="event.stopPropagation(); startBulkConfirm(' + taskIdsJson + ', &quot;screen-guide&quot;)">まとめて確認する（約' + bulkMinutes + '分）</button>' +
+                '</div>';
             }
             html += '</div>';
             return html;
@@ -10628,14 +10781,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 </div>
             `;
 
-            // 寄り添いメッセージ（進捗テキスト直下）
+            // 寄り添いメッセージ（非表示）
             const msgEl = document.getElementById('homeMessageText');
-            if (phaseMsg) {
-                msgEl.textContent = phaseMsg;
-                msgEl.style.display = '';
-            } else {
-                msgEl.style.display = 'none';
-            }
+            if (msgEl) msgEl.style.display = 'none';
 
             // きょうのきもちカードのサブテキスト更新
             var healingSub = document.getElementById('healingCardSub');
@@ -10643,13 +10791,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 var griefLogs = JSON.parse(localStorage.getItem('relief_note_grief_logs') || '[]');
                 if (griefLogs.length > 0) {
                     var lastLog = griefLogs[griefLogs.length - 1];
-                    var emojiMap = { 1: '😢', 2: '😔', 3: '😐', 4: '🙂', 5: '😌' };
+                    var moodLabelMap = { 1: 'つらい', 2: '沈んでいる', 3: 'ふつう', 4: '少し穏やか', 5: '穏やか' };
                     var ld = new Date(lastLog.date);
                     var today = new Date();
                     var isToday = ld.toDateString() === today.toDateString();
-                    healingSub.textContent = isToday
-                        ? '今日の記録: ' + (emojiMap[lastLog.mood] || '') + ' 記録済み'
-                        : '最後の記録: ' + (ld.getMonth()+1) + '/' + ld.getDate() + ' ' + (emojiMap[lastLog.mood] || '');
+                    healingSub.innerHTML = isToday
+                        ? '今日の記録: ' + moodSvg(lastLog.mood, 16) + ' 記録済み'
+                        : '最後の記録: ' + (ld.getMonth()+1) + '/' + ld.getDate() + ' ' + moodSvg(lastLog.mood, 16);
                 } else {
                     healingSub.textContent = '気持ちや体調を記録できます';
                 }
@@ -13015,8 +13163,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         function startBulkConfirmFromHome() {
-            var allNcIds = tasks.filter(function(t) { return taskStatuses[t.id] === 'NEED_CONFIRM'; }).map(function(t) { return t.id; });
-            startBulkConfirm(allNcIds, 'screen-home');
+            var allIds = tasks.map(function(t) { return t.id; });
+            startBulkConfirm(allIds, 'screen-home');
         }
 
         function renderBulkConfirmCard(index) {
@@ -13368,7 +13516,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         function showOnboardConfirmScreen(ncIds) {
             const bulkQuestions = buildBulkConfirmQuestions(ncIds);
             const qCount = bulkQuestions.length;
-            const bulkMinutes = Math.max(1, Math.ceil(qCount * 20 / 60));
+            const bulkMinutes = Math.max(1, Math.ceil(qCount * 8 / 60));
             const openCount = tasks.filter(function(t) {
                 var s = taskStatuses[t.id];
                 return s === 'OPEN' || s === 'BLOCKED';
