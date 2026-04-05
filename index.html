@@ -88,56 +88,50 @@
             from { stroke-dashoffset: 251.2; }
         }
 
-        /* Home progress ring */
-        .home-progress-ring {
-            display: flex;
-            align-items: center;
-            gap: 14px;
+        /* Home progress bar */
+        .home-progress-bar {
             margin-top: 20px;
         }
-        .home-progress-ring .ring-svg-wrap {
-            position: relative;
-            width: 64px;
-            height: 64px;
-            flex-shrink: 0;
+        .home-progress-bar .progress-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
-        .home-progress-ring .ring-svg-wrap svg {
-            width: 64px;
-            height: 64px;
-            transform: rotate(-90deg);
-            display: block;
-        }
-        .home-progress-ring .ring-bg {
-            fill: none;
-            stroke: var(--border-light);
-            stroke-width: 5;
-        }
-        .home-progress-ring .ring-fg {
-            fill: none;
-            stroke: var(--accent);
-            stroke-width: 5;
-            stroke-linecap: round;
-            animation: ringProgress 0.8s ease-out forwards;
-        }
-        .home-progress-ring .ring-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 15px;
+        .home-progress-bar .progress-percent {
+            font-size: 28px;
             font-weight: 700;
             color: var(--text-primary);
-            white-space: nowrap;
+            letter-spacing: -0.5px;
+            line-height: 1;
         }
-        .home-progress-ring .ring-detail {
+        .home-progress-bar .progress-percent span {
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 1px;
+        }
+        .home-progress-bar .progress-count {
             font-size: 13px;
             color: var(--text-secondary);
-            line-height: 1.5;
         }
-        .home-progress-ring .ring-detail strong {
-            font-size: 14px;
+        .home-progress-bar .progress-count strong {
             font-weight: 600;
             color: var(--text-primary);
+        }
+        .home-progress-bar .progress-track {
+            width: 100%;
+            height: 10px;
+            background: var(--border-light);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        .home-progress-bar .progress-fill {
+            height: 100%;
+            min-width: 6px;
+            background: var(--accent);
+            border-radius: 5px;
+            transition: width 0.8s ease-out;
         }
 
         /* First task highlight in next-tasks */
@@ -371,31 +365,31 @@
             flex-direction: column;
             justify-content: flex-start;
             min-height: 0;
-            padding: 32px 0 24px;
+            padding: 20px 0 16px;
         }
         .q-text {
-            font-size: clamp(24px, 6.5vw, 28px);
+            font-size: clamp(20px, 5.5vw, 24px);
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1.45;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.3px;
             margin: 0;
             word-break: auto-phrase;
             overflow-wrap: break-word;
         }
         .q-sub {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-secondary);
-            margin-top: 10px;
+            margin-top: 8px;
             line-height: 1.5;
         }
         .q-domain {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             background: var(--bg-secondary);
             color: var(--text-secondary);
         }
@@ -403,17 +397,17 @@
         .q-options {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            padding-bottom: max(32px, env(safe-area-inset-bottom, 32px));
+            gap: 8px;
+            padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
             flex-shrink: 0;
         }
         .q-option {
             width: 100%;
-            padding: 16px 20px;
+            padding: 14px 16px;
             background: var(--bg-primary);
             border: 1.5px solid var(--border);
-            border-radius: 14px;
-            font-size: 16px;
+            border-radius: 12px;
+            font-size: 15px;
             font-weight: 500;
             color: var(--text-primary);
             text-align: center;
@@ -438,6 +432,19 @@
         }
         .q-option-uncertain.selected {
             border-style: dashed;
+        }
+        /* 選択肢が多い場合のコンパクトモード */
+        .q-options.compact {
+            gap: 6px;
+        }
+        .q-options.compact .q-option {
+            padding: 11px 14px;
+            font-size: 14px;
+            border-radius: 10px;
+        }
+        .q-options.compact .q-option-uncertain {
+            padding: 9px 14px;
+            font-size: 13px;
         }
 
         .q-date-input {
@@ -3075,12 +3082,227 @@
             text-align: center;
         }
 
+        /* データ管理リストアイテム */
+        .data-mgmt-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            transition: background 0.15s;
+        }
+        .data-mgmt-item:active {
+            background: var(--border-light);
+        }
+        .data-mgmt-item:last-child {
+            margin-bottom: 0;
+        }
+        .data-mgmt-item-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+        .data-mgmt-item-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--text-secondary);
+        }
+        .data-mgmt-icon-danger {
+            background: var(--warning-light);
+            border-color: transparent;
+            color: var(--warning);
+        }
+        .data-mgmt-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+        .data-mgmt-item-danger .data-mgmt-item-title {
+            color: var(--warning);
+        }
+        .data-mgmt-item-desc {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+            margin-top: 2px;
+        }
+
+        /* 設定フッター */
         .settings-footer {
             text-align: center;
-            padding: 40px 16px;
+            padding: 32px 16px 40px;
             color: var(--text-tertiary);
             font-size: 12px;
-            line-height: 1.8;
+            line-height: 1.6;
+        }
+        .settings-footer-privacy {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        .settings-footer-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 8px;
+        }
+        .settings-footer-links span {
+            cursor: pointer;
+            padding: 4px 8px;
+            color: var(--text-tertiary);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        .settings-footer-links span:active {
+            opacity: 0.6;
+        }
+        .settings-footer-sep {
+            width: 1px;
+            height: 12px;
+            background: var(--border);
+            display: inline-block;
+            text-decoration: none !important;
+            cursor: default !important;
+            padding: 0 !important;
+        }
+        .settings-footer-copy {
+            color: var(--text-tertiary);
+            opacity: 0.7;
+        }
+
+        /* 回答サマリー画面 */
+        .answer-summary-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px; background: #FFF;
+            border-bottom: 1px solid var(--border-light);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .answer-summary-body {
+            padding: 16px;
+            padding-bottom: 100px;
+        }
+        .answer-summary-stats {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .answer-summary-stat {
+            flex: 1;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+        .answer-summary-stat-num {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1.2;
+        }
+        .answer-summary-stat-label {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+        .answer-summary-group {
+            margin-bottom: 16px;
+        }
+        .answer-summary-group-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+        .answer-summary-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .answer-summary-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-light);
+            cursor: pointer;
+            gap: 8px;
+        }
+        .answer-summary-item:last-child {
+            border-bottom: none;
+        }
+        .answer-summary-item:active {
+            background: var(--accent-light);
+        }
+        .answer-summary-item-left {
+            flex: 1;
+            min-width: 0;
+        }
+        .answer-summary-item-q {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+        .answer-summary-item-a {
+            font-size: 12px;
+            color: var(--accent);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .answer-summary-item-a.unanswered {
+            color: var(--text-tertiary);
+            font-style: italic;
+        }
+        .answer-summary-item-arrow {
+            flex-shrink: 0;
+            color: var(--text-tertiary);
+        }
+        .answer-summary-reset {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+        }
+        .answer-summary-reset-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .answer-summary-reset-btn:active {
+            background: var(--border-light);
         }
 
         /* 専門家リスト画面 */
@@ -3120,6 +3342,8 @@
             width: 44px; height: 44px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
+            background: var(--accent-light);
+            color: var(--accent);
         }
         .expert-card-v2-info { flex: 1; }
         .expert-card-v2-title {
@@ -3161,8 +3385,12 @@
         }
         .expert-call-btn-v2:active { opacity: 0.85; }
         .expert-card-v2-address {
-            padding: 0 16px 8px; font-size: 12px;
-            color: var(--text-tertiary); line-height: 1.5;
+            padding: 8px 16px 10px; font-size: 13px;
+            color: var(--text-secondary); line-height: 1.6;
+            display: flex; align-items: flex-start; gap: 6px;
+        }
+        .expert-card-v2-address svg {
+            flex-shrink: 0; margin-top: 2px;
         }
         .expert-section-divider {
             display: flex; align-items: center; gap: 10px;
@@ -4244,8 +4472,24 @@
 
         .need-confirm-item-action {
             background: none;
+            color: var(--accent);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .need-confirm-item-action:active {
+            background: var(--accent-light);
+        }
+        .need-confirm-item-arrow {
+            background: none;
             border: none;
-            padding: 0;
+            padding: 0 0 0 8px;
             cursor: pointer;
             flex-shrink: 0;
             display: flex;
@@ -6326,24 +6570,60 @@
                     <div class="settings-section-title">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:6px;opacity:0.5;"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>データ管理
                     </div>
-                    <button class="btn-secondary" onclick="resetAnswers()">回答をやり直す</button>
-                    <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-light);">
-                        <p style="font-size:12px;color:var(--text-tertiary);margin:0 0 12px;">この操作は取り消せません</p>
-                        <button class="btn-danger" onclick="showLogoutDialog()">すべてのデータを削除してログアウト</button>
+
+                    <div class="data-mgmt-item" onclick="showAnswerSummary()">
+                        <div class="data-mgmt-item-left">
+                            <div class="data-mgmt-item-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            </div>
+                            <div>
+                                <div class="data-mgmt-item-title">回答の確認・変更</div>
+                                <div class="data-mgmt-item-desc">これまでの回答を確認し、個別に変更できます。</div>
+                            </div>
+                        </div>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </div>
+
+                    <div class="data-mgmt-item data-mgmt-item-danger" onclick="showLogoutDialog()">
+                        <div class="data-mgmt-item-left">
+                            <div class="data-mgmt-item-icon data-mgmt-icon-danger">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </div>
+                            <div>
+                                <div class="data-mgmt-item-title">すべてのデータを削除</div>
+                                <div class="data-mgmt-item-desc">回答・完了状況を含む全データを削除します。この操作は取り消せません。</div>
+                            </div>
+                        </div>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                     </div>
                 </div>
 
                 <!-- フッター -->
                 <div class="settings-footer">
-                    <div style="margin-bottom:12px;">
-                        <span style="cursor:pointer;text-decoration:underline;" onclick="showTerms()">利用規約</span>
-                        <span style="margin:0 8px;opacity:0.3;">|</span>
-                        <span style="cursor:pointer;text-decoration:underline;" onclick="showPrivacy()">プライバシーポリシー</span>
+                    <div class="settings-footer-privacy">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                        データはこの端末にのみ保存されています
                     </div>
-                    データはこの端末にのみ保存されています<br>
-                    &copy; 2026 ReliefNote Inc.
+                    <div class="settings-footer-links">
+                        <span onclick="showTerms()">利用規約</span>
+                        <span class="settings-footer-sep"></span>
+                        <span onclick="showPrivacy()">プライバシーポリシー</span>
+                    </div>
+                    <div class="settings-footer-copy">&copy; 2026 ReliefNote Inc.</div>
                 </div>
             </div>
+        </div>
+
+        <!-- 画面: 回答サマリー -->
+        <div id="screen-answer-summary" class="screen">
+            <div class="answer-summary-header">
+                <button class="expert-back-btn" onclick="showScreen('screen-settings')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <span class="expert-screen-title">回答の確認・変更</span>
+                <span style="width:24px;"></span>
+            </div>
+            <div class="answer-summary-body" id="answerSummaryBody"></div>
         </div>
 
         <!-- 画面: 専門家リスト -->
@@ -6365,7 +6645,7 @@
                 <!-- 北竜町役場 -->
                 <div class="expert-card-v2">
                     <div class="expert-card-v2-top">
-                        <div class="expert-card-v2-icon" style="background:#FEE8E8;color:#DC2626;">
+                        <div class="expert-card-v2-icon">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18"/><path d="M9 21V10"/><path d="M15 21V10"/><path d="M5 10h14l-7-7-7 7z"/></svg>
                         </div>
                         <div class="expert-card-v2-info">
@@ -6381,7 +6661,7 @@
                             <li>介護保険・福祉関連の相談</li>
                         </ul>
                     </div>
-                    <div class="expert-card-v2-address">北海道雨竜郡北竜町字和11-1　平日 8:30-17:15</div>
+                    <div class="expert-card-v2-address"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>北海道雨竜郡北竜町字和11-1　平日 8:30-17:15</div>
                     <div class="expert-card-v2-footer">
                         <div class="expert-card-v2-cost">
                             <span class="expert-card-v2-cost-label">費用</span>
@@ -6397,7 +6677,7 @@
                 <!-- 砂川年金事務所 -->
                 <div class="expert-card-v2">
                     <div class="expert-card-v2-top">
-                        <div class="expert-card-v2-icon" style="background:#E8F0FE;color:#3B6CE7;">
+                        <div class="expert-card-v2-icon">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
                         </div>
                         <div class="expert-card-v2-info">
@@ -6413,7 +6693,7 @@
                             <li>受給要件の確認・相談</li>
                         </ul>
                     </div>
-                    <div class="expert-card-v2-address">北海道深川市2条18番36号　平日 8:30-17:15</div>
+                    <div class="expert-card-v2-address"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>北海道深川市2条18番36号　平日 8:30-17:15</div>
                     <div class="expert-card-v2-footer">
                         <div class="expert-card-v2-cost">
                             <span class="expert-card-v2-cost-label">費用</span>
@@ -6429,7 +6709,7 @@
                 <!-- 深川税務署 -->
                 <div class="expert-card-v2">
                     <div class="expert-card-v2-top">
-                        <div class="expert-card-v2-icon" style="background:#FEF3E8;color:#D4760A;">
+                        <div class="expert-card-v2-icon">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
                         </div>
                         <div class="expert-card-v2-info">
@@ -6445,7 +6725,7 @@
                             <li>農地の納税猶予の特例</li>
                         </ul>
                     </div>
-                    <div class="expert-card-v2-address">北海道深川市4条15番3号　平日 8:30-17:00</div>
+                    <div class="expert-card-v2-address"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>北海道深川市4条15番3号　平日 8:30-17:00</div>
                     <div class="expert-card-v2-footer">
                         <div class="expert-card-v2-cost">
                             <span class="expert-card-v2-cost-label">費用</span>
@@ -6461,7 +6741,7 @@
                 <!-- 旭川地方法務局 -->
                 <div class="expert-card-v2">
                     <div class="expert-card-v2-top">
-                        <div class="expert-card-v2-icon" style="background:#E8F0FE;color:#3B6CE7;">
+                        <div class="expert-card-v2-icon">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
                         </div>
                         <div class="expert-card-v2-info">
@@ -6477,7 +6757,7 @@
                             <li>遺言書の保管確認</li>
                         </ul>
                     </div>
-                    <div class="expert-card-v2-address">北海道旭川市宮前1条3丁目3番15号　平日 8:30-17:15</div>
+                    <div class="expert-card-v2-address"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>北海道旭川市宮前1条3丁目3番15号　平日 8:30-17:15</div>
                     <div class="expert-card-v2-footer">
                         <div class="expert-card-v2-cost">
                             <span class="expert-card-v2-cost-label">費用</span>
@@ -6493,7 +6773,7 @@
                 <!-- 旭川家庭裁判所 深川出張所 -->
                 <div class="expert-card-v2">
                     <div class="expert-card-v2-top">
-                        <div class="expert-card-v2-icon" style="background:#F0E8FE;color:#7C3AED;">
+                        <div class="expert-card-v2-icon">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
                         </div>
                         <div class="expert-card-v2-info">
@@ -6509,7 +6789,7 @@
                             <li>遺産分割調停の申立て</li>
                         </ul>
                     </div>
-                    <div class="expert-card-v2-address">北海道深川市2条1番4号　平日 8:30-17:00</div>
+                    <div class="expert-card-v2-address"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>北海道深川市2条1番4号　平日 8:30-17:00</div>
                     <div class="expert-card-v2-footer">
                         <div class="expert-card-v2-cost">
                             <span class="expert-card-v2-cost-label">費用</span>
@@ -6530,7 +6810,7 @@
                 <!-- 司法書士 -->
                 <div class="expert-card-v2">
                     <div class="expert-card-v2-top">
-                        <div class="expert-card-v2-icon" style="background:#E8F0FE;color:#3B6CE7;">
+                        <div class="expert-card-v2-icon">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                         </div>
                         <div class="expert-card-v2-info">
@@ -6546,7 +6826,7 @@
                             <li>法務局への申請手続き一式</li>
                         </ul>
                     </div>
-                    <div class="expert-card-v2-address">旭川司法書士会：旭川市4条通9丁目</div>
+                    <div class="expert-card-v2-address"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>旭川司法書士会：旭川市4条通9丁目</div>
                     <div class="expert-card-v2-footer">
                         <div class="expert-card-v2-cost">
                             <span class="expert-card-v2-cost-label">費用目安</span>
@@ -6562,7 +6842,7 @@
                 <!-- 税理士 -->
                 <div class="expert-card-v2">
                     <div class="expert-card-v2-top">
-                        <div class="expert-card-v2-icon" style="background:#FEF3E8;color:#D4760A;">
+                        <div class="expert-card-v2-icon">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
                         </div>
                         <div class="expert-card-v2-info">
@@ -6578,7 +6858,7 @@
                             <li>農地の納税猶予・節税アドバイス</li>
                         </ul>
                     </div>
-                    <div class="expert-card-v2-address">北海道税理士会 旭川支部</div>
+                    <div class="expert-card-v2-address"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>北海道税理士会 旭川支部</div>
                     <div class="expert-card-v2-footer">
                         <div class="expert-card-v2-cost">
                             <span class="expert-card-v2-cost-label">費用目安</span>
@@ -6594,7 +6874,7 @@
                 <!-- 弁護士 -->
                 <div class="expert-card-v2">
                     <div class="expert-card-v2-top">
-                        <div class="expert-card-v2-icon" style="background:#F0E8FE;color:#7C3AED;">
+                        <div class="expert-card-v2-icon">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
                         </div>
                         <div class="expert-card-v2-info">
@@ -6610,7 +6890,7 @@
                             <li>相続放棄の手続き支援</li>
                         </ul>
                     </div>
-                    <div class="expert-card-v2-address">旭川弁護士会：旭川市花咲町4丁目</div>
+                    <div class="expert-card-v2-address"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>旭川弁護士会：旭川市花咲町4丁目</div>
                     <div class="expert-card-v2-footer">
                         <div class="expert-card-v2-cost">
                             <span class="expert-card-v2-cost-label">費用目安</span>
@@ -6631,7 +6911,7 @@
                 <!-- 法テラス -->
                 <div class="expert-card-v2">
                     <div class="expert-card-v2-top">
-                        <div class="expert-card-v2-icon" style="background:#E8FEF0;color:#059669;">
+                        <div class="expert-card-v2-icon">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         </div>
                         <div class="expert-card-v2-info">
@@ -8219,7 +8499,7 @@ TR-8505,RN-M10-05,POSSIBLE,Q-FIN-01,Q-FIN-01 contains BANK,Q-FIN-01 == NONE OR (
 TR-8507,RN-M10-07,POSSIBLE,Q-CAR-01,Q-CAR-01 == YES,Q-CAR-01 == NO,,NEED_CONFIRM
 TR-8601,RN-Y3-01,POSSIBLE,Q-RE-01,Q-RE-01 == YES,Q-RE-01 == NO,,NEED_CONFIRM`,
             questions_master: `sort_order,question_id,time_bucket,onboarding_step,question_text,answer_type,options_internal,option_labels,exclusive_options,nullable
-1,Q-REL-01,H24,1,亡くなった方とあなたの関係を教えてください,single_select,SPOUSE;CHILD;PARENT;SIBLING;OTHER_RELATIVE;NON_RELATIVE;UNKNOWN,配偶者（夫・妻）;子;親;兄弟姉妹;その他の親族;親族以外;わからない,,TRUE
+1,Q-REL-01,H24,1,亡くなった方は、あなたにとってどのような関係ですか？,single_select,SPOUSE;PARENT;CHILD;SIBLING;OTHER_RELATIVE;NON_RELATIVE;UNKNOWN,配偶者（夫・妻）;自分の親;自分の子;兄弟姉妹;その他の親族;親族以外;わからない,,TRUE
 2,Q-DOD-01,H24,1,亡くなった日はいつですか？,date,DATE;UNKNOWN,日付入力;わからない,,TRUE
 3,Q-DIG-01,H24,1,故人名義の携帯電話やネット契約、サブスクはありますか？,multi_select,MOBILE;NET;SUBSCRIPTIONS;ACCOUNTS;NONE;UNKNOWN,携帯電話;ネット回線;サブスク（動画・音楽等）;SNS・メールなどのアカウント;どれもない;わからない,NONE;UNKNOWN,TRUE
 4,Q-FUN-STATUS-01,H24,1,葬儀の状況を教えてください,single_select,NOT_DECIDED;ARRANGING;SCHEDULED;COMPLETED;DIRECT_CREMATION;NO_FUNERAL;UNKNOWN,まだ決めていない;準備中;日程が決まった;すでに終わった;火葬のみ行う（直葬）;葬儀は行わない;わからない,,TRUE
@@ -9676,7 +9956,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             'Q-DIG-01': '故人のスマホや請求書を確認してみてください',
             'Q-FUN-STATUS-01': '葬儀社に連絡したか思い出してみてください',
             'Q-ADMIN-DN-01': '死亡届を役場に出したかどうかです',
-            'Q-REL-01': 'あなたと故人との関係（配偶者・子など）です',
+            'Q-REL-01': '亡くなった方はあなたにとって誰か（例：自分の親）です',
             'Q-EMP-01': 'あなたが現在お勤めかどうかです',
             'Q-DECEASED-EMP-01': '故人が亡くなった時点でお仕事をしていたかです',
             'Q-HOUSEHOLD-01': '住民票の世帯主が故人だったかです',
@@ -10314,16 +10594,21 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
             let optsHtml = '';
 
+            var uncertainValues = ['UNKNOWN', 'NONE'];
+            var exclusiveOpts = q.exclusiveOptions || [];
+
             if (q.type === 'single') {
                 q.options.forEach(opt => {
                     const selected = answers[q.id] === opt.value ? ' selected' : '';
-                    optsHtml += `<button class="q-option${selected}" onclick="selectSingle('${q.id}', '${opt.value}')">${opt.label}</button>`;
+                    const isUncertain = uncertainValues.includes(opt.value) || exclusiveOpts.includes(opt.value);
+                    optsHtml += `<button class="q-option${isUncertain ? ' q-option-uncertain' : ''}${selected}" onclick="selectSingle('${q.id}', '${opt.value}')">${opt.label}</button>`;
                 });
                 optsHtml += '<a class="q-skip" onclick="skipQuestion()">あとで回答する</a>';
             } else if (q.type === 'multi') {
                 q.options.forEach(opt => {
                     const selected = answers[q.id] && answers[q.id].includes(opt.value) ? ' selected' : '';
-                    optsHtml += `<button class="q-option${selected}" onclick="selectMulti('${q.id}', '${opt.value}')">${opt.label}</button>`;
+                    const isUncertain = uncertainValues.includes(opt.value) || exclusiveOpts.includes(opt.value);
+                    optsHtml += `<button class="q-option${isUncertain ? ' q-option-uncertain' : ''}${selected}" onclick="selectMulti('${q.id}', '${opt.value}')">${opt.label}</button>`;
                 });
 
                 const isLastQuestion = currentQuestionIndex === onboardingQuestions.length - 1;
@@ -10333,7 +10618,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 optsHtml += '<a class="q-skip" onclick="skipQuestion()">あとで回答する</a>';
             } else if (q.type === 'date') {
                 const value = answers[q.id] || '';
-                optsHtml += `<input type="date" class="q-date-input" id="dateInput" value="${value}" onchange="selectDate('${q.id}', this.value)">`;
+                const todayStr = new Date().toISOString().split('T')[0];
+                optsHtml += `<input type="date" class="q-date-input" id="dateInput" max="${todayStr}" value="${value}" onchange="selectDate('${q.id}', this.value)">`;
 
                 const isLastQuestion = currentQuestionIndex === onboardingQuestions.length - 1;
                 const hasDate = answers[q.id] && answers[q.id].trim() !== '';
@@ -10343,6 +10629,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             }
 
             opts.innerHTML = optsHtml;
+
+            // 選択肢が5個以上ならコンパクトモード
+            if (q.options && q.options.length >= 5) {
+                opts.classList.add('compact');
+            } else {
+                opts.classList.remove('compact');
+            }
         }
 
         function selectSingle(qid, value) {
@@ -10882,18 +11175,21 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         (info.hint ? '<div class="need-confirm-item-hint">💡 ' + info.hint + '</div>' : '') +
                         phoneHtml +
                     '</div>' +
-                    '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>' +
+                    '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')">確認する</button>' +
                 '</div>';
             }
             return '<div class="need-confirm-item" onclick="event.stopPropagation(); showTaskDetail(\'' + t.id + '\')">' +
                 '<div class="need-confirm-item-body">' +
                     '<div class="need-confirm-item-name">' + title + '</div>' +
                 '</div>' +
-                '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>' +
+                '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')">確認する</button>' +
             '</div>';
         }
 
         // ホーム画面レンダリング
+        // 「他OO件を表示」の展開状態を保持
+        window._ncExpandedState = window._ncExpandedState || {};
+
         function buildNeedConfirmSectionHtml(taskList, compact, phaseId) {
             // UNCERTAIN を上に、NEED_CONFIRM/SKIPPED を下にソート
             var sorted = taskList.slice().sort(function(a, b) {
@@ -10909,10 +11205,15 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 var allIds = tasks.map(function(t) { return t.id; });
                 var homeBulkQuestions = buildBulkConfirmQuestions(allIds);
                 var homeBulkMinutes = homeBulkQuestions.length > 0 ? Math.max(1, Math.ceil(homeBulkQuestions.length * 8 / 60)) : 0;
+                // 全カテゴリのNEED_CONFIRMタスク件数を表示
+                var allNeedConfirmCount = tasks.filter(function(t) {
+                    var s = taskStatuses[t.id];
+                    return s === 'NEED_CONFIRM';
+                }).length;
                 let html = '<div class="need-confirm-section home-compact">' +
                     '<div class="need-confirm-header">' +
                         '<div class="need-confirm-header-title">確認が必要な手続き</div>' +
-                        '<div class="need-confirm-header-count">' + sorted.length + '件</div>' +
+                        '<div class="need-confirm-header-count">' + allNeedConfirmCount + '件</div>' +
                     '</div>' +
                     '<p class="need-confirm-desc">いくつかの質問に答えるだけで、あなたに必要な手続きが分かります</p>';
                 if (homeBulkQuestions.length > 0) {
@@ -10933,13 +11234,16 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     '<div class="need-confirm-header-count">' + sorted.length + '件</div>' +
                 '</div>';
             var maxShow = 3;
+            var ncKey = 'nc_' + (phaseId || 'default');
+            var isExpanded = window._ncExpandedState[ncKey] || false;
             html += '<div class="need-confirm-list">';
             sorted.forEach(function(t, idx) {
-                var hidden = idx >= maxShow ? ' style="display:none;" data-nc-extra' : '';
+                var hidden = (!isExpanded && idx >= maxShow) ? ' style="display:none;" data-nc-extra="' + ncKey + '"' : '';
                 html += '<div' + hidden + '>' + renderNeedConfirmItem(t) + '</div>';
             });
             if (sorted.length > maxShow) {
-                html += '<div class="need-confirm-more" onclick="this.style.display=\'none\';this.parentNode.querySelectorAll(\'[data-nc-extra]\').forEach(function(e){e.style.display=\'\';})">他 ' + (sorted.length - maxShow) + ' 件を表示</div>';
+                var moreStyle = isExpanded ? ' style="display:none;"' : '';
+                html += '<div class="need-confirm-more"' + moreStyle + ' onclick="window._ncExpandedState[\'' + ncKey + '\']=true;this.style.display=\'none\';this.parentNode.querySelectorAll(\'[data-nc-extra=\\x22' + ncKey + '\\x22]\').forEach(function(e){e.style.display=\'\';})">他 ' + (sorted.length - maxShow) + ' 件を表示</div>';
             }
             html += '</div>';
             if (bulkQuestions.length > 0) {
@@ -11012,21 +11316,15 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             const phaseMsg = phaseMessagesOneLine[currentPhase] || '';
 
             const progressContainer = document.getElementById('homeProgress');
-            const circumference = 2 * Math.PI * 40; // r=40
-            const dashOffset = circumference - (circumference * progressPercent / 100);
+            const pct = Math.round(progressPercent);
             progressContainer.innerHTML = `
-                <div class="home-progress-ring">
-                    <div class="ring-svg-wrap">
-                        <svg viewBox="0 0 96 96">
-                            <circle class="ring-bg" cx="48" cy="48" r="40"/>
-                            <circle class="ring-fg" cx="48" cy="48" r="40"
-                                stroke-dasharray="${circumference}"
-                                stroke-dashoffset="${dashOffset}"/>
-                        </svg>
-                        <div class="ring-text">${Math.round(progressPercent)}%</div>
+                <div class="home-progress-bar">
+                    <div class="progress-header">
+                        <div class="progress-percent">${pct}<span>%</span></div>
+                        <div class="progress-count"><strong>${completedCount}件</strong>完了 / 全${totalCount}件</div>
                     </div>
-                    <div class="ring-detail">
-                        <strong>${completedCount}件完了</strong> / 全${totalCount}件
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: ${Math.max(pct, 1)}%"></div>
                     </div>
                 </div>
             `;
@@ -13077,8 +13375,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 });
                 optionsHtml += `<button class="confirm-sheet-submit" id="confirmSheetSubmit" disabled onclick="submitConfirmSheetMulti('${questionId}')">決定する</button>`;
             } else if (question.type === 'date') {
+                var todayMax = new Date().toISOString().split('T')[0];
                 optionsHtml = `
-                    <input type="date" id="confirmSheetDateInput" style="width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; margin-bottom: 8px;">
+                    <input type="date" id="confirmSheetDateInput" max="${todayMax}" style="width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; margin-bottom: 8px;">
                     <button class="confirm-sheet-option" style="background: var(--accent); color: white; border-color: var(--accent);" onclick="answerConfirmSheetDate('${questionId}')">回答する</button>
                 `;
             }
@@ -13336,6 +13635,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         function rerenderCurrentScreen() {
             const activeScreen = document.querySelector('.screen.active');
             if (!activeScreen) return;
+            // スクロール位置を保存して復元する
+            var scrollY = window.scrollY || window.pageYOffset || 0;
             if (activeScreen.id === 'screen-home') {
                 renderHome();
             } else if (activeScreen.id === 'screen-guide') {
@@ -13343,6 +13644,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             } else if (activeScreen.id === 'screen-detail' && currentTaskId) {
                 showTaskDetail(currentTaskId);
             }
+            requestAnimationFrame(function() {
+                window.scrollTo(0, scrollY);
+            });
         }
 
         // ── 一括確認ウィザード ──
@@ -13476,7 +13780,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 optionsHtml += '<button class="q-next-btn" id="bulkConfirmSubmit"' + submitDisabled + ' onclick="submitBulkConfirmMulti(\'' + q.questionId + '\')">決定する</button>';
             } else if (q.answerType === 'date') {
                 var dateVal = (typeof existingAnswer === 'string' && existingAnswer.match(/^\d{4}-\d{2}-\d{2}$/)) ? existingAnswer : '';
-                optionsHtml = '<input type="date" class="q-date-input" id="bulkConfirmDateInput" value="' + dateVal + '">' +
+                var todayMax = new Date().toISOString().split('T')[0];
+                optionsHtml = '<input type="date" class="q-date-input" id="bulkConfirmDateInput" max="' + todayMax + '" value="' + dateVal + '">' +
                     '<button class="q-next-btn" onclick="answerBulkConfirmDate(\'' + q.questionId + '\')">回答する</button>';
             }
             optionsHtml += '<a class="q-skip" onclick="skipBulkConfirm()">あとで確認する</a>';
@@ -14123,7 +14428,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 html += `<a class="skip-link" onclick="skipConfirmQuestion()" style="margin-top: 16px; display: block;">あとで回答する</a>`;
             } else if (q.type === 'date') {
                 const value = answers[q.id] || '';
-                html += `<input type="date" class="date-input" id="confirmDateInput" value="${value}" onchange="selectDateConfirm('${q.id}', this.value)">`;
+                const todayStr = new Date().toISOString().split('T')[0];
+                html += `<input type="date" class="date-input" id="confirmDateInput" max="${todayStr}" value="${value}" onchange="selectDateConfirm('${q.id}', this.value)">`;
 
                 const isLastQuestion = currentConfirmIndex === confirmQuestions.length - 1;
                 const hasDate = answers[q.id] && answers[q.id].trim() !== '';
@@ -14241,6 +14547,10 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 showTaskDetail(currentTaskId);
                 return;
             }
+            if (confirmSourceScreen === 'screen-answer-summary') {
+                showAnswerSummary();
+                return;
+            }
             showScreen(confirmSourceScreen);
             restoreConfirmScrollPosition();
         }
@@ -14279,7 +14589,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     `;
                 } else {
                     // 通常モード（確認センターから直接開いた場合）
-                    const returnLabel = confirmSourceScreen === 'screen-guide' ? 'おくやみガイドへ戻る' : 'ホームへ戻る';
+                    const returnLabel = confirmSourceScreen === 'screen-guide' ? 'おくやみガイドへ戻る' : confirmSourceScreen === 'screen-answer-summary' ? '回答一覧へ戻る' : 'ホームへ戻る';
                     completionScreen.innerHTML = `
                         <div class="confirm-completion-content">
                             <div class="heading-lg" style="text-align: center; margin-bottom: 16px;">確認が完了しました</div>
@@ -14318,6 +14628,10 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     showTaskDetail(currentTaskId);
                     return;
                 }
+                if (confirmSourceScreen === 'screen-answer-summary') {
+                    showAnswerSummary();
+                    return;
+                }
                 showScreen(confirmSourceScreen);
                 restoreConfirmScrollPosition();
             }
@@ -14343,6 +14657,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 renderHome();
                 renderGuide();
                 showTaskDetail(currentTaskId);
+                return;
+            }
+            if (confirmSourceScreen === 'screen-answer-summary') {
+                regenerateAllTaskStatuses();
+                renderHome();
+                renderGuide();
+                showAnswerSummary();
                 return;
             }
             showScreen(confirmSourceScreen);
@@ -14704,6 +15025,86 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         // 回答リセット関連
+        function showAnswerSummary() {
+            var body = document.getElementById('answerSummaryBody');
+            var answered = 0;
+            var unanswered = 0;
+            questions.forEach(function(q) {
+                var a = answers[q.id];
+                if (a && a !== '' && !(Array.isArray(a) && a.length === 0)) {
+                    answered++;
+                } else {
+                    unanswered++;
+                }
+            });
+
+            var html = '';
+            // 統計
+            html += '<div class="answer-summary-stats">';
+            html += '<div class="answer-summary-stat"><div class="answer-summary-stat-num">' + answered + '</div><div class="answer-summary-stat-label">回答済み</div></div>';
+            html += '<div class="answer-summary-stat"><div class="answer-summary-stat-num">' + unanswered + '</div><div class="answer-summary-stat-label">未回答</div></div>';
+            html += '<div class="answer-summary-stat"><div class="answer-summary-stat-num">' + questions.length + '</div><div class="answer-summary-stat-label">全質問数</div></div>';
+            html += '</div>';
+
+            // フェーズごとにグループ化
+            var phaseOrder = ['H24', 'D7', 'D14', 'D49', 'M3', 'M4', 'M10', 'Y3'];
+            var phaseQuestions = {};
+            questions.forEach(function(q) {
+                var phase = q.domain || 'OTHER';
+                if (!phaseQuestions[phase]) phaseQuestions[phase] = [];
+                phaseQuestions[phase].push(q);
+            });
+
+            phaseOrder.forEach(function(phase) {
+                var qs = phaseQuestions[phase];
+                if (!qs || qs.length === 0) return;
+                var label = timeBucketLabels[phase] || phase;
+                html += '<div class="answer-summary-group">';
+                html += '<div class="answer-summary-group-title">' + label + '</div>';
+                html += '<div class="answer-summary-card">';
+                qs.forEach(function(q) {
+                    var a = answers[q.id];
+                    var displayAnswer = '';
+                    var isUnanswered = false;
+                    if (!a || a === '' || (Array.isArray(a) && a.length === 0)) {
+                        displayAnswer = '未回答';
+                        isUnanswered = true;
+                    } else if (Array.isArray(a)) {
+                        displayAnswer = a.map(function(v) {
+                            var opt = q.options.find(function(o) { return o.value === v; });
+                            return opt ? opt.label : v;
+                        }).join('、');
+                    } else if (q.type === 'date') {
+                        displayAnswer = a;
+                    } else {
+                        var opt = q.options.find(function(o) { return o.value === a; });
+                        displayAnswer = opt ? opt.label : a;
+                    }
+                    html += '<div class="answer-summary-item" onclick="openAnswerEdit(\'' + q.id + '\')">';
+                    html += '<div class="answer-summary-item-left">';
+                    html += '<div class="answer-summary-item-q">' + q.text + '</div>';
+                    html += '<div class="answer-summary-item-a' + (isUnanswered ? ' unanswered' : '') + '">' + displayAnswer + '</div>';
+                    html += '</div>';
+                    html += '<div class="answer-summary-item-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>';
+                    html += '</div>';
+                });
+                html += '</div></div>';
+            });
+
+            // リセットボタン
+            html += '<div class="answer-summary-reset">';
+            html += '<button class="answer-summary-reset-btn" onclick="resetAnswers()">すべての回答をリセット</button>';
+            html += '</div>';
+
+            body.innerHTML = html;
+            showScreen('screen-answer-summary');
+            window.scrollTo(0, 0);
+        }
+
+        function openAnswerEdit(questionId) {
+            showFilteredQuestions([questionId], 'screen-answer-summary', null);
+        }
+
         function resetAnswers() {
             const dialog = document.getElementById('resetDialog');
             dialog.classList.add('show');
