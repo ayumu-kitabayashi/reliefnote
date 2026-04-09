@@ -12458,14 +12458,14 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         function applyHashState(hash) {
-            // 例: #screen-onboarding/q3, #screen-home
+            // 例: #screen-onboarding/q3, #screen-home, #screen-detail/RN-H24-01
             if (!hash || hash === '#') {
                 return;
             }
             var raw = hash.replace(/^#/, '');
-            var parts = raw.split('/');
-            var screenId = parts[0];
-            var extra = parts[1] || null;
+            var slashIdx = raw.indexOf('/');
+            var screenId = slashIdx === -1 ? raw : raw.slice(0, slashIdx);
+            var extra = slashIdx === -1 ? null : raw.slice(slashIdx + 1);
             if (!document.getElementById(screenId)) return;
 
             _suppressHistoryPush = true;
@@ -12483,6 +12483,23 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                             return;
                         }
                     }
+                }
+                // タスク詳細の復元: #screen-detail/<taskId>
+                if (screenId === 'screen-detail') {
+                    var restoreTaskId = extra;
+                    var taskExists = restoreTaskId && typeof tasks !== 'undefined'
+                        && tasks.some(function(t) { return t.id === restoreTaskId; });
+                    if (taskExists && typeof showTaskDetail === 'function') {
+                        showTaskDetail._skipStack = true;
+                        showTaskDetail(restoreTaskId);
+                        showTaskDetail._skipStack = false;
+                        _suppressHistoryPush = false;
+                        return;
+                    }
+                    // taskIdが無い/無効 → 一覧にフォールバック
+                    showScreen('screen-guide');
+                    _suppressHistoryPush = false;
+                    return;
                 }
                 showScreen(screenId);
             } finally {
@@ -15472,6 +15489,14 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             updatePinButtonState(taskId);
 
             showScreen('screen-detail');
+
+            // URLハッシュにtaskIdを含めてリロード時に復元できるようにする
+            try {
+                var _detailHash = '#screen-detail/' + taskId;
+                if (location.hash !== _detailHash) {
+                    history.replaceState({ screen: 'screen-detail', extra: taskId }, '', _detailHash);
+                }
+            } catch (e) {}
 
             // 念のため：タスク詳細画面でも必ずフッターナビ（4タブ）を表示する
             const _footerNavEl = document.querySelector('.footer-nav');
@@ -19119,6 +19144,8 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 var curHash = '#' + sid;
                 if (sid === 'screen-onboarding' && typeof currentQuestionIndex !== 'undefined') {
                     curHash += '/q' + currentQuestionIndex;
+                } else if (sid === 'screen-detail' && currentTaskId) {
+                    curHash += '/' + currentTaskId;
                 }
                 if (location.hash !== curHash) {
                     history.replaceState({ screen: sid }, '', curHash);
