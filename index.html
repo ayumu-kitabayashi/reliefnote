@@ -26,6 +26,12 @@
             --warning-light: rgba(196, 89, 60, 0.1);
             --border: #E8E5E1;
             --border-light: #E8E5E1;
+            --breath-inhale: #5B8C6A;
+            --breath-inhale-light: rgba(91, 140, 106, 0.12);
+            --breath-hold: #6A9B9E;
+            --breath-hold-light: rgba(106, 155, 158, 0.12);
+            --breath-exhale: #A68B6B;
+            --breath-exhale-light: rgba(166, 139, 107, 0.12);
         }
 
         * {
@@ -4472,9 +4478,9 @@
         }
 
         .overdue-summary {
-            margin: 16px 20px;
+            margin: 8px 20px;
             background: var(--warning-light);
-            padding: 12px 16px;
+            padding: 8px 12px;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -4494,6 +4500,11 @@
             font-size: 12px;
             cursor: pointer;
             padding: 4px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-expand.expanded {
+            transform: rotate(180deg);
         }
 
         .overdue-tasks-list {
@@ -4519,7 +4530,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
+            margin-bottom: 12px;
         }
 
         .month-nav-btn {
@@ -4547,11 +4558,39 @@
             letter-spacing: -0.3px;
         }
 
+        .calendar-quick-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .today-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .today-btn:hover {
+            background: var(--accent-light);
+        }
+
+        .calendar-month-summary {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
         .calendar-grid {
             background: var(--bg-primary);
             border: 1px solid var(--border-light);
             border-radius: 16px;
-            padding: 20px;
+            padding: 12px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
@@ -4566,23 +4605,31 @@
             font-size: 12px;
             font-weight: 600;
             color: var(--text-tertiary);
-            padding: 10px 0;
+            padding: 6px 0;
             letter-spacing: 0.5px;
+        }
+
+        .calendar-weekday:first-child {
+            color: #d47272;
+        }
+
+        .calendar-weekday:last-child {
+            color: #6b8ec2;
         }
 
         .calendar-dates {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
+            gap: 3px;
         }
 
         .calendar-date-cell {
-            min-height: 72px;
+            min-height: 48px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px 4px;
+            padding: 4px 2px;
             cursor: pointer;
             border-radius: 10px;
             transition: all 0.2s;
@@ -4601,15 +4648,28 @@
         }
 
         .calendar-date-cell.other-month {
-            opacity: 0.2;
+            opacity: 0.35;
             pointer-events: none;
         }
 
         .calendar-date-number {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
             color: var(--text-primary);
-            margin-bottom: 6px;
+            margin-bottom: 2px;
+        }
+
+        .calendar-date-cell:nth-child(7n+1) .calendar-date-number {
+            color: #d47272;
+        }
+
+        .calendar-date-cell:nth-child(7n) .calendar-date-number {
+            color: #6b8ec2;
+        }
+
+        .calendar-date-cell.past:not(.today):nth-child(7n+1) .calendar-date-number,
+        .calendar-date-cell.past:not(.today):nth-child(7n) .calendar-date-number {
+            opacity: 0.6;
         }
 
         .calendar-date-cell.past:not(.today) .calendar-date-number {
@@ -4619,9 +4679,9 @@
 
         .calendar-date-cell.today .calendar-date-number {
             background: var(--accent);
-            color: white;
-            width: 32px;
-            height: 32px;
+            color: white !important;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -4630,32 +4690,38 @@
             box-shadow: 0 2px 6px rgba(58, 63, 50, 0.3);
         }
 
-        .calendar-date-dots {
+        .calendar-task-badge {
+            font-size: 10px;
+            font-weight: 600;
+            min-width: 18px;
+            height: 16px;
+            border-radius: 8px;
             display: flex;
-            gap: 4px;
-            margin-top: auto;
-        }
-
-        .calendar-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
             background: var(--accent);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            color: white;
+            line-height: 1;
         }
 
-        .calendar-dot.overdue {
+        .calendar-task-badge.has-overdue {
             background: var(--warning);
         }
 
-        .calendar-dot.done {
-            background: var(--text-tertiary);
-            opacity: 0.5;
+        .calendar-task-badge.all-done {
+            background: transparent;
+            color: var(--text-tertiary);
+            opacity: 0.6;
         }
 
         .selected-date-tasks {
-            margin: 16px 20px;
+            margin: 12px 0 0 0;
+            padding: 16px;
             padding-bottom: 80px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
         }
 
         .selected-date-header {
@@ -6751,38 +6817,157 @@
             cursor: pointer;
         }
         .grief-breathing-card.running { cursor: default; }
+
+        /* 呼吸円 コンテナ */
+        .breathing-circle-wrap {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 14px;
+            position: relative;
+        }
+        .breathing-ring-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            transform: rotate(-90deg);
+        }
+        .breathing-ring-bg {
+            fill: none;
+            stroke: var(--border-light);
+            stroke-width: 4;
+        }
+        .breathing-ring-progress {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-dasharray: 408.41;
+            stroke-dashoffset: 408.41;
+            transition: stroke 0.4s ease;
+        }
+
+        /* 内側の円 */
         .breathing-circle {
             width: 100px;
             height: 100px;
             border-radius: 50%;
             background: var(--accent-light);
-            border: 3px solid var(--accent);
-            margin: 0 auto 16px;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(1);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--accent);
-            transition: transform 0.5s ease;
+            transition: background 0.4s ease, box-shadow 0.4s ease;
         }
         .breathing-circle.inhale {
+            background: var(--breath-inhale-light);
+            box-shadow: 0 0 20px rgba(91, 140, 106, 0.25);
             animation: breatheIn 4s ease-in-out forwards;
         }
         .breathing-circle.hold {
-            transform: scale(1.4);
+            background: var(--breath-hold-light);
+            box-shadow: 0 0 20px rgba(106, 155, 158, 0.25);
+            transform: translate(-50%, -50%) scale(1.3);
+            animation: holdPulse 2s ease-in-out infinite;
         }
         .breathing-circle.exhale {
-            animation: breatheOut 8s ease-in-out forwards;
+            background: var(--breath-exhale-light);
+            box-shadow: 0 0 20px rgba(166, 139, 107, 0.25);
+            animation: breatheOut 6s ease-in-out forwards;
         }
+        .breathing-circle.complete {
+            background: var(--breath-inhale-light);
+        }
+
         @keyframes breatheIn {
-            from { transform: scale(1); }
-            to { transform: scale(1.4); }
+            from { transform: translate(-50%, -50%) scale(1); }
+            to { transform: translate(-50%, -50%) scale(1.3); }
         }
         @keyframes breatheOut {
-            from { transform: scale(1.4); }
-            to { transform: scale(1); }
+            from { transform: translate(-50%, -50%) scale(1.3); }
+            to { transform: translate(-50%, -50%) scale(1); }
         }
+        @keyframes holdPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1.3); }
+            50% { transform: translate(-50%, -50%) scale(1.25); }
+        }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 円内テキスト */
+        .breathing-phase-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--accent);
+            line-height: 1.3;
+            transition: color 0.4s ease;
+        }
+        .breathing-circle.inhale .breathing-phase-text { color: var(--breath-inhale); }
+        .breathing-circle.hold .breathing-phase-text { color: var(--breath-hold); }
+        .breathing-circle.exhale .breathing-phase-text { color: var(--breath-exhale); }
+        .breathing-countdown {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* フェーズドット（吸う・止める・吐く） */
+        .breathing-phase-dots {
+            display: none;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 10px;
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+        .grief-breathing-card.running .breathing-phase-dots { display: flex; }
+        .breathing-phase-dot {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.3s ease;
+        }
+        .breathing-phase-dot::before {
+            content: '';
+            display: inline-block;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--border-light);
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .breathing-phase-dot.active { color: var(--text-primary); font-weight: 600; }
+        .breathing-phase-dot.active.phase-inhale::before { background: var(--breath-inhale); transform: scale(1.4); }
+        .breathing-phase-dot.active.phase-hold::before { background: var(--breath-hold); transform: scale(1.4); }
+        .breathing-phase-dot.active.phase-exhale::before { background: var(--breath-exhale); transform: scale(1.4); }
+
+        /* サイクルドット */
+        .breathing-cycle-dots {
+            display: none;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .grief-breathing-card.running .breathing-cycle-dots { display: flex; }
+        .breathing-cycle-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            border: 1.5px solid var(--accent);
+            background: transparent;
+            transition: background 0.3s ease;
+        }
+        .breathing-cycle-dot.current {
+            background: rgba(58, 63, 50, 0.3);
+        }
+        .breathing-cycle-dot.filled {
+            background: var(--accent);
+        }
+
+        /* テキスト要素 */
         .breathing-instruction {
             font-size: 15px;
             color: var(--text-secondary);
@@ -6794,10 +6979,47 @@
             color: var(--accent);
             font-weight: 500;
         }
-        .breathing-counter {
-            font-size: 13px;
+        .breathing-stop-text {
+            display: none;
+            font-size: 12px;
             color: var(--text-tertiary);
-            margin-top: 8px;
+            margin-top: 4px;
+        }
+        .grief-breathing-card.running .breathing-stop-text { display: block; }
+        .grief-breathing-card.running .breathing-instruction { display: none; }
+        .grief-breathing-card.running .breathing-start-text { display: none; }
+
+        /* 完了メッセージ */
+        .breathing-complete-msg {
+            display: none;
+            animation: fadeSlideUp 0.5s ease;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .breathing-complete-msg.show { display: block; }
+        .breathing-complete-check {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+        .breathing-complete-text {
+            font-size: 15px;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .breathing-complete-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        .breathing-restart-link {
+            font-size: 13px;
+            color: var(--accent);
+            cursor: pointer;
+            text-decoration: underline;
+            background: none;
+            border: none;
+            padding: 0;
         }
 
         /* 週間トレンドメッセージ */
@@ -9989,6 +10211,12 @@
                     <button class="month-nav-btn" onclick="changeMonth(1)">＞</button>
                 </div>
 
+                <!-- 今日ボタン + 月サマリー -->
+                <div class="calendar-quick-nav">
+                    <button class="today-btn" onclick="goToToday()">今日</button>
+                    <span class="calendar-month-summary" id="calendarMonthSummary"></span>
+                </div>
+
                 <!-- カレンダーグリッド -->
                 <div class="calendar-grid">
                     <!-- 曜日ヘッダー -->
@@ -10007,12 +10235,12 @@
                         <!-- JavaScriptで動的生成 -->
                     </div>
                 </div>
-            </div>
 
-            <!-- 選択日のタスクリスト -->
-            <div id="selectedDateTasks" class="selected-date-tasks" style="display: none;">
-                <div class="selected-date-header" id="selectedDateHeader">2月15日（土）のタスク</div>
-                <div id="selectedDateTasksList"></div>
+                <!-- 選択日のタスクリスト -->
+                <div id="selectedDateTasks" class="selected-date-tasks" style="display: none;">
+                    <div class="selected-date-header" id="selectedDateHeader">2月15日（土）のタスク</div>
+                    <div id="selectedDateTasksList"></div>
+                </div>
             </div>
         </div>
 
@@ -10383,13 +10611,36 @@
                         <!-- 呼吸エクササイズ -->
                         <div class="grief-card grief-breathing-section">
                             <h3 class="grief-section-title">ひと息つく</h3>
-                            <div class="grief-breathing-card" id="breathingCard" onclick="startBreathingExercise()">
-                                <div class="breathing-circle" id="breathingCircle">
-                                    <span id="breathingLabel">深呼吸</span>
+                            <div class="grief-breathing-card" id="breathingCard" onclick="handleBreathingTap()">
+                                <div class="breathing-circle-wrap" id="breathingWrap">
+                                    <svg class="breathing-ring-svg" viewBox="0 0 140 140">
+                                        <circle class="breathing-ring-bg" cx="70" cy="70" r="65"/>
+                                        <circle class="breathing-ring-progress" id="breathingRing" cx="70" cy="70" r="65"/>
+                                    </svg>
+                                    <div class="breathing-circle" id="breathingCircle">
+                                        <span class="breathing-phase-text" id="breathingPhaseText">深呼吸</span>
+                                        <span class="breathing-countdown" id="breathingCountdown"></span>
+                                    </div>
+                                </div>
+                                <div class="breathing-phase-dots" id="breathingPhaseDots">
+                                    <span class="breathing-phase-dot phase-inhale" data-phase="inhale">吸う</span>
+                                    <span class="breathing-phase-dot phase-hold" data-phase="hold">止める</span>
+                                    <span class="breathing-phase-dot phase-exhale" data-phase="exhale">吐く</span>
                                 </div>
                                 <p class="breathing-instruction">ゆっくり呼吸して、ひと息つきましょう</p>
                                 <span class="breathing-start-text" id="breathingStartText">タップして始める</span>
-                                <p class="breathing-counter" id="breathingCounter" style="display:none;"></p>
+                                <span class="breathing-stop-text" id="breathingStopText">タップして中断する</span>
+                                <div class="breathing-cycle-dots" id="breathingCycleDots">
+                                    <span class="breathing-cycle-dot" data-cycle="0"></span>
+                                    <span class="breathing-cycle-dot" data-cycle="1"></span>
+                                    <span class="breathing-cycle-dot" data-cycle="2"></span>
+                                </div>
+                                <div class="breathing-complete-msg" id="breathingCompleteMsg">
+                                    <div class="breathing-complete-check" aria-hidden="true">&#10003;</div>
+                                    <p class="breathing-complete-text">おつかれさまでした</p>
+                                    <p class="breathing-complete-sub">3サイクル完了しました</p>
+                                    <button type="button" class="breathing-restart-link" onclick="event.stopPropagation();resetBreathingUI()">もう一度行う</button>
+                                </div>
                             </div>
                         </div>
 
@@ -11456,65 +11707,209 @@
         }
 
         // ====== 呼吸エクササイズ ======
-        var _breathingTimer = null;
-        var _breathingCycles = 0;
-        var _breathingRunning = false;
+        var _breathState = {
+            running: false,
+            cycle: 0,
+            phase: null,       // 'inhale' | 'hold' | 'exhale'
+            phaseStart: 0,
+            phaseDuration: 0,
+            rafId: null,
+            timers: []
+        };
 
+        var BREATH_PHASES = [
+            { name: 'inhale',  label: '吸う…',   duration: 4000 },
+            { name: 'hold',    label: '止める…', duration: 4000 },
+            { name: 'exhale',  label: '吐く…',   duration: 6000 }
+        ];
+
+        var BREATH_RING_CIRCUMFERENCE = 2 * Math.PI * 65; // ~408.41
+
+        function handleBreathingTap() {
+            if (_breathState.running) {
+                cancelBreathingExercise();
+            } else {
+                var completeMsg = document.getElementById('breathingCompleteMsg');
+                if (completeMsg && completeMsg.classList.contains('show')) {
+                    resetBreathingUI();
+                } else {
+                    startBreathingExercise();
+                }
+            }
+        }
+
+        // 後方互換: 外部から呼ばれる箇所がある
         function startBreathingExercise() {
-            if (_breathingRunning) return;
-            _breathingRunning = true;
-            _breathingCycles = 0;
+            if (_breathState.running) return;
+            _breathState.running = true;
+            _breathState.cycle = 0;
             var card = document.getElementById('breathingCard');
             if (card) card.classList.add('running');
-            var startText = document.getElementById('breathingStartText');
-            if (startText) startText.style.display = 'none';
-            var counter = document.getElementById('breathingCounter');
-            if (counter) counter.style.display = '';
-            runBreathingCycle();
+            // 完了メッセージが残っていたら隠す
+            var completeMsg = document.getElementById('breathingCompleteMsg');
+            if (completeMsg) completeMsg.classList.remove('show');
+            // 円ラップを表示
+            var wrap = document.getElementById('breathingWrap');
+            if (wrap) wrap.style.display = '';
+            updateCycleDots();
+            runNextPhase(0);
         }
 
-        function runBreathingCycle() {
-            if (_breathingCycles >= 3) {
-                stopBreathingExercise();
+        function runNextPhase(phaseIndex) {
+            if (!_breathState.running) return;
+            if (phaseIndex >= BREATH_PHASES.length) {
+                // サイクル完了
+                _breathState.cycle++;
+                updateCycleDots();
+                if (_breathState.cycle >= 3) {
+                    completeBreathingExercise();
+                    return;
+                }
+                runNextPhase(0);
                 return;
             }
-            var circle = document.getElementById('breathingCircle');
-            var label = document.getElementById('breathingLabel');
-            var counter = document.getElementById('breathingCounter');
-            if (counter) counter.textContent = (_breathingCycles + 1) + ' / 3 回';
 
-            // Inhale 4s
-            circle.className = 'breathing-circle inhale';
-            label.textContent = '吸う…';
-            _breathingTimer = setTimeout(function() {
-                // Hold 7s
-                circle.className = 'breathing-circle hold';
-                label.textContent = '止める…';
-                _breathingTimer = setTimeout(function() {
-                    // Exhale 8s
-                    circle.className = 'breathing-circle exhale';
-                    label.textContent = '吐く…';
-                    _breathingTimer = setTimeout(function() {
-                        _breathingCycles++;
-                        runBreathingCycle();
-                    }, 8000);
-                }, 7000);
-            }, 4000);
+            var p = BREATH_PHASES[phaseIndex];
+            _breathState.phase = p.name;
+            _breathState.phaseStart = performance.now();
+            _breathState.phaseDuration = p.duration;
+
+            var circle = document.getElementById('breathingCircle');
+            var phaseText = document.getElementById('breathingPhaseText');
+            var ring = document.getElementById('breathingRing');
+
+            // 円のクラスをフェーズに合わせる
+            if (circle) circle.className = 'breathing-circle ' + p.name;
+            if (phaseText) phaseText.textContent = p.label;
+
+            // リングの色をフェーズに合わせる
+            if (ring) {
+                var colors = { inhale: 'var(--breath-inhale)', hold: 'var(--breath-hold)', exhale: 'var(--breath-exhale)' };
+                ring.style.stroke = colors[p.name] || 'var(--accent)';
+            }
+
+            // フェーズドット更新
+            updatePhaseDots(p.name);
+
+            // アニメーションフレーム開始
+            animateBreathingProgress();
+
+            // 次のフェーズへのタイマー
+            var tid = setTimeout(function() {
+                runNextPhase(phaseIndex + 1);
+            }, p.duration);
+            _breathState.timers.push(tid);
         }
 
-        function stopBreathingExercise() {
-            _breathingRunning = false;
-            if (_breathingTimer) clearTimeout(_breathingTimer);
-            var circle = document.getElementById('breathingCircle');
-            var label = document.getElementById('breathingLabel');
-            var startText = document.getElementById('breathingStartText');
-            var counter = document.getElementById('breathingCounter');
+        function animateBreathingProgress() {
+            if (!_breathState.running) return;
+            var now = performance.now();
+            var elapsed = now - _breathState.phaseStart;
+            var progress = Math.min(elapsed / _breathState.phaseDuration, 1);
+
+            // リングのstroke-dashoffset更新
+            var ring = document.getElementById('breathingRing');
+            if (ring) {
+                var offset = BREATH_RING_CIRCUMFERENCE * (1 - progress);
+                ring.style.strokeDashoffset = offset;
+            }
+
+            // カウントダウン更新
+            var countdown = document.getElementById('breathingCountdown');
+            if (countdown) {
+                var remaining = Math.ceil((_breathState.phaseDuration - elapsed) / 1000);
+                if (remaining < 0) remaining = 0;
+                countdown.textContent = remaining;
+            }
+
+            if (progress < 1 && _breathState.running) {
+                _breathState.rafId = requestAnimationFrame(animateBreathingProgress);
+            }
+        }
+
+        function updatePhaseDots(activePhase) {
+            var dots = document.querySelectorAll('.breathing-phase-dot');
+            for (var i = 0; i < dots.length; i++) {
+                if (dots[i].getAttribute('data-phase') === activePhase) {
+                    dots[i].classList.add('active');
+                } else {
+                    dots[i].classList.remove('active');
+                }
+            }
+        }
+
+        function updateCycleDots() {
+            var dots = document.querySelectorAll('.breathing-cycle-dot');
+            for (var i = 0; i < dots.length; i++) {
+                var idx = parseInt(dots[i].getAttribute('data-cycle'), 10);
+                dots[i].classList.remove('current', 'filled');
+                if (idx < _breathState.cycle) {
+                    dots[i].classList.add('filled');
+                } else if (idx === _breathState.cycle && _breathState.running) {
+                    dots[i].classList.add('current');
+                }
+            }
+        }
+
+        function cancelBreathingExercise() {
+            _breathState.running = false;
+            if (_breathState.rafId) cancelAnimationFrame(_breathState.rafId);
+            for (var i = 0; i < _breathState.timers.length; i++) {
+                clearTimeout(_breathState.timers[i]);
+            }
+            _breathState.timers = [];
+            _breathState.phase = null;
+            _breathState.cycle = 0;
+            resetBreathingUI();
+        }
+
+        function completeBreathingExercise() {
+            _breathState.running = false;
+            if (_breathState.rafId) cancelAnimationFrame(_breathState.rafId);
+            _breathState.phase = null;
+
             var card = document.getElementById('breathingCard');
-            if (circle) circle.className = 'breathing-circle';
-            if (label) label.textContent = '深呼吸';
-            if (startText) { startText.textContent = 'おつかれさまでした。もう一度'; startText.style.display = ''; }
-            if (counter) counter.style.display = 'none';
             if (card) card.classList.remove('running');
+
+            // 円を隠し、完了メッセージを表示
+            var wrap = document.getElementById('breathingWrap');
+            if (wrap) wrap.style.display = 'none';
+            var completeMsg = document.getElementById('breathingCompleteMsg');
+            if (completeMsg) completeMsg.classList.add('show');
+        }
+
+        function resetBreathingUI() {
+            _breathState.running = false;
+            _breathState.cycle = 0;
+            _breathState.phase = null;
+            if (_breathState.rafId) cancelAnimationFrame(_breathState.rafId);
+            for (var i = 0; i < _breathState.timers.length; i++) {
+                clearTimeout(_breathState.timers[i]);
+            }
+            _breathState.timers = [];
+
+            var card = document.getElementById('breathingCard');
+            if (card) card.classList.remove('running');
+            var circle = document.getElementById('breathingCircle');
+            if (circle) circle.className = 'breathing-circle';
+            var phaseText = document.getElementById('breathingPhaseText');
+            if (phaseText) phaseText.textContent = '深呼吸';
+            var countdown = document.getElementById('breathingCountdown');
+            if (countdown) countdown.textContent = '';
+            var ring = document.getElementById('breathingRing');
+            if (ring) {
+                ring.style.strokeDashoffset = BREATH_RING_CIRCUMFERENCE;
+                ring.style.stroke = 'var(--accent)';
+            }
+            var wrap = document.getElementById('breathingWrap');
+            if (wrap) wrap.style.display = '';
+            var completeMsg = document.getElementById('breathingCompleteMsg');
+            if (completeMsg) completeMsg.classList.remove('show');
+            // フェーズドット・サイクルドットもリセット
+            var pDots = document.querySelectorAll('.breathing-phase-dot');
+            for (var i = 0; i < pDots.length; i++) pDots[i].classList.remove('active');
+            var cDots = document.querySelectorAll('.breathing-cycle-dot');
+            for (var j = 0; j < cDots.length; j++) cDots[j].classList.remove('current', 'filled');
         }
 
         // ====== 記録後のケア提案 ======
@@ -11597,7 +11992,7 @@
 
         function goBackFromGrief() {
             // 呼吸エクササイズが実行中なら停止
-            if (_breathingRunning) stopBreathingExercise();
+            if (_breathState.running) cancelBreathingExercise();
             showScreen(_griefReturnScreen || 'screen-home');
         }
 
@@ -20212,6 +20607,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         let currentCalendarYear = new Date().getFullYear();
         let currentCalendarMonth = new Date().getMonth();
         let selectedDate = null;
+        let _calendarInitialized = false;
 
         function showCalendar() {
             // 死亡日が入力されているか確認
@@ -20228,9 +20624,12 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 noDateMessage.style.display = 'none';
                 calendarContainer.style.display = 'block';
 
-                // 現在の年月でカレンダーを表示
-                currentCalendarYear = new Date().getFullYear();
-                currentCalendarMonth = new Date().getMonth();
+                // 初回のみ今月に設定、以降は前回の月を記憶
+                if (!_calendarInitialized) {
+                    currentCalendarYear = new Date().getFullYear();
+                    currentCalendarMonth = new Date().getMonth();
+                    _calendarInitialized = true;
+                }
                 renderCalendar();
 
                 // 期限切れタスクをチェック
@@ -20238,6 +20637,21 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             }
 
             showScreen('screen-calendar');
+        }
+
+        function goToToday() {
+            const today = new Date();
+            currentCalendarYear = today.getFullYear();
+            currentCalendarMonth = today.getMonth();
+            renderCalendar();
+
+            // 今日のセルを自動選択
+            setTimeout(() => {
+                const todayCell = document.querySelector('.calendar-date-cell.today');
+                if (todayCell) {
+                    todayCell.click();
+                }
+            }, 50);
         }
 
         function goToDeathDateQuestion() {
@@ -20314,12 +20728,53 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 datesContainer.appendChild(cell);
             }
 
-            // 次月の日付を埋める
-            const totalCells = datesContainer.children.length;
-            const remainingCells = 42 - totalCells; // 6週間分
+            // 動的行数: 5行で収まるなら5行、そうでなければ6行
+            const totalCurrentCells = datesContainer.children.length;
+            const targetCells = totalCurrentCells <= 35 ? 35 : 42;
+            const remainingCells = targetCells - totalCurrentCells;
             for (let day = 1; day <= remainingCells; day++) {
                 const cell = createDateCell(day, true, null);
                 datesContainer.appendChild(cell);
+            }
+
+            // 月サマリーを更新
+            updateMonthSummary();
+        }
+
+        function updateMonthSummary() {
+            const summaryEl = document.getElementById('calendarMonthSummary');
+            if (!summaryEl) return;
+
+            const deathDate = answers['Q-DOD-01'];
+            if (!deathDate) {
+                summaryEl.textContent = '';
+                return;
+            }
+
+            const death = new Date(deathDate);
+            let totalCount = 0;
+            let doneCount = 0;
+
+            tasks.forEach(task => {
+                const status = taskStatuses[task.id] || determineTaskStatus(task);
+                if (status === 'NOT_APPLICABLE') return;
+
+                const deadline = getTaskDeadline(task, death);
+                if (!deadline) return;
+
+                deadline.setHours(0, 0, 0, 0);
+                if (deadline.getFullYear() === currentCalendarYear && deadline.getMonth() === currentCalendarMonth) {
+                    totalCount++;
+                    if (status === 'DONE' || status === 'AUTO_DONE') {
+                        doneCount++;
+                    }
+                }
+            });
+
+            if (totalCount > 0) {
+                summaryEl.textContent = `この月: ${doneCount}/${totalCount} 完了`;
+            } else {
+                summaryEl.textContent = 'この月: タスクなし';
             }
         }
 
@@ -20335,41 +20790,37 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             dayNumber.textContent = day;
             cell.appendChild(dayNumber);
 
-            // タスクのドットインジケーター
+            // タスクバッジ（件数表示）
             if (!isOtherMonth && date) {
                 const tasksForDate = getTasksForDate(date);
                 if (tasksForDate.length > 0) {
-                    const dotsContainer = document.createElement('div');
-                    dotsContainer.className = 'calendar-date-dots';
+                    const badge = document.createElement('div');
+                    badge.className = 'calendar-task-badge';
+                    badge.textContent = tasksForDate.length;
 
-                    // タスクの状態を判定
+                    // 状態判定: overdue > all-done > default
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
                     const hasOverdue = tasksForDate.some(t => {
                         const status = taskStatuses[t.id] || determineTaskStatus(t);
-                        return status !== 'DONE' && status !== 'AUTO_DONE' && date < new Date();
+                        return status !== 'DONE' && status !== 'AUTO_DONE' && date < today;
                     });
                     const allDone = tasksForDate.every(t => {
                         const status = taskStatuses[t.id] || determineTaskStatus(t);
                         return status === 'DONE' || status === 'AUTO_DONE';
                     });
 
-                    // ドット数を決定
-                    const dotCount = tasksForDate.length >= 3 ? 2 : 1;
-                    for (let i = 0; i < dotCount; i++) {
-                        const dot = document.createElement('div');
-                        dot.className = 'calendar-dot';
-                        if (hasOverdue) {
-                            dot.classList.add('overdue');
-                        } else if (allDone) {
-                            dot.classList.add('done');
-                        }
-                        dotsContainer.appendChild(dot);
+                    if (hasOverdue) {
+                        badge.classList.add('has-overdue');
+                    } else if (allDone) {
+                        badge.classList.add('all-done');
                     }
 
-                    cell.appendChild(dotsContainer);
+                    cell.appendChild(badge);
                 }
 
                 // タップイベント
-                cell.onclick = () => selectCalendarDate(date);
+                cell.onclick = (e) => selectCalendarDate(date, e);
             }
 
             return cell;
@@ -20396,14 +20847,16 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             });
         }
 
-        function selectCalendarDate(date) {
+        function selectCalendarDate(date, e) {
             selectedDate = date;
 
             // 選択状態を更新
             document.querySelectorAll('.calendar-date-cell').forEach(cell => {
                 cell.classList.remove('selected');
             });
-            event.currentTarget.classList.add('selected');
+            if (e && e.currentTarget) {
+                e.currentTarget.classList.add('selected');
+            }
 
             // タスクリストを表示
             const tasksForDate = getTasksForDate(date);
@@ -20463,7 +20916,12 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         function toggleOverdueTasks() {
             const overdueTasksList = document.getElementById('overdueTasksList');
+            const expandBtn = document.querySelector('.btn-expand');
             const isVisible = overdueTasksList.style.display === 'block';
+
+            if (expandBtn) {
+                expandBtn.classList.toggle('expanded', !isVisible);
+            }
 
             if (isVisible) {
                 overdueTasksList.style.display = 'none';
