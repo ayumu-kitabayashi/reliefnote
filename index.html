@@ -773,6 +773,24 @@
         }
         .home-header > * { position: relative; z-index: 1; }
 
+        .home-admin-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #F7F5F0;
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin: 0 16px 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .home-admin-banner-icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
         .header-top {
             display: flex;
             justify-content: flex-end;
@@ -9115,6 +9133,45 @@
         .home-my-assignment-item:last-child {
             border-bottom: none;
         }
+
+        /* ===== LINE Share Button ===== */
+        .family-btn-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            background: #06C755;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        /* ===== Guide Assignee Filter ===== */
+        .guide-assignee-filter {
+            display: flex;
+            gap: 6px;
+            padding: 0 16px 8px;
+        }
+        .assignee-filter-btn {
+            padding: 4px 12px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: transparent;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        .assignee-filter-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
     </style>
 </head>
 <body>
@@ -9325,6 +9382,9 @@
                 <span class="care-team-arrow">›</span>
             </div>
 
+            <!-- 行政案内バナー（北竜町チャネル用） -->
+            <div id="homeAdminBanner"></div>
+
             <!-- 3. 次にやること -->
             <div class="home-today-section">
                 <div class="home-today-card">
@@ -9404,6 +9464,11 @@
                 <button class="tab-btn" onclick="setGuideView('pinned')">ピン留め</button>
                 <div class="guide-tabs-border"></div>
                 <div class="guide-tab-indicator" id="guideTabIndicator"></div>
+            </div>
+            <div class="guide-assignee-filter" id="guideAssigneeFilter" style="display:none;">
+                <button class="assignee-filter-btn active" data-filter="all" onclick="setGuideAssigneeFilter('all')">全員</button>
+                <button class="assignee-filter-btn" data-filter="mine" onclick="setGuideAssigneeFilter('mine')">自分</button>
+                <button class="assignee-filter-btn" data-filter="unassigned" onclick="setGuideAssigneeFilter('unassigned')">未割当</button>
             </div>
             <div id="guideProgress"></div>
             <div id="guideContent"></div>
@@ -10342,6 +10407,10 @@
                 <canvas id="familyQrCanvas" class="family-qr-canvas" width="200" height="200"></canvas>
                 <p class="family-qr-hint">QR コードには暗号鍵が含まれます。<br>信頼できる家族にのみ見せてください。</p>
             </div>
+            <button type="button" class="family-btn-line" id="familyInviteLineBtn" onclick="shareViaLine()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 5.83 2 10.5c0 4.08 3.42 7.5 8.05 8.32.31.07.74.21.85.48.1.25.06.63.03.88l-.14.82c-.04.25-.2.96.84.52 1.04-.43 5.6-3.3 7.64-5.65C21.22 13.73 22 12.18 22 10.5 22 5.83 17.52 2 12 2z"/></svg>
+                LINEで送る
+            </button>
             <button type="button" class="family-btn-share" id="familyInviteShareBtn" onclick="shareFamilyInviteUrl()" style="display:none;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                 LINE やメッセージで送る
@@ -14306,6 +14375,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             return "jitaku";
         }
 
+        // 役場窓口タスクかどうか判定
+        function _isMunicipalOfficeTask(task) {
+            if (typeof getTaskDestinationGroup !== 'function') return false;
+            var group = getTaskDestinationGroup(task);
+            return group === 'hokuryu_yakuba' || group === 'yakuba';
+        }
+
         let onboardingQuestions = [];
 
         // 確認センター用（残り19問）
@@ -14351,6 +14427,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         let currentTaskId = null;
         let confirmReturnPhase = null; // 確認センターから戻る時のスクロール先フェーズ
         let savedScrollPosition = 0; // タスク詳細から戻る時のスクロール位置
+        var _guideAssigneeFilter = 'all'; // 'all' / 'mine' / 'unassigned'
         let detailReturnScreen = ''; // タスク詳細から戻る先の画面ID
         let detailNavStack = []; // タスク詳細間の遷移スタック [{taskId, scrollY}]
         let confirmSavedScrollPosition = 0; // 質問画面から戻る時のスクロール位置
@@ -14988,6 +15065,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             if (overlay) overlay.classList.remove('open');
         }
 
+        function shareViaLine() {
+            var url = _buildInviteUrl(_caseState.caseId, _caseState.caseKey);
+            var text = '手続きリストを共有します。このリンクから参加してください:';
+            var lineUrl = 'https://line.me/R/share?text=' + encodeURIComponent(text + '\n' + url);
+            window.open(lineUrl, '_blank');
+        }
+
         function _renderQrCode(text) {
             var qrBox = document.getElementById('familyQrBox');
             var canvas = document.getElementById('familyQrCanvas');
@@ -15560,6 +15644,11 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
                     return Promise.all(mergePromises).then(function(others) {
                         var merged = false;
+                        // 同期前のタスクステータスを保存（完了通知用）
+                        var prevStatuses = {};
+                        if (typeof taskStatuses === 'object') {
+                            for (var _tk in taskStatuses) { prevStatuses[_tk] = taskStatuses[_tk]; }
+                        }
                         others.forEach(function(other) {
                             if (!other) return;
                             SYNC_FIELDS.forEach(function(f) {
@@ -15577,9 +15666,31 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                             safeSetItem('relief_note_field_timestamps', JSON.stringify(myTimestamps));
                             // ローカルデータを再読み込み
                             if (typeof loadData === 'function') loadData();
+                            // 他メンバーの新規完了を検知してトースト表示
+                            try {
+                                var assignments = loadTaskAssignments();
+                                var newlyDone = [];
+                                for (var tid in taskStatuses) {
+                                    if (taskStatuses[tid] === 'DONE' && prevStatuses[tid] !== 'DONE') {
+                                        var assignee = assignments[tid];
+                                        if (assignee && assignee !== _caseState.memberId) {
+                                            newlyDone.push(tid);
+                                        }
+                                    }
+                                }
+                                if (newlyDone.length > 0) {
+                                    var firstTask = tasks.find(function(t) { return t.id === newlyDone[0]; });
+                                    var memberName = _getMemberDisplayName(assignments[newlyDone[0]]);
+                                    if (firstTask) {
+                                        var doneMsg = (memberName || 'メンバー') + 'さんが「' + firstTask.title + '」を完了しました';
+                                        if (newlyDone.length > 1) doneMsg += '（他' + (newlyDone.length - 1) + '件）';
+                                        showToast(doneMsg);
+                                    }
+                                }
+                            } catch(e) { newlyDone = []; /* ignore notification errors */ }
                             if (typeof renderHome === 'function') renderHome();
-                            // コンフリクト通知
-                            if (typeof showToast === 'function') showToast('家族のデータを同期しました');
+                            // コンフリクト通知（完了通知がなかった場合のみ汎用メッセージ）
+                            if (newlyDone.length === 0 && typeof showToast === 'function') showToast('家族のデータを同期しました');
                         }
                     });
                 })
@@ -17047,10 +17158,26 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
             // 修正2：「次にやること」の新しいロジック
 
+            // 行政案内バナー（北竜町チャネル専用）
+            var adminBanner = document.getElementById('homeAdminBanner');
+            if (adminBanner) {
+                if (window.currentChannelId === 'hokuryu') {
+                    adminBanner.innerHTML = '<div class="home-admin-banner">'
+                        + '<div class="home-admin-banner-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#8B7E6A" stroke-width="1.5" fill="none"/><line x1="8" y1="7" x2="16" y2="7" stroke="#8B7E6A" stroke-width="1.2" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#8B7E6A" stroke-width="1.2" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#8B7E6A" stroke-width="1.2" stroke-linecap="round"/></svg></div>'
+                        + '<div>役場での手続きは、同封の<b>「案内用紙」</b>に沿って進めてください。<br>このアプリでは、役場以外の手続きをご案内します。</div>'
+                        + '</div>';
+                } else {
+                    adminBanner.innerHTML = '';
+                }
+            }
+
             // 全OPEN/NEED_CONFIRMタスクを取得（DONE, AUTO_DONE, NOT_APPLICABLEは除外）
             const activeTasks = tasks.filter(t => {
                 const status = taskStatuses[t.id] || determineTaskStatus(t);
-                return status === 'OPEN' || status === 'NEED_CONFIRM';
+                if (status !== 'OPEN' && status !== 'NEED_CONFIRM') return false;
+                // 北竜町チャネルでは役場窓口タスクを除外
+                if (window.currentChannelId === 'hokuryu' && _isMunicipalOfficeTask(t)) return false;
+                return true;
             }).map(t => ({
                 ...t,
                 status: taskStatuses[t.id] || determineTaskStatus(t),
@@ -17129,8 +17256,14 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     ? mainDisp.destination.split(/[／\/]/).map(s => s.trim()).filter(s => s !== '')[0]
                     : '';
 
+                // 北竜町チャネルの場合、民間タスクであることを明示
+                let nextHTML = '';
+                if (window.currentChannelId === 'hokuryu') {
+                    nextHTML = '<div style="font-size:13px;color:var(--text-secondary);padding:0 0 8px;font-weight:500;">役場以外の手続き</div>';
+                }
+
                 // メインカード（1件目のみ大きく表示）
-                let nextHTML = `
+                nextHTML += `
                     <div style="
                         background: var(--bg-primary);
                         border: 1px solid var(--border-light);
@@ -17147,7 +17280,10 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 // 「他にN件のタスクがあります」リンク（全体の未完了タスク数 − 表示中の1件）
                 const totalActiveCount = tasks.filter(function(t) {
                     var s = taskStatuses[t.id];
-                    return s !== 'DONE' && s !== 'AUTO_DONE' && s !== 'NOT_APPLICABLE';
+                    if (s === 'DONE' || s === 'AUTO_DONE' || s === 'NOT_APPLICABLE') return false;
+                    // 北竜町チャネルでは役場窓口タスクを除外
+                    if (window.currentChannelId === 'hokuryu' && _isMunicipalOfficeTask(t)) return false;
+                    return true;
                 }).length;
                 const remainingOpenCount = totalActiveCount - 1;
                 if (remainingOpenCount > 0) {
@@ -17294,6 +17430,12 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 `;
             }
 
+            // 担当者フィルターUI表示切替（家族共有アクティブ時のみ）
+            var assigneeFilterEl = document.getElementById('guideAssigneeFilter');
+            if (assigneeFilterEl) {
+                assigneeFilterEl.style.display = (typeof isFamilySharingActive === 'function' && isFamilySharingActive()) ? 'flex' : 'none';
+            }
+
             renderGuideContent(contentEl);
             initGuideSwipe();
         }
@@ -17341,11 +17483,14 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             });
 
             // NOT_APPLICABLEフィルタ（既存ロジック流用）
-            const visibleAll = allTasks.filter(function(t) {
+            const visibleAllBase = allTasks.filter(function(t) {
                 if (t.status !== 'NOT_APPLICABLE') return true;
                 return t.requiredQuestions && t.requiredQuestions.length > 0 &&
                     t.requiredQuestions.some(function(qId) { return answers[qId] !== undefined && answers[qId] !== null && answers[qId] !== ''; });
             });
+
+            // 担当者フィルター適用
+            const visibleAll = _applyAssigneeFilter(visibleAllBase);
 
             let totalAllTasks = visibleAll.length;
             let doneAllTasks = visibleAll.filter(function(t) { return isTaskResolved(t.id); }).length;
@@ -17487,12 +17632,15 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
                 // NOT_APPLICABLEのうち、質問回答で不要と判定されたものは完了扱い
                 // GENERALルール（required_questionsなし）のNOT_APPLICABLEは非表示
-                const visibleTasks = phaseTasks.filter(t => {
+                const visibleTasksBase = phaseTasks.filter(t => {
                     if (t.status !== 'NOT_APPLICABLE') return true;
                     // required_questionsがあり、いずれかが回答済みなら「回答で不要と判定された」
                     return t.requiredQuestions && t.requiredQuestions.length > 0 &&
                         t.requiredQuestions.some(qId => answers[qId] !== undefined && answers[qId] !== null && answers[qId] !== '');
                 });
+
+                // 担当者フィルター適用
+                const visibleTasks = _applyAssigneeFilter(visibleTasksBase);
 
                 if (visibleTasks.length === 0) return;
 
@@ -17642,11 +17790,14 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 })).filter(t => t.destGroup === group.id);
 
                 // NOT_APPLICABLEのうち質問回答で不要判定されたものは完了扱い
-                const groupTasks = allGroupTasks.filter(t => {
+                const groupTasksBase = allGroupTasks.filter(t => {
                     if (t.status !== 'NOT_APPLICABLE') return true;
                     return t.requiredQuestions && t.requiredQuestions.length > 0 &&
                         t.requiredQuestions.some(qId => answers[qId] !== undefined && answers[qId] !== null && answers[qId] !== '');
                 });
+
+                // 担当者フィルター適用
+                const groupTasks = _applyAssigneeFilter(groupTasksBase);
 
                 if (groupTasks.length === 0) return;
 
@@ -17785,14 +17936,15 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 return;
             }
 
-            // ピン留めされたタスクを取得
-            const pinnedTasks = tasks
+            // ピン留めされたタスクを取得（担当者フィルター適用）
+            const pinnedTasksBase = tasks
                 .filter(t => pinnedTaskIds.includes(t.id))
                 .map(t => ({
                     ...t,
                     status: taskStatuses[t.id] || determineTaskStatus(t),
                     remaining: getTaskRemainingDays(t)
                 }));
+            const pinnedTasks = _applyAssigneeFilter(pinnedTasksBase);
 
             // ソート：期限日の近い順 → priority降順
             pinnedTasks.sort((a, b) => {
@@ -17979,6 +18131,33 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             const activeTab = tabs[activeIndex];
             indicator.style.left = activeTab.offsetLeft + 'px';
             indicator.style.width = activeTab.offsetWidth + 'px';
+        }
+
+        function setGuideAssigneeFilter(filter) {
+            _guideAssigneeFilter = filter;
+            var btns = document.querySelectorAll('#guideAssigneeFilter .assignee-filter-btn');
+            btns.forEach(function(btn) {
+                btn.classList.toggle('active', btn.getAttribute('data-filter') === filter);
+            });
+            var contentEl = document.getElementById('guideContent');
+            if (contentEl) renderGuideContent(contentEl);
+        }
+
+        // 担当者フィルターによるタスク絞り込み
+        function _applyAssigneeFilter(taskList) {
+            if (_guideAssigneeFilter === 'all') return taskList;
+            if (typeof isFamilySharingActive !== 'function' || !isFamilySharingActive()) return taskList;
+            var assignments = loadTaskAssignments();
+            var myId = _caseState.memberId;
+            return taskList.filter(function(t) {
+                var tid = t.id;
+                if (_guideAssigneeFilter === 'mine') {
+                    return assignments[tid] === myId;
+                } else if (_guideAssigneeFilter === 'unassigned') {
+                    return !assignments[tid];
+                }
+                return true;
+            });
         }
 
         function setGuideView(view) {
