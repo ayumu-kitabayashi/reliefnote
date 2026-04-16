@@ -807,13 +807,76 @@
             font-weight: 700;
             color: var(--accent);
         }
-        .home-admin-banner-cta {
-            display: inline-flex;
+        .home-admin-banner-heading {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 14px;
+            letter-spacing: 0.02em;
+        }
+        .home-admin-banner-split {
+            display: flex;
+            align-items: stretch;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .home-admin-banner-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             align-items: center;
+            text-align: center;
+            padding: 4px 2px;
+        }
+        .home-admin-banner-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .home-admin-banner-icon-paper {
+            background: #F3F2EF;
+        }
+        .home-admin-banner-icon-app {
+            background: #EEEEE8;
+        }
+        .home-admin-banner-col-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            margin-bottom: 4px;
+        }
+        .home-admin-banner-col-desc {
+            font-size: 13px;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        .home-admin-banner-col-desc b {
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .home-admin-banner-col:first-child .home-admin-banner-col-desc b {
+            color: #7A6C52;
+        }
+        .home-admin-banner-divider {
+            width: 1px;
+            background: var(--border-light);
+            flex-shrink: 0;
+        }
+        .home-admin-banner-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 4px;
             font-size: 12.5px;
             font-weight: 600;
             color: var(--accent);
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
         }
         .home-admin-banner-cta svg {
             transition: transform 0.15s;
@@ -10781,9 +10844,7 @@
         <div id="screen-grief-care" class="screen">
             <div style="display:flex;flex-direction:column;min-height:100dvh;min-height:100vh;padding-bottom:70px;">
                 <div class="grief-header">
-                    <button class="grief-back" onclick="goBackFromGrief()">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                    </button>
+                    <div style="width:40px;"></div>
                     <h2 class="grief-header-title">こころのケア</h2>
                     <button class="grief-sos-btn" onclick="openSosSheet()" aria-label="相談窓口">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -14700,98 +14761,107 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
             currentTaskId = MASTER_YAKUBA_ID;
             var masterStatus = _getMasterYakubaStatus();
+            var munTasks = _getMunicipalTasks();
+            var _activeMun = munTasks.filter(function(t) {
+                var s = taskStatuses[t.id] || determineTaskStatus(t);
+                return s !== 'NOT_APPLICABLE';
+            });
+            var _doneMun = _activeMun.filter(function(t) {
+                var s = taskStatuses[t.id] || determineTaskStatus(t);
+                return s === 'DONE' || s === 'AUTO_DONE';
+            });
+            var _total = _activeMun.length;
+            var _done = _doneMun.length;
+            var _pct = _total > 0 ? Math.round((_done / _total) * 100) : 0;
+            var _isDone = (masterStatus === 'DONE');
             var html = '';
 
             // Hero
-            html += '<div class="detail-hero" style="background:#FAF9F7; border-bottom:1px solid #EEEDEB; padding:20px 16px 20px;">';
-            html += '<div style="display:flex; align-items:center; gap:6px; margin-bottom:12px;">';
+            html += '<div class="detail-hero" style="background:#FAF9F7; border-bottom:1px solid #EEEDEB; padding:24px 16px 20px;">';
+            // 場所ラベル
+            html += '<div style="display:flex; align-items:center; gap:6px; margin-bottom:14px;">';
             html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A49B8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
-            html += '<span style="font-size:12px; color:#A49B8C; font-weight:600;">北竜町役場</span>';
-            if (masterStatus === 'DONE') {
-                html += '<span style="margin-left:auto; font-size:11px; font-weight:600; color:var(--accent); background:rgba(58,63,50,0.08); padding:3px 10px; border-radius:12px;">完了</span>';
+            html += '<span style="font-size:12px; color:#A49B8C; font-weight:600;">北竜町役場 こども・くらし応援課</span>';
+            if (_isDone) {
+                html += '<span style="margin-left:auto; font-size:11px; font-weight:600; color:#7A9A7D; background:#E6EDDF; padding:3px 10px; border-radius:12px;">完了</span>';
             }
             html += '</div>';
-            html += '<div class="detail-title-area">';
-            html += '<div class="detail-task-title" style="font-size:21px;">役場窓口での手続きを<br>終わらせる</div>';
+            // タイトル
+            html += '<div style="margin-bottom:8px;">';
+            html += '<div style="font-size:22px; font-weight:700; line-height:1.4; color:var(--text-primary); margin-bottom:8px;">役場窓口での手続きを終わらせる</div>';
+            html += '<div style="font-size:13px; color:var(--text-secondary); line-height:1.5;">同封の案内用紙にそって、窓口で手続きできます</div>';
             html += '</div>';
             html += '</div>';
 
             // Body
             html += '<div class="detail-body">';
 
-            // ── 3ステップ・ガイド（タイムライン） ──
-            html += '<div style="margin:0 0 24px;">';
-            html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:16px;">手続きの流れ</div>';
+            // ── 3ステップ・ガイド ──
+            html += '<div style="margin:0 0 28px;">';
+            html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:14px;">手続きの流れ</div>';
 
-            // タイムライン構造
             var _steps = [
-                { num: '1', bg: '#FAF9F7', color: '#A49B8C', title: '案内用紙を確認する', desc: '同封の用紙にチェック項目が記載されています', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.3"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/></svg>' },
-                { num: '2', bg: '#F5F8F4', color: '#7A9A7D', title: '持ち物を準備する', desc: '用紙の下部に○印つきリストがあります', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A9A7D" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>' },
-                { num: '3', bg: '#EDF1F7', color: '#7A8B9E', title: '役場窓口へ行く', desc: '用紙の項目ごとに担当の係へ（平日 8:30〜17:15）', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A8B9E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>' }
+                { num: '1', bg: '#FAF9F7', color: '#A49B8C', title: '案内用紙を確認する', desc: '同封の用紙にチェック項目が記載されています', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.3"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/></svg>' },
+                { num: '2', bg: '#F5F8F4', color: '#7A9A7D', title: '持ち物を準備する', desc: '用紙の下部に○印つきリストがあります', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7A9A7D" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>' },
+                { num: '3', bg: '#EDF1F7', color: '#7A8B9E', title: '役場窓口へ行く', desc: '担当の係ごとに手続き（平日 8:30〜17:15）', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7A8B9E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>' }
             ];
             _steps.forEach(function(step, i) {
                 var isLast = (i === _steps.length - 1);
-                html += '<div style="display:flex; gap:0; position:relative;">';
-                // 左カラム：ナンバー + コネクターライン
-                html += '<div style="display:flex; flex-direction:column; align-items:center; width:36px; flex-shrink:0;">';
-                html += '<div style="width:28px; height:28px; background:' + step.bg + '; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:' + step.color + '; flex-shrink:0;">' + step.num + '</div>';
-                if (!isLast) {
-                    html += '<div style="width:2px; flex:1; background:var(--border-light); margin:4px 0;"></div>';
-                }
-                html += '</div>';
-                // 右カラム：コンテンツ
-                html += '<div style="flex:1; padding:2px 0 ' + (isLast ? '0' : '20px') + ' 14px; min-width:0;">';
-                html += '<div style="font-size:15px; font-weight:700; color:var(--text-primary); margin-bottom:3px;">' + step.title + '</div>';
-                html += '<div style="font-size:13px; color:var(--text-secondary); line-height:1.5;">' + step.desc + '</div>';
+                html += '<div style="display:flex; gap:14px; margin-bottom:' + (isLast ? '0' : '4px') + ';">';
+                // 左：アイコンカード
+                html += '<div style="width:48px; height:48px; background:' + step.bg + '; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">' + step.icon + '</div>';
+                // 右：テキスト
+                html += '<div style="flex:1; padding:3px 0 ' + (isLast ? '0' : '16px') + '; min-width:0;' + (!isLast ? ' border-bottom:1px solid var(--border-light);' : '') + '">';
+                html += '<div style="font-size:14px; font-weight:700; color:var(--text-primary); margin-bottom:2px;">' + step.title + '</div>';
+                html += '<div style="font-size:12px; color:var(--text-secondary); line-height:1.5;">' + step.desc + '</div>';
                 html += '</div>';
                 html += '</div>';
             });
+            html += '</div>';
 
-            html += '</div>'; // close steps
+            // ── 担当する係 ──
+            html += '<div style="margin:0 0 24px;">';
+            html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">担当する係</div>';
 
-            // ── お問い合わせカード（電話・地図 + 3係情報） ──
-            html += '<div style="background:var(--bg-primary); border:1px solid var(--border-light); border-radius:14px; padding:18px; margin:0 0 20px;">';
-
-            // ヘッダー
-            html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">北竜町役場 こども・くらし応援課</div>';
-
-            // 3係リスト
             var _sections = [
-                { name: '医療・介護保険係', items: '健康保険、介護保険、葬祭費' },
-                { name: 'こども未来・福祉係', items: '障害者手帳、温泉優待券、自立支援医療' },
-                { name: '戸籍・町民生活係', items: '住民届出、印鑑登録、年金、マイナンバー' }
+                { name: '医療・介護保険係', items: '健康保険、介護保険、葬祭費', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A9A7D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>' },
+                { name: 'こども未来・福祉係', items: '障害者手帳、温泉優待券、自立支援医療', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A8B9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
+                { name: '戸籍・町民生活係', items: '住民届出、印鑑登録、年金、マイナンバー', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A49B8C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>' }
             ];
             _sections.forEach(function(sec) {
-                html += '<div style="display:flex; align-items:baseline; gap:8px; padding:6px 0;">';
-                html += '<div style="width:5px; height:5px; background:var(--accent); border-radius:50%; flex-shrink:0; margin-top:6px;"></div>';
-                html += '<div>';
+                html += '<div style="display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg-primary); border:1px solid var(--border-light); border-radius:10px; margin-bottom:8px;">';
+                html += '<div style="width:32px; height:32px; background:var(--bg-secondary); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">' + sec.icon + '</div>';
+                html += '<div style="flex:1; min-width:0;">';
                 html += '<div style="font-size:13px; font-weight:600; color:var(--text-primary);">' + sec.name + '</div>';
                 html += '<div style="font-size:11px; color:var(--text-tertiary); margin-top:1px;">' + sec.items + '</div>';
                 html += '</div>';
                 html += '</div>';
             });
-
-            // 電話ボタン
-            html += '<a href="tel:0164-34-7030" style="display:flex; align-items:center; justify-content:center; gap:8px; padding:12px; background:var(--accent); border-radius:10px; text-decoration:none; margin-top:14px; margin-bottom:10px; -webkit-tap-highlight-color:transparent;">';
-            html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>';
-            html += '<span style="font-size:14px; font-weight:600; color:#fff;">電話で問い合わせ</span>';
-            html += '<span style="font-size:12px; color:rgba(255,255,255,0.7);">0164-34-7030</span>';
-            html += '</a>';
-            html += '<div style="font-size:11px; color:var(--text-tertiary); text-align:center; margin-bottom:10px;">平日 8:30〜17:15 ／ 用紙の担当係に繋がります</div>';
-
-            // 地図リンク
-            html += '<div style="display:flex; align-items:center; gap:8px; padding:10px 12px; background:var(--bg-secondary); border-radius:8px; cursor:pointer; -webkit-tap-highlight-color:transparent;" onclick="openMap(\'北海道雨竜郡北竜町字和11-1\')">';
-            html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
-            html += '<span style="font-size:12px; color:var(--text-secondary);">北海道雨竜郡北竜町字和11-1</span>';
-            html += '<span style="font-size:11px; color:var(--accent); font-weight:600; margin-left:auto;">地図を開く</span>';
             html += '</div>';
 
-            html += '</div>'; // close contact card
+            // ── お問い合わせ ──
+            html += '<div style="margin:0 0 24px;">';
+            html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">お問い合わせ</div>';
 
-            // ── 案内用紙メッセージ ──
-            html += '<div style="display:flex; align-items:flex-start; gap:10px; padding:14px 16px; background:#FAF9F7; border-radius:12px; margin:0 0 24px;">';
-            html += '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0; margin-top:1px;"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.3"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/></svg>';
-            html += '<span style="font-size:13px; color:var(--text-secondary); line-height:1.6;">届出内容・持ち物・担当係は、すべて<b style="color:var(--text-primary);">案内用紙</b>に記載されています。用紙をお持ちのうえ窓口へお越しください。</span>';
+            // 電話・地図を横並び
+            html += '<div style="display:flex; gap:8px; margin-bottom:10px;">';
+            // 電話ボタン
+            html += '<a href="tel:0164-34-7030" style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:14px 10px; background:var(--accent); border-radius:12px; text-decoration:none; -webkit-tap-highlight-color:transparent;">';
+            html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>';
+            html += '<span style="font-size:13px; font-weight:600; color:#fff;">電話する</span>';
+            html += '</a>';
+            // 地図ボタン
+            html += '<div style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:14px 10px; background:var(--bg-secondary); border-radius:12px; cursor:pointer; -webkit-tap-highlight-color:transparent;" onclick="openMap(\'北海道雨竜郡北竜町字和11-1\')">';
+            html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+            html += '<span style="font-size:13px; font-weight:600; color:var(--text-primary);">地図を開く</span>';
+            html += '</div>';
+            html += '</div>';
+
+            // 補足情報
+            html += '<div style="text-align:center; font-size:11px; color:var(--text-tertiary); line-height:1.6;">';
+            html += '0164-34-7030 ／ 平日 8:30〜17:15<br>';
+            html += '北海道雨竜郡北竜町字和11-1';
+            html += '</div>';
             html += '</div>';
 
             html += '</div>'; // close detail-body
@@ -15603,7 +15673,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 h += '銀行・保険・公共料金など、役場以外の手続きは<b style="color:var(--text-primary);">このアプリ</b>がナビゲートします。';
                 h += '</div>';
 
-                h += '<button type="button" class="admin-guide-sheet-close" onclick="closeAdminGuideSheet(); navigateToYakubaGuide();">' + (isDone ? '閉じる' : 'わかりました') + '</button>';
+                h += '<button type="button" class="admin-guide-sheet-close" onclick="closeAdminGuideSheet(); navigateToYakubaGuide();">' + (isDone ? '閉じる' : '役場の手続きを見る') + '</button>';
                 contentEl.innerHTML = h;
             }
             if (sheet) sheet.classList.add('open');
@@ -18171,7 +18241,24 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     } else {
                         adminBanner.innerHTML = '<div class="home-admin-banner" onclick="openAdminGuideSheet()">'
                             + '<div class="home-admin-banner-inner">'
-                            +   '<div class="home-admin-banner-msg">役場の届出は同封の<span class="hl-paper">案内用紙</span>で、<br>それ以外は<span class="hl-app">このアプリ</span>でご案内します。</div>'
+                            +   '<div class="home-admin-banner-heading">手続きのご案内</div>'
+                            +   '<div class="home-admin-banner-split">'
+                            +     '<div class="home-admin-banner-col">'
+                            +       '<div class="home-admin-banner-icon home-admin-banner-icon-paper">'
+                            +         '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7A6C52" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="13" y2="15"/></svg>'
+                            +       '</div>'
+                            +       '<div class="home-admin-banner-col-label">役場の届出</div>'
+                            +       '<div class="home-admin-banner-col-desc">同封の<br><b>案内用紙</b>で</div>'
+                            +     '</div>'
+                            +     '<div class="home-admin-banner-divider"></div>'
+                            +     '<div class="home-admin-banner-col">'
+                            +       '<div class="home-admin-banner-icon home-admin-banner-icon-app">'
+                            +         '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3A3F32" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2.5"/><line x1="12" y1="18" x2="12" y2="18"/></svg>'
+                            +       '</div>'
+                            +       '<div class="home-admin-banner-col-label">それ以外</div>'
+                            +       '<div class="home-admin-banner-col-desc"><b>このアプリ</b><br>でご案内</div>'
+                            +     '</div>'
+                            +   '</div>'
                             +   '<div class="home-admin-banner-cta">くわしく見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>'
                             + '</div>'
                             + '</div>';
@@ -18421,7 +18508,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     bannerEl.innerHTML = '<div class="home-family-card" onclick="openFamilyScreen()">'
                         + '<div class="home-family-icon">' + familySvg + '</div>'
                         + '<div class="home-family-body">'
-                        + '<p class="home-family-title">家族と共有する</p>'
+                        + '<p class="home-family-title">家族で手続きを分担する</p>'
                         + '<p class="home-family-sub">共有状況や進み具合を確認できます</p>'
                         + '</div>'
                         + '<span class="home-family-arrow">›</span>'
@@ -18430,7 +18517,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     bannerEl.innerHTML = '<div class="home-family-card" onclick="openFamilyScreen()">'
                         + '<div class="home-family-icon">' + familySvg + '</div>'
                         + '<div class="home-family-body">'
-                        + '<p class="home-family-title">家族で手続きを分担</p>'
+                        + '<p class="home-family-title">家族で手続きを分担する</p>'
                         + '<p class="home-family-sub">タスクを共有して進捗を把握できます</p>'
                         + '</div>'
                         + '<span class="home-family-arrow">›</span>'
@@ -19018,14 +19105,14 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
                     var _mHintCard = '';
                     if (_isDone) {
-                        _mHintCard = '<div style="margin:0 16px 12px; padding:14px 16px; background:#F5F8F4; border:1px solid #E5EAE3; border-radius:12px;">'
+                        _mHintCard = '<div style="margin:16px 16px 12px; padding:14px 16px; background:#F5F8F4; border:1px solid #E5EAE3; border-radius:12px;">'
                             + '<div style="font-size:13px; color:#7A9A7D; line-height:1.6;">お疲れさまでした。役場での届出が完了しました。</div>'
                             + '</div>';
                     }
 
                     var _masterTaskHtml = '';
                     if (_isDone) {
-                        _masterTaskHtml = '<div style="margin:0 16px 8px; padding:14px 16px; background:#F5F8F4; border:1px solid #E5EAE3; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
+                        _masterTaskHtml = '<div style="margin:0 16px 16px; padding:14px 16px; background:#F5F8F4; border:1px solid #E5EAE3; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
                             + '<div style="width:28px; height:28px; background:#E5EDE2; border-radius:50%; display:flex; align-items:center; justify-content:center;">'
                             + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A9A7D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
                             + '</div>'
@@ -19036,16 +19123,20 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                             + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
                             + '</div>';
                     } else {
-                        _masterTaskHtml = '<div style="margin:0 16px 8px; padding:16px; background:#FFFFFF; border:1px solid var(--border-light); border-radius:12px; cursor:pointer; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
-                            + '<div style="display:flex; align-items:center; gap:10px;">'
-                            + '<div style="width:32px; height:32px; background:#F3F2EF; border-radius:8px; display:flex; align-items:center; justify-content:center;">'
-                            + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.4"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/></svg>'
+                        var _munDone = _activeMun.filter(function(t) { var s = taskStatuses[t.id] || determineTaskStatus(t); return s === 'DONE' || s === 'AUTO_DONE'; }).length;
+                        var _munTotal = _activeMun.length;
+                        _masterTaskHtml = '<div style="margin:16px 16px 16px; padding:20px; background:#FAF9F7; border:1px solid #EEEDEB; border-radius:16px; cursor:pointer; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
+                            + '<div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">'
+                            + '<div style="width:44px; height:44px; background:#F3F2EF; border-radius:12px; display:flex; align-items:center; justify-content:center;">'
+                            + '<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.4"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/></svg>'
                             + '</div>'
                             + '<div style="flex:1;">'
-                            + '<div style="font-size:14px; font-weight:700; color:var(--text-primary);">' + MASTER_YAKUBA_TASK.title + '</div>'
-                            + '<div style="font-size:11px; color:#A49B8C; margin-top:2px;">同封の用紙にそって窓口へ</div>'
+                            + '<div style="font-size:16px; font-weight:700; color:var(--text-primary); line-height:1.4;">' + MASTER_YAKUBA_TASK.title + '</div>'
                             + '</div>'
-                            + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A49B8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
+                            + '</div>'
+                            + '<div style="font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:16px;">同封の案内用紙にそって、持ち物を準備して窓口へお越しください。</div>'
+                            + '<div style="display:flex; align-items:center; justify-content:flex-end;">'
+                            + '<div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--accent);">詳しく見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>'
                             + '</div>'
                             + '</div>';
                     }
