@@ -696,6 +696,26 @@
             background: none;
             border: none;
         }
+        .q-intro-note {
+            font-size: 13px;
+            color: var(--text-secondary, var(--text-tertiary));
+            line-height: 1.7;
+            margin: 0 0 18px;
+            padding: 12px 14px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+        }
+        .q-encourage {
+            font-size: 13px;
+            color: var(--text-secondary, var(--text-tertiary));
+            line-height: 1.7;
+            margin: 0 0 14px;
+            padding: 10px 14px;
+            background: var(--bg-warm, var(--bg-secondary));
+            border-radius: 10px;
+            text-align: left;
+        }
         .question-info {
             background: var(--bg-secondary);
             padding: 12px 16px;
@@ -883,6 +903,63 @@
         }
         .home-admin-banner-inner:active .home-admin-banner-cta svg {
             transform: translateX(2px);
+        }
+
+        /* まとめて質問の中断復帰バナー */
+        .home-bulk-resume {
+            margin: 0 16px 12px;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .home-bulk-resume-body {
+            flex: 1;
+            min-width: 0;
+        }
+        .home-bulk-resume-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+        .home-bulk-resume-sub {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+        .home-bulk-resume-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .home-bulk-resume-btn {
+            background: var(--accent, #3A3F32);
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .home-bulk-resume-btn:active {
+            opacity: 0.8;
+        }
+        .home-bulk-resume-dismiss {
+            background: none;
+            color: var(--text-tertiary);
+            border: none;
+            padding: 2px 4px;
+            font-size: 11px;
+            cursor: pointer;
+            font-family: inherit;
         }
 
         /* 案内ガイドシート */
@@ -3417,10 +3494,27 @@
             cursor: pointer;
             transition: background 150ms;
         }
+        /* タップできることを視覚的に示す小さな「?」バッジ (控えめ) */
+        .glossary-term::after {
+            content: '?';
+            display: inline-block;
+            margin-left: 2px;
+            padding: 0 4px;
+            font-size: 10px;
+            line-height: 14px;
+            vertical-align: super;
+            color: #fff;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.7;
+        }
 
         .glossary-term:active {
             background: var(--accent-light);
             border-radius: 2px;
+        }
+        .glossary-term:active::after {
+            opacity: 1;
         }
 
         .glossary-overlay {
@@ -5190,14 +5284,13 @@
             display: flex;
             align-items: center;
             padding: 11px 0;
-            border-bottom: 1px solid var(--border-light);
             cursor: pointer;
             gap: 10px;
             transition: opacity 0.1s;
         }
 
-        .need-confirm-item:last-child {
-            border-bottom: none;
+        .nc-item-wrap + .nc-item-wrap {
+            border-top: 1px solid var(--border-light);
         }
 
         .need-confirm-item:active {
@@ -9393,6 +9486,154 @@
             color: var(--text-tertiary);
         }
 
+        /* ===== Home: Review (Feedback) Card ===== */
+        .home-review-card {
+            background: #FAF9F7;
+            border-radius: 16px;
+            margin: 12px 16px 0;
+            padding: 20px 18px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .home-review-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .home-review-options {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        .home-review-option {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 8px;
+            background: #FFFFFF;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .home-review-option:active {
+            background: #F0EDE8;
+        }
+        .home-review-option.selected {
+            border-color: #7B9B6B;
+            background: #F4F7F2;
+        }
+        .home-review-option-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .home-review-option-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+        .home-review-option-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.3;
+        }
+        .home-review-option.selected .home-review-option-label {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .home-review-comment {
+            margin-top: 14px;
+            animation: reviewFadeIn 0.3s ease;
+        }
+        .home-review-comment textarea {
+            width: 100%;
+            min-height: 60px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: #FFFFFF;
+            color: var(--text-primary);
+            box-sizing: border-box;
+        }
+        .home-review-comment textarea::placeholder {
+            color: var(--text-tertiary);
+        }
+        .home-review-comment textarea:focus {
+            outline: none;
+            border-color: #7B9B6B;
+        }
+        .home-review-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .home-review-submit {
+            flex: 1;
+            padding: 10px 16px;
+            background: #7B9B6B;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+        }
+        .home-review-submit:active {
+            opacity: 0.8;
+        }
+        .home-review-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 10px;
+        }
+        .home-review-link {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            padding: 4px 0;
+            border: none;
+            background: none;
+            text-decoration: underline;
+        }
+        .home-review-thanks {
+            text-align: center;
+            padding: 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .home-review-thanks-icon {
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: center;
+        }
+        .home-review-thanks-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+        @keyframes reviewFadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes reviewFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateY(8px); }
+        }
+
         /* ===== My Assignments Section (Home) ===== */
         .home-my-assignments {
             background: #FFFFFF;
@@ -9640,6 +9881,9 @@
             <!-- 行政案内バナー（北竜町チャネル用） -->
             <div id="homeAdminBanner"></div>
 
+            <!-- 途中だった「まとめて質問」の復帰バナー -->
+            <div id="homeBulkResumeBanner"></div>
+
             <!-- 2. サポートチーム導線（挨拶ヘッダーの直下） -->
             <div class="home-care-team-card" onclick="showScreen('screen-concierge')">
                 <div class="care-team-icon">
@@ -9673,6 +9917,9 @@
 
             <!-- 家族と分担バナー -->
             <div id="homeFamilyBanner"></div>
+
+            <!-- レビュー（フィードバック）カード -->
+            <div id="homeReviewCard"></div>
 
             <!-- 5. きょうのきもち + 専門家相談 -->
             <div class="home-healing-card" onclick="_griefReturnScreen='screen-home'; _griefCareScrollPosition=0; showScreen('screen-grief-care')">
@@ -14696,7 +14943,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             var _s = _getMasterYakubaStatus();
             if (_s === 'NOT_APPLICABLE') return '';
             if (_s === 'DONE') {
-                return '<div style="margin:0 16px 8px; padding:14px 16px; background:#F5F8F4; border:1px solid #E5EAE3; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')">'
+                return '<div style="margin:0 16px 8px; padding:14px 16px; background:#F5F8F4; border:1px solid #E5EAE3; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
                     + '<div style="width:28px; height:28px; background:#E5EDE2; border-radius:50%; display:flex; align-items:center; justify-content:center;">'
                     + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A9A7D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
                     + '</div>'
@@ -14707,8 +14954,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
                     + '</div>';
             }
-            return '<div style="margin:0 16px 8px; padding:14px 16px; background:#FFFFFF; border:1px solid var(--border-light); border-radius:12px; cursor:pointer;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')">'
-                + '<div style="display:flex; align-items:center; gap:10px;">'
+            return '<div style="margin:0 16px 8px; padding:14px 16px; background:#FFFFFF; border:1px solid var(--border-light); border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
                 + '<div style="width:28px; height:28px; background:#F3F2EF; border-radius:8px; display:flex; align-items:center; justify-content:center;">'
                 + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.4"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/></svg>'
                 + '</div>'
@@ -14717,7 +14963,6 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 + '<div style="font-size:11px; color:#A49B8C; margin-top:2px;">同封の用紙にそって窓口へ</div>'
                 + '</div>'
                 + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A49B8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
-                + '</div>'
                 + '</div>';
         }
 
@@ -14777,7 +15022,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             var html = '';
 
             // Hero
-            html += '<div class="detail-hero" style="background:#FAF9F7; border-bottom:1px solid #EEEDEB; padding:24px 16px 20px;">';
+            html += '<div class="detail-hero" style="background:#FFFFFF; border-bottom:1px solid #EEEDEB; padding:24px 16px 20px;">';
             // 場所ラベル
             html += '<div style="display:flex; align-items:center; gap:6px; margin-bottom:14px;">';
             html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A49B8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
@@ -14796,9 +15041,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             // Body
             html += '<div class="detail-body">';
 
-            // ── 3ステップ・ガイド ──
-            html += '<div style="margin:0 0 28px;">';
-            html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:14px;">手続きの流れ</div>';
+            // ── 3ステップ・ガイド（カード） ──
+            html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">手続きの流れ</div>';
+            html += '<div style="background:var(--bg-primary); border-radius:14px; padding:16px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">';
 
             var _steps = [
                 { num: '1', bg: '#FAF9F7', color: '#A49B8C', title: '案内用紙を確認する', desc: '同封の用紙にチェック項目が記載されています', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.3"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/></svg>' },
@@ -14808,9 +15053,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             _steps.forEach(function(step, i) {
                 var isLast = (i === _steps.length - 1);
                 html += '<div style="display:flex; gap:14px; margin-bottom:' + (isLast ? '0' : '4px') + ';">';
-                // 左：アイコンカード
                 html += '<div style="width:48px; height:48px; background:' + step.bg + '; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">' + step.icon + '</div>';
-                // 右：テキスト
                 html += '<div style="flex:1; padding:3px 0 ' + (isLast ? '0' : '16px') + '; min-width:0;' + (!isLast ? ' border-bottom:1px solid var(--border-light);' : '') + '">';
                 html += '<div style="font-size:14px; font-weight:700; color:var(--text-primary); margin-bottom:2px;">' + step.title + '</div>';
                 html += '<div style="font-size:12px; color:var(--text-secondary); line-height:1.5;">' + step.desc + '</div>';
@@ -14819,17 +15062,18 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             });
             html += '</div>';
 
-            // ── 担当する係 ──
-            html += '<div style="margin:0 0 24px;">';
+            // ── 担当する係（カード） ──
             html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">担当する係</div>';
+            html += '<div style="background:var(--bg-primary); border-radius:14px; padding:12px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">';
 
             var _sections = [
                 { name: '医療・介護保険係', items: '健康保険、介護保険、葬祭費', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A9A7D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>' },
                 { name: 'こども未来・福祉係', items: '障害者手帳、温泉優待券、自立支援医療', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A8B9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
                 { name: '戸籍・町民生活係', items: '住民届出、印鑑登録、年金、マイナンバー', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A49B8C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>' }
             ];
-            _sections.forEach(function(sec) {
-                html += '<div style="display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg-primary); border:1px solid var(--border-light); border-radius:10px; margin-bottom:8px;">';
+            _sections.forEach(function(sec, i) {
+                var isLast = (i === _sections.length - 1);
+                html += '<div style="display:flex; align-items:center; gap:12px; padding:12px 4px;' + (!isLast ? ' border-bottom:1px solid var(--border-light);' : '') + '">';
                 html += '<div style="width:32px; height:32px; background:var(--bg-secondary); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">' + sec.icon + '</div>';
                 html += '<div style="flex:1; min-width:0;">';
                 html += '<div style="font-size:13px; font-weight:600; color:var(--text-primary);">' + sec.name + '</div>';
@@ -14839,9 +15083,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             });
             html += '</div>';
 
-            // ── お問い合わせ ──
-            html += '<div style="margin:0 0 24px;">';
+            // ── お問い合わせ（カード） ──
             html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">お問い合わせ</div>';
+            html += '<div style="background:var(--bg-primary); border-radius:14px; padding:16px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">';
 
             // 電話・地図を横並び
             html += '<div style="display:flex; gap:8px; margin-bottom:10px;">';
@@ -15166,6 +15410,22 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             return encryptData('RELIEF_NOTE_KEY_CHECK', base64Key);
         }
 
+        // caseKey (base64) の SHA-256 を hex 文字列で返す。
+        // Supabase RLS は cases.key_hash と x-key-hash ヘッダが一致することで
+        // 鍵の所有証明とみなす。
+        function deriveKeyHash(base64Key) {
+            if (!_cryptoAvailable) return Promise.reject(new Error('Web Crypto API not available'));
+            var keyBytes = _base64ToArrayBuffer(base64Key);
+            return crypto.subtle.digest('SHA-256', keyBytes).then(function(hashBuf) {
+                var bytes = new Uint8Array(hashBuf);
+                var hex = '';
+                for (var i = 0; i < bytes.length; i++) {
+                    hex += (bytes[i] < 16 ? '0' : '') + bytes[i].toString(16);
+                }
+                return hex;
+            });
+        }
+
         function _arrayBufferToBase64(buffer) {
             var bytes = new Uint8Array(buffer);
             var binary = '';
@@ -15189,6 +15449,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             caseId: null,
             memberId: null,
             caseKey: null,
+            keyHash: null,
             role: null,
             isActive: false
         };
@@ -15197,8 +15458,45 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             _caseState.caseId = localStorage.getItem('relief_note_case_id') || null;
             _caseState.memberId = localStorage.getItem('relief_note_member_id') || null;
             _caseState.caseKey = localStorage.getItem('relief_note_case_key') || null;
+            _caseState.keyHash = localStorage.getItem('relief_note_case_key_hash') || null;
             _caseState.role = localStorage.getItem('relief_note_case_role') || null;
             _caseState.isActive = !!(_caseState.caseId && _caseState.memberId && _caseState.caseKey);
+            // レガシー (003 以前) で作成されたケースは keyHash が未保存。
+            // 非同期で導出 + サーバ側 cases.key_hash のバックフィルを試みる。
+            if (_caseState.isActive && !_caseState.keyHash) {
+                _ensureCaseKeyHash().catch(function() {});
+            }
+        }
+
+        // _caseState.keyHash と cases.key_hash の両方が揃った状態を保証する。
+        // 既に揃っていれば即 resolve、無ければ caseKey から導出して localStorage と
+        // サーバ (key_hash IS NULL の場合のみ UPDATE) に反映する。
+        function _ensureCaseKeyHash() {
+            if (!_caseState.caseKey) return Promise.reject(new Error('caseKey missing'));
+            if (_caseState.keyHash) return Promise.resolve(_caseState.keyHash);
+            return deriveKeyHash(_caseState.caseKey).then(function(hash) {
+                _caseState.keyHash = hash;
+                safeSetItem('relief_note_case_key_hash', hash);
+                // レガシーケースのバックフィル (新規作成済みなら 0 行で no-op)
+                if (_caseState.caseId) {
+                    fetch(SUPABASE_URL + '/rest/v1/cases?case_id=eq.' + _caseState.caseId + '&key_hash=is.null', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({ key_hash: hash })
+                    }).catch(function() {});
+                }
+                return hash;
+            });
+        }
+
+        // case_* テーブルへのリクエストに付ける所有証明ヘッダ。
+        function _caseAccessHeaders() {
+            return _caseState.keyHash ? { 'x-key-hash': _caseState.keyHash } : {};
         }
 
         function isFamilySharingActive() {
@@ -15219,23 +15517,29 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             var caseId = _generateUUID();
             var memberId = _generateUUID();
             return generateCaseKey().then(function(caseKey) {
-                return generateKeyCheck(caseKey).then(function(keyCheck) {
+                return Promise.all([generateKeyCheck(caseKey), deriveKeyHash(caseKey)])
+                    .then(function(results) {
+                    var keyCheck = results[0];
+                    var keyHash = results[1];
                     // ローカルに保存
                     safeSetItem('relief_note_case_id', caseId);
                     safeSetItem('relief_note_member_id', memberId);
                     safeSetItem('relief_note_case_key', caseKey);
+                    safeSetItem('relief_note_case_key_hash', keyHash);
                     safeSetItem('relief_note_case_role', 'owner');
                     _caseState.caseId = caseId;
                     _caseState.memberId = memberId;
                     _caseState.caseKey = caseKey;
+                    _caseState.keyHash = keyHash;
                     _caseState.role = 'owner';
                     _caseState.isActive = true;
 
-                    // Supabase にケースを作成
+                    // Supabase にケースを作成 (key_hash 必須)
                     var casePayload = {
                         case_id: caseId,
                         partner_id: window.currentPartnerId || '',
-                        encryption_key_check: keyCheck
+                        encryption_key_check: keyCheck,
+                        key_hash: keyHash
                     };
                     var memberPayload = {
                         case_id: caseId,
@@ -15248,7 +15552,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         memberPayload.display_name_encrypted = encName;
                         return _supabaseInsert('cases', casePayload)
                             .then(function() {
-                                return _supabaseInsert('case_members', memberPayload);
+                                return _supabaseInsert('case_members', memberPayload, _caseAccessHeaders());
                             });
                     });
                 });
@@ -15266,18 +15570,44 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         function joinCase(caseId, caseKey, displayName) {
             var memberId = _generateUUID();
+            var keyHash = null;
             return verifyCaseKey(null, caseKey)
                 .catch(function() { return false; })
                 .then(function() {
                     // まず Supabase のケースから key_check を取得して検証
-                    return _supabaseFetch('cases', 'case_id=eq.' + caseId + '&select=encryption_key_check');
+                    return _supabaseFetch('cases', 'case_id=eq.' + caseId + '&select=encryption_key_check,key_hash');
                 })
                 .then(function(rows) {
                     if (!rows || !rows.length) throw new Error('共有グループが見つかりません');
-                    return verifyCaseKey(rows[0].encryption_key_check, caseKey);
+                    return verifyCaseKey(rows[0].encryption_key_check, caseKey).then(function(valid) {
+                        return { valid: valid, serverKeyHash: rows[0].key_hash };
+                    });
                 })
-                .then(function(valid) {
-                    if (!valid) throw new Error('QR コードが無効か期限切れです');
+                .then(function(info) {
+                    if (!info.valid) throw new Error('QR コードが無効か期限切れです');
+                    // caseKey から keyHash を導出 (決定的)。サーバ側が NULL なら後でバックフィル。
+                    return deriveKeyHash(caseKey).then(function(h) {
+                        keyHash = h;
+                        // 先に _caseState に入れておく (case_members INSERT のヘッダに必要)
+                        _caseState.caseId = caseId;
+                        _caseState.caseKey = caseKey;
+                        _caseState.keyHash = keyHash;
+                        // レガシーケース (key_hash IS NULL) なら先にバックフィル
+                        if (!info.serverKeyHash) {
+                            return fetch(SUPABASE_URL + '/rest/v1/cases?case_id=eq.' + caseId + '&key_hash=is.null', {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'apikey': SUPABASE_ANON_KEY,
+                                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                                    'Prefer': 'return=minimal'
+                                },
+                                body: JSON.stringify({ key_hash: keyHash })
+                            }).catch(function() {});
+                        }
+                    });
+                })
+                .then(function() {
                     return encryptData(displayName || 'メンバー', caseKey);
                 })
                 .then(function(encName) {
@@ -15287,16 +15617,15 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         role: 'editor',
                         display_name_encrypted: encName
                     };
-                    return _supabaseInsert('case_members', memberPayload);
+                    return _supabaseInsert('case_members', memberPayload, _caseAccessHeaders());
                 })
                 .then(function() {
                     safeSetItem('relief_note_case_id', caseId);
                     safeSetItem('relief_note_member_id', memberId);
                     safeSetItem('relief_note_case_key', caseKey);
+                    safeSetItem('relief_note_case_key_hash', keyHash);
                     safeSetItem('relief_note_case_role', 'editor');
-                    _caseState.caseId = caseId;
                     _caseState.memberId = memberId;
-                    _caseState.caseKey = caseKey;
                     _caseState.role = 'editor';
                     _caseState.isActive = true;
                     if (typeof logEvent === 'function') {
@@ -15311,10 +15640,11 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             localStorage.removeItem('relief_note_case_id');
             localStorage.removeItem('relief_note_member_id');
             localStorage.removeItem('relief_note_case_key');
+            localStorage.removeItem('relief_note_case_key_hash');
             localStorage.removeItem('relief_note_case_role');
             localStorage.removeItem('relief_note_case_data');
             localStorage.removeItem('relief_note_sync_pending');
-            _caseState = { caseId: null, memberId: null, caseKey: null, role: null, isActive: false };
+            _caseState = { caseId: null, memberId: null, caseKey: null, keyHash: null, role: null, isActive: false };
             if (typeof logEvent === 'function') {
                 logEvent('case_left', { case_id: caseId });
             }
@@ -15335,15 +15665,19 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             });
         }
 
-        function _supabaseInsert(table, payload) {
+        function _supabaseInsert(table, payload, extraHeaders) {
+            var headers = {
+                'Content-Type': 'application/json',
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                'Prefer': 'return=minimal'
+            };
+            if (extraHeaders) {
+                Object.keys(extraHeaders).forEach(function(k) { headers[k] = extraHeaders[k]; });
+            }
             return fetch(SUPABASE_URL + '/rest/v1/' + table, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                    'Prefer': 'return=minimal'
-                },
+                headers: headers,
                 body: JSON.stringify(payload)
             }).then(function(res) {
                 if (!res.ok) return res.text().then(function(t) { throw new Error(t); });
@@ -15351,12 +15685,16 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             });
         }
 
-        function _supabaseFetch(table, query) {
+        function _supabaseFetch(table, query, extraHeaders) {
+            var headers = {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+            };
+            if (extraHeaders) {
+                Object.keys(extraHeaders).forEach(function(k) { headers[k] = extraHeaders[k]; });
+            }
             return fetch(SUPABASE_URL + '/rest/v1/' + table + '?' + query, {
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                }
+                headers: headers
             }).then(function(res) {
                 if (!res.ok) return res.text().then(function(t) { throw new Error(t); });
                 return res.json();
@@ -15454,7 +15792,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         function _loadFamilyMembers() {
             if (!_caseState.caseId) return;
-            _supabaseFetch('case_members', 'case_id=eq.' + _caseState.caseId + '&select=member_id,role,display_name_encrypted,joined_at,last_seen_at')
+            _supabaseFetch('case_members', 'case_id=eq.' + _caseState.caseId + '&select=member_id,role,display_name_encrypted,joined_at,last_seen_at', _caseAccessHeaders())
                 .then(function(members) {
                     var container = document.getElementById('familyMemberList');
                     if (!container) return;
@@ -15995,7 +16333,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             // 共有モード: メンバー招待リンク
             if (_isSharing) {
                 listHtml += '<div style="border-top:1px solid var(--border-light); margin:8px 0;"></div>';
-                listHtml += '<button class="bottom-sheet-item" onclick="closeAssigneeSheet(); showScreen(\'screen-family\')">' +
+                listHtml += '<button class="bottom-sheet-item" onclick="closeAssigneeSheet(); openFamilyScreen()">' +
                     '<span class="assignee-avatar none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></span>' +
                     '<span>メンバーを招待</span>' +
                     '</button>';
@@ -16554,12 +16892,14 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         function removeFamilyMember(memberId) {
             if (!confirm('このメンバーを除名しますか？')) return;
+            var headers = {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+            };
+            if (_caseState.keyHash) headers['x-key-hash'] = _caseState.keyHash;
             fetch(SUPABASE_URL + '/rest/v1/case_members?case_id=eq.' + _caseState.caseId + '&member_id=eq.' + memberId, {
                 method: 'DELETE',
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-                }
+                headers: headers
             }).then(function() {
                 if (typeof logEvent === 'function') logEvent('family_member_removed', {});
                 _loadFamilyMembers();
@@ -16614,6 +16954,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         function performCaseSync() {
             if (!isFamilySharingActive()) return;
             if (_syncInProgress) return;
+            // keyHash 未導出 (レガシー起動直後) なら導出 + バックフィルを待ってから再開
+            if (!_caseState.keyHash) {
+                _ensureCaseKeyHash().then(function() {
+                    setTimeout(performCaseSync, 100);
+                }).catch(function() {});
+                return;
+            }
             _syncInProgress = true;
 
             var caseId = _caseState.caseId;
@@ -16649,14 +16996,16 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         field_timestamps: fieldTimestamps,
                         synced_at: now
                     };
+                    var upsertHeaders = {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Prefer': 'resolution=merge-duplicates,return=minimal'
+                    };
+                    if (_caseState.keyHash) upsertHeaders['x-key-hash'] = _caseState.keyHash;
                     return fetch(SUPABASE_URL + '/rest/v1/case_data?on_conflict=case_id,member_id', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'apikey': SUPABASE_ANON_KEY,
-                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                            'Prefer': 'resolution=merge-duplicates,return=minimal'
-                        },
+                        headers: upsertHeaders,
                         body: JSON.stringify(payload)
                     });
                 })
@@ -16667,14 +17016,16 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         });
                     }
                     // 4. last_seen_at を更新
+                    var patchHeaders = {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                        'Prefer': 'return=minimal'
+                    };
+                    if (_caseState.keyHash) patchHeaders['x-key-hash'] = _caseState.keyHash;
                     fetch(SUPABASE_URL + '/rest/v1/case_members?case_id=eq.' + caseId + '&member_id=eq.' + memberId, {
                         method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'apikey': SUPABASE_ANON_KEY,
-                            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-                            'Prefer': 'return=minimal'
-                        },
+                        headers: patchHeaders,
                         body: JSON.stringify({ last_seen_at: now })
                     }).catch(function() {}); // best-effort
                     // 5. 他メンバーのデータを取得してマージ
@@ -16689,7 +17040,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         }
 
         function _pullAndMerge(caseId, myMemberId, caseKey) {
-            return _supabaseFetch('case_data', 'case_id=eq.' + caseId + '&select=member_id,encrypted_snapshot,field_timestamps,synced_at')
+            return _supabaseFetch('case_data', 'case_id=eq.' + caseId + '&select=member_id,encrypted_snapshot,field_timestamps,synced_at', _caseAccessHeaders())
                 .then(function(rows) {
                     if (!rows || rows.length <= 1) return; // 自分だけなら不要
 
@@ -17451,6 +17802,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             const q = onboardingQuestions[currentQuestionIndex];
 
             let bodyHtml = `<div class="q-domain">${timeBucketLabels[q.domain] || q.domain}</div>`;
+            // 最初の質問の冒頭に「なぜ聞くのか」を短く添える (認知負荷が高い遺族向け)
+            if (currentQuestionIndex === 0) {
+                bodyHtml += '<div class="q-intro-note">'
+                    + 'このあと数問だけ伺います。あなたに必要な手続きだけを絞り込むためです。'
+                    + '<br>わからない項目は「わかりません」「いまは答えない」で大丈夫です。'
+                    + '</div>';
+            }
             bodyHtml += `<h1 class="q-text">${markGlossaryTerms(q.text)}</h1>`;
             const _qHint = (typeof CONFIRM_HINTS !== 'undefined' && CONFIRM_HINTS[q.id]) ? CONFIRM_HINTS[q.id] : '';
             if (_qHint) {
@@ -17469,7 +17827,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     const isUncertain = uncertainValues.includes(opt.value) || exclusiveOpts.includes(opt.value);
                     optsHtml += `<button class="q-option${isUncertain ? ' q-option-uncertain' : ''}${selected}" onclick="selectSingle('${q.id}', '${opt.value}')">${opt.label}</button>`;
                 });
-                optsHtml += '<a class="q-skip" onclick="skipQuestion()">あとで回答する</a>';
+                optsHtml += '<a class="q-skip" onclick="skipQuestion()">いまは答えない</a>';
             } else if (q.type === 'multi') {
                 q.options.forEach(opt => {
                     const selected = answers[q.id] && answers[q.id].includes(opt.value) ? ' selected' : '';
@@ -17481,7 +17839,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 const hasSelection = answers[q.id] && answers[q.id].length > 0;
                 const btnText = isLastQuestion ? '完了' : '次へ';
                 optsHtml += `<button class="q-next-btn" id="nextBtn" onclick="nextQuestion()" ${hasSelection ? '' : 'disabled'}>${btnText}</button>`;
-                optsHtml += '<a class="q-skip" onclick="skipQuestion()">あとで回答する</a>';
+                optsHtml += '<a class="q-skip" onclick="skipQuestion()">いまは答えない</a>';
             } else if (q.type === 'date') {
                 const value = answers[q.id] || '';
                 const todayStr = new Date().toISOString().split('T')[0];
@@ -17491,7 +17849,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 const hasDate = answers[q.id] && answers[q.id].trim() !== '';
                 const btnText = isLastQuestion ? '完了' : '次へ';
                 optsHtml += `<button class="q-next-btn" id="nextBtn" onclick="nextQuestion()" ${hasDate ? '' : 'disabled'}>${btnText}</button>`;
-                optsHtml += '<a class="q-skip" onclick="skipQuestion()">あとで回答する</a>';
+                optsHtml += '<a class="q-skip" onclick="skipQuestion()">いまは答えない</a>';
             }
 
             opts.innerHTML = optsHtml;
@@ -18057,15 +18415,69 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         (info.hint ? '<div class="need-confirm-item-hint">💡 ' + info.hint + '</div>' : '') +
                         phoneHtml +
                     '</div>' +
-                    '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')">確認する</button>' +
+                    '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')">質問に答える</button>' +
                 '</div>';
             }
             return '<div class="need-confirm-item" onclick="event.stopPropagation(); showTaskDetail(\'' + t.id + '\')">' +
                 '<div class="need-confirm-item-body">' +
                     '<div class="need-confirm-item-name">' + title + '</div>' +
                 '</div>' +
-                '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')">確認する</button>' +
+                '<button class="need-confirm-item-action" onclick="event.stopPropagation(); openConfirmSheet(\'' + t.id + '\')">質問に答える</button>' +
             '</div>';
+        }
+
+        // 前回中断した「まとめて質問」を続きから再開できるバナー。
+        // 自動復帰は行わず、ユーザーが明示的に選べるようにする (遺族の認知負荷配慮)。
+        function renderBulkResumeBanner() {
+            var el = document.getElementById('homeBulkResumeBanner');
+            if (!el) return;
+            var bcState = safeParseJSON(localStorage.getItem('rn_bulk_confirm_state'), null);
+            if (!bcState || !bcState.active || !bcState.targetTaskIds) {
+                el.innerHTML = '';
+                return;
+            }
+            var questions = buildBulkConfirmQuestions(bcState.targetTaskIds);
+            var total = questions.length;
+            var answered = Math.min(Math.max(bcState.index || 0, 0), total);
+            // 残りが 0 ならバナー不要 (状態だけ残ってるケース)
+            if (total === 0 || answered >= total) {
+                localStorage.removeItem('rn_bulk_confirm_state');
+                el.innerHTML = '';
+                return;
+            }
+            el.innerHTML =
+                '<div class="home-bulk-resume">'
+                + '<div class="home-bulk-resume-body">'
+                +   '<div class="home-bulk-resume-title">途中だった質問があります</div>'
+                +   '<div class="home-bulk-resume-sub">' + answered + ' / ' + total + ' 問まで答えました。続きから再開できます。</div>'
+                + '</div>'
+                + '<div class="home-bulk-resume-actions">'
+                +   '<button class="home-bulk-resume-btn" onclick="resumeBulkConfirm()">続きから</button>'
+                +   '<button class="home-bulk-resume-dismiss" onclick="dismissBulkResume()">最初から</button>'
+                + '</div>'
+                + '</div>';
+        }
+
+        function resumeBulkConfirm() {
+            var bcState = safeParseJSON(localStorage.getItem('rn_bulk_confirm_state'), null);
+            if (!bcState || !bcState.targetTaskIds) return;
+            _bulkConfirmReturnScreen = bcState.returnScreen || 'screen-home';
+            _bulkConfirmQuestions = buildBulkConfirmQuestions(bcState.targetTaskIds);
+            _bulkConfirmInitStatuses = {};
+            tasks.forEach(function(t) { _bulkConfirmInitStatuses[t.id] = taskStatuses[t.id]; });
+            if (_bulkConfirmQuestions.length === 0) {
+                localStorage.removeItem('rn_bulk_confirm_state');
+                renderBulkResumeBanner();
+                return;
+            }
+            _bulkConfirmIndex = Math.min(Math.max(bcState.index || 0, 0), _bulkConfirmQuestions.length - 1);
+            renderBulkConfirmCard(_bulkConfirmIndex);
+            showScreen('screen-bulk-confirm');
+        }
+
+        function dismissBulkResume() {
+            localStorage.removeItem('rn_bulk_confirm_state');
+            renderBulkResumeBanner();
         }
 
         // ホーム画面レンダリング
@@ -18124,7 +18536,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             html += '<div class="need-confirm-list">';
             sorted.forEach(function(t, idx) {
                 var hidden = (!isExpanded && idx >= maxShow) ? ' style="display:none;" data-nc-extra="' + ncKey + '"' : '';
-                html += '<div' + hidden + '>' + renderNeedConfirmItem(t) + '</div>';
+                html += '<div class="nc-item-wrap"' + hidden + '>' + renderNeedConfirmItem(t) + '</div>';
             });
             if (sorted.length > maxShow) {
                 var moreStyle = isExpanded ? ' style="display:none;"' : '';
@@ -18204,6 +18616,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             // 寄り添いメッセージ（非表示）
             const msgEl = document.getElementById('homeMessageText');
             if (msgEl) msgEl.style.display = 'none';
+
+            // まとめて質問の中断復帰バナー
+            renderBulkResumeBanner();
 
             // きょうのきもちカードのサブテキスト更新
             var healingSub = document.getElementById('healingCardSub');
@@ -18526,12 +18941,220 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     bannerEl.innerHTML = '';
                 }
             }
+
+            // レビューカード描画
+            renderReviewCard();
         }
 
         function dismissFamilyBanner() {
             safeSetItem('relief_note_family_banner_dismissed', '1');
             var el = document.getElementById('homeFamilyBanner');
             if (el) el.innerHTML = '';
+        }
+
+        // ===== レビュー（フィードバック）カード =====
+
+        function renderReviewCard() {
+            var el = document.getElementById('homeReviewCard');
+            if (!el) return;
+
+            // 表示条件チェック
+            var status = localStorage.getItem('rn_review_status');
+            if (status === 'submitted' || status === 'dismissed') {
+                el.innerHTML = '';
+                return;
+            }
+
+            // 「あとで」制御
+            if (status === 'later') {
+                var laterUntil = localStorage.getItem('rn_review_later_until');
+                var laterCount = parseInt(localStorage.getItem('rn_review_later_count') || '0', 10);
+                if (laterCount > 2) {
+                    el.innerHTML = '';
+                    return;
+                }
+                if (laterUntil && Date.now() < parseInt(laterUntil, 10)) {
+                    el.innerHTML = '';
+                    return;
+                }
+            }
+
+            // 25%マイルストーン達成チェック
+            var reached = safeParseJSON(localStorage.getItem('rn_milestones_reached'), []);
+            var has25 = false;
+            for (var i = 0; i < reached.length; i++) {
+                if (reached[i] >= 25) { has25 = true; break; }
+            }
+            if (!has25) {
+                el.innerHTML = '';
+                return;
+            }
+
+            // カード描画
+            el.innerHTML = '<div class="home-review-card">'
+                + '<p class="home-review-title">ReliefNoteは<br>お役に立てていますか？</p>'
+                + '<div class="home-review-options">'
+                +   '<div class="home-review-option" onclick="selectReviewRating(\'positive\')">'
+                +     '<span class="home-review-option-icon"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">'
+                +       '<circle cx="16" cy="16" r="13" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.6"/>'
+                +       '<circle cx="11.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<circle cx="20.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<path d="M10.5 19.5c1.5 3 4 4 5.5 4s4-1 5.5-4" fill="none" stroke="#3A3F32" stroke-width="1.6" stroke-linecap="round"/>'
+                +     '</svg></span>'
+                +     '<span class="home-review-option-label">とても<br>助かっている</span>'
+                +   '</div>'
+                +   '<div class="home-review-option" onclick="selectReviewRating(\'neutral\')">'
+                +     '<span class="home-review-option-icon"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">'
+                +       '<circle cx="16" cy="16" r="13" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.6"/>'
+                +       '<circle cx="11.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<circle cx="20.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<line x1="11" y1="20" x2="21" y2="20" stroke="#3A3F32" stroke-width="1.6" stroke-linecap="round"/>'
+                +     '</svg></span>'
+                +     '<span class="home-review-option-label">ふつう</span>'
+                +   '</div>'
+                +   '<div class="home-review-option" onclick="selectReviewRating(\'needs_improvement\')">'
+                +     '<span class="home-review-option-icon"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">'
+                +       '<circle cx="16" cy="16" r="13" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.6"/>'
+                +       '<circle cx="11.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<circle cx="20.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<path d="M11 21.5c1.5-2.5 3.5-3.5 5-3.5s3.5 1 5 3.5" fill="none" stroke="#3A3F32" stroke-width="1.6" stroke-linecap="round"/>'
+                +     '</svg></span>'
+                +     '<span class="home-review-option-label">改善して<br>ほしい</span>'
+                +   '</div>'
+                + '</div>'
+                + '<div id="reviewCommentArea"></div>'
+                + '<div class="home-review-links">'
+                +   '<button class="home-review-link" onclick="laterReview()">あとで</button>'
+                +   '<button class="home-review-link" onclick="dismissReview()">表示しない</button>'
+                + '</div>'
+                + '</div>';
+        }
+
+        var _selectedReviewRating = null;
+
+        function selectReviewRating(rating) {
+            _selectedReviewRating = rating;
+            // 選択肢ハイライト
+            var opts = document.querySelectorAll('.home-review-option');
+            for (var i = 0; i < opts.length; i++) {
+                opts[i].classList.remove('selected');
+            }
+            var ratingMap = { 'positive': 0, 'neutral': 1, 'needs_improvement': 2 };
+            if (typeof ratingMap[rating] !== 'undefined' && opts[ratingMap[rating]]) {
+                opts[ratingMap[rating]].classList.add('selected');
+            }
+            // コメント入力欄を表示
+            var area = document.getElementById('reviewCommentArea');
+            if (area) {
+                area.innerHTML = '<div class="home-review-comment">'
+                    + '<textarea id="reviewCommentText" placeholder="ひとことあればお聞かせください（任意）" rows="2"></textarea>'
+                    + '<div class="home-review-actions">'
+                    +   '<button class="home-review-submit" onclick="submitReview()">送信する</button>'
+                    + '</div>'
+                    + '</div>';
+            }
+        }
+
+        function submitReview() {
+            if (!_selectedReviewRating) return;
+            var comment = '';
+            var ta = document.getElementById('reviewCommentText');
+            if (ta) comment = ta.value.trim();
+
+            // 進捗データ収集
+            var allT = tasks.map(function(t) {
+                return { id: t.id, status: taskStatuses[t.id] || determineTaskStatus(t) };
+            }).filter(function(t) { return t.status !== 'NOT_APPLICABLE' && !isTaskHidden(t.id); });
+            var tasksDone = allT.filter(function(t) { return t.status === 'DONE' || t.status === 'AUTO_DONE'; }).length;
+            var tasksTotal = allT.length;
+            var milestonePct = tasksTotal > 0 ? Math.round((tasksDone / tasksTotal) * 100) : 0;
+
+            var daysSinceDeath = null;
+            var deathDateStr = getDeathDateFromLocalStorage();
+            if (deathDateStr) {
+                var ddDate = new Date(deathDateStr);
+                if (!isNaN(ddDate.getTime())) {
+                    daysSinceDeath = Math.floor((Date.now() - ddDate.getTime()) / (1000 * 60 * 60 * 24));
+                }
+            }
+
+            var ch = localStorage.getItem('relief_note_channel') || 'direct';
+
+            var payload = {
+                channel_id: ch,
+                rating: _selectedReviewRating,
+                comment: comment || null,
+                milestone_pct: milestonePct,
+                days_since_death: daysSinceDeath,
+                tasks_done: tasksDone,
+                tasks_total: tasksTotal
+            };
+
+            _supabaseInsert('feedback', payload).catch(function(e) {
+                console.warn('[RN] feedback insert error:', e);
+            });
+
+            safeSetItem('rn_review_status', 'submitted');
+
+            // お礼メッセージに差し替え
+            var el = document.getElementById('homeReviewCard');
+            if (el) {
+                el.innerHTML = '<div class="home-review-card">'
+                    + '<div class="home-review-thanks">'
+                    + '<div class="home-review-thanks-icon"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">'
+                    + '<circle cx="16" cy="16" r="13" fill="#EFE9DE" stroke="#3A3F32" stroke-width="1.6"/>'
+                    + '<path d="M16 8v6M13 14c0-1.7 1.3-3 3-3s3 1.3 3 3v4c0 3.3-2.7 6-6 6h0c-3.3 0-6-2.7-6-6v-2" fill="none" stroke="#3A3F32" stroke-width="1.6" stroke-linecap="round"/>'
+                    + '<path d="M19 14c0-1.7 1.3-3 3-3s3 1.3 3 3v4c0 3.3-2.7 6-6 6" fill="none" stroke="#3A3F32" stroke-width="1.6" stroke-linecap="round"/>'
+                    + '</svg></div>'
+                    + 'ご意見ありがとうございます。<br>今後の改善に活かしてまいります。'
+                    + '</div>'
+                    + '</div>';
+                // 2秒後にフェードアウト
+                setTimeout(function() {
+                    var card = el.querySelector('.home-review-card');
+                    if (card) {
+                        card.style.animation = 'reviewFadeOut 0.4s ease forwards';
+                        setTimeout(function() { el.innerHTML = ''; }, 400);
+                    }
+                }, 2000);
+            }
+        }
+
+        function dismissReview() {
+            safeSetItem('rn_review_status', 'dismissed');
+            var el = document.getElementById('homeReviewCard');
+            if (el) {
+                var card = el.querySelector('.home-review-card');
+                if (card) {
+                    card.style.animation = 'reviewFadeOut 0.3s ease forwards';
+                    setTimeout(function() { el.innerHTML = ''; }, 300);
+                } else {
+                    el.innerHTML = '';
+                }
+            }
+        }
+
+        function laterReview() {
+            var count = parseInt(localStorage.getItem('rn_review_later_count') || '0', 10);
+            count++;
+            safeSetItem('rn_review_later_count', String(count));
+            if (count > 2) {
+                safeSetItem('rn_review_status', 'dismissed');
+            } else {
+                safeSetItem('rn_review_status', 'later');
+                // 7日後に再表示
+                safeSetItem('rn_review_later_until', String(Date.now() + 7 * 24 * 60 * 60 * 1000));
+            }
+            var el = document.getElementById('homeReviewCard');
+            if (el) {
+                var card = el.querySelector('.home-review-card');
+                if (card) {
+                    card.style.animation = 'reviewFadeOut 0.3s ease forwards';
+                    setTimeout(function() { el.innerHTML = ''; }, 300);
+                } else {
+                    el.innerHTML = '';
+                }
+            }
         }
 
         // ガイド画面レンダリング
@@ -18647,7 +19270,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 var catTasks = mappedTasks.filter(function(t) { return _lifecycleCatMap[t.id] === cat.id; });
                 var isCityhallHokuryu = cat.id === 'cityhall' && window.currentChannelId === 'hokuryu';
                 if (isCityhallHokuryu) {
-                    catTasks = catTasks.filter(function(t) { return !_isMunicipalOfficeTask(t); });
+                    catTasks = []; // 全てマスタータスクカードに集約
                 }
                 var hasIncompleteTasks = catTasks.some(function(t) { return !isTaskResolved(t.id); });
                 // 北竜町のcityhallカテゴリ: マスタータスクも未完了チェック
@@ -18660,10 +19283,10 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             lifecycleDefs.forEach(function(cat) {
                 var catTasks = mappedTasks.filter(function(t) { return _lifecycleCatMap[t.id] === cat.id; });
 
-                // cityhallカテゴリ + 北竜町: 個別役場タスクを除外（マスタータスクで代替）
+                // cityhallカテゴリ + 北竜町: 個別タスクを全て非表示（マスタータスクに集約）
                 var isCityhallHokuryu = cat.id === 'cityhall' && window.currentChannelId === 'hokuryu';
                 if (isCityhallHokuryu) {
-                    catTasks = catTasks.filter(function(t) { return !_isMunicipalOfficeTask(t); });
+                    catTasks = [];
                 }
 
                 // マスタータスクのみの場合もセクション表示するため、空チェックは後で
@@ -19110,36 +19733,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                             + '</div>';
                     }
 
-                    var _masterTaskHtml = '';
-                    if (_isDone) {
-                        _masterTaskHtml = '<div style="margin:0 16px 16px; padding:14px 16px; background:#F5F8F4; border:1px solid #E5EAE3; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
-                            + '<div style="width:28px; height:28px; background:#E5EDE2; border-radius:50%; display:flex; align-items:center; justify-content:center;">'
-                            + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A9A7D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
-                            + '</div>'
-                            + '<div style="flex:1;">'
-                            + '<div style="font-size:14px; font-weight:600; color:var(--text-primary);">' + MASTER_YAKUBA_TASK.title + '</div>'
-                            + '<div style="font-size:11px; color:#7A9A7D; margin-top:2px;">完了しました</div>'
-                            + '</div>'
-                            + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
-                            + '</div>';
-                    } else {
-                        var _munDone = _activeMun.filter(function(t) { var s = taskStatuses[t.id] || determineTaskStatus(t); return s === 'DONE' || s === 'AUTO_DONE'; }).length;
-                        var _munTotal = _activeMun.length;
-                        _masterTaskHtml = '<div style="margin:16px 16px 16px; padding:20px; background:#FAF9F7; border:1px solid #EEEDEB; border-radius:16px; cursor:pointer; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
-                            + '<div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">'
-                            + '<div style="width:44px; height:44px; background:#F3F2EF; border-radius:12px; display:flex; align-items:center; justify-content:center;">'
-                            + '<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.4"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/></svg>'
-                            + '</div>'
-                            + '<div style="flex:1;">'
-                            + '<div style="font-size:16px; font-weight:700; color:var(--text-primary); line-height:1.4;">' + MASTER_YAKUBA_TASK.title + '</div>'
-                            + '</div>'
-                            + '</div>'
-                            + '<div style="font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:16px;">同封の案内用紙にそって、持ち物を準備して窓口へお越しください。</div>'
-                            + '<div style="display:flex; align-items:center; justify-content:flex-end;">'
-                            + '<div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--accent);">詳しく見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>'
-                            + '</div>'
-                            + '</div>';
-                    }
+                    var _masterTaskHtml = _buildMasterCardHtml();
 
                     html += '<div class="phase-section' + _mOpenClass + '" data-phase-id="' + group.id + '">'
                         + '<div class="phase-card">'
@@ -21263,6 +21857,11 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
             // --- body (question text area) ---
             var bodyHtml = '';
+            // 中間地点 (total >= 4 かつ半分を超えた瞬間) で一呼吸入れる。
+            // 問答が長いときの息切れを和らげる目的で、該当問のみ表示する。
+            if (total >= 4 && index === Math.floor(total / 2)) {
+                bodyHtml += '<div class="q-encourage">ここまで答えてくださり、ありがとうございます。<br>残りもご自身のペースで大丈夫です。</div>';
+            }
             bodyHtml += '<h1 class="q-text">' + q.questionText + '</h1>';
             bodyHtml += '<div class="q-sub">' + (index + 1) + ' / ' + total + ' 問</div>';
             if (q.affectedTaskIds.length > 1) {
@@ -21999,7 +22598,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 const btnDisabled = hasDate ? '' : ' disabled';
                 optionsHtml += `<button class="q-next-btn" id="confirmNextBtn" onclick="nextConfirmQuestion()"${btnDisabled}>${btnText}</button>`;
             }
-            optionsHtml += `<a class="q-skip" onclick="skipConfirmQuestion()">あとで回答する</a>`;
+            optionsHtml += `<a class="q-skip" onclick="skipConfirmQuestion()">いまは答えない</a>`;
             optionsEl.innerHTML = optionsHtml;
 
             // スクロール位置リセット（q-screen-inner がスクロール要素）
@@ -22753,6 +23352,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             localStorage.removeItem('rn_task_memos');
             localStorage.removeItem('rn_hidden_tasks');
             localStorage.removeItem('rn_task_reminders');
+            localStorage.removeItem('rn_review_status');
+            localStorage.removeItem('rn_review_later_until');
+            localStorage.removeItem('rn_review_later_count');
 
             // モーダルを閉じてからリロード
             closeResetDialog();
@@ -23037,12 +23639,23 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 container.innerHTML = '';
                 return;
             }
+            // AI が返した提案文字列はプロンプトインジェクション経由で HTML を含み得るため、
+            // 可視テキストも属性値も escapeHtml で無害化し、ハンドラは data 属性経由で渡す。
             container.innerHTML = list.map(function(q) {
-                var safe = String(q).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-                return '<button class="ai-suggestion-chip" onclick="_onSuggestionClick(\'' + safe + '\')">' + q + '</button>';
+                var safe = escapeHtml(String(q));
+                return '<button class="ai-suggestion-chip" data-q="' + safe + '" onclick="_onSuggestionClickFromData(this)">' + safe + '</button>';
             }).join('');
         }
 
+        function _onSuggestionClickFromData(btn) {
+            var text = btn ? (btn.getAttribute('data-q') || '') : '';
+            var input = document.getElementById('aiChatInput');
+            if (!input) return;
+            input.value = text;
+            sendAIChatMessage();
+        }
+
+        // 互換: 既存コードから呼ばれる可能性があるため残す
         function _onSuggestionClick(text) {
             var input = document.getElementById('aiChatInput');
             if (!input) return;
@@ -24052,13 +24665,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
                     rows.push(
                         '<tr>' +
-                        '<td style="padding:6px 10px;border-bottom:1px solid #eee;' + (isDone ? 'color:#888;text-decoration:line-through;' : '') + '">' + t.title + '</td>' +
+                        '<td style="padding:6px 10px;border-bottom:1px solid #eee;' + (isDone ? 'color:#888;text-decoration:line-through;' : '') + '">' + escapeHtml(t.title) + '</td>' +
                         '<td style="padding:6px 10px;border-bottom:1px solid #eee;text-align:center;white-space:nowrap;">' +
                             '<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;' +
                             (isDone ? 'background:#E8F5E9;color:#2E7D32;' : (status === 'OVERDUE' ? 'background:#FFEBEE;color:#C62828;' : 'background:#F5F5F5;color:#555;')) +
-                            '">' + statusText + '</span>' +
+                            '">' + escapeHtml(statusText) + '</span>' +
                         '</td>' +
-                        '<td style="padding:6px 10px;border-bottom:1px solid #eee;font-size:13px;color:#666;">' + dst + '</td>' +
+                        '<td style="padding:6px 10px;border-bottom:1px solid #eee;font-size:13px;color:#666;">' + escapeHtml(dst) + '</td>' +
                         '</tr>'
                     );
                 });
@@ -24084,7 +24697,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             const timeStr = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
 
             const html = '<!DOCTYPE html><html><head><meta charset="utf-8">' +
-                '<title>進捗レポート - ' + deceasedName + '</title>' +
+                '<title>進捗レポート - ' + escapeHtml(deceasedName) + '</title>' +
                 '<style>' +
                 'body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;margin:0;padding:24px;color:#333;line-height:1.6;}' +
                 '@media print{body{padding:16px;}button{display:none!important;}}' +
@@ -24092,7 +24705,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 '<div style="max-width:700px;margin:0 auto;">' +
                 '<div style="text-align:center;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #3A3F32;">' +
                 '<h1 style="font-size:20px;margin:0 0 6px;color:#3A3F32;">おくやみ手続き 進捗レポート</h1>' +
-                '<p style="margin:0;font-size:14px;color:#666;">' + deceasedName + ' 様　｜　' + dateStr + ' 時点</p>' +
+                '<p style="margin:0;font-size:14px;color:#666;">' + escapeHtml(deceasedName) + ' 様　｜　' + dateStr + ' 時点</p>' +
                 '</div>' +
                 '<div style="margin-bottom:28px;padding:16px;background:#F9F8F6;border-radius:8px;">' +
                 '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
@@ -24389,7 +25002,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             if (!('serviceWorker' in navigator)) return;
             // localhost / file:// での開発時はスキップしない（動作確認のため）
             try {
-                navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                // URL にバージョンを含めて登録 → APP_VERSION を更新した瞬間に
+                // ブラウザが別ファイルとして扱い、install → activate が走る
+                navigator.serviceWorker.register('/sw.js?v=' + encodeURIComponent(window.APP_VERSION)).then(function(reg) {
                     // 更新チェック: 新しいSWが見つかったら即座にアクティベートを促す
                     if (reg.waiting) {
                         try { reg.waiting.postMessage('SKIP_WAITING'); } catch (e) {}
@@ -24521,21 +25136,17 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             const userName = localStorage.getItem('rn_user_name');
             const hasAnswers = Object.keys(answers).length > 0;
 
-            // ウィザード復元チェック（リロード時）
+            // まとめて質問を中断して離れた状態 → ホーム画面の復帰バナーで選んでもらう。
+            // 自動で質問画面に戻ってしまうと、離脱して一呼吸置きたかった遺族には負担が大きい。
             var savedBulkState = safeParseJSON(localStorage.getItem('rn_bulk_confirm_state'), null);
             if (savedBulkState && savedBulkState.active && userName && hasAnswers) {
                 try {
                     generateTasks();
                     updateUserNameDisplay();
                     renderHome();
-                    startBulkConfirm(savedBulkState.targetTaskIds, savedBulkState.returnScreen);
-                    // 保存されたindexまで進める
-                    if (savedBulkState.index > 0 && savedBulkState.index < _bulkConfirmQuestions.length) {
-                        _bulkConfirmIndex = savedBulkState.index;
-                        renderBulkConfirmCard(_bulkConfirmIndex);
-                    }
+                    showScreen('screen-home');
                 } catch (e) {
-                    console.warn('[RN] ウィザード復元に失敗、ホーム画面にフォールバック:', e);
+                    console.warn('[RN] ホーム復帰に失敗、状態を破棄:', e);
                     localStorage.removeItem('rn_bulk_confirm_state');
                     showScreen('screen-home');
                 }
