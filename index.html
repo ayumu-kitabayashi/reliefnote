@@ -26,6 +26,66 @@
             --warning-light: rgba(196, 89, 60, 0.08);
             --border: #E5E3E0;
             --border-light: #ECEAE7;
+            /* ===== ステータス用の和のくすみ色 ===== */
+            /* 期限超過: 煉瓦色 (赤の威圧感を避けた土色) */
+            --status-overdue: #C76D56;
+            --status-overdue-bg: rgba(199, 109, 86, 0.10);
+            /* もうすぐ期限: 山吹くすみ */
+            --status-upcoming: #C79355;
+            --status-upcoming-bg: rgba(199, 147, 85, 0.10);
+            /* 完了: 若竹色 (達成の静かな肯定) */
+            --status-done: #8FA88A;
+            --status-done-bg: rgba(143, 168, 138, 0.10);
+            /* ===== 家族同期ステータス ===== */
+        .family-sync-status {
+            display: inline-block;
+            font-size: 11px;
+            margin-top: 4px;
+            padding: 2px 10px;
+            border-radius: 10px;
+            line-height: 1.4;
+            min-height: 16px;
+            transition: opacity 0.2s ease;
+        }
+        .family-sync-status:empty {
+            display: none;
+        }
+        .family-sync-status.ok {
+            color: var(--status-done);
+            background: var(--status-done-bg);
+        }
+        .family-sync-status.error {
+            color: var(--status-overdue);
+            background: var(--status-overdue-bg);
+        }
+
+        /* ===== オフラインバナー ===== */
+        .offline-banner {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 9999;
+            padding: 8px 14px;
+            background: #4A4540;
+            color: #fff;
+            font-size: 13px;
+            line-height: 1.4;
+            text-align: center;
+            transform: translateY(-100%);
+            transition: transform 0.25s ease;
+            pointer-events: none;
+        }
+        .offline-banner.show {
+            transform: translateY(0);
+        }
+        /* ===== フェーズ別の左端帯色 (時間の流れを暖→冷へ) ===== */
+            --phase-H24: #E8D3C9;   /* 淡紅 */
+            --phase-D7:  #DDCBA8;   /* 桑茶 */
+            --phase-D14: #D6C8A0;   /* 桑茶 濃 */
+            --phase-D49: #CDD6B5;   /* 若芽 */
+            --phase-M3:  #C4CEB0;   /* 若芽 濃 */
+            --phase-M4:  #BAC9BE;   /* 秘色寄り */
+            --phase-M10: #B3C4C2;   /* 秘色 */
+            --phase-Y3:  #B5B7C7;   /* 青藤 */
             --breath-inhale: #7AA68A;
             --breath-inhale-light: rgba(122, 166, 138, 0.10);
             --breath-hold: #85B0B3;
@@ -144,7 +204,10 @@
             min-width: 6px;
             background: var(--accent);
             border-radius: 5px;
-            transition: width 0.8s ease-out;
+            transition: width 0.8s ease-out, background 0.3s ease;
+        }
+        .home-progress-bar .progress-fill.complete {
+            background: var(--status-done);
         }
 
         /* First task highlight in next-tasks */
@@ -696,15 +759,33 @@
             background: none;
             border: none;
         }
+        /* オンボ冒頭の目的提示。軽めの左ボーダー + アイコンで主張を下げる */
         .q-intro-note {
-            font-size: 13px;
-            color: var(--text-secondary, var(--text-tertiary));
-            line-height: 1.7;
-            margin: 0 0 18px;
-            padding: 12px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 0 0 20px;
+            padding: 10px 14px;
             background: var(--bg-secondary);
-            border-radius: 10px;
-            border: 1px solid var(--border-light);
+            border-left: 3px solid var(--phase-H24);
+            border-radius: 6px;
+        }
+        .q-intro-note-icon {
+            flex-shrink: 0;
+            color: var(--phase-H24);
+            margin-top: 2px;
+        }
+        .q-intro-note-main {
+            font-size: 13px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        .q-intro-note-sub {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+            margin-top: 3px;
         }
         .q-encourage {
             font-size: 13px;
@@ -1784,7 +1865,26 @@
             border-radius: 10px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             overflow: hidden;
+            position: relative;
         }
+        /* フェーズ別の左端 4px 帯。時間軸を暖色→冷色で直感的に示す */
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: var(--border-light);
+            border-radius: 10px 0 0 10px;
+            pointer-events: none;
+        }
+        .phase-section[data-phase-id="H24"] .phase-card::before { background: var(--phase-H24); }
+        .phase-section[data-phase-id="D7"]  .phase-card::before { background: var(--phase-D7);  }
+        .phase-section[data-phase-id="D14"] .phase-card::before { background: var(--phase-D14); }
+        .phase-section[data-phase-id="D49"] .phase-card::before { background: var(--phase-D49); }
+        .phase-section[data-phase-id="M3"]  .phase-card::before { background: var(--phase-M3);  }
+        .phase-section[data-phase-id="M4"]  .phase-card::before { background: var(--phase-M4);  }
+        .phase-section[data-phase-id="M10"] .phase-card::before { background: var(--phase-M10); }
+        .phase-section[data-phase-id="Y3"]  .phase-card::before { background: var(--phase-Y3);  }
 
         /* ヘッダー部分（常に表示） */
         .phase-header {
@@ -1849,7 +1949,10 @@
             height: 100%;
             background: var(--accent);
             border-radius: inherit;
-            transition: width 0.3s ease;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+        .phase-progress-fill.complete {
+            background: var(--status-done);
         }
 
         /* タスクリスト部分（開いた時のみ表示） */
@@ -2052,12 +2155,12 @@
 
         /* 3日以内・当日 */
         .task-deadline.urgent {
-            color: #D4854A;
+            color: var(--status-upcoming);
         }
 
         /* 超過 */
         .task-deadline.overdue {
-            color: var(--warning);
+            color: var(--status-overdue);
         }
 
         /* 法定期限バッジ（タスクリスト用） */
@@ -2071,10 +2174,10 @@
         }
         .legal-due-badge.overdue,
         .legal-due-badge.urgent {
-            color: #C0392B;
+            color: var(--status-overdue);
         }
         .legal-due-badge.soon {
-            color: #D4854A;
+            color: var(--status-upcoming);
         }
 
         /* やること順カテゴリ表示 */
@@ -2087,6 +2190,8 @@
         }
         .category-header { padding: 16px 16px 14px; cursor: pointer; transition: opacity 0.15s ease; }
         .category-header:active { opacity: 0.6; }
+        /* 開いているときは下パディングを外し、他タブ (.phase-header) と同じ間隔にする */
+        .category-section.open .category-header { padding-bottom: 0; }
         .category-label { display: flex; align-items: center; gap: 8px; }
         .category-title { font-size: 15px; font-weight: 700; color: var(--text-primary); }
         .category-count { font-size: 12px; color: var(--text-secondary); margin-left: auto; }
@@ -2114,10 +2219,11 @@
             display: block;
             width: 17px; height: 17px;
             flex-shrink: 0;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke='%23C0392B' stroke-width='1.8'/%3E%3Cpolyline points='12 6.5 12 12 15.5 14' fill='none' stroke='%23C0392B' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center;
+            /* 煉瓦色 #C76D56 = %23C76D56 */
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke='%23C76D56' stroke-width='1.8'/%3E%3Cpolyline points='12 6.5 12 12 15.5 14' fill='none' stroke='%23C76D56' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center;
             background-size: contain;
         }
-        .category-section.legal .category-progress-fill { background: #C0392B; }
+        .category-section.legal .category-progress-fill { background: var(--status-overdue); }
 
         /* 期限カテゴリ内タスクの期限バッジ */
         .task-legal-date { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
@@ -2130,10 +2236,10 @@
             background: #F0EDEA; color: var(--text-secondary);
         }
         .task-legal-date-remain.soon {
-            background: #FFF3E0; color: #E65100;
+            background: var(--status-upcoming-bg); color: var(--status-upcoming);
         }
         .task-legal-date-remain.urgent {
-            background: #FFEBEE; color: #C0392B;
+            background: var(--status-overdue-bg); color: var(--status-overdue);
         }
 
         /* 法定期限セクション（タスク詳細用 - シンプル・洗練） */
@@ -2227,8 +2333,9 @@
         }
 
         .task-confirm-hint {
-            font-size: 11px;
+            font-size: 13px;
             color: var(--text-tertiary);
+            line-height: 1.5;
         }
 
         .task-name.done {
@@ -3767,6 +3874,84 @@
             padding: 0;
         }
 
+        /* ===== アカウントカード ===== */
+        .account-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .account-card:active {
+            background: var(--border-light);
+        }
+        .account-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E8DCC3, #D9C9A8);
+            color: #5C4A2E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            flex-shrink: 0;
+            letter-spacing: 0;
+        }
+        .account-body {
+            flex: 1;
+            min-width: 0;
+        }
+        .account-name-label {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-bottom: 2px;
+            letter-spacing: 0.02em;
+        }
+        .account-name {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .account-since {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+        .account-since:empty { display: none; }
+        .account-edit-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            min-height: 36px;
+        }
+        .account-edit-btn svg {
+            opacity: 0.7;
+        }
+        .account-edit-btn:active {
+            background: var(--bg-secondary);
+        }
+
         .btn-danger {
             width: 100%;
             background: transparent;
@@ -3817,25 +4002,73 @@
             flex-shrink: 0;
             color: var(--text-secondary);
         }
-        .data-mgmt-icon-danger {
-            background: var(--warning-light);
-            border-color: transparent;
-            color: var(--warning);
-        }
         .data-mgmt-item-title {
             font-size: 14px;
             font-weight: 600;
             color: var(--text-primary);
             line-height: 1.4;
         }
-        .data-mgmt-item-danger .data-mgmt-item-title {
-            color: var(--warning);
-        }
         .data-mgmt-item-desc {
             font-size: 12px;
             color: var(--text-tertiary);
             line-height: 1.5;
             margin-top: 2px;
+        }
+
+        /* セクション冒頭の保管先ノート */
+        .data-mgmt-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+        .data-mgmt-note svg {
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* 危険な操作ゾーン: 安全な行と視覚的に分離し、誤タップを抑止 */
+        .data-mgmt-danger-zone {
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px dashed var(--border);
+        }
+        .data-mgmt-danger-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--status-overdue);
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+        }
+        .data-mgmt-danger-btn {
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: transparent;
+            border: 1px solid var(--status-overdue);
+            border-radius: 10px;
+            color: var(--status-overdue);
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            min-height: 40px;
+        }
+        .data-mgmt-danger-btn:active {
+            background: var(--status-overdue-bg);
         }
 
         /* 設定フッター */
@@ -4360,6 +4593,98 @@
             cursor: pointer;
         }
 
+        /* ===== 取り消せない操作ダイアログ (削除など) ===== */
+        .dialog-danger {
+            text-align: left;
+        }
+        .dialog-danger-icon {
+            display: flex;
+            width: 44px;
+            height: 44px;
+            margin: 0 auto 12px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--status-overdue-bg);
+            color: var(--status-overdue);
+        }
+        .dialog-danger-list {
+            list-style: none;
+            margin: 0 0 14px;
+            padding: 10px 14px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+        }
+        .dialog-danger-list li {
+            position: relative;
+            padding-left: 14px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .dialog-danger-list li::before {
+            content: '•';
+            position: absolute;
+            left: 2px;
+            color: var(--status-overdue);
+        }
+        .dialog-backup-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 14px;
+            padding: 8px 12px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        .dialog-backup-link:active {
+            background: var(--bg-secondary);
+        }
+        .dialog-danger-ack {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            margin-bottom: 4px;
+            font-size: 13px;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+        .dialog-danger-ack input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--status-overdue);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .btn-dialog-danger {
+            background: var(--status-overdue);
+        }
+        .btn-dialog-danger:disabled {
+            background: var(--border);
+            color: var(--text-tertiary);
+            cursor: not-allowed;
+        }
+        .dialog-danger .dialog-title {
+            text-align: center;
+        }
+        .dialog-danger .dialog-message {
+            text-align: left;
+        }
+        .dialog-danger .dialog-actions {
+            flex-direction: row-reverse;
+            gap: 8px;
+        }
+        .dialog-danger .dialog-actions .btn-dialog-cancel,
+        .dialog-danger .dialog-actions .btn-dialog-confirm {
+            flex: 1;
+        }
+
         /* フローティング相談ボタン */
         /* フローティング相談ボタン */
         .floating-consult-btn {
@@ -4762,9 +5087,9 @@
             line-height: 1.2;
         }
         .concierge-cta-btn-sub {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 400;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.78);
             letter-spacing: 0.2px;
         }
         .concierge-cta-btn:active { opacity: 0.85; }
@@ -7732,7 +8057,8 @@
 
         /* ===== Splash Carousel (simple) ===== */
         .splash-carousel {
-            background: #FAFAF9;
+            /* 添付リファレンスのような柔らかいアイボリーで統一。字形と画面が同じ地色 */
+            background: #F9F5EB;
             height: 100vh;
             height: 100dvh;
             display: flex;
@@ -7758,32 +8084,24 @@
             overflow: hidden;
         }
         .sc-illust-wrap {
-            width: min(62vw, 240px);
-            aspect-ratio: 1 / 1;
-            margin-bottom: 40px;
-            flex-shrink: 0;
-        }
-        .sc-illust-wrap {
+            /* 画面幅いっぱい、高さは画面の約半分。四角い枠感を完全に消す */
+            width: 100%;
+            height: 54%;
+            margin: 0 0 28px;
+            flex-shrink: 1;
+            filter: none;
+            animation: none;
             position: relative;
-            filter:
-                drop-shadow(0 1px 0 rgba(58,63,50,0.18))
-                drop-shadow(0 3px 2px rgba(58,63,50,0.10))
-                drop-shadow(0 18px 28px rgba(58,63,50,0.16));
-            transform: rotate(-0.6deg);
-            animation: scIllustFloat 5s ease-in-out infinite;
-        }
-        @keyframes scIllustFloat {
-            0%, 100% { transform: rotate(-0.6deg) translateY(0); }
-            50%      { transform: rotate(-0.6deg) translateY(-8px); }
+            overflow: visible;
         }
         .sc-illust-wrap svg,
         .sc-illust-wrap img {
             width: 100%;
             height: 100%;
             display: block;
-            object-fit: cover;
-            border-radius: 22px;
-            filter: url(#paperCut);
+            background: transparent;
+            border-radius: 0;
+            overflow: visible; /* 形が viewBox を越えて画面端までにじみ出る */
         }
         .sc-text {
             text-align: center;
@@ -7791,17 +8109,18 @@
         }
         .sc-headline {
             font-size: 22px;
-            font-weight: 700;
+            font-weight: 600;
             line-height: 1.6;
-            color: #2B2F24;
+            color: #3A3530;
             margin: 0 0 12px;
-            letter-spacing: 0.2px;
+            letter-spacing: 0.3px;
         }
         .sc-sub {
             font-size: 14px;
-            line-height: 1.8;
-            color: #6E6D67;
+            line-height: 1.9;
+            color: #7A756E;
             margin: 0;
+            letter-spacing: 0.2px;
         }
         .sc-slide .sc-illust-wrap,
         .sc-slide .sc-headline,
@@ -8776,12 +9095,21 @@
             margin-top: 1px;
         }
         .family-member-del {
-            width: 28px; height: 28px;
+            /* WCAG AA 相当のタッチターゲット 44px。見た目は従来のバツ印だが
+               透明な余白で当たり判定を広げる (高齢者の手ぶれ許容) */
+            width: 44px; height: 44px;
             background: transparent;
             border: none;
             color: var(--text-tertiary);
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 22px;
+        }
+        .family-member-del:active {
+            background: var(--bg-secondary);
         }
         .family-member-empty {
             text-align: center;
@@ -9696,32 +10024,36 @@
         <!-- 画面0: スプラッシュ -->
         <div id="screen-splash" class="screen active">
             <div class="splash-carousel">
-                <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-                    <defs>
-                        <filter id="paperCut" x="-10%" y="-10%" width="120%" height="120%">
-                            <feTurbulence type="fractalNoise" baseFrequency="0.018 0.032" numOctaves="3" seed="7" result="noise"/>
-                            <feDisplacementMap in="SourceGraphic" in2="noise" scale="9"/>
-                        </filter>
-                    </defs>
-                </svg>
                 <div class="sc-track" id="scTrack">
-                    <!-- Slide 1: 夜明け -->
+                    <!-- 共通 defs: 淡いラジアル/リニアグラデで「質量」を作る -->
+                    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+                        <defs>
+                            <radialGradient id="scMass" cx="36%" cy="32%" r="72%">
+                                <stop offset="0%" stop-color="#8A7F72" stop-opacity="0.16"/>
+                                <stop offset="70%" stop-color="#5C554C" stop-opacity="0.07"/>
+                                <stop offset="100%" stop-color="#4A4540" stop-opacity="0.02"/>
+                            </radialGradient>
+                            <radialGradient id="scMassSoft" cx="50%" cy="40%" r="65%">
+                                <stop offset="0%" stop-color="#8A7F72" stop-opacity="0.12"/>
+                                <stop offset="100%" stop-color="#4A4540" stop-opacity="0.02"/>
+                            </radialGradient>
+                            <linearGradient id="scPillar" x1="0" y1="1" x2="0" y2="0">
+                                <stop offset="0%" stop-color="#4A4540" stop-opacity="0.025"/>
+                                <stop offset="60%" stop-color="#7A706A" stop-opacity="0.10"/>
+                                <stop offset="100%" stop-color="#8A7F72" stop-opacity="0.15"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <!-- Slide 1: はじまり — 崩れた石のような塊が右から画面をはみ出す -->
                     <div class="sc-slide sc-active">
                         <div class="sc-illust-wrap">
-                            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-                                <rect width="400" height="400" fill="#F2EDE1"/>
-                                <!-- soft sky band -->
-                                <rect y="0" width="400" height="240" fill="#EFE6D2"/>
-                                <!-- sun -->
-                                <circle cx="200" cy="180" r="78" fill="#F5CD67"/>
-                                <circle cx="200" cy="180" r="78" fill="none" stroke="#3A3F32" stroke-width="3"/>
-                                <!-- back hill -->
-                                <path d="M-20 280 Q90 220 200 260 T420 240 L420 420 L-20 420 Z" fill="#3A3F32"/>
-                                <!-- front hill -->
-                                <path d="M-20 320 Q120 270 230 310 T420 295 L420 420 L-20 420 Z" fill="#5C604F"/>
-                                <!-- bird -->
-                                <path d="M118 110 q10 -10 20 0 q10 -10 20 0" fill="none" stroke="#3A3F32" stroke-width="3" stroke-linecap="round"/>
-                                <path d="M260 88 q8 -8 16 0 q8 -8 16 0" fill="none" stroke="#3A3F32" stroke-width="3" stroke-linecap="round"/>
+                            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                                <path d="M 90 30
+                                         C 240 0, 430 60, 440 210
+                                         C 450 350, 340 430, 210 420
+                                         C 70 410, -40 300, -10 200
+                                         C 20 110, 40 50, 90 30 Z"
+                                      fill="url(#scMass)"/>
                             </svg>
                         </div>
                         <div class="sc-text">
@@ -9729,23 +10061,22 @@
                             <p class="sc-sub">悲しみのなかで向き合う手続きを、<br>ReliefNoteがそっとご案内します。</p>
                         </div>
                     </div>
-                    <!-- Slide 2: 星（導き） -->
+                    <!-- Slide 2: 道 — 縦長のいびつな塊が左端からはみ出す -->
                     <div class="sc-slide">
                         <div class="sc-illust-wrap">
-                            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-                                <rect width="400" height="400" fill="#F2EDE1"/>
-                                <!-- soft halo -->
-                                <circle cx="200" cy="200" r="150" fill="#EFE6D2"/>
-                                <circle cx="200" cy="200" r="110" fill="none" stroke="#3A3F32" stroke-width="2" stroke-dasharray="2 8" opacity="0.45"/>
-                                <!-- 4-point star (gold) -->
-                                <path d="M200 70 Q210 180 320 200 Q210 220 200 330 Q190 220 80 200 Q190 180 200 70 Z" fill="#F5CD67" stroke="#3A3F32" stroke-width="3" stroke-linejoin="round"/>
-                                <!-- center dot -->
-                                <circle cx="200" cy="200" r="10" fill="#3A3F32"/>
-                                <!-- small accent stars -->
-                                <circle cx="92" cy="100" r="4" fill="#3A3F32"/>
-                                <circle cx="318" cy="118" r="3" fill="#3A3F32"/>
-                                <circle cx="78" cy="306" r="3" fill="#3A3F32"/>
-                                <circle cx="328" cy="296" r="4" fill="#3A3F32"/>
+                            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                                <path d="M -40 -30
+                                         C 80 -20, 210 40, 220 180
+                                         C 230 310, 180 400, 90 430
+                                         C -20 440, -80 340, -60 220
+                                         C -50 110, -70 20, -40 -30 Z"
+                                      fill="url(#scPillar)"/>
+                                <!-- 遠景のかすかな副塊 -->
+                                <path d="M 300 340
+                                         C 360 320, 420 380, 410 450
+                                         C 380 490, 310 480, 280 440
+                                         C 260 400, 270 350, 300 340 Z"
+                                      fill="url(#scMassSoft)" opacity="0.55"/>
                             </svg>
                         </div>
                         <div class="sc-text">
@@ -9753,28 +10084,17 @@
                             <p class="sc-sub">質問にお答えいただくだけで、<br>あなたに必要な手続きが整います。</p>
                         </div>
                     </div>
-                    <!-- Slide 3: 貝（寄り添い） -->
+                    <!-- Slide 3: 寄り添い — 横に伏せる大きな塊が左右にはみ出す -->
                     <div class="sc-slide">
                         <div class="sc-illust-wrap">
-                            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-                                <rect width="400" height="400" fill="#F2EDE1"/>
-                                <!-- sand band -->
-                                <path d="M0 320 Q120 300 200 320 T400 318 L400 400 L0 400 Z" fill="#EFE6D2"/>
-                                <!-- scallop shell body -->
-                                <path d="M120 300 Q90 170 200 90 Q310 170 280 300 Z" fill="#F5CD67" stroke="#3A3F32" stroke-width="3" stroke-linejoin="round"/>
-                                <!-- ribs -->
-                                <g stroke="#3A3F32" stroke-width="2.5" stroke-linecap="round" fill="none">
-                                    <path d="M200 110 L200 290"/>
-                                    <path d="M200 110 Q170 200 160 290"/>
-                                    <path d="M200 110 Q230 200 240 290"/>
-                                    <path d="M200 110 Q145 200 132 290"/>
-                                    <path d="M200 110 Q255 200 268 290"/>
-                                </g>
-                                <!-- hinge -->
-                                <circle cx="200" cy="92" r="8" fill="#3A3F32"/>
-                                <!-- small pebble -->
-                                <ellipse cx="86" cy="338" rx="14" ry="6" fill="#3A3F32"/>
-                                <ellipse cx="318" cy="346" rx="10" ry="5" fill="#3A3F32"/>
+                            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                                <path d="M -60 220
+                                         C 20 140, 180 130, 260 180
+                                         C 340 220, 420 200, 470 260
+                                         C 490 340, 400 440, 260 440
+                                         C 120 450, -40 400, -70 320
+                                         C -80 280, -70 240, -60 220 Z"
+                                      fill="url(#scMassSoft)"/>
                             </svg>
                         </div>
                         <div class="sc-text">
@@ -9782,28 +10102,22 @@
                             <p class="sc-sub">ご不安なことは、サポートチームが<br>いつでもお応えいたします。</p>
                         </div>
                     </div>
-                    <!-- Slide 4: 空（旅立ち） -->
+                    <!-- Slide 4: 共 — 2 つのいびつな塊が身を寄せ合い、両端からはみ出す -->
                     <div class="sc-slide">
                         <div class="sc-illust-wrap">
-                            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-                                <rect width="400" height="400" fill="#F2EDE1"/>
-                                <!-- upper sky band -->
-                                <rect width="400" height="220" fill="#EFE6D2"/>
-                                <!-- moon -->
-                                <circle cx="312" cy="96" r="38" fill="#F5CD67"/>
-                                <circle cx="312" cy="96" r="38" fill="none" stroke="#3A3F32" stroke-width="3"/>
-                                <!-- cloud -->
-                                <path d="M60 150 Q70 120 110 124 Q130 100 160 116 Q190 108 196 138 Q220 144 210 168 Q170 180 120 172 Q70 178 60 150 Z" fill="#3A3F32"/>
-                                <!-- bird flock (rising) -->
-                                <g fill="none" stroke="#3A3F32" stroke-width="3.5" stroke-linecap="round">
-                                    <path d="M120 250 q14 -14 28 0 q14 -14 28 0"/>
-                                    <path d="M196 230 q12 -12 24 0 q12 -12 24 0"/>
-                                    <path d="M256 206 q10 -10 20 0 q10 -10 20 0"/>
-                                </g>
-                                <!-- horizon -->
-                                <path d="M0 320 Q200 300 400 320 L400 400 L0 400 Z" fill="#3A3F32"/>
-                                <!-- path of light -->
-                                <line x1="200" y1="320" x2="200" y2="360" stroke="#F5CD67" stroke-width="6" stroke-linecap="round"/>
+                            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                                <path d="M -20 120
+                                         C 60 60, 200 70, 240 180
+                                         C 260 280, 190 380, 100 390
+                                         C 0 400, -80 320, -70 220
+                                         C -60 170, -40 140, -20 120 Z"
+                                      fill="url(#scMassSoft)"/>
+                                <path d="M 260 60
+                                         C 360 40, 460 110, 450 230
+                                         C 440 340, 370 420, 290 410
+                                         C 200 400, 180 300, 200 220
+                                         C 220 140, 230 80, 260 60 Z"
+                                      fill="url(#scMass)"/>
                             </svg>
                         </div>
                         <div class="sc-text">
@@ -10034,13 +10348,21 @@
             </div>
             <div class="settings-content">
                 <!-- アカウントセクション -->
-                <div class="settings-section">
+                <div class="settings-section settings-account-section">
                     <div class="settings-section-title">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:6px;opacity:0.5;"><circle cx="12" cy="8" r="4"/><path d="M6 21v-1a6 6 0 0 1 12 0v1"/></svg>アカウント
                     </div>
-                    <div class="settings-item">
-                        <span class="settings-item-label" id="displayUserName">田中さん</span>
-                        <button class="btn-edit" onclick="showEditNameModal()">編集</button>
+                    <div class="account-card" onclick="showEditNameModal()" role="button" tabindex="0">
+                        <div class="account-avatar" id="accountAvatar">—</div>
+                        <div class="account-body">
+                            <div class="account-name-label">お名前</div>
+                            <div class="account-name" id="displayUserName">田中さん</div>
+                            <div class="account-since" id="accountSince"></div>
+                        </div>
+                        <button type="button" class="account-edit-btn" onclick="event.stopPropagation(); showEditNameModal()" aria-label="お名前を変更">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                            <span>変更</span>
+                        </button>
                     </div>
                 </div>
 
@@ -10095,6 +10417,12 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:6px;opacity:0.5;"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>データ管理
                     </div>
 
+                    <!-- セクション冒頭の保管先ノート (コンテキスト提示) -->
+                    <div class="data-mgmt-note">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                        <span>この端末にのみ保存されています。大切な内容は PDF で控えを残せます。</span>
+                    </div>
+
                     <div class="data-mgmt-item" onclick="showAnswerSummary()">
                         <div class="data-mgmt-item-left">
                             <div class="data-mgmt-item-icon">
@@ -10102,7 +10430,7 @@
                             </div>
                             <div>
                                 <div class="data-mgmt-item-title">回答の確認・変更</div>
-                                <div class="data-mgmt-item-desc">これまでの回答を確認し、個別に変更できます。</div>
+                                <div class="data-mgmt-item-desc" id="dataMgmtAnsweredDesc">これまでの回答を確認し、個別に変更できます。</div>
                             </div>
                         </div>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -10121,17 +10449,29 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                     </div>
 
-                    <div class="data-mgmt-item data-mgmt-item-danger" onclick="showLogoutDialog()">
+                    <div class="data-mgmt-item" onclick="generateProgressReport()">
                         <div class="data-mgmt-item-left">
-                            <div class="data-mgmt-item-icon data-mgmt-icon-danger">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            <div class="data-mgmt-item-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                             </div>
                             <div>
-                                <div class="data-mgmt-item-title">すべてのデータを削除</div>
-                                <div class="data-mgmt-item-desc">回答・完了状況を含む全データを削除します。この操作は取り消せません。</div>
+                                <div class="data-mgmt-item-title">控えを PDF で残す</div>
+                                <div class="data-mgmt-item-desc">これまでの回答や進捗を 1 枚の書類にまとめます。印刷やメール添付にも使えます。</div>
                             </div>
                         </div>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </div>
+
+                    <!-- 危険な操作: 他の行とビジュアルを分け、ワンテンポ置く構造 -->
+                    <div class="data-mgmt-danger-zone">
+                        <div class="data-mgmt-danger-label">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                            取り消しできない操作
+                        </div>
+                        <button type="button" class="data-mgmt-danger-btn" onclick="showLogoutDialog()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            すべてのデータを削除する
+                        </button>
                     </div>
                 </div>
 
@@ -11051,14 +11391,32 @@
             </div>
         </div>
 
-        <!-- ログアウト確認ダイアログ -->
+        <!-- すべてのデータ削除ダイアログ (取り消し不可 → 2段階確認) -->
         <div id="logoutDialog" class="dialog-overlay">
-            <div class="dialog">
-                <div class="dialog-title">ログアウトしますか？</div>
-                <div class="dialog-message">すべてのデータ（回答・完了状況）が削除されます。この操作は取り消せません。</div>
+            <div class="dialog dialog-danger">
+                <div class="dialog-danger-icon" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <div class="dialog-title">すべてのデータを削除しますか？</div>
+                <div class="dialog-message">
+                    以下がこの端末から完全に消えます。復元はできません。
+                </div>
+                <ul class="dialog-danger-list">
+                    <li>これまでの回答と手続きの進捗</li>
+                    <li>メモ・リマインダー・こころの記録</li>
+                    <li>家族共有の参加情報</li>
+                </ul>
+                <button type="button" class="dialog-backup-link" onclick="closeLogoutDialog(); generateProgressReport();">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>先に控えを PDF で残す</span>
+                </button>
+                <label class="dialog-danger-ack" for="logoutAckCheck">
+                    <input type="checkbox" id="logoutAckCheck" onchange="_onLogoutAckChange(this)">
+                    <span>元に戻せないことを理解しました</span>
+                </label>
                 <div class="dialog-actions">
-                    <button class="btn-dialog-confirm" onclick="confirmLogout()">ログアウトする</button>
-                    <button class="btn-dialog-cancel" onclick="closeLogoutDialog()">キャンセル</button>
+                    <button type="button" class="btn-dialog-cancel" onclick="closeLogoutDialog()">キャンセル</button>
+                    <button type="button" class="btn-dialog-confirm btn-dialog-danger" id="logoutConfirmBtn" onclick="confirmLogout()" disabled>削除する</button>
                 </div>
             </div>
         </div>
@@ -11916,6 +12274,14 @@
         function updateGriefCharCount(textarea) {
             var el = document.getElementById('grief-char-current');
             if (el) el.textContent = textarea.value.length;
+            // 下書きを localStorage に残す。ブラウザが閉じても復元できる。
+            try {
+                if (textarea.value.length > 0) {
+                    localStorage.setItem('relief_note_grief_draft', textarea.value);
+                } else {
+                    localStorage.removeItem('relief_note_grief_draft');
+                }
+            } catch (e) {}
         }
 
         function saveGriefLog() {
@@ -11944,6 +12310,8 @@
                 logs.push(log);
             }
             localStorage.setItem('relief_note_grief_logs', JSON.stringify(logs));
+            // 送信済みなので下書きを破棄
+            try { localStorage.removeItem('relief_note_grief_draft'); } catch (e) {}
 
             if (typeof logEvent === 'function') {
                 logEvent('grief_log_saved', {
@@ -12205,6 +12573,16 @@
 
         function showGriefScreen() {
             restoreGriefConsent();
+            // 下書き復元: textarea が空なら localStorage から戻す (未送信の記録を守る)
+            try {
+                var _griefTa = document.getElementById('griefTextarea');
+                var _griefDraft = localStorage.getItem('relief_note_grief_draft');
+                if (_griefTa && _griefDraft && !_griefTa.value) {
+                    _griefTa.value = _griefDraft;
+                    var _charEl = document.getElementById('grief-char-current');
+                    if (_charEl) _charEl.textContent = _griefDraft.length;
+                }
+            } catch (e) {}
             // SVGアイコンで気分ボタンを描画
             var moodLabels = { 1: 'つらい', 2: '沈んでいる', 3: 'ふつう', 4: '少し穏やか', 5: '穏やか' };
             var selectorEl = document.getElementById('moodSelectorButtons');
@@ -14943,7 +15321,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             var _s = _getMasterYakubaStatus();
             if (_s === 'NOT_APPLICABLE') return '';
             if (_s === 'DONE') {
-                return '<div style="margin:0 16px 8px; padding:14px 16px; background:#F5F8F4; border:1px solid #E5EAE3; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
+                return '<div style="margin:14px 16px 14px; padding:14px 16px; background:#F5F8F4; border:1px solid #E5EAE3; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
                     + '<div style="width:28px; height:28px; background:#E5EDE2; border-radius:50%; display:flex; align-items:center; justify-content:center;">'
                     + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A9A7D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
                     + '</div>'
@@ -14954,13 +15332,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
                     + '</div>';
             }
-            return '<div style="margin:0 16px 8px; padding:14px 16px; background:#FFFFFF; border:1px solid var(--border-light); border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
+            return '<div style="margin:14px 16px 14px; padding:14px 16px; background:#FFFFFF; border:1px solid var(--border-light); border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:transform 0.15s ease;" onclick="event.stopPropagation(); showTaskDetail(\'' + MASTER_YAKUBA_ID + '\')" ontouchstart="this.style.transform=\'scale(0.98)\'" ontouchend="this.style.transform=\'\'">'
                 + '<div style="width:28px; height:28px; background:#F3F2EF; border-radius:8px; display:flex; align-items:center; justify-content:center;">'
                 + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.4"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/></svg>'
                 + '</div>'
                 + '<div style="flex:1;">'
                 + '<div style="font-size:14px; font-weight:600; color:var(--text-primary);">' + MASTER_YAKUBA_TASK.title + '</div>'
-                + '<div style="font-size:11px; color:#A49B8C; margin-top:2px;">同封の用紙にそって窓口へ</div>'
+                + '<div style="font-size:13px; color:#A49B8C; margin-top:2px;">同封の用紙にそって窓口へ</div>'
                 + '</div>'
                 + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A49B8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
                 + '</div>';
@@ -15705,6 +16083,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         function openFamilyScreen() {
             initCaseState();
+            _familyLoadRetryCount = 0; // 画面を開き直したらリトライ回数をリセット
             renderFamilyScreen();
             if (typeof showScreen === 'function') {
                 showScreen('screen-family');
@@ -15761,6 +16140,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 + '<div class="family-hub-msg">'
                 + '<h3>家族と情報を共有</h3>'
                 + '<p>手続きの進み具合を家族と一緒に確認できます</p>'
+                + '<span id="familySyncStatus" class="family-sync-status"></span>'
                 + '</div>';
             if (_caseState.role === 'owner' || _caseState.role === 'editor') {
                 html += '<button type="button" class="family-hub-invite-btn" onclick="openFamilyInvite()">'
@@ -15790,10 +16170,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             _loadFamilyMembers();
         }
 
+        var _familyLoadRetryCount = 0;
+        var _FAMILY_LOAD_MAX_RETRY = 3;
         function _loadFamilyMembers() {
             if (!_caseState.caseId) return;
             _supabaseFetch('case_members', 'case_id=eq.' + _caseState.caseId + '&select=member_id,role,display_name_encrypted,joined_at,last_seen_at', _caseAccessHeaders())
                 .then(function(members) {
+                    _familyLoadRetryCount = 0; // 成功でリセット
                     var container = document.getElementById('familyMemberList');
                     if (!container) return;
                     if (!members || !members.length) {
@@ -15892,15 +16275,24 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 })
                 .catch(function(err) {
                     console.error('Failed to load members:', err);
+                    _familyLoadRetryCount++;
                     var container = document.getElementById('familyMemberList');
-                    if (container) container.innerHTML = '<div class="family-member-error">'
+                    if (!container) return;
+                    var exhausted = _familyLoadRetryCount >= _FAMILY_LOAD_MAX_RETRY;
+                    var hintText = exhausted
+                        ? '回線状況が不安定なようです。<br>しばらくしてから画面を開き直してください'
+                        : 'インターネット接続を確認して<br>もう一度お試しください';
+                    var btn = exhausted
+                        ? ''
+                        : '<button type="button" class="family-member-retry-btn" onclick="_loadFamilyMembers()">'
+                            + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>'
+                            + '再試行 (' + _familyLoadRetryCount + '/' + _FAMILY_LOAD_MAX_RETRY + ')</button>';
+                    container.innerHTML = '<div class="family-member-error">'
                         + '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C8956A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
                         + '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
                         + '<p class="family-member-error-msg">メンバーを読み込めませんでした</p>'
-                        + '<p class="family-member-error-hint">インターネット接続を確認して<br>もう一度お試しください</p>'
-                        + '<button type="button" class="family-member-retry-btn" onclick="_loadFamilyMembers()">'
-                        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>'
-                        + '再試行</button>'
+                        + '<p class="family-member-error-hint">' + hintText + '</p>'
+                        + btn
                         + '</div>';
                 });
         }
@@ -15918,10 +16310,12 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             createNewCase(name)
                 .then(function() {
                     if (errEl) errEl.textContent = '';
+                    if (nameEl) nameEl.value = ''; // 成功時のみクリア
                     renderFamilyScreen();
                     if (typeof showToast === 'function') showToast('共有を開始しました');
                 })
                 .catch(function(err) {
+                    // エラー時は入力を残してリトライできるようにする
                     if (errEl) errEl.textContent = 'エラー: ' + (err.message || err);
                 });
         }
@@ -16668,6 +17062,23 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             if (countEl) countEl.textContent = hidden.length + '件のタスクが非表示です';
         }
 
+        // 「回答の確認・変更」のサブテキストに「全 N 問中 M 問回答済み」を反映する
+        function updateDataMgmtAnsweredDesc() {
+            var el = document.getElementById('dataMgmtAnsweredDesc');
+            if (!el) return;
+            try {
+                var total = (typeof questions !== 'undefined' && Array.isArray(questions)) ? questions.length : 0;
+                var answered = (typeof answers === 'object' && answers) ? Object.keys(answers).length : 0;
+                if (total > 0) {
+                    el.textContent = '全' + total + '問中 ' + answered + '問に回答済み';
+                } else {
+                    el.textContent = 'これまでの回答を確認し、個別に変更できます。';
+                }
+            } catch (e) {
+                el.textContent = 'これまでの回答を確認し、個別に変更できます。';
+            }
+        }
+
         function showHiddenTasksManager() {
             var hidden = safeParseJSON(localStorage.getItem('rn_hidden_tasks'), []);
             if (hidden.length === 0) {
@@ -16820,12 +17231,40 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         // ========== オンライン復帰時の自動同期 ==========
         if (typeof window !== 'undefined') {
             window.addEventListener('online', function() {
+                _updateOfflineBanner();
                 var pending = localStorage.getItem('relief_note_sync_pending');
                 if (pending === '1' && isFamilySharingActive()) {
                     localStorage.removeItem('relief_note_sync_pending');
                     performCaseSync();
                 }
             });
+            window.addEventListener('offline', function() {
+                _updateOfflineBanner();
+            });
+        }
+
+        // ========== オフラインバナー ==========
+        // 電波が弱くなりがちな高齢ユーザー向けに、接続が切れていることを
+        // 常時わかるように画面上部に薄く表示する。復旧したら自動で消える。
+        function _updateOfflineBanner() {
+            var banner = document.getElementById('offlineBanner');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'offlineBanner';
+                banner.className = 'offline-banner';
+                banner.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>'
+                    + '<span>オフラインです。回線が戻ると自動で同期します。</span>';
+                document.body.appendChild(banner);
+            }
+            banner.classList.toggle('show', navigator.onLine === false);
+        }
+        // ページロード時にも状態を反映。既に DOMContentLoaded を過ぎていたら即実行
+        if (typeof window !== 'undefined') {
+            if (document.readyState === 'loading') {
+                window.addEventListener('DOMContentLoaded', _updateOfflineBanner);
+            } else {
+                _updateOfflineBanner();
+            }
         }
 
         // URL パラメータから参加フロー
@@ -16882,10 +17321,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             joinCase(_pendingJoin.caseId, _pendingJoin.caseKey, name)
                 .then(function() {
                     _pendingJoin = { caseId: null, caseKey: null };
+                    if (nameEl) nameEl.value = ''; // 成功時のみクリア
+                    if (errEl) errEl.textContent = '';
                     if (typeof showToast === 'function') showToast('共有に参加しました');
                     if (typeof showScreen === 'function') showScreen('screen-home');
                 })
                 .catch(function(err) {
+                    // エラー時は入力を残す
                     if (errEl) errEl.textContent = err.message || 'エラーが発生しました';
                 });
         }
@@ -17013,8 +17455,10 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     if (!res.ok) {
                         return res.text().then(function(t) {
                             console.warn('[Sync] Upload failed:', t);
+                            _setSyncStatus('error');
                         });
                     }
+                    _setSyncStatus('ok');
                     // 4. last_seen_at を更新
                     var patchHeaders = {
                         'Content-Type': 'application/json',
@@ -17033,10 +17477,37 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 })
                 .catch(function(err) {
                     console.warn('[Sync] Error:', err);
+                    _setSyncStatus('error');
                 })
                 .then(function() {
                     _syncInProgress = false;
                 });
+        }
+
+        // 家族共有画面の右上に同期状態を小さく表示する。
+        // 'ok' | 'error' を受け取り、ヘッダー部の #familySyncStatus 要素を更新する。
+        // ok は 3 秒後に自動で消える (常時表示で気が散らないように)
+        var _syncStatusTimer = null;
+        function _setSyncStatus(kind) {
+            var el = document.getElementById('familySyncStatus');
+            if (!el) return;
+            clearTimeout(_syncStatusTimer);
+            if (kind === 'error') {
+                el.className = 'family-sync-status error';
+                el.textContent = '同期できていません';
+            } else if (kind === 'ok') {
+                el.className = 'family-sync-status ok';
+                el.textContent = '同期済み';
+                _syncStatusTimer = setTimeout(function() {
+                    if (el.classList.contains('ok')) {
+                        el.textContent = '';
+                        el.className = 'family-sync-status';
+                    }
+                }, 3000);
+            } else {
+                el.textContent = '';
+                el.className = 'family-sync-status';
+            }
         }
 
         function _pullAndMerge(caseId, myMemberId, caseKey) {
@@ -17360,6 +17831,46 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             } catch (e) {}
         }
 
+        // ===== 汎用スクロール保存/復元 =====
+        // どの画面でも「戻る」時に前の位置まで戻すための共通レイヤ。
+        // 画面を離れる直前に scrollY を保存し、戻ってきたときに復元する。
+        // フロー系画面 (詳細・オンボ・ウィザード等) は常に先頭から見せたいので
+        // ブロックリストで除外する。
+        var _screenScrollMap = {};
+        var _SCROLL_NO_RESTORE = {
+            'screen-detail': 1,          // タスク詳細は常に先頭 (別途 detailNavStack で扱う)
+            'screen-onboarding': 1,
+            'screen-bulk-confirm': 1,
+            'screen-onboard-confirm': 1,
+            'screen-splash': 1,
+            'screen-terms': 1,
+            'screen-privacy': 1,
+            'screen-family-join': 1,
+            'screen-grief-article': 1,   // 記事は常に頭から
+            'screen-generating': 1
+        };
+
+        function _captureScreenScroll(screenId) {
+            if (!screenId) return;
+            if (_SCROLL_NO_RESTORE[screenId]) return;
+            var y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+            _screenScrollMap[screenId] = y;
+        }
+
+        function _restoreScreenScroll(screenId) {
+            if (!screenId) return;
+            if (_SCROLL_NO_RESTORE[screenId]) return;
+            if (!(screenId in _screenScrollMap)) return;
+            var y = _screenScrollMap[screenId];
+            if (!y) return; // 0 ならそのまま先頭で問題ない
+            // 描画完了後に復元する必要があるので double rAF
+            requestAnimationFrame(function() {
+                requestAnimationFrame(function() {
+                    window.scrollTo(0, y);
+                });
+            });
+        }
+
         function applyHashState(hash) {
             // 例: #screen-onboarding/q3, #screen-home, #screen-detail/RN-H24-01
             if (!hash || hash === '#') {
@@ -17416,6 +17927,11 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         // 画面遷移
         function showScreen(screenId) {
+            // 画面が切り替わる直前に、今いる画面の scroll を保存する。
+            // showScreen は自画面の再描画でも呼ばれるので、同じ画面なら保存不要。
+            if (_currentScreenId && _currentScreenId !== screenId) {
+                _captureScreenScroll(_currentScreenId);
+            }
             _currentScreenId = screenId;
             // 履歴に追加（popstate中は除く）
             if (screenId === 'screen-onboarding' && typeof currentQuestionIndex !== 'undefined') {
@@ -17536,9 +18052,15 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 initSlackWebhookUI();
                 _renderDevSettings();
                 updateHiddenTasksMgmt();
+                updateDataMgmtAnsweredDesc();
             } else if (screenId === 'screen-confirm') {
                 // 確認センター画面の初期表示（startConfirmCenterは呼び出し元で実行済み）
             }
+
+            // 汎用復元: ブロックリストに入っていない画面で、かつ個別復元ロジック (home/guide
+            // の savedScrollPosition 等) が発火しなかった場合に備えて、最後にも試す。
+            // 個別ロジックが既に復元済みの場合は同じ値が入っているので冪等。
+            _restoreScreenScroll(screenId);
 
             // screen_viewed / session_start / progress_snapshot ログは廃止
         }
@@ -17563,11 +18085,6 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         // LINE公式アカウントを開く
         function openLineOA() {
             window.open(LINE_OA_URL, '_blank');
-        }
-
-        // 電話をかける
-        function callPhone() {
-            window.location.href = 'tel:0164342111';
         }
 
         // ===== 利用規約・プライバシーポリシー =====
@@ -17805,8 +18322,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             // 最初の質問の冒頭に「なぜ聞くのか」を短く添える (認知負荷が高い遺族向け)
             if (currentQuestionIndex === 0) {
                 bodyHtml += '<div class="q-intro-note">'
-                    + 'このあと数問だけ伺います。あなたに必要な手続きだけを絞り込むためです。'
-                    + '<br>わからない項目は「わかりません」「いまは答えない」で大丈夫です。'
+                    + '<svg class="q-intro-note-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+                    +   '<path d="M12 3 L13.5 9.5 L20 12 L13.5 14.5 L12 21 L10.5 14.5 L4 12 L10.5 9.5 Z"/>'
+                    + '</svg>'
+                    + '<div>'
+                    +   '<div class="q-intro-note-main">数問だけで、あなたに必要な手続きを絞り込みます</div>'
+                    +   '<div class="q-intro-note-sub">わからない項目は飛ばして大丈夫です</div>'
+                    + '</div>'
                     + '</div>';
             }
             bodyHtml += `<h1 class="q-text">${markGlossaryTerms(q.text)}</h1>`;
@@ -18835,9 +19357,9 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                                ontouchstart="this.style.transform='scale(0.98)'"
                                ontouchend="this.style.transform=''">
                                 <div style="flex:1; min-width:0;">
-                                    <div style="font-size:11px; color:var(--text-tertiary); margin-bottom:3px;">次のタスク</div>
+                                    <div style="font-size:12px; color:var(--text-tertiary); margin-bottom:3px;">次のタスク</div>
                                     <div style="font-size:14px; font-weight:600; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${_secondTask.title}</div>
-                                    ${_secDest ? `<div style="font-size:11px; color:var(--text-tertiary); margin-top:2px;">${_secDest}</div>` : ''}
+                                    ${_secDest ? `<div style="font-size:12px; color:var(--text-tertiary); margin-top:2px;">${_secDest}</div>` : ''}
                                 </div>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
                             </div>
@@ -19179,7 +19701,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                             <div class="progress-count"><strong>${completedCount}件</strong>完了 / 全${totalCount}件</div>
                         </div>
                         <div class="progress-track">
-                            <div class="progress-fill" style="width: ${Math.max(pct, 1)}%"></div>
+                            <div class="progress-fill${pct >= 100 ? ' complete' : ''}" style="width: ${Math.max(pct, 1)}%"></div>
                         </div>
                     </div>
                 `;
@@ -19657,7 +20179,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                                     <span class="phase-arrow">▼</span>
                                 </div>
                                 <div class="phase-progress-bar">
-                                    <div class="phase-progress-fill" style="width: ${phasePercent}%"></div>
+                                    <div class="phase-progress-fill${phasePercent >= 100 ? ' complete' : ''}" style="width: ${phasePercent}%"></div>
                                 </div>
                             </div>
                             <div class="phase-tasks guide-task-list">
@@ -19746,7 +20268,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                         + '<span class="phase-arrow">▼</span>'
                         + '</div>'
                         + '<div class="phase-progress-bar">'
-                        + '<div class="phase-progress-fill" style="width: ' + _destPct + '%"></div>'
+                        + '<div class="phase-progress-fill' + (_destPct >= 100 ? ' complete' : '') + '" style="width: ' + _destPct + '%"></div>'
                         + '</div>'
                         + '</div>'
                         + '<div class="phase-tasks"><div class="phase-tasks-inner">'
@@ -19861,7 +20383,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                                     <span class="phase-arrow">▼</span>
                                 </div>
                                 <div class="phase-progress-bar">
-                                    <div class="phase-progress-fill" style="width: ${destPercent}%"></div>
+                                    <div class="phase-progress-fill${destPercent >= 100 ? ' complete' : ''}" style="width: ${destPercent}%"></div>
                                 </div>
                             </div>
                             <div class="phase-tasks">
@@ -19980,10 +20502,10 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 }
 
                 if (isNotApplicable) {
-                    extraInfo = '<div class="task-confirm-hint" style="color: var(--text-tertiary); font-size: 11px;">質問の回答により該当なしと判定されました</div>';
+                    extraInfo = '<div class="task-confirm-hint">質問の回答により該当なしと判定されました</div>';
                     checkboxDisabled = 'disabled';
                 } else if (isAutoDone) {
-                    extraInfo = '<div class="task-confirm-hint" style="color: var(--text-tertiary); font-size: 11px;">質問の回答に基づき完了しました</div>';
+                    extraInfo = '<div class="task-confirm-hint">質問の回答に基づき完了しました</div>';
                     checkboxDisabled = 'disabled';
                 }
 
@@ -20038,10 +20560,10 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 }
 
                 if (isNotApplicable) {
-                    extraInfo = '<div class="task-confirm-hint" style="color: var(--text-tertiary); font-size: 11px;">質問の回答により該当なしと判定されました</div>';
+                    extraInfo = '<div class="task-confirm-hint">質問の回答により該当なしと判定されました</div>';
                     checkboxDisabled = 'disabled';
                 } else if (isAutoDone) {
-                    extraInfo = '<div class="task-confirm-hint" style="color: var(--text-tertiary); font-size: 11px;">質問の回答に基づき完了しました</div>';
+                    extraInfo = '<div class="task-confirm-hint">質問の回答に基づき完了しました</div>';
                     checkboxDisabled = 'disabled';
                 }
 
@@ -21625,10 +22147,10 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
             document.getElementById('confirmSheetContent').innerHTML = html;
 
-            // カウントアップアニメーション
+            // カウントアップアニメーション (短め)
             var numEl = document.getElementById('confirmSheetFeedbackNumber');
             var startTime = null;
-            var duration = 400;
+            var duration = 220;
             function animateCount(ts) {
                 if (!startTime) startTime = ts;
                 var progress = Math.min((ts - startTime) / duration, 1);
@@ -21637,16 +22159,16 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             }
             requestAnimationFrame(animateCount);
 
-            // スタガーアニメーション
+            // スタガーアニメーション (遅延を 0.05 秒刻みに詰める)
             var items = document.querySelectorAll('.confirm-sheet-feedback .bulk-feedback-item');
             items.forEach(function(item) {
-                var delay = parseInt(item.getAttribute('data-delay') || '0') * 100 + 200;
+                var delay = parseInt(item.getAttribute('data-delay') || '0') * 50 + 80;
                 setTimeout(function() { item.classList.add('visible'); }, delay);
             });
 
-            // 自動クローズタイマー: タスク数 × 0.6秒 + 2秒（最低3秒、最大6秒）
+            // 自動クローズタイマー: タスク数 × 0.35 秒 + 1 秒 (最低 1.6秒、最大 3秒)
             if (window._confirmSheetFeedbackTimer) clearTimeout(window._confirmSheetFeedbackTimer);
-            var autoCloseMs = Math.min(Math.max(totalChanged * 600 + 2000, 3000), 6000);
+            var autoCloseMs = Math.min(Math.max(totalChanged * 350 + 1000, 1600), 3000);
             window._confirmSheetFeedbackTimer = setTimeout(function() {
                 finishConfirmSheetFeedback();
             }, autoCloseMs);
@@ -21868,7 +22390,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                 bodyHtml += '<details class="bulk-confirm-affected">' +
                     '<summary class="bulk-confirm-affected-summary">' +
                         '<svg class="bulk-confirm-affected-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>' +
-                        '<span>この回答で' + q.affectedTaskIds.length + '件の手続きが確定します</span>' +
+                        '<span>この回答で' + q.affectedTaskIds.length + '件の手続きが整理されます</span>' +
                         '<svg class="bulk-confirm-affected-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
                     '</summary>' +
                     '<div class="bulk-confirm-affected-list">' +
@@ -22068,7 +22590,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     } else {
                         renderBulkConfirmCard(_bulkConfirmIndex);
                     }
-                }, 2000);
+                }, 1100);
                 return;
             }
 
@@ -22099,10 +22621,10 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
             document.getElementById('bulkConfirmBody').innerHTML = html;
 
-            // カウントアップアニメーション（0.4秒）
+            // カウントアップアニメーション（短め）
             var numEl = document.getElementById('bulkFeedbackNumber');
             var startTime = null;
-            var duration = 400;
+            var duration = 220;
             function animateCount(ts) {
                 if (!startTime) startTime = ts;
                 var progress = Math.min((ts - startTime) / duration, 1);
@@ -22112,15 +22634,15 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             }
             requestAnimationFrame(animateCount);
 
-            // リストのスタガーアニメーション（0.1秒ずつ遅延）
+            // リストのスタガーアニメーション（0.05秒ずつ遅延、最初の項目は即時）
             var items = document.querySelectorAll('.bulk-feedback-item');
             items.forEach(function(item) {
-                var delay = parseInt(item.getAttribute('data-delay') || '0') * 100 + 200;
+                var delay = parseInt(item.getAttribute('data-delay') || '0') * 50 + 80;
                 setTimeout(function() { item.classList.add('visible'); }, delay);
             });
 
-            // 自動遷移タイマー: タスク数 × 0.8秒 + 1秒（最低2秒、最大4秒）
-            var autoAdvanceMs = Math.min(Math.max(totalChanged * 800 + 1000, 2000), 4000);
+            // 自動遷移タイマー: 内容確認に必要な最小時間。タスク数 × 0.3秒 + 0.6秒 (最低 1.2秒、最大 2.2秒)
+            var autoAdvanceMs = Math.min(Math.max(totalChanged * 300 + 600, 1200), 2200);
             setTimeout(function() {
                 _bulkConfirmIndex++;
                 if (_bulkConfirmIndex >= _bulkConfirmQuestions.length) {
@@ -23189,6 +23711,24 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             if (displayUserNameEl) {
                 displayUserNameEl.textContent = userName + 'さん';
             }
+            // アバター: 名前の先頭 1 文字（姓が複数字でも 1 文字で十分）
+            const avatarEl = document.getElementById('accountAvatar');
+            if (avatarEl) {
+                var firstChar = (userName && userName !== 'ゲスト') ? userName.charAt(0) : '—';
+                avatarEl.textContent = firstChar;
+            }
+            // 利用開始からの日数（死亡日ではなくアプリ開始基準）
+            const sinceEl = document.getElementById('accountSince');
+            if (sinceEl) {
+                var installAt = localStorage.getItem('rn_install_at');
+                if (!installAt) {
+                    installAt = new Date().toISOString();
+                    try { localStorage.setItem('rn_install_at', installAt); } catch (e) {}
+                }
+                var startedDate = new Date(installAt);
+                var daysUsed = Math.max(1, Math.floor((Date.now() - startedDate.getTime()) / 86400000) + 1);
+                sinceEl.textContent = 'ご利用' + daysUsed + '日目';
+            }
         }
 
         // 名前変更モーダル
@@ -23227,6 +23767,10 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         // ログアウト関連
         function showLogoutDialog() {
+            // 開くたびにチェックを外し、削除ボタンを無効化した状態から始める
+            var ack = document.getElementById('logoutAckCheck');
+            if (ack) ack.checked = false;
+            _onLogoutAckChange(ack);
             const dialog = document.getElementById('logoutDialog');
             dialog.classList.add('show');
         }
@@ -23234,9 +23778,24 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
         function closeLogoutDialog() {
             const dialog = document.getElementById('logoutDialog');
             dialog.classList.remove('show');
+            // 確認状態は毎回リセット
+            var ack = document.getElementById('logoutAckCheck');
+            if (ack) ack.checked = false;
+            _onLogoutAckChange(ack);
+        }
+
+        // 「元に戻せないことを理解しました」のチェックで削除ボタンを活性化
+        function _onLogoutAckChange(el) {
+            var btn = document.getElementById('logoutConfirmBtn');
+            if (!btn) return;
+            btn.disabled = !(el && el.checked);
         }
 
         function confirmLogout() {
+            // 二重ガード: チェックが外れていたら絶対に走らせない
+            var ack = document.getElementById('logoutAckCheck');
+            if (!ack || !ack.checked) return;
+
             // localStorage を完全にクリア
             localStorage.clear();
 
@@ -23552,12 +24111,29 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             }
             var provider = _getAIProvider();
 
+            // 15秒経っても応答が無ければ typing を止めて明示エラーを出す
+            // (Worker 側が応答できないケース / 4G 不安定時の無限待ち防止)
+            var _aiResolved = false;
+            var _aiTimeout = setTimeout(function() {
+                if (_aiResolved) return;
+                _aiResolved = true;
+                _hideTyping();
+                if (navigator.onLine === false) {
+                    _appendAIMessage('オフラインのようです。接続が戻ってから、もう一度お試しください。');
+                } else {
+                    _appendAIMessage('応答に時間がかかっています。通信環境を確認して、もう一度お試しください。');
+                }
+            }, 15000);
+
             provider.getResponse({
                 question: text,
                 taskId: _aiChatState.taskId,
                 taskContext: taskContext,
                 history: history
             }).then(function(answer) {
+                if (_aiResolved) return;
+                _aiResolved = true;
+                clearTimeout(_aiTimeout);
                 // タイピングインジケータの最小表示時間
                 var elapsed = Date.now() - start;
                 var wait = Math.max(0, _AI_MIN_THINK_MS - elapsed);
@@ -23571,9 +24147,16 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
                     }
                 }, wait);
             }).catch(function(err) {
+                if (_aiResolved) return;
+                _aiResolved = true;
+                clearTimeout(_aiTimeout);
                 console.error('[ai chat] provider error:', err);
                 _hideTyping();
-                _appendAIMessage(_AI_ERROR_MESSAGE);
+                if (navigator.onLine === false) {
+                    _appendAIMessage('オフラインのようです。接続が戻ってから、もう一度お試しください。');
+                } else {
+                    _appendAIMessage(_AI_ERROR_MESSAGE);
+                }
             });
         }
 
@@ -24550,7 +25133,7 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
             footer.innerHTML = `
                 <div style="font-size: 12px; color: #9B9B9B; line-height: 1.6;">
                     この画面は閲覧専用です<br>
-                    <span style="font-size: 11px;">共有された時点の進捗が表示されています</span>
+                    <span style="font-size: 13px;">共有された時点の進捗が表示されています</span>
                 </div>
             `;
 
@@ -24622,6 +25205,13 @@ CH-FUN-149,task,RN-Y3-01,phone,HIDE,`
 
         // PDF進捗レポート生成
         function generateProgressReport() {
+            // PDF 生成〜新規タブ起動までは数百ms の無反応期間があるので、トーストで反応を返す
+            if (typeof showToast === 'function') showToast('PDF を作成しています…');
+            // 体感で少し待ってから重い処理を開始（トーストの表示確定）
+            setTimeout(_runProgressReport, 50);
+        }
+
+        function _runProgressReport() {
             const data = buildFullShareData();
             const pdfRate = data.a > 0 ? Math.round((data.c / data.a) * 100) : 0;
             logEvent('share_action', { method: 'pdf', completion_rate: pdfRate });
