@@ -4628,11 +4628,12 @@
         }
 
         /* ===== 行き先タブ 情報カード (住所/電話/受付時間) ===== */
-        /* ごく薄いクリームで存在感を出しつつ、フェーズカード白地に溶け込む */
+        /* 白地 + 淡色ボーダーで枠線を主役に */
         .dest-info-card {
             margin: 8px 14px 12px;
             padding: 4px 0;
-            background: #FBF9F4;
+            background: #FFFFFF;
+            border: 1px solid #EADFC7;
             border-radius: 10px;
             overflow: hidden;
         }
@@ -9275,13 +9276,14 @@
             padding: 16px 20px 4px;
         }
 
-        /* メッセージバブル */
+        /* メッセージバブル。AI 側はバブルの下に関連タスク/出典/アクション/フィードバックを縦に積む */
         .ai-msg {
             display: flex;
+            flex-direction: column;
             margin-bottom: 12px;
         }
-        .ai-msg-ai { justify-content: flex-start; }
-        .ai-msg-user { justify-content: flex-end; }
+        .ai-msg-ai { align-items: flex-start; }
+        .ai-msg-user { align-items: flex-end; }
         .ai-msg-bubble {
             max-width: 80%;
             padding: 10px 14px;
@@ -9300,6 +9302,208 @@
             background: #2E2E2A;
             color: #FFFFFF;
             border-top-right-radius: 4px;
+        }
+
+        /* 構造化回答: 本文を bubble に収めつつ関連タスク・出典を外側のカード要素として下に並べる */
+        .ai-msg-ai .ai-msg-bubble p { margin: 0 0 8px; }
+        .ai-msg-ai .ai-msg-bubble p:last-child { margin-bottom: 0; }
+        .ai-msg-ai .ai-msg-bubble ul {
+            margin: 4px 0 6px;
+            padding-left: 1.1em;
+            list-style: disc;
+        }
+        .ai-msg-ai .ai-msg-bubble li { margin: 2px 0; line-height: 1.55; }
+        .ai-msg-ai .ai-msg-bubble strong { font-weight: 700; color: var(--text-primary); }
+        .ai-msg-ai .ai-msg-bubble h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 10px 0 4px;
+            letter-spacing: 0.02em;
+        }
+        .ai-msg-ai .ai-msg-bubble h4:first-child { margin-top: 0; }
+        .ai-msg-ai .ai-msg-bubble em { color: var(--text-secondary); font-style: normal; }
+        /* ストリーミング中のカーソル（末尾の▍を点滅表示） */
+        .ai-msg-streaming { position: relative; }
+        .ai-msg-streaming::after { content: ''; }
+        .ai-msg-streaming {
+            /* 文字が増えるたびに再描画。カーソル ▍ は bubble.textContent に直接含めている */
+            animation: aiStreamingCursor 0.9s steps(2) infinite;
+        }
+        @keyframes aiStreamingCursor {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.9; }
+        }
+        .ai-msg-related {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-width: 80%;
+        }
+        .ai-msg-related-label {
+            flex: 0 0 100%;
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-bottom: 2px;
+            letter-spacing: 0.04em;
+        }
+        .ai-msg-related-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            padding: 6px 11px;
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: var(--accent);
+            cursor: pointer;
+            font-family: inherit;
+            text-decoration: none;
+            max-width: 100%;
+        }
+        .ai-msg-related-chip:active { background: #F4F1EC; }
+        .ai-msg-related-chip svg { flex-shrink: 0; }
+        .ai-msg-related-chip-title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .ai-msg-citations {
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 5px;
+            margin-top: 6px;
+            font-size: 11px;
+            color: var(--text-tertiary);
+            max-width: 85%;
+            line-height: 1.6;
+        }
+        .ai-msg-citations svg {
+            width: 11px;
+            height: 11px;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        /* AI 回答のアクション行 (コピー / 家族に送る) */
+        .ai-msg-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .ai-msg-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11.5px;
+            padding: 5px 10px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            font-family: inherit;
+            white-space: nowrap;
+            transition: color 0.15s, background 0.15s;
+        }
+        .ai-msg-action-btn:hover,
+        .ai-msg-action-btn:active {
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+        .ai-msg-action-btn svg {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+        }
+        .ai-msg-action-btn.copied { color: #5b8c6a; }
+
+        /* AI 回答へのフィードバックとエスカレーションパネル */
+        .ai-msg-feedback {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+            align-items: center;
+        }
+        .ai-msg-feedback-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            padding: 6px 12px;
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: inherit;
+            white-space: nowrap;
+            transition: opacity 0.15s, border-color 0.15s, background 0.15s;
+        }
+        .ai-msg-feedback-btn svg {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+        }
+        .ai-msg-feedback-btn:active { opacity: 0.7; }
+        .ai-msg-feedback-btn.selected {
+            background: var(--accent-light);
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .ai-msg-feedback-thanks {
+            font-size: 11.5px;
+            color: var(--text-tertiary);
+            margin-left: 4px;
+        }
+        .ai-msg-handoff {
+            margin-top: 10px;
+            padding: 12px 14px;
+            background: #FBF8F2;
+            border: 1px solid #EADFC7;
+            border-radius: 12px;
+            max-width: 85%;
+        }
+        .ai-msg-handoff-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .ai-msg-handoff-sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .ai-msg-handoff-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 14px;
+            background: #06C755;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+        .ai-msg-handoff-btn:active { opacity: 0.85; }
+        .ai-msg-handoff-note {
+            font-size: 10.5px;
+            color: var(--text-tertiary);
+            text-align: center;
+            margin-top: 6px;
         }
 
         /* タイピングインジケータ */
@@ -9347,33 +9551,47 @@
         }
         .ai-suggestion-chip:active { background: #F1F2EF; }
 
-        /* 入力欄 */
+        /* 入力欄 (single capsule: 入力とアイコンボタンを1つのパネルに統合) */
         .ai-chat-input-row {
             display: flex;
-            gap: 8px;
             align-items: center;
-            padding: 12px 20px;
-            border-top: 1px solid rgba(58, 63, 50, 0.08);
+            padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+            border-top: 1px solid rgba(58, 63, 50, 0.06);
             background: var(--bg-primary);
             flex-shrink: 0;
+        }
+        .ai-chat-input-capsule {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 5px 5px 16px;
+            background: #F4F4F1;
+            border: 1.5px solid transparent;
+            border-radius: 999px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .ai-chat-input-capsule:focus-within {
+            background: #FFFFFF;
+            border-color: var(--accent);
         }
         .ai-chat-input-row input {
             flex: 1;
             min-width: 0;
-            border: 1px solid rgba(58, 63, 50, 0.12);
-            border-radius: 999px;
-            padding: 10px 14px;
-            font-size: 14px;
+            border: none;
+            background: transparent;
+            padding: 9px 0;
+            font-size: 14.5px;
             font-family: inherit;
-            background: #F6F7F4;
             color: var(--text-primary);
             outline: none;
+            line-height: 1.4;
         }
-        .ai-chat-input-row input:focus { border-color: var(--accent); }
+        .ai-chat-input-row input::placeholder { color: var(--text-tertiary); }
         .ai-chat-send {
-            width: 40px; height: 40px;
+            width: 36px; height: 36px;
             border-radius: 50%;
-            background: #2E2E2A;
+            background: #D7D6D0;
             color: #FFFFFF;
             border: none;
             display: flex;
@@ -9381,9 +9599,16 @@
             justify-content: center;
             cursor: pointer;
             flex-shrink: 0;
+            transition: background 0.18s, transform 0.15s;
         }
-        .ai-chat-send:active { opacity: 0.85; }
-        .ai-chat-send svg { width: 18px; height: 18px; }
+        .ai-chat-input-capsule.has-text .ai-chat-send {
+            background: var(--accent);
+        }
+        .ai-chat-send:active { transform: scale(0.92); }
+        .ai-chat-send svg {
+            width: 16px; height: 16px;
+            transform: translateY(-1px);
+        }
 
         /* 下部固定サポーター CTA（シンプル・洗練） */
         .ai-chat-footer-cta {
@@ -12515,13 +12740,15 @@
                 <div class="ai-chat-body" id="aiChatBody"></div>
                 <div class="ai-chat-suggestions" id="aiChatSuggestions"></div>
                 <div class="ai-chat-input-row">
-                    <input type="text" id="aiChatInput" placeholder="質問を入力..." autocomplete="off" />
-                    <button class="ai-chat-send" onclick="sendAIChatMessage()" aria-label="送信">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2" fill="currentColor" stroke="none"></polygon>
-                        </svg>
-                    </button>
+                    <div class="ai-chat-input-capsule" id="aiChatInputCapsule">
+                        <input type="text" id="aiChatInput" placeholder="メッセージを入力..." autocomplete="off" enterkeyhint="send" />
+                        <button class="ai-chat-send" onclick="sendAIChatMessage()" aria-label="送信">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="12" y1="19" x2="12" y2="5"></line>
+                                <polyline points="5 12 12 5 19 12"></polyline>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 <div class="ai-chat-footer-cta">
                     <button type="button" class="ai-chat-footer-btn" onclick="openLineOA()">
@@ -26666,13 +26893,16 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
 
             _appendAIMessage(
                 'こんにちは。このタスクについて、制度や手続きの一般的な情報をお答えします。\n\n' +
-                '個別のご事情や判断を要するご質問は、下の「サポーターに直接相談する」からお気軽にどうぞ。'
+                '個別のご事情や判断を要するご質問は、下の「サポーターに直接相談する」からお気軽にどうぞ。',
+                { showFeedback: false }
             );
 
             _renderSuggestions(_generateSuggestions(taskId));
 
             var input = document.getElementById('aiChatInput');
             if (input) input.value = '';
+            var capsule = document.getElementById('aiChatInputCapsule');
+            if (capsule) capsule.classList.remove('has-text');
 
             document.getElementById('aiChatOverlay').classList.add('show');
         }
@@ -26689,6 +26919,8 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
             var rawText = input.value.trim();
             if (!rawText) return;
             input.value = '';
+            var capsule = document.getElementById('aiChatInputCapsule');
+            if (capsule) capsule.classList.remove('has-text');
 
             // 0. PII 自動マスク（ユーザー入力のみ、taskContext は対象外）
             var sanitized = _sanitizePII(rawText);
@@ -26707,7 +26939,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 _showTyping();
                 setTimeout(function() {
                     _hideTyping();
-                    _appendAIMessage(guardrailResponse);
+                    _appendAIMessage(guardrailResponse, { showFeedback: false });
                 }, 400);
                 return;
             }
@@ -26733,9 +26965,9 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 _aiResolved = true;
                 _hideTyping();
                 if (navigator.onLine === false) {
-                    _appendAIMessage('オフラインのようです。接続が戻ってから、もう一度お試しください。');
+                    _appendAIMessage('オフラインのようです。接続が戻ってから、もう一度お試しください。', { showFeedback: false });
                 } else {
-                    _appendAIMessage('応答に時間がかかっています。通信環境を確認して、もう一度お試しください。');
+                    _appendAIMessage('応答に時間がかかっています。通信環境を確認して、もう一度お試しください。', { showFeedback: false });
                 }
             }, 15000);
 
@@ -26755,9 +26987,9 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                     _hideTyping();
                     if (answer) {
                         // 末尾 CTA はここで必ず付加（LLM には書かせない）
-                        _appendAIMessage(answer + _AI_ESCALATION_NOTE);
+                        _appendAIMessage(answer + _AI_ESCALATION_NOTE, { stream: true });
                     } else {
-                        _appendAIMessage(_AI_NO_MATCH_MESSAGE);
+                        _appendAIMessage(_AI_NO_MATCH_MESSAGE, { showFeedback: false });
                     }
                 }, wait);
             }).catch(function(err) {
@@ -26767,24 +26999,491 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 console.error('[ai chat] provider error:', err);
                 _hideTyping();
                 if (navigator.onLine === false) {
-                    _appendAIMessage('オフラインのようです。接続が戻ってから、もう一度お試しください。');
+                    _appendAIMessage('オフラインのようです。接続が戻ってから、もう一度お試しください。', { showFeedback: false });
                 } else {
-                    _appendAIMessage(_AI_ERROR_MESSAGE);
+                    _appendAIMessage(_AI_ERROR_MESSAGE, { showFeedback: false });
                 }
             });
         }
 
-        function _appendAIMessage(text) {
+        // AI 回答を「バブル本体 + 関連タスク chips + 出典 + フィードバック」に分解してレンダリング。
+        //  - 本文: 軽量 markdown (h3/h4=###、太字=**、箇条書き=- か •) を対応
+        //  - 関連タスク: 本文中の RN-xxxx-NN 参照を下部の chip として並べる (タップで遷移)
+        //  - 出典: 本文最後の「出典: ...」or「参考: ...」行を抽出してフッタへ
+        //  - フィードバック: 🙂/🤔 チップ。🤔 からサポーターに会話履歴ごとハンドオフ
+        //  opts.showFeedback が false の場合は ② を描画しない（挨拶・ガードレール応答用）
+        //  opts.stream が true の場合はタイプライター風に1文字ずつ表示
+        function _appendAIMessage(text, opts) {
+            opts = opts || {};
+            if (opts.stream) {
+                return _appendAIMessageStreaming(String(text || ''), opts);
+            }
+            return _appendAIMessageInstant(text, opts);
+        }
+
+        function _appendAIMessageInstant(text, opts) {
+            var body = document.getElementById('aiChatBody');
+            if (!body) return;
+            var wrap = document.createElement('div');
+            wrap.className = 'ai-msg ai-msg-ai';
+
+            var parsed = _parseAIMessageContent(String(text || ''));
+
+            var bubble = document.createElement('div');
+            bubble.className = 'ai-msg-bubble';
+            bubble.innerHTML = parsed.html;
+            wrap.appendChild(bubble);
+
+            // 関連タスク chips
+            if (parsed.relatedTaskIds.length) {
+                var related = document.createElement('div');
+                related.className = 'ai-msg-related';
+                var label = document.createElement('span');
+                label.className = 'ai-msg-related-label';
+                label.textContent = '関連するタスク';
+                related.appendChild(label);
+                parsed.relatedTaskIds.forEach(function(tid) {
+                    var t = (typeof tasks !== 'undefined') ? tasks.find(function(x) { return x.id === tid; }) : null;
+                    if (!t) return;
+                    var chip = document.createElement('button');
+                    chip.type = 'button';
+                    chip.className = 'ai-msg-related-chip';
+                    chip.setAttribute('data-task-id', tid);
+                    chip.onclick = function() {
+                        try { if (typeof closeAIChat === 'function') { document.getElementById('aiChatOverlay').classList.remove('show'); } } catch (e) {}
+                        if (typeof showTaskDetail === 'function') showTaskDetail(tid);
+                    };
+                    chip.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+                    var tEl = document.createElement('span');
+                    tEl.className = 'ai-msg-related-chip-title';
+                    tEl.textContent = t.title;
+                    chip.appendChild(tEl);
+                    related.appendChild(chip);
+                });
+                wrap.appendChild(related);
+            }
+
+            // 出典フッタ
+            if (parsed.citation) {
+                var cite = document.createElement('div');
+                cite.className = 'ai-msg-citations';
+                cite.innerHTML =
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                        '<path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>' +
+                    '</svg><span></span>';
+                cite.querySelector('span').textContent = parsed.citation;
+                wrap.appendChild(cite);
+            }
+
+            // アクション行 (コピー / 家族に送る) と フィードバック行 — 挨拶/エラー時はスキップ
+            if (opts.showFeedback !== false) {
+                wrap.appendChild(_buildAIActionsRow(String(text || '')));
+                wrap.appendChild(_buildAIFeedbackRow());
+            }
+
+            body.appendChild(wrap);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        // タイプライター風にテキストを 1 文字ずつ表示してから、完了時に markdown/関連/出典を整形する。
+        // LLM ストリーミングの「考えている感」を体感速度向上目的でエミュレート。
+        function _appendAIMessageStreaming(text, opts) {
             var body = document.getElementById('aiChatBody');
             if (!body) return;
             var wrap = document.createElement('div');
             wrap.className = 'ai-msg ai-msg-ai';
             var bubble = document.createElement('div');
-            bubble.className = 'ai-msg-bubble';
-            bubble.textContent = text;
+            bubble.className = 'ai-msg-bubble ai-msg-streaming';
+            // 最終的に markdown 化される前に使う一時的な textContent レイヤ
             wrap.appendChild(bubble);
             body.appendChild(wrap);
-            body.scrollTop = body.scrollHeight;
+
+            var full = String(text || '');
+            var pos = 0;
+            var cps = 45;                           // chars per second
+            var intervalMs = 1000 / cps;
+            var lastTick = Date.now();
+
+            function step() {
+                var now = Date.now();
+                var advance = Math.max(1, Math.floor((now - lastTick) / intervalMs));
+                lastTick = now;
+                pos = Math.min(full.length, pos + advance);
+                bubble.textContent = full.slice(0, pos) + (pos < full.length ? '▍' : '');
+                body.scrollTop = body.scrollHeight;
+                if (pos < full.length) {
+                    requestAnimationFrame(step);
+                } else {
+                    // 完了後に構造化レンダリングに差し替える
+                    var parsed = _parseAIMessageContent(full);
+                    bubble.classList.remove('ai-msg-streaming');
+                    bubble.innerHTML = parsed.html;
+
+                    if (parsed.relatedTaskIds.length) {
+                        var related = document.createElement('div');
+                        related.className = 'ai-msg-related';
+                        var label = document.createElement('span');
+                        label.className = 'ai-msg-related-label';
+                        label.textContent = '関連するタスク';
+                        related.appendChild(label);
+                        parsed.relatedTaskIds.forEach(function(tid) {
+                            var t = (typeof tasks !== 'undefined') ? tasks.find(function(x) { return x.id === tid; }) : null;
+                            if (!t) return;
+                            var chip = document.createElement('button');
+                            chip.type = 'button';
+                            chip.className = 'ai-msg-related-chip';
+                            chip.setAttribute('data-task-id', tid);
+                            chip.onclick = function() {
+                                try { document.getElementById('aiChatOverlay').classList.remove('show'); } catch (e) {}
+                                if (typeof showTaskDetail === 'function') showTaskDetail(tid);
+                            };
+                            chip.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+                            var tEl = document.createElement('span');
+                            tEl.className = 'ai-msg-related-chip-title';
+                            tEl.textContent = t.title;
+                            chip.appendChild(tEl);
+                            related.appendChild(chip);
+                        });
+                        wrap.appendChild(related);
+                    }
+
+                    if (parsed.citation) {
+                        var cite = document.createElement('div');
+                        cite.className = 'ai-msg-citations';
+                        cite.innerHTML =
+                            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                                '<path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>' +
+                            '</svg><span></span>';
+                        cite.querySelector('span').textContent = parsed.citation;
+                        wrap.appendChild(cite);
+                    }
+
+                    if (opts.showFeedback !== false) {
+                        wrap.appendChild(_buildAIActionsRow(full));
+                        wrap.appendChild(_buildAIFeedbackRow());
+                    }
+                    body.scrollTop = body.scrollHeight;
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // 📋 コピー / 💬 家族に送る
+        function _buildAIActionsRow(rawText) {
+            var row = document.createElement('div');
+            row.className = 'ai-msg-actions';
+
+            var copyBtn = document.createElement('button');
+            copyBtn.type = 'button';
+            copyBtn.className = 'ai-msg-action-btn';
+            copyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>コピー</span>';
+            copyBtn.onclick = function() {
+                // 出典・CTA・関連タスクのID行を削ぎ落とした、読みやすい本文だけコピー
+                var clean = String(rawText || '')
+                    .replace(/\n{2,}個別のご事情は、下の「サポーターに直接相談する」[^\n]*/g, '')
+                    .replace(/^\s*出典[：:].*$/gmi, '')
+                    .trim();
+                _copyToClipboard(clean).then(function(ok) {
+                    if (ok) {
+                        copyBtn.classList.add('copied');
+                        copyBtn.querySelector('span').textContent = 'コピーしました';
+                        setTimeout(function() {
+                            copyBtn.classList.remove('copied');
+                            copyBtn.querySelector('span').textContent = 'コピー';
+                        }, 1800);
+                        if (typeof logEvent === 'function') {
+                            try { logEvent('ai_chat_copy', { task_id: _aiChatState.taskId }); } catch (e) {}
+                        }
+                    } else if (typeof showToast === 'function') {
+                        showToast('コピーに失敗しました');
+                    }
+                });
+            };
+
+            var shareBtn = document.createElement('button');
+            shareBtn.type = 'button';
+            shareBtn.className = 'ai-msg-action-btn';
+            shareBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg><span>家族に送る</span>';
+            shareBtn.onclick = function() {
+                var task = (typeof tasks !== 'undefined') ? tasks.find(function(t) { return t.id === _aiChatState.taskId; }) : null;
+                var titleText = 'ReliefNote AI の回答' + (task ? '（' + task.title + '）' : '');
+                var shareText = String(rawText || '')
+                    .replace(/\n{2,}個別のご事情は、下の「サポーターに直接相談する」[^\n]*/g, '')
+                    .trim();
+                // Web Share API が使える環境なら OS ネイティブの共有シートを出す
+                if (navigator.share) {
+                    navigator.share({ title: titleText, text: shareText }).catch(function() {});
+                    if (typeof logEvent === 'function') {
+                        try { logEvent('ai_chat_share', { task_id: _aiChatState.taskId, channel: 'native' }); } catch (e) {}
+                    }
+                    return;
+                }
+                // 非対応環境はクリップボードにコピーしてトースト誘導
+                _copyToClipboard(titleText + '\n\n' + shareText).then(function(ok) {
+                    if (typeof showToast === 'function') {
+                        showToast(ok ? 'コピーしました。LINE等で貼り付けてください' : 'コピーに失敗しました');
+                    }
+                    if (typeof logEvent === 'function') {
+                        try { logEvent('ai_chat_share', { task_id: _aiChatState.taskId, channel: 'clipboard' }); } catch (e) {}
+                    }
+                });
+            };
+
+            row.appendChild(copyBtn);
+            row.appendChild(shareBtn);
+            return row;
+        }
+
+        // クリップボード書き込み（Clipboard API→execCommand 順のフォールバック）
+        function _copyToClipboard(text) {
+            return new Promise(function(resolve) {
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(function() { resolve(true); }, function() { resolve(_legacyCopy(text)); });
+                        return;
+                    }
+                } catch (e) {}
+                resolve(_legacyCopy(text));
+            });
+        }
+        function _legacyCopy(text) {
+            try {
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed'; ta.style.top = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                var ok = document.execCommand('copy');
+                document.body.removeChild(ta);
+                return ok;
+            } catch (e) { return false; }
+        }
+
+        // 🙂 / 🤔 フィードバックチップを作り、ハンドオフ導線を組み立てる
+        function _buildAIFeedbackRow() {
+            var row = document.createElement('div');
+            row.className = 'ai-msg-feedback';
+
+            var btnHelpful = document.createElement('button');
+            btnHelpful.type = 'button';
+            btnHelpful.className = 'ai-msg-feedback-btn';
+            btnHelpful.innerHTML =
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                    '<polyline points="20 6 9 17 4 12"/>' +
+                '</svg>' +
+                '<span>解決した</span>';
+
+            var btnStuck = document.createElement('button');
+            btnStuck.type = 'button';
+            btnStuck.className = 'ai-msg-feedback-btn';
+            btnStuck.innerHTML =
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                    '<circle cx="12" cy="12" r="10"/>' +
+                    '<line x1="12" y1="8" x2="12" y2="13"/>' +
+                    '<line x1="12" y1="16.5" x2="12" y2="16.5"/>' +
+                '</svg>' +
+                '<span>まだ不安</span>';
+
+            btnHelpful.onclick = function() {
+                btnHelpful.classList.add('selected');
+                btnStuck.disabled = true;
+                btnStuck.style.opacity = '0.4';
+                var thanks = document.createElement('span');
+                thanks.className = 'ai-msg-feedback-thanks';
+                thanks.textContent = 'お役に立ててよかったです。';
+                row.appendChild(thanks);
+                try {
+                    if (typeof logEvent === 'function') {
+                        logEvent('ai_chat_feedback', {
+                            task_id: _aiChatState.taskId,
+                            helpful: true,
+                            turn: _aiChatState.turnCount
+                        });
+                    }
+                } catch (e) {}
+            };
+
+            btnStuck.onclick = function() {
+                btnStuck.classList.add('selected');
+                btnHelpful.disabled = true;
+                btnHelpful.style.opacity = '0.4';
+                // ハンドオフパネルを追加
+                var handoff = _buildAIHandoffPanel();
+                row.parentNode.insertBefore(handoff, row.nextSibling);
+                var body = document.getElementById('aiChatBody');
+                if (body) body.scrollTop = body.scrollHeight;
+                try {
+                    if (typeof logEvent === 'function') {
+                        logEvent('ai_chat_feedback', {
+                            task_id: _aiChatState.taskId,
+                            helpful: false,
+                            turn: _aiChatState.turnCount
+                        });
+                    }
+                } catch (e) {}
+            };
+
+            row.appendChild(btnHelpful);
+            row.appendChild(btnStuck);
+            return row;
+        }
+
+        function _buildAIHandoffPanel() {
+            var panel = document.createElement('div');
+            panel.className = 'ai-msg-handoff';
+
+            var title = document.createElement('div');
+            title.className = 'ai-msg-handoff-title';
+            title.textContent = 'サポーターに引き継げます';
+            panel.appendChild(title);
+
+            var sub = document.createElement('div');
+            sub.className = 'ai-msg-handoff-sub';
+            sub.textContent = 'これまでの会話をコピーしてLINEを開きます。貼り付けて送信するだけで、事情を1から説明しなくて大丈夫です。';
+            panel.appendChild(sub);
+
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'ai-msg-handoff-btn';
+            btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>会話を引き継いでLINEで相談</span>';
+            btn.onclick = _triggerAIHandoff;
+            panel.appendChild(btn);
+
+            var note = document.createElement('div');
+            note.className = 'ai-msg-handoff-note';
+            note.textContent = '会話内容は自動でコピー済みです';
+            panel.appendChild(note);
+
+            return panel;
+        }
+
+        function _triggerAIHandoff() {
+            // 1. 会話履歴 + タスク文脈を整形
+            var task = (typeof tasks !== 'undefined') ? tasks.find(function(t) { return t.id === _aiChatState.taskId; }) : null;
+            var lines = [];
+            lines.push('ReliefNote AIアシスタントとの会話を引き継ぎます。');
+            if (task) lines.push('【タスク】' + task.title + ' (' + task.id + ')');
+            lines.push('─────────');
+            var history = _getAIChatHistory(20);
+            // _getAIChatHistory は直前の user を除外するので、画面の全履歴を取り直す
+            var body = document.getElementById('aiChatBody');
+            if (body) {
+                var nodes = body.querySelectorAll('.ai-msg');
+                history = [];
+                for (var i = 0; i < nodes.length; i++) {
+                    var node = nodes[i];
+                    if (node.id === 'aiChatTypingRow') continue;
+                    var bubble = node.querySelector('.ai-msg-bubble');
+                    if (!bubble) continue;
+                    var role = node.classList.contains('ai-msg-user') ? 'あなた' : 'AI';
+                    history.push({ role: role, content: (bubble.textContent || '').trim() });
+                }
+            }
+            history.forEach(function(h) {
+                lines.push('【' + h.role + '】');
+                lines.push(h.content);
+                lines.push('');
+            });
+            lines.push('─────────');
+            lines.push('（このあとご相談したいこと）');
+            var text = lines.join('\n');
+
+            // 2. クリップボードへコピー
+            var copied = false;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text);
+                    copied = true;
+                }
+            } catch (e) {}
+            if (!copied) {
+                try {
+                    var ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed'; ta.style.top = '-9999px';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    copied = true;
+                } catch (e2) {}
+            }
+
+            // 3. トースト + LINE へ
+            if (typeof showToast === 'function') {
+                showToast(copied ? '会話をコピーしました。LINEで貼り付けてください' : 'コピーに失敗しました。LINEを開きます');
+            }
+            try {
+                if (typeof logEvent === 'function') {
+                    logEvent('ai_chat_handoff', {
+                        task_id: _aiChatState.taskId,
+                        turn: _aiChatState.turnCount,
+                        copied: copied
+                    });
+                }
+            } catch (e) {}
+            _aiChatState.escalated = true;
+            if (typeof openLineOA === 'function') {
+                setTimeout(openLineOA, 400);
+            }
+        }
+
+        // 軽量 markdown + タスク参照抽出 + 出典分離
+        function _parseAIMessageContent(raw) {
+            var text = raw.replace(/\r\n/g, '\n');
+
+            // 1. 出典行の分離 (末尾の「出典:」または「参考:」ではじまる行を取り出す)
+            var citation = '';
+            text = text.replace(/(?:^|\n)(?:出典|参考|ソース)[：:]\s*([^\n]+)\s*$/i, function(m, c) {
+                citation = c.trim();
+                return '';
+            });
+
+            // 2. タスク参照を収集 (RN-XXX-NN / RN-XXX-NNa 形式)
+            var ids = [];
+            var seen = Object.create(null);
+            text.replace(/RN-[A-Z]+\d*-\d+[a-z]?/g, function(id) {
+                if (!seen[id]) { seen[id] = true; ids.push(id); }
+                return id;
+            });
+
+            // 3. 軽量 markdown を HTML に変換 (XSS 対策のため先に escape)
+            var html = _escapeHtml(text).trim();
+
+            // 見出し ### → h4
+            html = html.replace(/(^|\n)\s*#{2,4}\s+(.+)/g, function(_, pre, title) {
+                return pre + '<h4>' + title.trim() + '</h4>';
+            });
+
+            // 太字 **xxx**
+            html = html.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+
+            // 箇条書き (行頭 - , ・, •) をまとめて <ul><li>
+            html = html.replace(/(?:^|\n)((?:[\s]*[-・•][^\n]+\n?)+)/g, function(m, block) {
+                var items = block
+                    .split('\n')
+                    .map(function(l) { return l.replace(/^\s*[-・•]\s*/, '').trim(); })
+                    .filter(function(l) { return l.length > 0; });
+                return '\n<ul>' + items.map(function(i) { return '<li>' + i + '</li>'; }).join('') + '</ul>';
+            });
+
+            // 残りの改行を段落に整える (連続改行=段落、単独改行=br)
+            html = html.split(/\n{2,}/).map(function(p) {
+                p = p.trim();
+                if (!p) return '';
+                if (/^<(h4|ul)/.test(p)) return p;     // 既にブロック要素
+                return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
+            }).join('');
+
+            return {
+                html: html,
+                relatedTaskIds: ids.slice(0, 3),       // 多すぎると圧迫するので最大3
+                citation: citation
+            };
+        }
+
+        function _escapeHtml(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
         function _appendUserMessage(text) {
@@ -26816,17 +27515,47 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
             if (row && row.parentNode) row.parentNode.removeChild(row);
         }
 
+        // タスク別のスマート質問候補。以下の優先順で生成:
+        //  1. task_content_master の faq 列から「そのタスク固有の疑問」を抽出（最大4件）
+        //  2. 一般的な手続き汎用質問（必要書類・期限・提出先…）で不足分を補う
+        //  3. 最大 6 件まで表示
         function _generateSuggestions(taskId) {
             var d = (typeof taskDetails !== 'undefined' && taskDetails) ? taskDetails[taskId] : null;
             var task = tasks.find(function(t) { return t.id === taskId; });
-            var suggestions = [];
-            if (d && d.requiredDocs) suggestions.push('必要書類は？');
-            if (task && (task.legalDueDays || task.phase)) suggestions.push('期限はいつまで？');
-            if (d && (d.destination || d.address)) suggestions.push('どこに提出する？');
-            if (d && d.officeHours) suggestions.push('受付時間は？');
+            var out = [];
+            var seen = Object.create(null);
+            function add(q) {
+                if (!q) return;
+                var key = q.replace(/[\s?？]/g, '');
+                if (seen[key]) return;
+                seen[key] = true;
+                out.push(q);
+            }
+
+            // 1. タスク固有の FAQ を抽出
+            if (d && d.faq) {
+                var parts = String(d.faq).split(/(?=Q\.)/).filter(function(f) { return f.trim(); });
+                for (var i = 0; i < parts.length && out.length < 4; i++) {
+                    var piece = parts[i].trim();
+                    // "Q.xxx→yyy" から質問本文のみ取り出す
+                    var q = piece.replace(/^Q[．.]\s*/, '').split('→')[0].trim();
+                    // 末尾の「？」「?」を整形、長すぎるものは切る
+                    q = q.replace(/[／/]\s*$/, '').trim();
+                    if (!/[?？]$/.test(q)) q = q + '？';
+                    if (q.length > 26) continue;   // チップに収まらない長さはスキップ
+                    add(q);
+                }
+            }
+
+            // 2. 汎用の手続き質問で不足分を埋める
+            if (d && d.requiredDocs) add('必要書類は？');
+            if (task && (task.legalDueDays || task.phase)) add('期限はいつまで？');
+            if (d && (d.destination || d.address)) add('どこに提出する？');
+            if (d && d.officeHours) add('受付時間は？');
             var steps = (typeof taskStepsData !== 'undefined' && taskStepsData && taskStepsData[taskId]) ? taskStepsData[taskId].steps_short : null;
-            if (steps && steps.length) suggestions.push('手順を教えて');
-            return suggestions.slice(0, 3);
+            if (steps && steps.length) add('手順を教えて');
+
+            return out.slice(0, 6);
         }
 
         function _renderSuggestions(list) {
@@ -27027,8 +27756,10 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
         }
 
         // 全応答末尾に付けるサポーター導線（ガードレール #2: UI 側ハードコード）
+        // 注: バブル下の「解決した／まだ不安」チップでもエスカレーション導線を提示しているが、
+        //      この一文はレガシーな保険として残す。
         var _AI_ESCALATION_NOTE =
-            '\n\n💡 個別のご事情は下の「サポーターに直接相談する」からお尋ねください。';
+            '\n\n個別のご事情は、下の「サポーターに直接相談する」からお尋ねください。';
 
         // プロバイダが null を返したときの既定メッセージ（mock でキーワード未マッチ等）
         var _AI_NO_MATCH_MESSAGE =
@@ -27232,10 +27963,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 }
                 // ローカル環境では AI Worker を呼ばずモックレスポンスで応答
                 if (typeof _isProductionEnv === 'function' && !_isProductionEnv()) {
-                    return Promise.resolve({
-                        answer: '【ローカル環境】AIチャットはローカルでは外部送信されません。本番環境(reliefnote.github.io)で利用してください。',
-                        suggestions: []
-                    });
+                    return Promise.resolve('【ローカル環境】AIチャットはローカルでは外部送信されません。本番環境(reliefnote.github.io)で利用してください。');
                 }
                 return fetch(_AI_CHAT_CONFIG.apiEndpoint, {
                     method: 'POST',
@@ -27263,10 +27991,20 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
             return _aiMockProvider;
         }
 
-        // Enter キーで送信（IME 変換中は無視）
+        // Enter キーで送信（IME 変換中は無視）＋ 入力有無で送信ボタン色を切替
         document.addEventListener('DOMContentLoaded', function() {
             var input = document.getElementById('aiChatInput');
             if (!input) return;
+            var capsule = document.getElementById('aiChatInputCapsule');
+            function syncCapsuleState() {
+                if (!capsule) return;
+                if (input.value && input.value.trim().length > 0) {
+                    capsule.classList.add('has-text');
+                } else {
+                    capsule.classList.remove('has-text');
+                }
+            }
+            input.addEventListener('input', syncCapsuleState);
             input.addEventListener('keydown', function(e) {
                 if (e.key !== 'Enter') return;
                 if (e.isComposing || e.keyCode === 229) return;
@@ -28373,7 +29111,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
         // ========== Service Worker 登録 (キャッシュバスティング) ==========
         // HTMLは network-first、画像等は cache-first。新しいデプロイを確実に
         // ユーザーへ届けるために使用する。詳細は /sw.js を参照。
-        window.APP_VERSION = 'rn-2026-04-21-phase6d';
+        window.APP_VERSION = 'rn-2026-04-21-phase6j';
         (function registerServiceWorker() {
             if (!('serviceWorker' in navigator)) return;
             // localhost / file:// での開発時はスキップしない（動作確認のため）
