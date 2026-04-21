@@ -376,7 +376,6 @@
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 28px;
-            box-shadow: 0 12px 32px rgba(58, 63, 50, 0.12), 0 2px 6px rgba(58, 63, 50, 0.06);
         }
 
         .splash-logo-fallback {
@@ -466,7 +465,6 @@
             padding: 16px 24px;
             font-weight: 600;
             letter-spacing: 2px;
-            box-shadow: 0 8px 20px rgba(58, 63, 50, 0.18);
         }
 
         /* 画面1: オンボーディング（質問） */
@@ -939,8 +937,8 @@
         .home-header {
             position: relative;
             background: #FBF9F5;
-            padding: 16px 16px 20px;
-            margin-bottom: 14px;
+            padding: 16px 16px 44px;
+            margin-bottom: 0;
             border-bottom: 1px solid var(--border-light);
             overflow: hidden;
         }
@@ -963,110 +961,82 @@
             -webkit-tap-highlight-color: transparent;
         }
         .home-admin-banner-inner {
+            position: relative;
             background: #FFFFFF;
-            border: 1.5px solid #D6CFBE;
+            border: 1px solid var(--border-light);
             border-radius: 14px;
-            padding: 18px 20px;
-            box-shadow: 0 3px 12px rgba(139, 126, 106, 0.13);
+            padding: 14px 36px 14px 16px;
         }
-        .home-admin-banner-inner:active {
-            background: #FDFCFA;
-            box-shadow: 0 1px 6px rgba(139, 126, 106, 0.10);
+        .home-admin-banner-inner:active { background: #FDFCFA; }
+        .home-admin-banner-chevron {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            transition: transform 0.15s;
+            pointer-events: none;
         }
-        .home-admin-banner-msg {
-            font-size: 14.5px;
-            font-weight: 500;
-            color: var(--text-primary);
-            line-height: 1.8;
-            margin-bottom: 12px;
-        }
-        .home-admin-banner-msg .hl-paper {
-            font-weight: 700;
-            color: #7A6C52;
-            background: #F3F2EF;
-            padding: 1px 6px;
-            border-radius: 4px;
-        }
-        .home-admin-banner-msg .hl-app {
-            font-weight: 700;
-            color: var(--accent);
+        .home-admin-banner-inner:active .home-admin-banner-chevron {
+            transform: translateY(-50%) translateX(2px);
         }
         .home-admin-banner-heading {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-align: center;
-            margin-bottom: 14px;
-            letter-spacing: 0.02em;
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-tertiary);
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+            text-transform: none;
         }
-        .home-admin-banner-split {
+        .home-admin-route {
             display: flex;
-            align-items: stretch;
-            gap: 12px;
-            margin-bottom: 14px;
-        }
-        .home-admin-banner-col {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            text-align: center;
-            padding: 4px 2px;
+            gap: 10px;
+            padding: 7px 0;
         }
-        .home-admin-banner-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+        .home-admin-route-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 8px;
-        }
-        .home-admin-banner-icon-paper {
-            background: #F3F2EF;
-        }
-        .home-admin-banner-icon-app {
-            background: #EEEEE8;
-        }
-        .home-admin-banner-col-label {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-tertiary);
-            margin-bottom: 4px;
-        }
-        .home-admin-banner-col-desc {
-            font-size: 13px;
-            color: var(--text-primary);
-            line-height: 1.5;
-        }
-        .home-admin-banner-col-desc b {
-            font-weight: 700;
-            color: var(--accent);
-        }
-        .home-admin-banner-col:first-child .home-admin-banner-col-desc b {
-            color: #7A6C52;
-        }
-        .home-admin-banner-divider {
-            width: 1px;
-            background: var(--border-light);
             flex-shrink: 0;
         }
-        .home-admin-banner-cta {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
+        .home-admin-route-icon.paper { background: #F3EFE6; }
+        .home-admin-route-icon.app { background: #F3EEE9; }
+        .home-admin-route-label {
+            font-size: 15px;
+            font-weight: 700;
+            flex-shrink: 0;
+            min-width: 78px;
+            letter-spacing: 0.01em;
+        }
+        .home-admin-route-label.paper { color: #7A6C52; }
+        .home-admin-route-label.app { color: var(--accent); }
+        .home-admin-route-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            color: #FFFFFF;
+            background: var(--accent);
+            padding: 2px 7px;
+            border-radius: 8px;
+            letter-spacing: 0.02em;
+            flex-shrink: 0;
+        }
+        .home-admin-route-arrow {
+            color: #C9C1B0;
+            font-size: 13px;
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+        .home-admin-route-dest {
             font-size: 12.5px;
-            font-weight: 600;
-            color: var(--accent);
-            padding-top: 10px;
-            border-top: 1px solid var(--border-light);
-        }
-        .home-admin-banner-cta svg {
-            transition: transform 0.15s;
-        }
-        .home-admin-banner-inner:active .home-admin-banner-cta svg {
-            transform: translateX(2px);
+            color: var(--text-tertiary);
+            flex: 1;
+            font-weight: 500;
         }
 
         /* まとめて質問の中断復帰バナー */
@@ -1340,7 +1310,7 @@
         }
 
         .home-today-section {
-            padding: 16px 16px 0;
+            padding: 4px 16px 0;
         }
 
         .home-today-card {
@@ -1349,7 +1319,6 @@
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 0;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
 
         .phase-message-home {
@@ -1382,21 +1351,22 @@
             margin-bottom: 8px;
         }
 
-        /* サポートチームカード */
+        /* サポートチームカード (ヘッダー下端の境界線がカードの中央を通るよう配置) */
         .home-care-team-card {
             display: flex;
             align-items: center;
             padding: 14px 16px;
             background: #FFFFFF;
+            border: 1px solid var(--border-light);
             border-radius: 12px;
-            margin: 12px 16px 0;
+            margin: -36px 16px 8px;
+            position: relative;
+            z-index: 2;
             cursor: pointer;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.15s ease;
         }
         .home-care-team-card:active {
             transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
         }
 
         .care-team-icon {
@@ -1444,15 +1414,14 @@
             align-items: center;
             padding: 14px 16px;
             background: #FFFFFF;
+            border: 1px solid var(--border-light);
             border-radius: 12px;
             margin: 10px 16px 0;
             cursor: pointer;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.15s ease;
         }
         .home-healing-card:active {
             transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
         }
 
         .healing-icon {
@@ -1733,7 +1702,6 @@
             align-items: center;
             justify-content: center;
             color: var(--accent);
-            box-shadow: 0 1px 2px rgba(58, 63, 50, 0.05), 0 4px 10px rgba(58, 63, 50, 0.04);
             transition: background 0.2s ease, border-color 0.2s ease;
             -webkit-tap-highlight-color: transparent;
             padding: 0;
@@ -1754,7 +1722,6 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
 
         .guide-tabs-border {
@@ -1865,8 +1832,8 @@
 
         .guide-summary {
             background: #FFFFFF;
+            border: 1px solid var(--border-light);
             border-radius: 12px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
             padding: 16px 20px;
             margin: 16px 16px 0;
         }
@@ -1940,8 +1907,8 @@
         /* フェーズカード（全体を包む白カード） */
         .phase-card {
             background: #FFFFFF;
+            border: 1px solid var(--border-light);
             border-radius: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             overflow: hidden;
             position: relative;
         }
@@ -2262,8 +2229,8 @@
         .category-section { margin: 12px 16px 0; }
         .category-card {
             background: #FFFFFF;
+            border: 1px solid var(--border-light);
             border-radius: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             overflow: hidden;
         }
         .category-header { padding: 16px 16px 14px; cursor: pointer; transition: opacity 0.15s ease; }
@@ -3299,6 +3266,16 @@
             100% { box-shadow: 0 0 0 0 rgba(58, 63, 50, 0); }
         }
 
+        /* ホーム画面初回表示時の波紋演出（メインCTAを1回だけ強調） */
+        @keyframes home-card-ripple {
+            0%   { box-shadow: 0 0 0 0 rgba(185, 95, 62, 0.32); }
+            60%  { box-shadow: 0 0 0 14px rgba(185, 95, 62, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(185, 95, 62, 0); }
+        }
+        .home-pulse-once {
+            animation: home-card-ripple 1.8s ease-out 0.35s 2;
+        }
+
         .step-item.current .step-indicator {
             background: #FFFFFF;
             color: var(--accent);
@@ -3513,10 +3490,10 @@
         /* 専門家選びのヒント (アコーディオンセクション) */
         .expert-tips-section {
             background: #FFFFFF;
+            border: 1px solid var(--border-light);
             border-radius: 14px;
             margin: 0 0 14px;
             padding: 16px 16px 6px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
         .expert-tips-header {
             display: flex;
@@ -4103,10 +4080,10 @@
 
         .settings-section {
             background: var(--bg-primary);
+            border: 1px solid var(--border-light);
             margin: 0 16px 16px;
             padding: 16px;
             border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
 
         .settings-section-title {
@@ -4587,8 +4564,8 @@
             margin: 14px 16px 4px;
             padding: 14px 16px;
             background: var(--bg-primary);
+            border: 1px solid var(--border-light);
             border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
         .custom-tasks-title {
             font-size: 13px;
@@ -4956,9 +4933,9 @@
         .expert-neutrality-banner svg { flex-shrink: 0; margin-top: 1px; }
 
         .expert-card-v2 {
-            background: #FFFFFF; border-radius: 14px;
+            background: #FFFFFF; border: 1px solid var(--border-light);
+            border-radius: 14px;
             margin-bottom: 14px; overflow: hidden;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
         .expert-card-v2-top {
             display: flex; align-items: center; gap: 12px;
@@ -5035,8 +5012,8 @@
             line-height: 1.7; margin: 0 0 10px;
         }
         .expert-gov-list {
-            background: #FFFFFF; border-radius: 14px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            background: #FFFFFF; border: 1px solid var(--border-light);
+            border-radius: 14px;
             overflow: hidden;
         }
         .expert-gov-item {
@@ -5071,13 +5048,12 @@
         .home-expert-entry {
             display: flex; align-items: center;
             padding: 14px 16px; margin: 10px 16px calc(56px + 60px + env(safe-area-inset-bottom));
-            background: #FFFFFF; border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;
+            background: #FFFFFF; border: 1px solid var(--border-light);
+            border-radius: 12px;
+            cursor: pointer; transition: transform 0.15s ease;
         }
         .home-expert-entry:active {
             transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
         }
         .home-expert-entry-icon {
             width: 42px; height: 42px; border-radius: 50%;
@@ -5115,8 +5091,8 @@
         .share-card {
             display: flex; align-items: center;
             padding: 14px 16px; margin: 0 16px 12px;
-            background: #FFFFFF; border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            background: #FFFFFF; border: 1px solid var(--border-light);
+            border-radius: 12px;
             cursor: pointer; transition: opacity 0.15s;
         }
         .share-card-icon {
@@ -5399,7 +5375,6 @@
             gap: 6px;
             border: none;
             cursor: pointer;
-            box-shadow: 0 2px 12px rgba(58, 63, 50, 0.25);
             transition: transform 0.15s ease;
         }
 
@@ -6092,7 +6067,6 @@
             border: 1px solid var(--border-light);
             border-radius: 16px;
             padding: 12px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .calendar-weekdays {
@@ -6145,7 +6119,6 @@
         .calendar-date-cell.selected {
             background: var(--accent-light);
             border: 2px solid var(--accent);
-            box-shadow: 0 2px 8px rgba(58, 63, 50, 0.15);
         }
 
         .calendar-date-cell.other-month {
@@ -6188,7 +6161,6 @@
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            box-shadow: 0 2px 6px rgba(58, 63, 50, 0.3);
         }
 
         .calendar-task-badge {
@@ -7658,14 +7630,12 @@
             border-radius: 14px;
             margin-bottom: 20px;
             cursor: pointer;
-            box-shadow: 0 1px 3px rgba(58, 63, 50, 0.04);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.15s ease;
             position: relative;
             overflow: hidden;
         }
         .grief-rescue-entry:active {
             transform: scale(0.995);
-            box-shadow: 0 1px 2px rgba(58, 63, 50, 0.05);
         }
         .grief-rescue-entry-icon {
             width: 44px;
@@ -9138,10 +9108,7 @@
             border: 1px solid rgba(58, 63, 50, 0.13);
             border-radius: 12px;
             cursor: pointer;
-            box-shadow:
-                0 1px 2px rgba(58, 63, 50, 0.04),
-                0 6px 18px rgba(58, 63, 50, 0.07);
-            transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease;
+            transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
             -webkit-tap-highlight-color: transparent;
             position: relative;
             overflow: hidden;
@@ -9158,9 +9125,6 @@
         .detail-ai-entry:active {
             background: linear-gradient(135deg, #FCFCFA 0%, #F2F3EF 100%);
             border-color: rgba(58, 63, 50, 0.18);
-            box-shadow:
-                0 1px 2px rgba(58, 63, 50, 0.05),
-                0 3px 10px rgba(58, 63, 50, 0.06);
             transform: scale(0.995);
         }
         .detail-ai-entry-avatar {
@@ -9170,15 +9134,11 @@
             display: flex; align-items: center; justify-content: center;
             color: #FBF8F2;
             flex-shrink: 0;
-            box-shadow:
-                0 2px 6px rgba(58, 63, 50, 0.22),
-                inset 0 1px 0 rgba(255, 255, 255, 0.18);
             position: relative;
             z-index: 1;
         }
         .detail-ai-entry-avatar svg {
             width: 26px; height: 26px;
-            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
         }
         .detail-ai-entry-title {
             flex: 1;
@@ -9200,9 +9160,6 @@
             opacity: 0.55;
             position: relative;
             z-index: 1;
-            position: relative;
-            z-index: 1;
-            box-shadow: 0 1px 3px rgba(58, 63, 50, 0.12);
         }
 
         /* ボトムシート本体 */
@@ -9258,13 +9215,9 @@
             margin-right: 10px;
             color: #FBF8F2;
             flex-shrink: 0;
-            box-shadow:
-                0 2px 6px rgba(58, 63, 50, 0.22),
-                inset 0 1px 0 rgba(255, 255, 255, 0.18);
         }
         .ai-chat-avatar svg {
             width: 22px; height: 22px;
-            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
         }
         .ai-chat-header-text { flex: 1; min-width: 0; }
         .ai-chat-title {
@@ -9500,7 +9453,6 @@
             border-radius: 16px;
             padding: 14px 16px;
             margin: 12px 0 0;
-            box-shadow: 0 1px 3px rgba(58, 63, 50, 0.04);
             box-sizing: border-box;
         }
         .grief-card:empty { display: none; }
@@ -9742,7 +9694,6 @@
             background: var(--bg-primary);
             border: 1px solid var(--border);
             border-radius: 14px;
-            box-shadow: 0 1px 3px rgba(58, 63, 50, 0.04);
         }
         .grief-anniv-today-icon {
             width: 44px; height: 44px;
@@ -10456,7 +10407,6 @@
             font-family: inherit;
             cursor: pointer;
             transition: opacity 0.15s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             width: calc(100% - 40px);
             max-width: 320px;
         }
@@ -10631,15 +10581,14 @@
             align-items: center;
             padding: 14px 16px;
             background: #FFFFFF;
+            border: 1px solid var(--border-light);
             border-radius: 12px;
             margin: 12px 16px 0;
             cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.15s ease;
         }
         .home-family-card:active {
             transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
         }
         .home-family-icon {
             width: 44px; height: 44px;
@@ -10669,10 +10618,10 @@
         /* ===== Home: Review (Feedback) Card ===== */
         .home-review-card {
             background: #FAF9F7;
+            border: 1px solid var(--border-light);
             border-radius: 16px;
             margin: 12px 16px 0;
             padding: 20px 18px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
         .home-review-title {
             font-size: 15px;
@@ -10871,7 +10820,6 @@
             background: #FFFFFF;
             color: var(--text-primary);
             font-weight: 600;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
         }
     </style>
 </head>
@@ -11049,13 +10997,7 @@
                 <p id="homeMessageText" class="home-message" style="display: none;"></p>
             </div>
 
-            <!-- 行政案内バナー（北竜町チャネル用） -->
-            <div id="homeAdminBanner"></div>
-
-            <!-- 途中だった「まとめて質問」の復帰バナー -->
-            <div id="homeBulkResumeBanner"></div>
-
-            <!-- 2. サポートチーム導線（挨拶ヘッダーの直下） -->
+            <!-- サポートチーム導線（ヘッダーの下端に重ねて配置） -->
             <div class="home-care-team-card" onclick="showScreen('screen-concierge')">
                 <div class="care-team-icon">
                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -11074,6 +11016,12 @@
                 </div>
                 <span class="care-team-arrow">›</span>
             </div>
+
+            <!-- 行政案内バナー（北竜町チャネル用） -->
+            <div id="homeAdminBanner"></div>
+
+            <!-- 途中だった「まとめて質問」の復帰バナー -->
+            <div id="homeBulkResumeBanner"></div>
 
             <!-- 3. 次にやること -->
             <div class="home-today-section">
@@ -16888,7 +16836,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
 
             // ── 3ステップ・ガイド（カード） ──
             html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">手続きの流れ</div>';
-            html += '<div style="background:var(--bg-primary); border-radius:14px; padding:16px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">';
+            html += '<div style="background:var(--bg-primary); border-radius:14px; padding:16px; margin-bottom:20px; border:1px solid var(--border-light);">';
 
             var _steps = [
                 { num: '1', bg: '#FAF9F7', color: '#A49B8C', title: '案内用紙を確認する', desc: '同封の用紙にチェック項目が記載されています', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.3"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/></svg>' },
@@ -16909,7 +16857,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
 
             // ── 担当する係（カード） ──
             html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">担当する係</div>';
-            html += '<div style="background:var(--bg-primary); border-radius:14px; padding:12px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">';
+            html += '<div style="background:var(--bg-primary); border-radius:14px; padding:12px; margin-bottom:20px; border:1px solid var(--border-light);">';
 
             var _sections = [
                 { name: '医療・介護保険係', items: '健康保険、介護保険、葬祭費', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A9A7D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>' },
@@ -16930,7 +16878,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
 
             // ── お問い合わせ（カード） ──
             html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">お問い合わせ</div>';
-            html += '<div style="background:var(--bg-primary); border-radius:14px; padding:16px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">';
+            html += '<div style="background:var(--bg-primary); border-radius:14px; padding:16px; margin-bottom:20px; border:1px solid var(--border-light);">';
 
             // 電話・地図を横並び
             html += '<div style="display:flex; gap:8px; margin-bottom:10px;">';
@@ -21290,7 +21238,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 if (window.currentChannelId === 'hokuryu') {
                     var _masterDone = (_getMasterYakubaStatus() === 'DONE');
                     if (_masterDone) {
-                        adminBanner.innerHTML = '<div style="margin:0 16px 12px; padding:12px 16px; background:#F5F8F4; border:1px solid #E5EAE3; border-radius:10px; cursor:pointer; -webkit-tap-highlight-color:transparent;" onclick="openAdminGuideSheet()">'
+                        adminBanner.innerHTML = '<div style="margin:10px 16px 7px; padding:12px 16px; background:#F5F8F4; border:1px solid #E5EAE3; border-radius:10px; cursor:pointer; -webkit-tap-highlight-color:transparent;" onclick="openAdminGuideSheet()">'
                             + '<div style="display:flex; align-items:center; gap:10px;">'
                             + '<div style="width:24px; height:24px; background:#E5EDE2; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">'
                             + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7A9A7D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
@@ -21298,29 +21246,9 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                             + '<div style="font-size:13px; font-weight:600; color:var(--text-primary);">役場の届出は完了しました</div>'
                             + '</div></div>';
                     } else {
-                        adminBanner.innerHTML = '<div class="home-admin-banner" onclick="openAdminGuideSheet()">'
-                            + '<div class="home-admin-banner-inner">'
-                            +   '<div class="home-admin-banner-heading">手続きのご案内</div>'
-                            +   '<div class="home-admin-banner-split">'
-                            +     '<div class="home-admin-banner-col">'
-                            +       '<div class="home-admin-banner-icon home-admin-banner-icon-paper">'
-                            +         '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7A6C52" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="13" y2="15"/></svg>'
-                            +       '</div>'
-                            +       '<div class="home-admin-banner-col-label">役場の届出</div>'
-                            +       '<div class="home-admin-banner-col-desc">同封の<br><b>案内用紙</b>で</div>'
-                            +     '</div>'
-                            +     '<div class="home-admin-banner-divider"></div>'
-                            +     '<div class="home-admin-banner-col">'
-                            +       '<div class="home-admin-banner-icon home-admin-banner-icon-app">'
-                            +         '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3A3F32" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2.5"/><line x1="12" y1="18" x2="12" y2="18"/></svg>'
-                            +       '</div>'
-                            +       '<div class="home-admin-banner-col-label">それ以外</div>'
-                            +       '<div class="home-admin-banner-col-desc"><b>このアプリ</b><br>でご案内</div>'
-                            +     '</div>'
-                            +   '</div>'
-                            +   '<div class="home-admin-banner-cta">くわしく見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>'
-                            + '</div>'
-                            + '</div>';
+                        // 手続きのご案内カードは「次にやること」と役割が重複するため非表示
+                        // (仕組み説明は openAdminGuideSheet() 経由の詳細シートに集約)
+                        adminBanner.innerHTML = '';
                     }
                 } else {
                     adminBanner.innerHTML = '';
@@ -21430,11 +21358,14 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 }
 
                 // メインカード（1件目のみ大きく表示）
+                // 初回表示時のみ枠から波打つ演出を付与
+                const _pulseClass = window._homePulsePlayed ? '' : ' home-pulse-once';
+                if (!window._homePulsePlayed) { window._homePulsePlayed = true; }
                 let nextHTML = '';
                 if (mainTask.id === MASTER_YAKUBA_ID) {
                     // マスタータスク専用カード
                     nextHTML = `
-                        <div class="home-task-card-touch" style="
+                        <div class="home-task-card-touch${_pulseClass}" style="
                             background: #FFFFFF;
                             border: 1px solid var(--border-light);
                             border-radius: 16px;
@@ -21442,8 +21373,8 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                             cursor: pointer;
                             transition: transform 0.15s ease, box-shadow 0.15s ease;
                         " onclick="event.stopPropagation(); showTaskDetail('${MASTER_YAKUBA_ID}')"
-                           ontouchstart="this.style.transform='scale(0.98)'; this.style.boxShadow='0 1px 4px rgba(0,0,0,0.06)'"
-                           ontouchend="this.style.transform=''; this.style.boxShadow=''">
+                           ontouchstart="this.style.transform='scale(0.98)'"
+                           ontouchend="this.style.transform=''">
                             <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
                                 <div style="width:36px; height:36px; background:#F3F2EF; border-radius:10px; display:flex; align-items:center; justify-content:center;">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.4"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1.1" stroke-linecap="round"/></svg>
@@ -21489,7 +21420,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                     }
                 } else {
                     nextHTML = `
-                        <div class="home-task-card-touch" style="
+                        <div class="home-task-card-touch${_pulseClass}" style="
                             background: #FFFFFF;
                             border: 1px solid var(--border-light);
                             border-radius: 14px;
@@ -21497,8 +21428,8 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                             cursor: pointer;
                             transition: transform 0.15s ease, box-shadow 0.15s ease;
                         " onclick="event.stopPropagation(); showTaskDetail('${mainTask.id}')"
-                           ontouchstart="this.style.transform='scale(0.98)'; this.style.boxShadow='0 1px 4px rgba(0,0,0,0.06)'"
-                           ontouchend="this.style.transform=''; this.style.boxShadow=''">
+                           ontouchstart="this.style.transform='scale(0.98)'"
+                           ontouchend="this.style.transform=''">
                             <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">まずはこれから</div>
                             <div style="font-size: 18px; font-weight: 700; color: var(--text-primary); line-height: 1.4; margin-bottom: 8px;">${mainTask.title}</div>
                             ${destinationText ? `<div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">届出先: ${destinationText}</div>` : ''}
@@ -28433,7 +28364,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
         // ========== Service Worker 登録 (キャッシュバスティング) ==========
         // HTMLは network-first、画像等は cache-first。新しいデプロイを確実に
         // ユーザーへ届けるために使用する。詳細は /sw.js を参照。
-        window.APP_VERSION = 'rn-2026-04-21-phase5j';
+        window.APP_VERSION = 'rn-2026-04-21-phase5y';
         (function registerServiceWorker() {
             if (!('serviceWorker' in navigator)) return;
             // localhost / file:// での開発時はスキップしない（動作確認のため）
