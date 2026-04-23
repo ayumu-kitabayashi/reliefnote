@@ -3552,6 +3552,46 @@
             100% { box-shadow: 0 0 0 0 rgba(185,95,62,0); background: #FFFFFF; }
         }
 
+        /* 役場マスタータスクのチェックリスト */
+        .yakuba-check-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 8px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.12s;
+        }
+        .yakuba-check-row:active { background: var(--bg-secondary); }
+        .yakuba-check-box {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #FFFFFF;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .yakuba-check-box.checked {
+            background: var(--accent, #B95F3E);
+            border-color: var(--accent, #B95F3E);
+        }
+        .yakuba-check-box svg { width: 14px; height: 14px; }
+        .yakuba-check-label {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+        .yakuba-check-row.checked .yakuba-check-label {
+            color: var(--text-tertiary);
+            text-decoration: line-through;
+        }
+
         /* タスク文脈バナー（専門家画面の最上部、タスクから遷移した時のみ表示） */
         .expert-task-context {
             background: linear-gradient(180deg, #FFFFFF 0%, #FAF6F0 100%);
@@ -18300,6 +18340,38 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 + '</div>';
         }
 
+        // 役場マスタータスクのチェックリスト state
+        var _YAKUBA_CHECKLIST_KEY = 'rn_yakuba_checklist';
+        var YAKUBA_CHECKLIST_ITEMS = [
+            '同封の紙を見つけた',
+            '窓口の予約電話をした',
+            '必要な持ち物を確認した',
+            '窓口に行った'
+        ];
+        function _loadYakubaChecklist() {
+            var saved = safeParseJSON(localStorage.getItem(_YAKUBA_CHECKLIST_KEY), null);
+            if (!Array.isArray(saved) || saved.length !== YAKUBA_CHECKLIST_ITEMS.length) {
+                return YAKUBA_CHECKLIST_ITEMS.map(function() { return false; });
+            }
+            return saved.map(function(v) { return !!v; });
+        }
+        function _saveYakubaChecklist(arr) {
+            safeSetItem(_YAKUBA_CHECKLIST_KEY, JSON.stringify(arr));
+        }
+        function _toggleYakubaChecklistItem(idx) {
+            // マスターが DONE のときはチェックリストでは何もしない
+            // （既存の一番下のボタンで未完了に戻す運用を維持）
+            if (_getMasterYakubaStatus() === 'DONE') return;
+            var list = _loadYakubaChecklist();
+            list[idx] = !list[idx];
+            _saveYakubaChecklist(list);
+            // 4 項目すべてチェックでマスタータスクを完了
+            if (list.every(function(v) { return v; })) {
+                _completeMasterYakuba();
+            }
+            _showMasterYakubaDetail();
+        }
+
         function _completeMasterYakuba() {
             // 既に完了済み (DONE) なら何もしない (連打対策、二重ログ防止)
             if (_getMasterYakubaStatus() === 'DONE') return;
@@ -18377,23 +18449,23 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
             // Body
             html += '<div class="detail-body">';
 
-            // ── 3ステップ・ガイド（カード） ──
-            html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">手続きの流れ</div>';
-            html += '<div style="background:var(--bg-primary); border-radius:14px; padding:16px; margin-bottom:20px; border:1px solid var(--border-light);">';
+            // ── 役場手続きチェックリスト（カード） ──
+            html += '<div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:12px;">役場手続きチェックリスト</div>';
+            html += '<div style="background:var(--bg-primary); border-radius:14px; padding:6px 12px; margin-bottom:20px; border:1px solid var(--border-light);">';
 
-            var _steps = [
-                { num: '1', bg: '#FAF9F7', color: '#A49B8C', title: '案内用紙を確認する', desc: '同封の用紙にチェック項目が記載されています', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#A49B8C" stroke-width="1.3"/><line x1="8" y1="7" x2="16" y2="7" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/><line x1="8" y1="15" x2="13" y2="15" stroke="#A49B8C" stroke-width="1" stroke-linecap="round"/></svg>' },
-                { num: '2', bg: '#F5F8F4', color: '#7A9A7D', title: '持ち物を準備する', desc: '用紙の下部に○印つきリストがあります', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7A9A7D" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>' },
-                { num: '3', bg: '#EDF1F7', color: '#7A8B9E', title: '役場窓口へ行く', desc: '担当の係ごとに手続き（平日 8:30〜17:15）', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7A8B9E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>' }
-            ];
-            _steps.forEach(function(step, i) {
-                var isLast = (i === _steps.length - 1);
-                html += '<div style="display:flex; gap:14px; margin-bottom:' + (isLast ? '0' : '4px') + ';">';
-                html += '<div style="width:48px; height:48px; background:' + step.bg + '; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">' + step.icon + '</div>';
-                html += '<div style="flex:1; padding:3px 0 ' + (isLast ? '0' : '16px') + '; min-width:0;' + (!isLast ? ' border-bottom:1px solid var(--border-light);' : '') + '">';
-                html += '<div style="font-size:14px; font-weight:700; color:var(--text-primary); margin-bottom:2px;">' + step.title + '</div>';
-                html += '<div style="font-size:12px; color:var(--text-secondary); line-height:1.5;">' + step.desc + '</div>';
+            var _ycList = _loadYakubaChecklist();
+            YAKUBA_CHECKLIST_ITEMS.forEach(function(label, i) {
+                var checked = _isDone ? true : _ycList[i];
+                var isLast = (i === YAKUBA_CHECKLIST_ITEMS.length - 1);
+                html += '<div class="yakuba-check-row' + (checked ? ' checked' : '') + '"'
+                    + (_isDone ? '' : ' onclick="_toggleYakubaChecklistItem(' + i + ')"')
+                    + ' style="' + (!isLast ? 'border-bottom:1px solid var(--border-light);' : '') + (_isDone ? 'cursor:default;' : '') + '">';
+                html += '<div class="yakuba-check-box' + (checked ? ' checked' : '') + '">';
+                if (checked) {
+                    html += '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+                }
                 html += '</div>';
+                html += '<div class="yakuba-check-label">' + label + '</div>';
                 html += '</div>';
             });
             html += '</div>';
@@ -18494,6 +18566,8 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                                 taskStatuses[t.id] = determineTaskStatus(t);
                             }
                         });
+                        // チェックリストもリセット（DONE を解除したのに全チェックが残ると不整合）
+                        _saveYakubaChecklist(YAKUBA_CHECKLIST_ITEMS.map(function() { return false; }));
                         saveData();
                         regenerateAllTaskStatuses();
                         renderHome();
