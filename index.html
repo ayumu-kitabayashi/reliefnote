@@ -12126,11 +12126,11 @@
                     <div class="data-mgmt-item" id="hiddenTasksMgmtItem" onclick="showHiddenTasksManager()" style="display:none;">
                         <div class="data-mgmt-item-left">
                             <div class="data-mgmt-item-icon">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
                             </div>
                             <div>
-                                <div class="data-mgmt-item-title">非表示タスクの管理</div>
-                                <div class="data-mgmt-item-desc" id="hiddenTasksCount">非表示にしたタスクを元に戻せます。</div>
+                                <div class="data-mgmt-item-title">削除したタスクの管理</div>
+                                <div class="data-mgmt-item-desc" id="hiddenTasksCount">削除したタスクを元に戻せます。</div>
                             </div>
                         </div>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -19763,10 +19763,10 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 + '<span>' + (hasReminder ? 'リマインダーを変更' : 'リマインダーを設定') + '</span>'
                 + '</button>';
 
-            // 非表示にする
+            // 削除する
             html += '<button class="task-action-item danger" onclick="closeTaskActionSheet(); hideTask(\'' + taskId + '\')">'
-                + '<div class="task-action-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div>'
-                + '<span>非表示にする</span>'
+                + '<div class="task-action-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></div>'
+                + '<span>削除する</span>'
                 + '</button>';
 
             document.getElementById('taskActionSheetContent').innerHTML = html;
@@ -20033,18 +20033,18 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
         // 起動時にもチェック
         setTimeout(_checkDueReminders, 3000);
 
-        // ── 非表示機能 ──
+        // ── 削除機能（実体は非表示リスト。設定から復元可能） ──
         function hideTask(taskId) {
             var task = tasks.find(function(t) { return t.id === taskId; });
             var taskName = task ? task.title : 'このタスク';
-            if (!confirm('「' + taskName + '」を非表示にしますか？\n\n設定画面からいつでも戻せます。')) return;
+            if (!confirm('「' + taskName + '」を削除しますか？\n\n設定画面からいつでも戻せます。')) return;
             var hidden = safeParseJSON(localStorage.getItem('rn_hidden_tasks'), []);
             if (!hidden.includes(taskId)) {
                 hidden.push(taskId);
                 safeSetItem('rn_hidden_tasks', JSON.stringify(hidden));
             }
             if (typeof logEvent === 'function') logEvent('task_hidden', { task_id: taskId });
-            if (typeof showToast === 'function') showToast('非表示にしました');
+            if (typeof showToast === 'function') showToast('削除しました');
             goBackFromDetail();
         }
 
@@ -20052,7 +20052,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
             var hidden = safeParseJSON(localStorage.getItem('rn_hidden_tasks'), []);
             hidden = hidden.filter(function(id) { return id !== taskId; });
             safeSetItem('rn_hidden_tasks', JSON.stringify(hidden));
-            if (typeof showToast === 'function') showToast('表示に戻しました');
+            if (typeof showToast === 'function') showToast('元に戻しました');
         }
 
         function isTaskHidden(taskId) {
@@ -20065,7 +20065,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
             var el = document.getElementById('hiddenTasksMgmtItem');
             if (el) el.style.display = hidden.length > 0 ? '' : 'none';
             var countEl = document.getElementById('hiddenTasksCount');
-            if (countEl) countEl.textContent = hidden.length + '件のタスクが非表示です';
+            if (countEl) countEl.textContent = hidden.length + '件のタスクを削除しています';
         }
 
         // 「回答の確認・変更」のサブテキストに「全 N 問中 M 問回答済み」を反映する
@@ -20088,7 +20088,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
         function showHiddenTasksManager() {
             var hidden = safeParseJSON(localStorage.getItem('rn_hidden_tasks'), []);
             if (hidden.length === 0) {
-                if (typeof showToast === 'function') showToast('非表示のタスクはありません');
+                if (typeof showToast === 'function') showToast('削除したタスクはありません');
                 return;
             }
             var overlay = document.getElementById('hiddenTasksSheetOverlay');
@@ -20099,7 +20099,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 overlay.innerHTML =
                     '<div class="bottom-sheet-panel">' +
                         '<div class="bottom-sheet-handle"></div>' +
-                        '<div class="bottom-sheet-title">非表示のタスク</div>' +
+                        '<div class="bottom-sheet-title">削除したタスク</div>' +
                         '<div class="bottom-sheet-list" id="hiddenTasksSheetList"></div>' +
                         '<button class="bottom-sheet-cancel" onclick="closeHiddenTasksSheet()">閉じる</button>' +
                     '</div>';
