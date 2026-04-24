@@ -2384,9 +2384,10 @@
         }
 
         .task-confirm-hint {
-            font-size: 13px;
+            font-size: 11.5px;
             color: var(--text-tertiary);
-            line-height: 1.5;
+            line-height: 1.45;
+            opacity: 0.85;
         }
 
         .task-name.done {
@@ -4165,6 +4166,22 @@
             border-bottom: 1px solid var(--border-light);
             overflow: hidden;
         }
+        .detail-faq-more-btn {
+            display: block;
+            width: 100%;
+            margin: 10px auto 0;
+            padding: 10px 14px;
+            background: #FFFFFF;
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--accent, #B95F3E);
+            cursor: pointer;
+            font-family: inherit;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .detail-faq-more-btn:active { background: #FAF6F0; }
 
         .detail-faq-item:last-child {
             border-bottom: none;
@@ -12058,6 +12075,182 @@
 </head>
 <body>
     <div id="toast" class="toast"></div>
+    <!-- 25% 達成時のフルスクリーンレビューモーダル -->
+    <div id="reviewModalOverlay" class="review-modal-overlay" onclick="_handleReviewModalBackdrop(event)">
+        <div class="review-modal-panel" onclick="event.stopPropagation()">
+            <button class="review-modal-close" onclick="laterReview()" aria-label="閉じる">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div id="reviewModalContent"></div>
+        </div>
+    </div>
+    <!-- 認知負荷低減のための CSS 上書き -->
+    <style>
+        /* 25%達成レビューモーダル（センター配置 + 周囲シャドウ） */
+        .review-modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+        .review-modal-overlay.show { display: flex; animation: reviewOverlayFade 0.22s ease; }
+        .review-modal-panel {
+            position: relative;
+            background: #FFFFFF;
+            width: 100%; max-width: 440px;
+            border-radius: 20px;
+            padding: 32px 22px 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.2);
+            animation: reviewPanelPop 0.28s cubic-bezier(.2,.9,.3,1.1);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .review-modal-close {
+            position: absolute; top: 10px; right: 10px;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: transparent; border: none;
+            color: var(--text-tertiary);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .review-modal-close:active { background: var(--bg-secondary); }
+        /* モーダル内のレビューカードは装飾枠を外す（背景をパネルに委ねる） */
+        .review-modal-panel .home-review-card {
+            margin: 0; border: none; padding: 0; background: transparent;
+        }
+        @keyframes reviewOverlayFade {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+        @keyframes reviewPanelPop {
+            0% { opacity: 0; transform: scale(0.88) translateY(6px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+    </style>
+    <style>
+        /* ホーム画面: 主要情報（次にやること・確認が必要）以外は視覚的に落ち着かせる */
+        #screen-home .home-care-team-card,
+        #screen-home .home-healing-card,
+        #screen-home .home-expert-entry,
+        #screen-home .home-family-card {
+            padding: 10px 14px;
+        }
+        #screen-home .care-team-icon,
+        #screen-home .healing-icon,
+        #screen-home .home-family-icon {
+            width: 34px; height: 34px; margin-right: 10px;
+        }
+        #screen-home .care-team-icon svg,
+        #screen-home .healing-icon svg,
+        #screen-home .home-family-icon svg { width: 18px; height: 18px; }
+        #screen-home .home-expert-entry-icon { width: 32px; height: 32px; }
+        #screen-home .home-expert-entry-icon svg { width: 16px; height: 16px; }
+        #screen-home .care-team-title,
+        #screen-home .healing-title,
+        #screen-home .home-family-title { font-size: 13.5px; font-weight: 600; }
+        #screen-home .care-team-sub,
+        #screen-home .healing-sub,
+        #screen-home .home-expert-entry-sub,
+        #screen-home .home-family-sub { font-size: 11px; }
+        #screen-home .home-expert-entry-title { font-size: 13.5px; }
+        /* タスクカード: 下位情報を subtle に */
+        .task-item .task-confirm-hint { margin-top: 2px; }
+        .task-item .legal-due-badge { font-size: 10.5px; opacity: 0.9; }
+        /* タスク詳細: 装飾的アイコンのうち実情報ではないものを控えめに */
+        .task-expert-panel-header { opacity: 0.95; }
+
+        /* レビューモーダル: モバイル収まり調整 */
+        @media (max-width: 480px) {
+            .review-modal-overlay { padding: 14px; }
+            .review-modal-panel {
+                padding: 22px 14px 16px;
+                border-radius: 16px;
+                max-height: 92vh;
+            }
+            .review-modal-panel .home-review-title {
+                font-size: 15px;
+                line-height: 1.45;
+                margin-bottom: 12px;
+            }
+            .review-modal-panel .home-review-options { gap: 6px; margin-bottom: 8px; }
+            .review-modal-panel .home-review-option {
+                padding: 8px 4px;
+                border-width: 1.5px;
+                border-radius: 10px;
+            }
+            .review-modal-panel .home-review-option-icon { width: 26px; height: 26px; }
+            .review-modal-panel .home-review-option-icon svg { width: 26px; height: 26px; }
+            .review-modal-panel .home-review-option-label {
+                font-size: 11px;
+                line-height: 1.3;
+                min-height: calc(1.3em * 2);
+            }
+            .review-modal-panel .home-review-comment textarea {
+                min-height: 48px; font-size: 13px;
+            }
+            .review-modal-panel .home-review-actions { margin-top: 8px; }
+            .review-modal-panel .home-review-submit { padding: 10px 18px; font-size: 14px; }
+            .review-modal-panel .home-review-links { margin-top: 8px; gap: 14px; }
+            .review-modal-panel .home-review-link { font-size: 12px; padding: 4px 6px; }
+            .review-modal-close { top: 6px; right: 6px; width: 32px; height: 32px; }
+        }
+        /* 360px 未満の極小画面はさらに圧縮 */
+        @media (max-width: 360px) {
+            .review-modal-panel { padding: 18px 12px 14px; }
+            .review-modal-panel .home-review-option { padding: 6px 3px; }
+            .review-modal-panel .home-review-option-icon { width: 22px; height: 22px; }
+            .review-modal-panel .home-review-option-icon svg { width: 22px; height: 22px; }
+            .review-modal-panel .home-review-option-label { font-size: 10.5px; }
+        }
+
+        /* === タスクカードのバッジ最大 2 個 === */
+        /* 一覧では「タイトル + 状態 (期限 or hint)」のみに集約。
+           担当者バッジは詳細画面に委ね、ピンは大幅に控えめにする */
+        .task-item .task-assignee-badge { display: none !important; }
+        .task-item .task-pin-indicator {
+            opacity: 0.4;
+            transform: scale(0.8);
+            transform-origin: right center;
+        }
+        /* 完了タスクの統一済みラベルにも opacity を控えめに */
+        .task-confirm-hint { opacity: 0.78; }
+
+        /* === 色バリエーション整理 + 装飾アイコン控えめ === */
+        /* 装飾的な黄色 fill（F5CD67）を一律でグレースケール寄りに（警告色は別途残す） */
+        #screen-home .care-team-icon svg [fill="#F5CD67"],
+        #screen-home .healing-icon svg [fill="#F5CD67"],
+        #screen-home .home-expert-entry-icon svg [fill="#F5CD67"],
+        .home-care-team-card svg [fill="#F5CD67"],
+        .home-healing-card svg [fill="#F5CD67"],
+        .home-expert-entry svg [fill="#F5CD67"],
+        .splash-carousel svg [fill="#F5CD67"],
+        .grief-icon svg [fill="#F5CD67"],
+        .concierge-avatar svg [fill="#F5CD67"] {
+            fill: #EAE3D2 !important;
+        }
+        /* card 背景の subtle 違い (#FAF9F7, #F5F8F4 等) を 1 色に統一 */
+        .home-care-team-card,
+        .home-healing-card,
+        .home-expert-entry,
+        .home-today-card { background: #FFFFFF !important; }
+        /* 期限の状態色は警告のみ強調、それ以外はニュートラル */
+        .legal-due-badge { color: var(--text-tertiary) !important; }
+        .legal-due-badge.overdue,
+        .legal-due-badge.urgent { color: var(--status-overdue) !important; }
+        /* soon は警告色を外して落ち着いた表現に */
+        .legal-due-badge.soon { color: var(--text-secondary) !important; }
+        /* タブインジケータの余計な多色グラデを単色に */
+        .guide-tab-indicator { background: var(--accent) !important; box-shadow: none !important; }
+        /* ボタンのデフォルトグラデを単色塗りに */
+        .btn-complete.active { background: var(--accent) !important; box-shadow: none !important; }
+        /* アコーディオン矢印など装飾文字色の弱化 */
+        .detail-accordion-arrow,
+        .phase-arrow,
+        .category-arrow { color: var(--text-tertiary) !important; opacity: 0.7; }
+    </style>
     <div class="app-container">
         <!-- 画面0: スプラッシュ -->
         <div id="screen-splash" class="screen active">
@@ -12222,9 +12415,9 @@
                         </svg>
                     </button>
                 </div>
-                <div class="header-greeting" id="greetingText">こんにちは、</div>
+                <div class="header-greeting" id="greetingText" style="display:none;">こんにちは、</div>
                 <div>
-                    <span class="header-name">田中さん</span>
+                    <span class="header-name" id="headerName"></span>
                     <span class="header-weeks" id="weeksDisplay">--週目</span>
                 </div>
                 <p id="homeMessageText" class="home-message" style="display: none;"></p>
@@ -12270,8 +12463,8 @@
             <!-- 家族と分担バナー -->
             <div id="homeFamilyBanner"></div>
 
-            <!-- レビュー（フィードバック）カード -->
-            <div id="homeReviewCard"></div>
+            <!-- レビュー（フィードバック）カード（DEMO: 非表示） -->
+            <div id="homeReviewCard" style="display:none;"></div>
 
             <!-- 5. きょうのきもち + 専門家相談 -->
             <div class="home-healing-card" onclick="_griefReturnScreen='screen-home'; _griefCareScrollPosition=0; showScreen('screen-grief-care')">
@@ -12345,9 +12538,9 @@
                 </div>
             </div>
             <div class="guide-tabs" id="guideTabs">
-                <button class="tab-btn active" onclick="setGuideView('lifecycle')">カテゴリー</button>
-                <button class="tab-btn" onclick="setGuideView('domain')">行き先</button>
-                <button class="tab-btn" onclick="setGuideView('phase')">時系列</button>
+                <button class="tab-btn active" onclick="setGuideView('lifecycle')">やること別</button>
+                <button class="tab-btn" onclick="setGuideView('domain')">窓口別</button>
+                <button class="tab-btn" onclick="setGuideView('phase')">いつまで</button>
                 <div class="guide-tabs-border"></div>
                 <div class="guide-tab-indicator" id="guideTabIndicator"></div>
             </div>
@@ -12508,6 +12701,20 @@
                             <div>
                                 <div class="data-mgmt-item-title">控えを PDF で残す</div>
                                 <div class="data-mgmt-item-desc">これまでの回答や進捗を 1 枚の書類にまとめます。印刷やメール添付にも使えます。</div>
+                            </div>
+                        </div>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </div>
+
+                    <!-- ご意見・レビューを送る -->
+                    <div class="data-mgmt-item" onclick="openReviewFromSettings()">
+                        <div class="data-mgmt-item-left">
+                            <div class="data-mgmt-item-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            </div>
+                            <div>
+                                <div class="data-mgmt-item-title">ご意見・レビューを送る</div>
+                                <div class="data-mgmt-item-desc">使い心地やご要望をお聞かせください。今後の改善に活かします。</div>
                             </div>
                         </div>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -23468,7 +23675,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                     return ans === undefined || ans === null || ans === '';
                 });
                 if (hasUnanswered) {
-                    return '→ 質問に回答してください';
+                    return '→ 質問に答える';
                 }
             }
             return '確認が必要です';
@@ -24037,15 +24244,80 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
         }
 
         // ===== レビュー（フィードバック）カード =====
+        // 25% 達成時にセンター配置のモーダルで表示。設定からも開ける
+
+        function _closeReviewModal() {
+            var overlay = document.getElementById('reviewModalOverlay');
+            if (overlay) overlay.classList.remove('show');
+        }
+        // 設定画面から強制起動: 25% 条件・dismissed/later 状態を bypass
+        function openReviewFromSettings() {
+            // 一時的に状態リセット相当の挙動でモーダルを開く
+            _selectedReviewRating = null;
+            var modalBody = document.getElementById('reviewModalContent');
+            if (!modalBody) return;
+            modalBody.innerHTML = '<div class="home-review-card">'
+                + '<p class="home-review-title">使い心地を<br>聞かせてください</p>'
+                + '<div class="home-review-options">'
+                +   '<div class="home-review-option" onclick="selectReviewRating(\'positive\')">'
+                +     '<span class="home-review-option-icon"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">'
+                +       '<circle cx="16" cy="16" r="13" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.6"/>'
+                +       '<circle cx="11.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<circle cx="20.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<path d="M10.5 19.5c1.5 3 4 4 5.5 4s4-1 5.5-4" fill="none" stroke="#3A3F32" stroke-width="1.6" stroke-linecap="round"/>'
+                +     '</svg></span>'
+                +     '<span class="home-review-option-label">とても<br>助かっている</span>'
+                +   '</div>'
+                +   '<div class="home-review-option" onclick="selectReviewRating(\'neutral\')">'
+                +     '<span class="home-review-option-icon"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">'
+                +       '<circle cx="16" cy="16" r="13" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.6"/>'
+                +       '<circle cx="11.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<circle cx="20.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<line x1="11" y1="20" x2="21" y2="20" stroke="#3A3F32" stroke-width="1.6" stroke-linecap="round"/>'
+                +     '</svg></span>'
+                +     '<span class="home-review-option-label">ふつう</span>'
+                +   '</div>'
+                +   '<div class="home-review-option" onclick="selectReviewRating(\'needs_improvement\')">'
+                +     '<span class="home-review-option-icon"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">'
+                +       '<circle cx="16" cy="16" r="13" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.6"/>'
+                +       '<circle cx="11.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<circle cx="20.5" cy="13.5" r="1.5" fill="#3A3F32"/>'
+                +       '<path d="M11 21.5c1.5-2.5 3.5-3.5 5-3.5s3.5 1 5 3.5" fill="none" stroke="#3A3F32" stroke-width="1.6" stroke-linecap="round"/>'
+                +     '</svg></span>'
+                +     '<span class="home-review-option-label">改善して<br>ほしい</span>'
+                +   '</div>'
+                + '</div>'
+                + '<div id="reviewCommentArea"></div>'
+                + '<div class="home-review-links">'
+                +   '<button class="home-review-link" onclick="_closeReviewModal()">閉じる</button>'
+                + '</div>'
+                + '</div>';
+            _openReviewModal();
+        }
+        function _openReviewModal() {
+            var overlay = document.getElementById('reviewModalOverlay');
+            if (overlay) overlay.classList.add('show');
+        }
+        function _handleReviewModalBackdrop(e) {
+            // 背景タップで「あとで」扱い（誤タップ防止のため submit/select 中は対象外）
+            if (e.target && e.target.id === 'reviewModalOverlay') {
+                laterReview();
+            }
+        }
 
         function renderReviewCard() {
-            var el = document.getElementById('homeReviewCard');
-            if (!el) return;
+            // 旧インラインカード要素は常に空（モーダルに移行済み）
+            var inline = document.getElementById('homeReviewCard');
+            if (inline) inline.innerHTML = '';
+
+            var modalBody = document.getElementById('reviewModalContent');
+            if (!modalBody) return;
 
             // 表示条件チェック
             var status = localStorage.getItem('rn_review_status');
             if (status === 'submitted' || status === 'dismissed') {
-                el.innerHTML = '';
+                _closeReviewModal();
+                modalBody.innerHTML = '';
                 return;
             }
 
@@ -24054,11 +24326,13 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 var laterUntil = localStorage.getItem('rn_review_later_until');
                 var laterCount = parseInt(localStorage.getItem('rn_review_later_count') || '0', 10);
                 if (laterCount > 2) {
-                    el.innerHTML = '';
+                    _closeReviewModal();
+                    modalBody.innerHTML = '';
                     return;
                 }
                 if (laterUntil && Date.now() < parseInt(laterUntil, 10)) {
-                    el.innerHTML = '';
+                    _closeReviewModal();
+                    modalBody.innerHTML = '';
                     return;
                 }
             }
@@ -24070,12 +24344,17 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 if (reached[i] >= 25) { has25 = true; break; }
             }
             if (!has25) {
-                el.innerHTML = '';
+                _closeReviewModal();
+                modalBody.innerHTML = '';
                 return;
             }
 
+            // 既にモーダルが開いている場合は再描画しない（ユーザーが入力途中の可能性）
+            var overlay = document.getElementById('reviewModalOverlay');
+            if (overlay && overlay.classList.contains('show')) return;
+
             // カード描画
-            el.innerHTML = '<div class="home-review-card">'
+            modalBody.innerHTML = '<div class="home-review-card">'
                 + '<p class="home-review-title">ここまでの使い心地を<br>聞かせてください</p>'
                 + '<div class="home-review-options">'
                 +   '<div class="home-review-option" onclick="selectReviewRating(\'positive\')">'
@@ -24112,6 +24391,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 +   '<button class="home-review-link" onclick="dismissReview()">表示しない</button>'
                 + '</div>'
                 + '</div>';
+            _openReviewModal();
         }
 
         var _selectedReviewRating = null;
@@ -24180,10 +24460,10 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
 
             safeSetItem('rn_review_status', 'submitted');
 
-            // お礼メッセージに差し替え
-            var el = document.getElementById('homeReviewCard');
-            if (el) {
-                el.innerHTML = '<div class="home-review-card">'
+            // お礼メッセージに差し替え（モーダル内）
+            var modalBody = document.getElementById('reviewModalContent');
+            if (modalBody) {
+                modalBody.innerHTML = '<div class="home-review-card">'
                     + '<div class="home-review-thanks">'
                     + '<div class="home-review-thanks-icon"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">'
                     + '<circle cx="16" cy="16" r="13" fill="#EFE9DE" stroke="#3A3F32" stroke-width="1.6"/>'
@@ -24193,29 +24473,16 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                     + 'ご意見ありがとうございます。<br>今後の改善に活かしてまいります。'
                     + '</div>'
                     + '</div>';
-                // 2秒後にフェードアウト
-                setTimeout(function() {
-                    var card = el.querySelector('.home-review-card');
-                    if (card) {
-                        card.style.animation = 'reviewFadeOut 0.4s ease forwards';
-                        setTimeout(function() { el.innerHTML = ''; }, 400);
-                    }
-                }, 2000);
+                // 1.8秒後にモーダルを閉じる
+                setTimeout(function() { _closeReviewModal(); modalBody.innerHTML = ''; }, 1800);
             }
         }
 
         function dismissReview() {
             safeSetItem('rn_review_status', 'dismissed');
-            var el = document.getElementById('homeReviewCard');
-            if (el) {
-                var card = el.querySelector('.home-review-card');
-                if (card) {
-                    card.style.animation = 'reviewFadeOut 0.3s ease forwards';
-                    setTimeout(function() { el.innerHTML = ''; }, 300);
-                } else {
-                    el.innerHTML = '';
-                }
-            }
+            _closeReviewModal();
+            var modalBody = document.getElementById('reviewModalContent');
+            if (modalBody) modalBody.innerHTML = '';
         }
 
         function laterReview() {
@@ -24229,6 +24496,9 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 // 7日後に再表示
                 safeSetItem('rn_review_later_until', String(Date.now() + 7 * 24 * 60 * 60 * 1000));
             }
+            _closeReviewModal();
+            var modalBody = document.getElementById('reviewModalContent');
+            if (modalBody) modalBody.innerHTML = '';
             var el = document.getElementById('homeReviewCard');
             if (el) {
                 var card = el.querySelector('.home-review-card');
@@ -25114,10 +25384,10 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 }
 
                 if (isNotApplicable) {
-                    extraInfo = '<div class="task-confirm-hint">質問の回答により該当なしと判定されました</div>';
+                    extraInfo = '<div class="task-confirm-hint">回答内容から、この手続きは必要ありません</div>';
                     checkboxDisabled = 'disabled';
                 } else if (isAutoDone) {
-                    extraInfo = '<div class="task-confirm-hint">質問の回答に基づき完了しました</div>';
+                    extraInfo = '<div class="task-confirm-hint">回答内容から自動で完了になりました</div>';
                     checkboxDisabled = 'disabled';
                 }
 
@@ -25173,10 +25443,10 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 }
 
                 if (isNotApplicable) {
-                    extraInfo = '<div class="task-confirm-hint">質問の回答により該当なしと判定されました</div>';
+                    extraInfo = '<div class="task-confirm-hint">回答内容から、この手続きは必要ありません</div>';
                     checkboxDisabled = 'disabled';
                 } else if (isAutoDone) {
-                    extraInfo = '<div class="task-confirm-hint">質問の回答に基づき完了しました</div>';
+                    extraInfo = '<div class="task-confirm-hint">回答内容から自動で完了になりました</div>';
                     checkboxDisabled = 'disabled';
                 }
 
@@ -25191,9 +25461,9 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                         const remainText = legalStatus.remaining < 0
                             ? `${Math.abs(legalStatus.remaining)}日超過`
                             : legalStatus.remaining === 0 ? '今日が期限' : `あと${legalStatus.remaining}日`;
-                        legalBadgeHtml = `<div class="legal-due-badge ${legalStatus.status}">⚖ 法定期限: ${lm}/${ld}（${remainText}）</div>`;
+                        legalBadgeHtml = `<div class="legal-due-badge ${legalStatus.status}">期限:${lm}/${ld}（${remainText}）</div>`;
                     } else {
-                        legalBadgeHtml = `<div class="legal-due-badge">⚖ 法定期限あり（${t.legalDueDays}日）</div>`;
+                        legalBadgeHtml = `<div class="legal-due-badge">期限あり（${t.legalDueDays}日）</div>`;
                     }
                 }
 
@@ -26332,7 +26602,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 // AUTO_DONEタスク用の取消リンク付き通知
                 const autoDoneQuestionId = getAutoDoneQuestionId(task);
                 html += `<div style="background: var(--accent-light); border-radius: 10px; padding: 12px 16px; margin: 0 0 8px 0; font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                    質問の回答に基づき完了しました。
+                    回答内容から自動で完了になりました。
                     ${autoDoneQuestionId ? `<span style="color: var(--accent); cursor: pointer; text-decoration: underline;" onclick="event.stopPropagation(); openAutoDoneQuestion('${task.id}', '${autoDoneQuestionId}')">回答を変更する</span>` : ''}
                 </div>`;
             }
@@ -26417,8 +26687,8 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                         </div>
                         <div class="detail-confirm-banner-body">
-                            <div class="detail-confirm-banner-text">かんたんな質問に回答する</div>
-                            <div class="detail-confirm-banner-sub">この手続きが必要か確認できます</div>
+                            <div class="detail-confirm-banner-text">かんたんな質問に答える</div>
+                            <div class="detail-confirm-banner-sub">必要かどうかが分かります</div>
                         </div>
                         <svg class="detail-confirm-banner-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                     </div>`;
@@ -26594,13 +26864,13 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                     `;
                 }
 
-                // アコーディオン: なぜ必要か（必要なものが空の場合のみデフォルトで開く）
+                // アコーディオン: 背景（デフォルトは閉じる。詳しく知りたい人だけが開く）
                 if (hasWhyContent) {
-                    const whyOpenClass = hasDocsContent ? '' : ' open';
+                    const whyOpenClass = '';
                     html += `
                         <div class="detail-accordion-section${whyOpenClass}" data-accordion="why">
                             <div class="detail-accordion-header" onclick="toggleAccordion('why')">
-                                <span>なぜ必要か？</span>
+                                <span>背景</span>
                                 <span class="detail-accordion-arrow">▾</span>
                             </div>
                             <div class="detail-accordion-content">
@@ -26612,36 +26882,44 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                     `;
                 }
 
-                // アコーディオン: よくある質問
+                // アコーディオン: Q&A（2件超は「さらに表示」で展開）
                 if (hasFaqContent) {
                     const faqList = chFaq.split(/(?=Q\.)/).filter(f => f.trim() !== '');
                     if (faqList.length > 0) {
+                        const faqInitialLimit = 2;
+                        const faqHiddenCount = Math.max(0, faqList.length - faqInitialLimit);
+                        const faqItemsHtml = faqList.map((faqItem, faqIdx) => {
+                            const parts = faqItem.split('→');
+                            if (parts.length >= 2) {
+                                const question = parts[0].trim();
+                                let answer = parts.slice(1).join('→').trim();
+                                answer = answer.replace(/\/\s*$/, '').trim();
+                                const hiddenAttr = faqIdx >= faqInitialLimit ? ' data-faq-hidden="1" style="display:none;"' : '';
+                                return `
+                                    <div class="detail-faq-item"${hiddenAttr} onclick="toggleFAQ(this)">
+                                        <div class="detail-faq-question">
+                                            <span>${escapeHtml(question)}</span>
+                                            <span class="detail-faq-arrow">▼</span>
+                                        </div>
+                                        <div class="detail-faq-answer">${replaceTaskIdLinks(markGlossaryTerms(escapeHtml(answer)))}</div>
+                                    </div>
+                                `;
+                            }
+                            return '';
+                        }).join('');
+                        const moreBtnHtml = faqHiddenCount > 0
+                            ? `<button type="button" class="detail-faq-more-btn" onclick="_expandAllFaq(this)">さらに ${faqHiddenCount} 件の Q&amp;A を見る</button>`
+                            : '';
                         html += `
                             <div class="detail-accordion-section" data-accordion="faq">
                                 <div class="detail-accordion-header" onclick="toggleAccordion('faq')">
-                                    <span>よくある質問</span>
+                                    <span>Q&amp;A</span>
                                     <span class="detail-accordion-arrow">▾</span>
                                 </div>
                                 <div class="detail-accordion-content">
                                     <div class="detail-accordion-inner">
-                                        ${faqList.map(faqItem => {
-                                            const parts = faqItem.split('→');
-                                            if (parts.length >= 2) {
-                                                const question = parts[0].trim();
-                                                let answer = parts.slice(1).join('→').trim();
-                                                answer = answer.replace(/\/\s*$/, '').trim();
-                                                return `
-                                                    <div class="detail-faq-item" onclick="toggleFAQ(this)">
-                                                        <div class="detail-faq-question">
-                                                            <span>${escapeHtml(question)}</span>
-                                                            <span class="detail-faq-arrow">▼</span>
-                                                        </div>
-                                                        <div class="detail-faq-answer">${replaceTaskIdLinks(markGlossaryTerms(escapeHtml(answer)))}</div>
-                                                    </div>
-                                                `;
-                                            }
-                                            return '';
-                                        }).join('')}
+                                        ${faqItemsHtml}
+                                        ${moreBtnHtml}
                                     </div>
                                 </div>
                             </div>
@@ -26698,7 +26976,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
             if (oldBlockedContainer) oldBlockedContainer.remove();
 
             if (status === 'AUTO_DONE') {
-                completeBtn.textContent = '質問の回答に基づき完了 ✓';
+                completeBtn.textContent = '完了 ✓';
                 completeBtn.classList.add('done');
                 completeBtn.disabled = false;
                 // AUTO_DONE状態の場合：回答変更画面へ遷移
@@ -26709,7 +26987,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                     }
                 };
             } else if (status === 'DONE') {
-                completeBtn.textContent = '完了済み ✓';
+                completeBtn.textContent = '完了 ✓';
                 completeBtn.classList.add('done');
                 completeBtn.disabled = false;
                 // DONE状態の場合：モーダルを直接表示
@@ -26755,7 +27033,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                     completeBtn.parentNode.insertBefore(blockedContainer, completeBtn);
                 }
             } else if (status === 'NEED_CONFIRM') {
-                completeBtn.textContent = '質問に回答してタスクを確定する';
+                completeBtn.textContent = '質問に答えて確定する';
                 completeBtn.classList.add('active');
                 completeBtn.disabled = false;
                 completeBtn.onclick = function() {
@@ -26994,6 +27272,17 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                 // 開く
                 element.classList.add('open');
             }
+        }
+        // 「さらに N 件の Q&A を見る」ボタンから隠れた FAQ を一括展開
+        function _expandAllFaq(btn) {
+            var wrap = btn.parentElement;
+            if (!wrap) return;
+            var hidden = wrap.querySelectorAll('.detail-faq-item[data-faq-hidden="1"]');
+            hidden.forEach(function(el) {
+                el.style.display = '';
+                el.removeAttribute('data-faq-hidden');
+            });
+            btn.style.display = 'none';
         }
 
         // NEED_CONFIRMタスク用: 未回答質問を取得
