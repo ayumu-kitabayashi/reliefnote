@@ -12355,11 +12355,7 @@
         }
 
         /* === ラウンド 3 大改造: ホーム画面の更なる集約 === */
-        /* care-team / healing / expert / family を「サポート」セクションとして
-           ビジュアル的にグループ化（横線 + ヘッダー文字） */
-        #screen-home .home-care-team-card { display: none !important; }
-        /* care-team は重要だが頻度低いので fix-bottom-right に floating button にできる
-           ※ DEMO ではシンプルに非表示で代用。実装時は floating button 化 */
+        /* care-team / healing / expert / family は表示を維持（ユーザー要望反映） */
         #screen-home .home-healing-card,
         #screen-home .home-expert-entry,
         #screen-home .home-family-card {
@@ -27067,7 +27063,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
                     html += `
                         <div class="detail-accordion-section${whyOpenClass}" data-accordion="why">
                             <div class="detail-accordion-header" onclick="toggleAccordion('why')">
-                                <span>背景</span>
+                                <span>なぜ必要か？</span>
                                 <span class="detail-accordion-arrow">▾</span>
                             </div>
                             <div class="detail-accordion-content">
