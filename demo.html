@@ -359,13 +359,14 @@
         .splash-screen > * {
             animation: splashFadeUp 0.8s ease both;
         }
-        .splash-screen > *:nth-child(2) { animation-delay: 0.05s; }
-        .splash-screen > *:nth-child(3) { animation-delay: 0.10s; }
-        .splash-screen > *:nth-child(4) { animation-delay: 0.18s; }
-        .splash-screen > *:nth-child(5) { animation-delay: 0.28s; }
-        .splash-screen > *:nth-child(6) { animation-delay: 0.40s; }
-        .splash-screen > *:nth-child(7) { animation-delay: 0.50s; }
-        .splash-screen > *:nth-child(8) { animation-delay: 0.58s; }
+        /* DEMO ラウンド 2: 過剰な stagger を圧縮（580ms → 160ms 上限） */
+        .splash-screen > *:nth-child(2) { animation-delay: 0.02s; }
+        .splash-screen > *:nth-child(3) { animation-delay: 0.04s; }
+        .splash-screen > *:nth-child(4) { animation-delay: 0.06s; }
+        .splash-screen > *:nth-child(5) { animation-delay: 0.08s; }
+        .splash-screen > *:nth-child(6) { animation-delay: 0.10s; }
+        .splash-screen > *:nth-child(7) { animation-delay: 0.13s; }
+        .splash-screen > *:nth-child(8) { animation-delay: 0.16s; }
 
         .splash-tagline-top {
             font-size: 11px;
@@ -509,8 +510,8 @@
             color: var(--text-primary);
             cursor: pointer;
             padding: 8px;
-            min-width: 40px;
-            min-height: 40px;
+            min-width: 44px;
+            min-height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -12075,8 +12076,8 @@
 </head>
 <body>
     <div id="toast" class="toast"></div>
-    <div style="position:fixed; top:0; left:0; right:0; z-index:9999; background:#3A3F32; color:#F5CD67; text-align:center; padding:4px 8px; font-size:10.5px; font-weight:700; letter-spacing:0.1em;">DEMO（認知負荷削減プレビュー）｜本番は index.html</div>
-    <!-- DEMO: 25% 到達時フルスクリーンレビューモーダル -->
+    <div style="position:fixed; top:0; left:0; right:0; z-index:9999; background:#3A3F32; color:#F5CD67; text-align:center; padding:4px 8px; font-size:10.5px; font-weight:700; letter-spacing:0.1em;">DEMO ラウンド 2（更なる認知負荷削減プレビュー）｜本番は index.html</div>
+    <!-- 25% 達成時のフルスクリーンレビューモーダル -->
     <div id="reviewModalOverlay" class="review-modal-overlay" onclick="_handleReviewModalBackdrop(event)">
         <div class="review-modal-panel" onclick="event.stopPropagation()">
             <button class="review-modal-close" onclick="laterReview()" aria-label="閉じる">
@@ -12085,7 +12086,7 @@
             <div id="reviewModalContent"></div>
         </div>
     </div>
-    <!-- DEMO 専用: 認知負荷を下げるためのサブカードコンパクト化 -->
+    <!-- 認知負荷低減のための CSS 上書き -->
     <style>
         /* 25%達成レビューモーダル（センター配置 + 周囲シャドウ） */
         .review-modal-overlay {
@@ -12135,22 +12136,27 @@
         /* ホーム画面: 主要情報（次にやること・確認が必要）以外は視覚的に落ち着かせる */
         #screen-home .home-care-team-card,
         #screen-home .home-healing-card,
-        #screen-home .home-expert-entry {
+        #screen-home .home-expert-entry,
+        #screen-home .home-family-card {
             padding: 10px 14px;
         }
         #screen-home .care-team-icon,
-        #screen-home .healing-icon {
+        #screen-home .healing-icon,
+        #screen-home .home-family-icon {
             width: 34px; height: 34px; margin-right: 10px;
         }
         #screen-home .care-team-icon svg,
-        #screen-home .healing-icon svg { width: 18px; height: 18px; }
+        #screen-home .healing-icon svg,
+        #screen-home .home-family-icon svg { width: 18px; height: 18px; }
         #screen-home .home-expert-entry-icon { width: 32px; height: 32px; }
         #screen-home .home-expert-entry-icon svg { width: 16px; height: 16px; }
         #screen-home .care-team-title,
-        #screen-home .healing-title { font-size: 13.5px; font-weight: 600; }
+        #screen-home .healing-title,
+        #screen-home .home-family-title { font-size: 13.5px; font-weight: 600; }
         #screen-home .care-team-sub,
         #screen-home .healing-sub,
-        #screen-home .home-expert-entry-sub { font-size: 11px; }
+        #screen-home .home-expert-entry-sub,
+        #screen-home .home-family-sub { font-size: 11px; }
         #screen-home .home-expert-entry-title { font-size: 13.5px; }
         /* タスクカード: 下位情報を subtle に */
         .task-item .task-confirm-hint { margin-top: 2px; }
@@ -12202,7 +12208,7 @@
             .review-modal-panel .home-review-option-label { font-size: 10.5px; }
         }
 
-        /* === DEMO 大物 1: タスクカードのバッジ最大 2 個 === */
+        /* === タスクカードのバッジ最大 2 個 === */
         /* 一覧では「タイトル + 状態 (期限 or hint)」のみに集約。
            担当者バッジは詳細画面に委ね、ピンは大幅に控えめにする */
         .task-item .task-assignee-badge { display: none !important; }
@@ -12214,7 +12220,7 @@
         /* 完了タスクの統一済みラベルにも opacity を控えめに */
         .task-confirm-hint { opacity: 0.78; }
 
-        /* === DEMO 大物 2: 色バリエーション整理 + 装飾アイコン控えめ === */
+        /* === 色バリエーション整理 + 装飾アイコン控えめ === */
         /* 装飾的な黄色 fill（F5CD67）を一律でグレースケール寄りに（警告色は別途残す） */
         #screen-home .care-team-icon svg [fill="#F5CD67"],
         #screen-home .healing-icon svg [fill="#F5CD67"],
@@ -12246,6 +12252,80 @@
         .detail-accordion-arrow,
         .phase-arrow,
         .category-arrow { color: var(--text-tertiary) !important; opacity: 0.7; }
+
+        /* === ラウンド 2 バッチ E: コントラスト + ボタン強化 === */
+        /* text-tertiary の WCAG AAA 改善: #9A9A9A → 約 #6F6F6F */
+        :root { --text-tertiary: #6F6F6F !important; }
+        /* モーダルオーバーレイの透過度を 0.3 → 0.5 でコントラスト強化 */
+        .bottom-sheet-overlay,
+        .modal-overlay,
+        .task-action-sheet-overlay {
+            background: rgba(0, 0, 0, 0.5) !important;
+        }
+        /* タップ可能な要素を 44x44 確保（小さい header ボタン群） */
+        .icon-header-btn,
+        .settings-icon-btn,
+        .expert-back-btn,
+        .detail-back-btn,
+        .calendar-back-btn,
+        .grief-back,
+        .task-search-back,
+        .detail-more-btn { min-width: 44px !important; min-height: 44px !important; }
+
+        /* === ラウンド 2 バッチ E: 確認センター 2 行ヘッダー === */
+        .q-header-2row {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 6px;
+            padding: 10px 12px 8px !important;
+        }
+        .q-header-row1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 0 4px;
+        }
+        .q-header-row1 .q-header-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .q-header-row1 .q-header-counter {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .q-header-row2 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .q-header-row2 .q-progress-bar { flex: 1; }
+
+        /* === ラウンド 2 バッチ F: ホーム画面の更なる集約 === */
+        /* ケアチームカードを subtle に（既に compact だが、さらに視覚的後退） */
+        #screen-home .home-care-team-card {
+            background: #FAFAF8 !important;
+            border-style: dashed !important;
+        }
+        /* ホーム下部のサブカードに区切り感（横線）を入れて、グルーピング明示 */
+        #screen-home .home-healing-card { margin-top: 18px !important; }
+        /* タスク詳細フッター: 無駄な余白を削減 */
+        .detail-footer { padding: 8px 12px !important; }
+        .detail-content { padding-bottom: calc(56px + 56px + env(safe-area-inset-bottom, 0px)) !important; }
+
+        /* === ラウンド 2 ライト改善 === */
+        /* caption テキスト統一: 12px + text-secondary */
+        .caption, .text-caption { font-size: 12px !important; color: var(--text-secondary) !important; }
+        /* disabled state を視覚的に明確に */
+        button:disabled, .btn:disabled {
+            opacity: 0.5 !important;
+            cursor: not-allowed !important;
+        }
+        /* タスク完了ボタンのグラデを単色塗り（既に対応済みだが念のため） */
+        .btn-complete:not(.done) { box-shadow: none !important; }
+        /* expert-neutrality-banner のテキスト左 margin */
+        .expert-neutrality-banner span { margin-left: 8px !important; }
     </style>
     <div class="app-container" style="padding-top:22px;">
         <!-- 画面0: スプラッシュ -->
@@ -12564,16 +12644,22 @@
         <div id="screen-confirm" class="screen">
             <div class="q-screen">
                 <div class="q-screen-inner">
-                    <div class="q-header">
-                        <button class="q-back" id="confirmCenterBack" onclick="prevConfirmQuestion()">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                        </button>
-                        <div class="q-progress-bar">
-                            <div class="q-progress-fill" id="confirmProgressFill"></div>
+                    <div class="q-header q-header-2row">
+                        <div class="q-header-row1">
+                            <span class="q-header-title">確認が必要な手続き</span>
+                            <span class="q-header-counter" id="confirmCounterText"></span>
                         </div>
-                        <button class="q-close" id="confirmCenterClose" onclick="exitConfirmCenter()">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
+                        <div class="q-header-row2">
+                            <button class="q-back" id="confirmCenterBack" onclick="prevConfirmQuestion()" aria-label="前の質問へ戻る">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <div class="q-progress-bar">
+                                <div class="q-progress-fill" id="confirmProgressFill"></div>
+                            </div>
+                            <button class="q-close" id="confirmCenterClose" onclick="exitConfirmCenter()" aria-label="中断してホームに戻る">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
                     </div>
                     <div class="q-body" id="confirmQuestionArea"></div>
                     <div class="q-options" id="confirmOptionsArea"></div>
@@ -12660,7 +12746,7 @@
                     <!-- セクション冒頭の保管先ノート (コンテキスト提示) -->
                     <div class="data-mgmt-note">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                        <span>この端末にのみ保存されています。大切な内容は PDF で控えを残せます。</span>
+                        <span>この端末にのみ保存。大切な内容は PDF で控えを残せます。</span>
                     </div>
 
                     <div class="data-mgmt-item" onclick="showAnswerSummary()">
@@ -12702,7 +12788,7 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                     </div>
 
-                    <!-- ご意見・レビューを送る（DEMO 追加） -->
+                    <!-- ご意見・レビューを送る -->
                     <div class="data-mgmt-item" onclick="openReviewFromSettings()">
                         <div class="data-mgmt-item-left">
                             <div class="data-mgmt-item-icon">
@@ -12710,7 +12796,7 @@
                             </div>
                             <div>
                                 <div class="data-mgmt-item-title">ご意見・レビューを送る</div>
-                                <div class="data-mgmt-item-desc">使い心地やご要望をお聞かせください。今後の改善に活かします。</div>
+                                <div class="data-mgmt-item-desc">使い心地やご要望を送れます。改善に活かします。</div>
                             </div>
                         </div>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -12799,7 +12885,7 @@
                 <div class="settings-footer">
                     <div class="settings-footer-privacy">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                        データはこの端末にのみ保存されています
+                        データはこの端末にのみ保存
                     </div>
                     <div class="settings-footer-links">
                         <span onclick="showTerms()">利用規約</span>
@@ -24240,7 +24326,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
         }
 
         // ===== レビュー（フィードバック）カード =====
-        // DEMO: 25% 達成時にフルスクリーンのモーダルで浮かび上がる
+        // 25% 達成時にセンター配置のモーダルで表示。設定からも開ける
 
         function _closeReviewModal() {
             var overlay = document.getElementById('reviewModalOverlay');
@@ -24407,7 +24493,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
             var area = document.getElementById('reviewCommentArea');
             if (area) {
                 area.innerHTML = '<div class="home-review-comment">'
-                    + '<textarea id="reviewCommentText" maxlength="500" placeholder="ひとことあればお聞かせください（任意）" rows="2"></textarea>'
+                    + '<textarea id="reviewCommentText" maxlength="500" placeholder="ひとこと（任意）" rows="2"></textarea>'
                     + '<div class="home-review-actions">'
                     +   '<button class="home-review-submit" onclick="submitReview()">送信する</button>'
                     + '</div>'
@@ -27503,7 +27589,7 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
             // 変化なし → 即閉じて軽いtoast
             if (totalChanged === 0) {
                 closeConfirmSheetDirect();
-                showConfirmFeedback('回答を保存しました');
+                showConfirmFeedback('保存しました');
                 rerenderCurrentScreen();
                 return;
             }
@@ -28524,6 +28610,9 @@ RN-D49-03,遺品整理業者,50000,500000,円,1Kで5〜10万円、一軒家で20
             const progressPercent = ((currentConfirmIndex + 1) / confirmQuestions.length) * 100;
             const fillEl = document.getElementById('confirmProgressFill');
             if (fillEl) fillEl.style.width = progressPercent + '%';
+            // ラウンド 2: header counter「3 / 15」表示
+            const counterEl = document.getElementById('confirmCounterText');
+            if (counterEl) counterEl.textContent = (currentConfirmIndex + 1) + ' / ' + confirmQuestions.length;
         }
 
         function selectSingleConfirm(qid, value) {
