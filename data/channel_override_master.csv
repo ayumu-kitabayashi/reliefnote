@@ -3,26 +3,14 @@ CH-FUN-001,ui_config,global,subtitle,REPLACE,遺族のためのGPS
 CH-FUN-002,ui_config,global,header_logo_text,HIDE,
 CH-FUN-003,question,Q-FUN-STATUS-01,prefill_answer,PREFILL,ARRANGING
 CH-FUN-004,question,Q-AGRI-01,prefill_answer,CLEAR,
-CH-FUN-010,task,RN-H24-03,address,HIDE,
-CH-FUN-011,task,RN-H24-03,phone,HIDE,
-CH-FUN-012,task,RN-H24-05,action_summary,REPLACE,故人の自宅の施錠・ガスの元栓・水回りを確認する。寒冷地の冬季は水道管凍結にも注意。
-CH-FUN-013,task,RN-H24-05,faq,REPLACE,Q.同居している場合は？→故人の部屋の窓の施錠を確認してください\nQ.遠方で行けない→近くの親族や大家にご依頼ください\nQ.冬場の水抜きがわからない→お住まいの市区町村役場にご相談ください
 CH-FUN-020,task,RN-D7-01,address,HIDE,
 CH-FUN-021,task,RN-D7-01,phone,HIDE,
-CH-FUN-022,task,RN-D7-02,address,HIDE,
-CH-FUN-023,task,RN-D7-02,phone,HIDE,
 CH-FUN-024,task,RN-D7-06,action_summary,REPLACE,お住まいの市区町村役場に「死亡届」を提出し、「火葬許可証」を受け取る。届出は葬儀社が代行してくれる場合も多い。
 CH-FUN-025,task,RN-D7-06,destination,REPLACE,お住まいの市区町村役場
 CH-FUN-026,task,RN-D7-06,steps_short,REPLACE,1. 死亡診断書の原本と届出人の印鑑を用意 2. お住まいの市区町村役場で伝える 3. 必要事項を記入して提出 4. 火葬許可証を受け取りクリアファイルで保管
 CH-FUN-027,task,RN-D7-06,office_hours,REPLACE,平日 8:30-17:15（一般的な開庁時間）
 CH-FUN-028,task,RN-D7-06,address,HIDE,
 CH-FUN-029,task,RN-D7-06,phone,HIDE,
-CH-FUN-030,task,RN-D7-07,address,HIDE,
-CH-FUN-038,task,RN-D7-13,action_summary,REPLACE,故人の「住民票の除票」を取得する。複数枚まとめて取得推奨。
-CH-FUN-039,task,RN-D7-13,destination,REPLACE,お住まいの市区町村役場
-CH-FUN-040,task,RN-D7-13,office_hours,REPLACE,平日 8:30-17:15（一般的な開庁時間）
-CH-FUN-041,task,RN-D7-13,address,HIDE,
-CH-FUN-042,task,RN-D7-13,phone,HIDE,
 CH-FUN-150,task,RN-D7-16,address,REPLACE,最寄りのキャリアショップまたは電話/オンライン手続きを推奨
 CH-FUN-151,task,RN-D7-16,steps_detail,REPLACE,1. よく使われるものは誕生日（6桁）、電話番号の下4桁、結婚記念日です。【重要】10回間違えるとデータが消える機種があります。3回試してダメなら止めてください。\n2. iPhoneの場合はAppleサポート（0120-277-535）にご相談ください。Digital Legacyの案内を受けられます。\n3. Androidの場合はGoogleの「故人のアカウントに関するリクエスト」ページから申請できます。審査には数週間かかります。\n4. 費用目安は3〜10万円です。最寄りのキャリアショップまたは電話/オンラインで対応できます。
 CH-FUN-152,task,RN-D7-17,address,HIDE,
@@ -84,11 +72,6 @@ CH-FUN-103,task,RN-D14-24,destination,REPLACE,お住まいの市区町村役場
 CH-FUN-104,task,RN-D14-24,office_hours,REPLACE,平日 8:30-17:15（一般的な開庁時間）
 CH-FUN-105,task,RN-D14-24,address,HIDE,
 CH-FUN-106,task,RN-D14-24,phone,HIDE,
-CH-FUN-156,task,RN-D14-25,destination,REPLACE,お住まいの市区町村役場
-CH-FUN-157,task,RN-D14-25,office_hours,REPLACE,平日 8:30-17:15（一般的な開庁時間）
-CH-FUN-158,task,RN-D14-25,address,HIDE,
-CH-FUN-159,task,RN-D14-25,phone,HIDE,
-CH-FUN-160,task,RN-D14-25,steps_detail,REPLACE,1. お住まいの市区町村役場に電話して「亡くなった家族の税金の届出について聞きたい」とお伝えください。住民税は不動産がなくても発生します。\n2. 届出書は窓口でもらえます。相続人のうち誰が代表して通知を受け取るかを届け出てください。\n3. 故人が亡くなった月によっては納付済みの場合もあります。「過払い分の還付はありますか」と聞いてみてください。\n4. 固定資産がある場合は評価証明書も取得しておいてください（相続登記で使います）。
 CH-FUN-110,task,RN-M3-01,destination,REPLACE,最寄りの家庭裁判所
 CH-FUN-111,task,RN-M3-01,steps_detail,REPLACE,1. 財産目録の作成と負債調査を並行して進めてください。 2.— 3.【重要】3か月以内に判断が必要です。 4. 最寄りの家庭裁判所に申述します。必要書類一式をお持ちください。 5. 3か月の延長を申し立てることもできます。
 CH-FUN-112,task,RN-M3-01,address,HIDE,
@@ -96,24 +79,10 @@ CH-FUN-113,task,RN-M3-01,phone,HIDE,
 CH-FUN-114,task,RN-M3-03,destination,REPLACE,故人の本籍地の市区町村役場／広域交付で最寄り役場も可
 CH-FUN-115,task,RN-M3-03,address,HIDE,
 CH-FUN-116,task,RN-M3-03,phone,HIDE,
-CH-FUN-117,task,RN-M3-05,destination,REPLACE,最寄りの法務局
-CH-FUN-118,task,RN-M3-05,steps_detail,REPLACE,1. 手書きでもPCでも作成できます。 2. 最寄りの法務局で申請できます。窓口・郵送どちらも可能です。 3. 5〜10枚の取得をおすすめします。
-CH-FUN-119,task,RN-M3-05,address,HIDE,
-CH-FUN-120,task,RN-M3-05,phone,HIDE,
-CH-FUN-121,task,RN-M3-12,action_summary,REPLACE,故人名義の農地について、お住まいの市区町村の農業委員会に届出してください。届出を怠ると10万円以下の過料の対象になります。耕作不能なら貸付制度の案内があります。
-CH-FUN-122,task,RN-M3-12,destination,REPLACE,お住まいの市区町村の農業委員会
-CH-FUN-123,task,RN-M3-12,address,HIDE,
-CH-FUN-124,task,RN-M3-12,phone,HIDE,
-CH-FUN-125,task,RN-M3-12,office_hours,REPLACE,平日 8:30-17:15（一般的な開庁時間）
 CH-FUN-126,task,RN-M4-01,destination,REPLACE,最寄りの税務署
 CH-FUN-127,task,RN-M4-01,steps_detail,REPLACE,1. 年金400万円以下で他の所得が20万円以下であれば原則不要です。判断がつかない場合は最寄りの税務署にお電話ください。 2. 所得の計算は1月1日から死亡日までの分です。 3. 国税庁のWebサイトで申告書を作成できます。 4. 最寄りの税務署に提出してください。
 CH-FUN-128,task,RN-M4-01,address,HIDE,
 CH-FUN-129,task,RN-M4-01,phone,HIDE,
-CH-FUN-161,task,RN-M4-02,destination,REPLACE,最寄りの税務署
-CH-FUN-162,task,RN-M4-02,office_hours,REPLACE,平日 8:30-17:00（一般的な開庁時間）
-CH-FUN-163,task,RN-M4-02,address,HIDE,
-CH-FUN-164,task,RN-M4-02,phone,HIDE,
-CH-FUN-165,task,RN-M4-02,steps_detail,REPLACE,1. 病院・薬局・介護サービスの領収書をすべて集めてください。通院の交通費も対象になります。\n2. 厳密には「10万円または総所得の5%のいずれか低い方」を超えた分が控除対象です。\n3. 準確定申告（RN-M4-01）と一緒に行うことができます。申告義務がなくても還付申告だけ行うことも可能です。国税庁のWebサイトで作成できます。\n4. 最寄りの税務署に提出してください（郵送も可能です）。還付金は1〜2か月後に振り込まれます。期限は5年間です。
 CH-FUN-130,task,RN-M10-01,destination,REPLACE,最寄りの税務署
 CH-FUN-131,task,RN-M10-01,steps_detail,REPLACE,1. 基礎控除の計算例をご確認ください。 2.— 3. 特例を使って税額が0円でも申告が必要です。期限は10か月です。 4. 税理士への依頼費用の目安は遺産総額の0.5〜1%です。最寄りの税務署に提出してください。農地には納税猶予の特例があります。
 CH-FUN-132,task,RN-M10-01,address,HIDE,
