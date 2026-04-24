@@ -12157,6 +12157,51 @@
         .task-item .legal-due-badge { font-size: 10.5px; opacity: 0.9; }
         /* タスク詳細: 装飾的アイコンのうち実情報ではないものを控えめに */
         .task-expert-panel-header { opacity: 0.95; }
+
+        /* === DEMO 大物 1: タスクカードのバッジ最大 2 個 === */
+        /* 一覧では「タイトル + 状態 (期限 or hint)」のみに集約。
+           担当者バッジは詳細画面に委ね、ピンは大幅に控えめにする */
+        .task-item .task-assignee-badge { display: none !important; }
+        .task-item .task-pin-indicator {
+            opacity: 0.4;
+            transform: scale(0.8);
+            transform-origin: right center;
+        }
+        /* 完了タスクの統一済みラベルにも opacity を控えめに */
+        .task-confirm-hint { opacity: 0.78; }
+
+        /* === DEMO 大物 2: 色バリエーション整理 + 装飾アイコン控えめ === */
+        /* 装飾的な黄色 fill（F5CD67）を一律でグレースケール寄りに（警告色は別途残す） */
+        #screen-home .care-team-icon svg [fill="#F5CD67"],
+        #screen-home .healing-icon svg [fill="#F5CD67"],
+        #screen-home .home-expert-entry-icon svg [fill="#F5CD67"],
+        .home-care-team-card svg [fill="#F5CD67"],
+        .home-healing-card svg [fill="#F5CD67"],
+        .home-expert-entry svg [fill="#F5CD67"],
+        .splash-carousel svg [fill="#F5CD67"],
+        .grief-icon svg [fill="#F5CD67"],
+        .concierge-avatar svg [fill="#F5CD67"] {
+            fill: #EAE3D2 !important;
+        }
+        /* card 背景の subtle 違い (#FAF9F7, #F5F8F4 等) を 1 色に統一 */
+        .home-care-team-card,
+        .home-healing-card,
+        .home-expert-entry,
+        .home-today-card { background: #FFFFFF !important; }
+        /* 期限の状態色は警告のみ強調、それ以外はニュートラル */
+        .legal-due-badge { color: var(--text-tertiary) !important; }
+        .legal-due-badge.overdue,
+        .legal-due-badge.urgent { color: var(--status-overdue) !important; }
+        /* soon は警告色を外して落ち着いた表現に */
+        .legal-due-badge.soon { color: var(--text-secondary) !important; }
+        /* タブインジケータの余計な多色グラデを単色に */
+        .guide-tab-indicator { background: var(--accent) !important; box-shadow: none !important; }
+        /* ボタンのデフォルトグラデを単色塗りに */
+        .btn-complete.active { background: var(--accent) !important; box-shadow: none !important; }
+        /* アコーディオン矢印など装飾文字色の弱化 */
+        .detail-accordion-arrow,
+        .phase-arrow,
+        .category-arrow { color: var(--text-tertiary) !important; opacity: 0.7; }
     </style>
     <div class="app-container" style="padding-top:22px;">
         <!-- 画面0: スプラッシュ -->
