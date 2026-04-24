@@ -12516,6 +12516,55 @@
         /* 18. 確認バナー / 詳細内 banner の重複説明を削減 */
         .detail-confirm-banner-sub { display: none !important; }
 
+        /* === ラウンド 8 続き: 画面の目的に貢献しない要素を削減 === */
+
+        /* ── ガイド画面 ──
+           目的: 全タスクを俯瞰して、自分のペースで選ぶ
+           「おくやみガイド」というタイトルはフッターナビと重複する冗長 */
+        .guide-header .guide-title { display: none !important; }
+        .guide-header { padding: 8px 16px !important; }
+        /* タブとコンテンツが主役になる */
+
+        /* ── タスク詳細画面 ──
+           目的: このタスクを完了するための具体的手順を理解する
+           「ステップ（手順）」セクションを視覚的に最優先に */
+        .steps-section {
+            background: #FAF9F7 !important;
+            border-radius: 12px !important;
+            padding: 14px 16px !important;
+            margin: 14px 16px 16px !important;
+            border: 1px solid var(--border-light) !important;
+        }
+        .step-section-count {
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.06em !important;
+            color: var(--accent, #B95F3E) !important;
+            text-transform: uppercase;
+        }
+        /* ステップ番号インジケーターを accent 化（行動の主役） */
+        .step-indicator {
+            background: var(--accent, #B95F3E) !important;
+            color: #FFFFFF !important;
+        }
+        .step-indicator .step-number-text {
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+        /* チェック済みステップは緑でも accent でもなく落ち着いた色 */
+        .step-item.checked .step-indicator {
+            background: #7A9A7D !important;
+        }
+
+        /* ── タスク詳細: なぜ必要か / よくある質問 / 専門家 を更に subtle に
+              (それらは「主目的」ではなく補助情報) ── */
+        .detail-accordion-section[data-accordion="why"] .detail-accordion-header,
+        .detail-accordion-section[data-accordion="faq"] .detail-accordion-header {
+            color: var(--text-secondary) !important;
+        }
+
+        /* 必要なものは行動に直結するので subtle 化しない */
+
     </style>
     <div class="app-container" style="padding-top:22px;">
         <!-- 画面0: スプラッシュ -->
