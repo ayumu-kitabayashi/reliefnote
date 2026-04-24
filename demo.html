@@ -12606,6 +12606,47 @@
             font-size: 11px !important;
         }
 
+        /* ── 遺族支援画面 (concierge) ──
+           目的: 困った時にチームに繋がる
+           - 4 アバター装飾 → 一部非表示（装飾過剰、安心感は 2 つで十分） */
+        .concierge-avatar:nth-of-type(3),
+        .concierge-avatar:nth-of-type(4) { display: none !important; }
+        /* ヒーロー サブタイトルを 1 行短縮 */
+        .concierge-subtitle {
+            font-size: 13px !important;
+            line-height: 1.5 !important;
+        }
+        /* 相談例 5 つ → 3 つに削減（多すぎると目移り、安心感は 3 つで十分） */
+        .concierge-example-bubble:nth-of-type(4),
+        .concierge-example-bubble:nth-of-type(5) { display: none !important; }
+        .concierge-examples-label {
+            font-size: 12px !important;
+            color: var(--text-secondary) !important;
+        }
+        /* 3 ステップガイドの説明性を抑え、CTA を視覚的に主役に */
+        .concierge-steps { opacity: 0.85; }
+        .concierge-step-label { font-size: 10.5px !important; }
+
+        /* ── こころのケア画面 ──
+           目的: 寄り添う読みものや記録
+           - entry サブテキストを subtle 化 */
+        .grief-rescue-entry-sub,
+        .grief-wave-entry-sub {
+            font-size: 11.5px !important;
+            opacity: 0.85;
+        }
+
+        /* ── スプラッシュ画面 ──
+           目的: らしさを一瞬伝えてホームへ
+           - 既に R5 で stagger 短縮済み。装飾 SVG はブランドに必要なので残す */
+
+        /* ── オンボーディング ──
+           目的: 必要最小限の質問で初期化
+           - 質問数削減は別途。UI 上の補足説明を subtle に */
+        .onboard-confirm-sub,
+        .onboard-confirm-action-desc { font-size: 12.5px !important; opacity: 0.85; }
+        .onboard-confirm-reassure { font-size: 11.5px !important; opacity: 0.7; }
+
     </style>
     <div class="app-container" style="padding-top:22px;">
         <!-- 画面0: スプラッシュ -->
