@@ -9884,6 +9884,247 @@
             z-index: 1;
         }
 
+        /* ============================================================
+           Support Chat (LINE代替: 相談タブの画面そのもの / Phase B)
+           ============================================================ */
+        .support-chat-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            /* footer-nav (56px + safe-area) を避ける */
+            height: calc(100vh - 56px - env(safe-area-inset-bottom));
+            height: calc(100dvh - 56px - env(safe-area-inset-bottom));
+            background: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1;
+        }
+        /* この画面が表示中だけ可視化 */
+        #screen-concierge:not(.active) .support-chat-screen { display: none; }
+        .support-chat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-light);
+            flex-shrink: 0;
+            background: #FFFFFF;
+        }
+        .support-chat-header-avatars {
+            position: relative;
+            width: 44px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+        .support-chat-header-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 2px solid #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            box-sizing: border-box;
+        }
+        .support-chat-header-avatar:first-child { left: 0; top: 0; }
+        .support-chat-header-avatar:last-child { right: 0; bottom: 0; }
+        .support-chat-header-avatar svg { width: 18px; height: 18px; }
+        .support-chat-header-text {
+            flex: 1;
+            min-width: 0;
+        }
+        .support-chat-header-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+        .support-chat-header-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .support-chat-header-status::before {
+            content: '';
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #4DAA5E;
+            display: inline-block;
+        }
+        .support-chat-header-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+            align-items: center;
+        }
+        .support-chat-icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: #F5F3EE;
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.15s ease;
+        }
+        .support-chat-icon-btn:active { background: var(--bg-secondary); }
+        .support-chat-icon-btn svg { width: 18px; height: 18px; }
+        .support-chat-close {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+        .support-chat-close svg { width: 22px; height: 22px; }
+
+        .support-chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #FBF9F5;
+            -webkit-overflow-scrolling: touch;
+        }
+        .support-chat-empty {
+            padding: 12px 4px;
+            color: var(--text-secondary);
+        }
+        .support-chat-empty-icon {
+            width: 28px;
+            height: 28px;
+            margin-bottom: 14px;
+            color: var(--text-tertiary);
+        }
+        .support-chat-empty-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+        .support-chat-empty-text a {
+            color: var(--text-primary);
+            text-decoration: underline;
+        }
+
+        .support-chat-date-sep {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin: 8px 0 2px;
+            align-self: center;
+        }
+
+        .support-chat-msg {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            max-width: 86%;
+        }
+        .support-chat-msg.from-supporter { align-self: flex-start; }
+        .support-chat-msg.from-user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .support-chat-msg-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .support-chat-msg-avatar svg { width: 16px; height: 16px; }
+        .support-chat-msg.from-user .support-chat-msg-avatar { display: none; }
+        .support-chat-msg-bubble {
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 14.5px;
+            line-height: 1.55;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        .support-chat-msg.from-supporter .support-chat-msg-bubble {
+            background: #FFFFFF;
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+            border-bottom-left-radius: 4px;
+        }
+        .support-chat-msg.from-user .support-chat-msg-bubble {
+            background: #3A3F32;
+            color: #FFFFFF;
+            border-bottom-right-radius: 4px;
+        }
+        .support-chat-msg-time {
+            font-size: 10.5px;
+            color: var(--text-tertiary);
+            white-space: nowrap;
+            padding-bottom: 2px;
+        }
+        .support-chat-msg.error .support-chat-msg-bubble {
+            opacity: 0.6;
+        }
+
+        .support-chat-input-row {
+            border-top: 1px solid var(--border-light);
+            padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .support-chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            font-size: 14.5px;
+            font-family: inherit;
+            background: #FFFFFF;
+            color: var(--text-primary);
+            -webkit-appearance: none;
+            min-width: 0;
+        }
+        .support-chat-input:focus {
+            outline: none;
+            border-color: #A87E2A;
+        }
+        .support-chat-send-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #C8C2B8;
+            color: #FFFFFF;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.15s ease;
+        }
+        .support-chat-send-btn.active { background: #3A3F32; }
+        .support-chat-send-btn:active { transform: scale(0.95); }
+        .support-chat-send-btn svg { width: 18px; height: 18px; }
+
         /* ボトムシート本体 */
         .ai-chat-overlay {
             position: fixed;
@@ -12421,25 +12662,25 @@
         }
 
         /* ===== ホーム外側カード（コンテナ：内側に 2 枚のカード）===== */
-        /* A: 外側カードを単なる縦リズム提供に */
         .rn-home-card {
             margin: 14px 16px 4px;
-            padding: 0;
-            background: transparent;
-            border: none;
-            border-radius: 0;
+            padding: 10px;
+            background: #FBF9F5;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             gap: 10px;
+            box-shadow: 0 1px 2px rgba(58, 63, 50, 0.04);
         }
 
-        /* ===== B: Hero カード（ゴールド左アクセント付き） ===== */
+        /* ===== B: Hero カード（内側カード①） ===== */
         .rn-home-hero {
             position: relative;
-            padding: 22px 20px 20px;
+            padding: 20px 18px 18px;
             background: #FFFFFF;
-            border-radius: 16px;
-            border: 1px solid var(--border-light);
+            border-radius: 14px;
+            border: 1px solid #EFEAE0;
             cursor: pointer;
             transition: transform 0.15s ease;
             -webkit-tap-highlight-color: transparent;
@@ -12592,6 +12833,11 @@
         }
         .rn-home-support {
             margin: 0 16px 80px;
+            padding: 10px;
+            background: #FBF9F5;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            box-shadow: 0 1px 2px rgba(58, 63, 50, 0.04);
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
@@ -12599,7 +12845,7 @@
         .rn-home-support-chip {
             padding: 16px 14px;
             background: #FFFFFF;
-            border: 1px solid var(--border-light);
+            border: 1px solid #EFEAE0;
             border-radius: 14px;
             display: flex;
             align-items: center;
@@ -12979,7 +13225,7 @@
             </div>
 
             <!-- サポートチーム導線（ヘッダーの下端に重ねて配置） -->
-            <div class="home-care-team-card" onclick="showScreen('screen-concierge')">
+            <div class="home-care-team-card" onclick="openSupportChat()">
                 <div class="care-team-icon">
                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <!-- three figures: gold center, ink sides -->
@@ -14153,49 +14399,33 @@
             </div>
         </div>
 
-        <!-- 画面7: 遺族コンシェルジュ -->
+        <!-- 画面7: サポートチームチャット (フッター「相談」タブ) -->
         <div id="screen-concierge" class="screen">
-            <div class="concierge-content">
-                <!-- ヒーロー -->
-                <div class="concierge-hero">
-                    <div class="concierge-avatars">
-                        <div class="concierge-avatar">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.2" fill="none" stroke="#3A3F32" stroke-width="1.6"/><path d="M5.5 20c0-3.3 2.9-5.8 6.5-5.8s6.5 2.5 6.5 5.8" fill="none" stroke="#3A3F32" stroke-width="1.6"/><path d="M8.2 7.2c0-1.4 1.7-2.8 3.8-2.8s3.8 1.4 3.8 2.8" fill="none" stroke="#3A3F32" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <div class="support-chat-screen">
+                <header class="support-chat-header">
+                    <div class="support-chat-header-avatars">
+                        <div class="support-chat-header-avatar">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.2" fill="none" stroke="#3A3F32" stroke-width="1.6"/><path d="M5.5 20c0-3.3 2.9-5.8 6.5-5.8s6.5 2.5 6.5 5.8" fill="none" stroke="#3A3F32" stroke-width="1.6"/></svg>
                         </div>
-                        <div class="concierge-avatar">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.4" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.6"/><path d="M5.2 20.2c0-3.4 3-6 6.8-6s6.8 2.6 6.8 6" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.6"/><path d="M10 9.2 h4" stroke="#3A3F32" stroke-width="1.3" stroke-linecap="round"/></svg>
-                        </div>
-                        <div class="concierge-avatar">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.2" fill="none" stroke="#3A3F32" stroke-width="1.6"/><path d="M5.5 20c0-3.3 2.9-5.8 6.5-5.8s6.5 2.5 6.5 5.8" fill="none" stroke="#3A3F32" stroke-width="1.6"/><path d="M6.5 7.4 Q12 3.6 17.5 7.4" fill="none" stroke="#3A3F32" stroke-width="1.4" stroke-linecap="round"/></svg>
-                        </div>
-                        <div class="concierge-avatar">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.2" fill="none" stroke="#3A3F32" stroke-width="1.6"/><path d="M5.5 20c0-3.3 2.9-5.8 6.5-5.8s6.5 2.5 6.5 5.8" fill="none" stroke="#3A3F32" stroke-width="1.6"/><circle cx="16.5" cy="6.2" r="1.4" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.2"/></svg>
+                        <div class="support-chat-header-avatar">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.4" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.6"/><path d="M5.2 20.2c0-3.4 3-6 6.8-6s6.8 2.6 6.8 6" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.6"/></svg>
                         </div>
                     </div>
-                    <h2 class="concierge-hero-main">サポートチームが、<br>いつもそばにいます</h2>
-                    <p class="concierge-subtitle">お手続きのことも、お気持ちのことも、どうぞお聞かせください。</p>
-                </div>
-
-                <!-- 本文 -->
-                <div class="concierge-body">
-                    <!-- 相談例 (吹き出し風・縦並び) -->
-                    <div class="concierge-examples">
-                        <p class="concierge-examples-label">例えば、こんなご相談をいただいています</p>
-                        <div class="concierge-examples-row">
-                            <span class="concierge-example-bubble">死亡届の出し方がわからないのですが…</span>
-                            <span class="concierge-example-bubble">遺族年金は私ももらえますか？</span>
-                            <span class="concierge-example-bubble">手続きが多くて、何から始めればよいでしょうか</span>
-                            <span class="concierge-example-bubble">相続放棄は3ヶ月以内って本当ですか？</span>
-                            <span class="concierge-example-bubble">故人の銀行口座はどうすればよいですか？</span>
-                        </div>
+                    <div class="support-chat-header-text">
+                        <div class="support-chat-header-title">サポートチーム</div>
+                        <div class="support-chat-header-status">24時間以内に返信</div>
                     </div>
-                </div>
-
-                <!-- 固定CTA -->
-                <div class="concierge-footer">
-                    <button class="concierge-cta-btn" onclick="openLineOA()">
-                        <span class="concierge-cta-btn-label">LINEでご相談を始める</span>
-                        <span class="concierge-cta-btn-sub">タップするとLINEが開きます・ご相談料はいただきません</span>
+                    <div class="support-chat-header-actions">
+                        <a class="support-chat-icon-btn" href="tel:07036303146" aria-label="電話する">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        </a>
+                    </div>
+                </header>
+                <div id="supportChatBody" class="support-chat-body"></div>
+                <div class="support-chat-input-row">
+                    <input type="text" id="supportChatInput" class="support-chat-input" placeholder="メッセージを入力..." autocomplete="off" enterkeyhint="send" maxlength="2000" />
+                    <button type="button" id="supportChatSendBtn" class="support-chat-send-btn" onclick="sendSupportChatMessage()" aria-label="送信">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
                     </button>
                 </div>
             </div>
@@ -14484,13 +14714,13 @@
                     </div>
                 </div>
                 <div class="ai-chat-footer-cta">
-                    <button type="button" class="ai-chat-footer-btn" onclick="openLineOA()">
+                    <button type="button" class="ai-chat-footer-btn" onclick="openSupportChat()">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                         </svg>
                         <span>サポーターに直接相談する</span>
                     </button>
-                    <div class="ai-chat-footer-hint">LINEで24時間以内に返信します</div>
+                    <div class="ai-chat-footer-hint">サポーターが24時間以内に返信します</div>
                 </div>
             </div>
         </div>
@@ -22204,6 +22434,10 @@ RN-D14-60,行政書士,20000,50000,円,公営住宅の名義承継申請書類�
                     window._filteredTaskId = null;
                     window._filteredPhaseId = null;
                 }
+                // 相談画面（チャット）から離れる時はポーリング停止
+                if (_currentScreenId === 'screen-concierge' && screenId !== 'screen-concierge') {
+                    if (typeof _supportChatDeactivate === 'function') _supportChatDeactivate();
+                }
                 // 開いたままのダイアログ/オーバーレイを次画面に持ち越さない
                 document.querySelectorAll('.dialog-overlay.show, .bottom-sheet-overlay.show').forEach(function(el) {
                     el.classList.remove('show');
@@ -22342,6 +22576,7 @@ RN-D14-60,行政書士,20000,50000,円,公営住宅の名義承継申請書類�
                 if (_navItems[_activeIdx]) _navItems[_activeIdx].classList.add('active');
             } else if (screenId === 'screen-concierge') {
                 document.querySelectorAll('.nav-item')[3].classList.add('active');
+                if (typeof _supportChatActivate === 'function') _supportChatActivate();
             } else if (screenId === 'screen-grief-care') {
                 document.querySelectorAll('.nav-item')[2].classList.add('active');
                 showGriefScreen();
@@ -22407,7 +22642,8 @@ RN-D14-60,行政書士,20000,50000,円,公営住宅の名義承継申請書類�
                 _griefCareScrollPosition = 0;
                 showScreen('screen-grief-care');
             } else if (tab === 'concierge') {
-                showScreen('screen-concierge');
+                // 相談タブは中間画面を挟まずチャットを直接開く
+                if (typeof openSupportChat === 'function') openSupportChat();
             }
         }
 
@@ -22420,6 +22656,232 @@ RN-D14-60,行政書士,20000,50000,円,公営住宅の名義承継申請書類�
             _lineOpenedAt = now;
             // noopener,noreferrer で tabnabbing と opener 経由のアクセスを防ぐ
             window.open(LINE_OA_URL, '_blank', 'noopener,noreferrer');
+        }
+
+        // ====================================================================
+        // Support Chat (LINE代替: アプリ内サポーター相談 / Phase B)
+        // ====================================================================
+        var SUPPORT_CHAT_WORKER_URL = 'https://reliefnote-ai-chat.reliefnote.workers.dev';
+        var SUPPORT_CHAT_PHONE = '07036303146';
+        var SUPPORT_CHAT_POLL_MS = 5000;
+        var _SUPPORT_CHAT_SESSION_KEY = 'rn_support_chat_session_id';
+        var _supportChatPollTimer = null;
+        var _supportChatLastUpdate = 0;
+        var _supportChatMessages = [];
+        var _supportChatSending = false;
+
+        function _supportChatGetSessionId() {
+            try {
+                var id = localStorage.getItem(_SUPPORT_CHAT_SESSION_KEY);
+                if (id && /^[A-Za-z0-9_-]{8,64}$/.test(id)) return id;
+                var buf = new Uint8Array(16);
+                (window.crypto || window.msCrypto).getRandomValues(buf);
+                var bin = '';
+                for (var i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
+                var b64 = btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+                if (b64.length < 8) b64 = (b64 + 'aaaaaaaa').slice(0, 8);
+                localStorage.setItem(_SUPPORT_CHAT_SESSION_KEY, b64);
+                return b64;
+            } catch (e) {
+                return 'fallback' + Math.random().toString(36).slice(2, 12);
+            }
+        }
+
+        // 相談タブの画面そのものがチャット。エントリポイントは画面遷移を行う。
+        function openSupportChat() {
+            if (typeof showScreen === 'function') showScreen('screen-concierge');
+        }
+        // 後方互換: 既存呼び出しが残っても無害
+        function closeSupportChat() {
+            if (typeof showScreen === 'function') showScreen('screen-home');
+        }
+
+        // showScreen から呼ばれる: 相談画面に入った時にポーリング開始
+        function _supportChatActivate() {
+            _supportChatRender();
+            _supportChatPollOnce();
+            if (_supportChatPollTimer) clearInterval(_supportChatPollTimer);
+            _supportChatPollTimer = setInterval(_supportChatPollOnce, SUPPORT_CHAT_POLL_MS);
+            setTimeout(function() {
+                var body = document.getElementById('supportChatBody');
+                if (body) body.scrollTop = body.scrollHeight;
+            }, 50);
+        }
+        // showScreen から呼ばれる: 相談画面を離れた時にポーリング停止
+        function _supportChatDeactivate() {
+            if (_supportChatPollTimer) {
+                clearInterval(_supportChatPollTimer);
+                _supportChatPollTimer = null;
+            }
+        }
+
+        function _supportChatMergeMessages(existing, incoming) {
+            var seen = {};
+            existing.forEach(function(m) { seen[m.id] = true; });
+            var merged = existing.slice();
+            incoming.forEach(function(m) {
+                if (!seen[m.id]) {
+                    merged.push(m);
+                    seen[m.id] = true;
+                }
+            });
+            merged.sort(function(a, b) { return a.createdAt - b.createdAt; });
+            return merged;
+        }
+
+        function _supportChatPollOnce() {
+            var sid = _supportChatGetSessionId();
+            var url = SUPPORT_CHAT_WORKER_URL + '/chat/messages?sessionId=' + encodeURIComponent(sid)
+                + (_supportChatLastUpdate ? '&since=' + _supportChatLastUpdate : '');
+            fetch(url).then(function(resp) {
+                if (!resp.ok) return null;
+                return resp.json();
+            }).then(function(data) {
+                if (!data) return;
+                if (Array.isArray(data.messages) && data.messages.length > 0) {
+                    _supportChatMessages = _supportChatMergeMessages(_supportChatMessages, data.messages);
+                    _supportChatLastUpdate = Math.max(_supportChatLastUpdate, data.lastUpdate || 0);
+                    _supportChatRender();
+                } else if (data.lastUpdate) {
+                    _supportChatLastUpdate = Math.max(_supportChatLastUpdate, data.lastUpdate);
+                }
+            }).catch(function() {
+                // ネットワーク不安定時はサイレント
+            });
+        }
+
+        function sendSupportChatMessage() {
+            if (_supportChatSending) return;
+            var input = document.getElementById('supportChatInput');
+            if (!input) return;
+            var body = (input.value || '').trim();
+            if (!body) return;
+            _supportChatSending = true;
+            var sid = _supportChatGetSessionId();
+            var tempId = 'tmp_' + Date.now();
+            // 楽観表示
+            _supportChatMessages.push({
+                id: tempId,
+                senderType: 'user',
+                body: body,
+                createdAt: Date.now(),
+                _pending: true
+            });
+            input.value = '';
+            _supportChatUpdateSendBtn();
+            _supportChatRender();
+            fetch(SUPPORT_CHAT_WORKER_URL + '/chat/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sessionId: sid, body: body })
+            }).then(function(resp) {
+                return resp.json().then(function(data) {
+                    if (!resp.ok) throw new Error(data.error || ('http ' + resp.status));
+                    return data;
+                });
+            }).then(function(data) {
+                var idx = _supportChatMessages.findIndex(function(m) { return m.id === tempId; });
+                if (idx >= 0) {
+                    _supportChatMessages[idx] = {
+                        id: data.messageId,
+                        senderType: 'user',
+                        body: body,
+                        createdAt: data.createdAt
+                    };
+                }
+                _supportChatLastUpdate = Math.max(_supportChatLastUpdate, data.createdAt || 0);
+            }).catch(function(e) {
+                var idx = _supportChatMessages.findIndex(function(m) { return m.id === tempId; });
+                if (idx >= 0) {
+                    _supportChatMessages[idx]._pending = false;
+                    _supportChatMessages[idx]._error = true;
+                }
+                if (typeof showToast === 'function') showToast('送信に失敗しました');
+            }).then(function() {
+                _supportChatSending = false;
+                _supportChatRender();
+                if (input) input.focus();
+            });
+        }
+
+        function _supportChatEscape(s) {
+            return String(s || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function _supportChatRender() {
+            var body = document.getElementById('supportChatBody');
+            if (!body) return;
+            if (_supportChatMessages.length === 0) {
+                body.innerHTML = '<div class="support-chat-empty">'
+                    + '<svg class="support-chat-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'
+                    + '<div class="support-chat-empty-text">サポーターとチャットでつながれます。<br>または <a href="tel:' + SUPPORT_CHAT_PHONE + '">電話で相談（070-3630-3146）</a>。</div>'
+                    + '</div>';
+                return;
+            }
+            var html = '';
+            var lastDate = '';
+            _supportChatMessages.forEach(function(m) {
+                var d = new Date(m.createdAt);
+                var dateStr = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+                if (dateStr !== lastDate) {
+                    html += '<div class="support-chat-date-sep">' + dateStr + '</div>';
+                    lastDate = dateStr;
+                }
+                var hh = ('0' + d.getHours()).slice(-2);
+                var mm = ('0' + d.getMinutes()).slice(-2);
+                var timeStr = hh + ':' + mm;
+                var isUser = m.senderType === 'user';
+                var bubble = _supportChatEscape(m.body).replace(/\n/g, '<br>');
+                var statusSuffix = '';
+                if (m._pending) statusSuffix = ' 送信中…';
+                else if (m._error) statusSuffix = ' 失敗';
+                if (isUser) {
+                    html += '<div class="support-chat-msg from-user' + (m._error ? ' error' : '') + '">'
+                        + '<div class="support-chat-msg-bubble">' + bubble + '</div>'
+                        + '<div class="support-chat-msg-time">' + timeStr + statusSuffix + '</div>'
+                        + '</div>';
+                } else {
+                    html += '<div class="support-chat-msg from-supporter">'
+                        + '<div class="support-chat-msg-avatar">'
+                        + '<svg viewBox="0 0 24 24" fill="none" stroke="#3A3F32" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="3.2"/><path d="M5.5 20c0-3.3 2.9-5.8 6.5-5.8s6.5 2.5 6.5 5.8"/></svg>'
+                        + '</div>'
+                        + '<div class="support-chat-msg-bubble">' + bubble + '</div>'
+                        + '<div class="support-chat-msg-time">' + timeStr + '</div>'
+                        + '</div>';
+                }
+            });
+            body.innerHTML = html;
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function _supportChatUpdateSendBtn() {
+            var input = document.getElementById('supportChatInput');
+            var btn = document.getElementById('supportChatSendBtn');
+            if (!input || !btn) return;
+            if ((input.value || '').trim()) btn.classList.add('active');
+            else btn.classList.remove('active');
+        }
+
+        // 入力イベント登録（DOM 構築後に1回だけ）
+        function _supportChatBindInputEvents() {
+            var input = document.getElementById('supportChatInput');
+            if (!input || input._rnBound) return;
+            input._rnBound = true;
+            input.addEventListener('input', _supportChatUpdateSendBtn);
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendSupportChatMessage();
+                }
+            });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', _supportChatBindInputEvents);
+        } else {
+            _supportChatBindInputEvents();
         }
 
         // ===== 利用規約・プライバシーポリシー =====
@@ -32734,7 +33196,7 @@ RN-D14-60,行政書士,20000,50000,円,公営住宅の名義承継申請書類�
                     + '<path d="M13 19c0-2 1.6-3.5 3.5-3.5s3.5 1.5 3.5 3.5" fill="#F5CD67" stroke="#3A3F32" stroke-width="1.6" stroke-linecap="round"/>'
                     + '</svg>';
                 support.innerHTML =
-                      '<button type="button" class="rn-home-support-chip" onclick="showScreen(\'screen-concierge\')">'
+                      '<button type="button" class="rn-home-support-chip" onclick="openSupportChat()">'
                     +   '<span class="rn-home-support-chip-icon">' + iconConcierge + '</span>'
                     +   '<span>相談する</span>'
                     + '</button>'
