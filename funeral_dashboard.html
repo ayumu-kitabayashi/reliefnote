@@ -1246,6 +1246,527 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 }
 
 /* ============================================================
+   お声がけスクリプト
+   ============================================================ */
+.script-section {
+    background: var(--surface-warm);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+}
+.staff-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    flex-wrap: wrap;
+}
+.staff-input-row label { color: var(--ink-3); }
+.staff-input-row input {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-family: inherit;
+    font-size: 12px;
+    width: 160px;
+    background: white;
+}
+.staff-input-row input:focus { outline: none; border-color: var(--brand-2); }
+.context-pill {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--ink-3);
+    background: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+}
+.context-pill.alert-ctx { background: var(--alert-tint); color: var(--alert); border-color: var(--alert); }
+.context-pill.gold-ctx { background: var(--gold-tint); color: var(--gold); border-color: var(--gold-2); }
+
+.script-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+}
+.script-tab {
+    background: transparent;
+    border: none;
+    padding: 9px 16px;
+    font-size: 12px;
+    color: var(--ink-3);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-family: inherit;
+    font-weight: 500;
+    transition: color 0.15s;
+}
+.script-tab:hover { color: var(--ink); }
+.script-tab.active {
+    color: var(--brand);
+    border-bottom-color: var(--brand);
+    font-weight: 600;
+}
+.script-text {
+    width: 100%;
+    min-height: 200px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", sans-serif;
+    font-size: 13px;
+    line-height: 1.85;
+    color: var(--ink);
+    background: white;
+    resize: vertical;
+    font-feature-settings: "palt" 1;
+    transition: border-color 0.15s;
+}
+.script-text:focus { outline: none; border-color: var(--brand-2); }
+.script-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.script-tip {
+    font-size: 11.5px;
+    color: var(--ink-3);
+    font-style: italic;
+    flex: 1;
+    min-width: 200px;
+    line-height: 1.5;
+}
+.script-tip::before { content: '💡 '; font-style: normal; }
+.btn-copy {
+    background: var(--brand);
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.15s;
+}
+.btn-copy:hover { background: var(--brand-2); }
+.btn-copy.copied { background: var(--positive); }
+.btn-copy.copied::before { content: '✓ '; }
+.script-disclaimer {
+    margin-top: 10px;
+    font-size: 10.5px;
+    color: var(--ink-mute);
+    line-height: 1.5;
+}
+
+/* ============================================================
+   Privacy / Identity layer
+   ============================================================ */
+.privacy-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-warm);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 11px;
+    color: var(--ink-3);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+}
+.privacy-toggle:hover { border-color: var(--brand-2); }
+.privacy-toggle.on {
+    background: var(--alert-tint);
+    border-color: var(--alert);
+    color: var(--alert);
+    font-weight: 600;
+}
+.privacy-toggle .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--ink-mute);
+}
+.privacy-toggle.on .dot { background: var(--alert); animation: pulse 1.6s infinite; }
+
+.identity-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    background: var(--surface-warm);
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin-top: 8px;
+}
+.identity-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--ink-3);
+}
+.identity-form input, .identity-form textarea {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--ink);
+    background: white;
+    transition: border-color 0.15s;
+}
+.identity-form input:focus, .identity-form textarea:focus { outline: none; border-color: var(--brand-2); }
+.identity-form textarea { min-height: 50px; resize: vertical; grid-column: 1 / -1; }
+.identity-form .actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+.identity-form .privacy-note {
+    font-size: 10.5px;
+    color: var(--ink-mute);
+    flex: 1;
+    line-height: 1.5;
+}
+.identity-form .privacy-note::before { content: '🔒 '; }
+.btn-save {
+    background: var(--brand);
+    color: white;
+    border: none;
+    padding: 7px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+}
+.btn-save:hover { background: var(--brand-2); }
+.btn-clear {
+    background: transparent;
+    color: var(--alert);
+    border: 1px solid var(--alert-tint);
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+}
+.btn-clear:hover { background: var(--alert-tint); }
+
+.identity-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.identity-display .deceased-name {
+    font-weight: 600;
+    color: var(--ink);
+}
+.identity-display .chief-name {
+    font-size: 11px;
+    color: var(--ink-3);
+}
+.identity-add-link {
+    font-size: 10px;
+    color: var(--ink-mute);
+    margin-left: 6px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.identity-add-link:hover { color: var(--brand); }
+
+.csv-import-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: var(--brand-tint-2);
+    border-radius: 8px;
+    margin-top: 12px;
+    font-size: 12px;
+    flex-wrap: wrap;
+}
+.csv-import-row label {
+    background: var(--brand);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+}
+.csv-import-row label:hover { background: var(--brand-2); }
+.csv-import-row input[type="file"] { display: none; }
+.csv-import-row .desc {
+    color: var(--ink-3);
+    flex: 1;
+    min-width: 240px;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* ============================================================
+   CRM: フォローアップ
+   ============================================================ */
+.followup-form {
+    background: var(--surface-warm);
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+.followup-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.followup-form-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--ink-3);
+}
+.followup-form-grid select, .followup-form-grid input {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: inherit;
+    font-size: 13px;
+    background: white;
+}
+.followup-form textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-family: inherit;
+    font-size: 13px;
+    min-height: 70px;
+    resize: vertical;
+    background: white;
+    margin-bottom: 8px;
+}
+.followup-form textarea:focus { outline: none; border-color: var(--brand-2); }
+.followup-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.followup-history {
+    border-left: 2px solid var(--border);
+    padding-left: 16px;
+    margin-left: 4px;
+}
+.followup-entry {
+    position: relative;
+    padding: 10px 0;
+    font-size: 12px;
+    border-bottom: 1px dashed var(--border-light);
+}
+.followup-entry:last-child { border-bottom: none; }
+.followup-entry::before {
+    content: '';
+    position: absolute;
+    left: -22px;
+    top: 16px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--brand-2);
+    border: 2px solid white;
+}
+.followup-entry.action-call::before { background: var(--positive); }
+.followup-entry.action-email::before { background: var(--neutral); }
+.followup-entry.action-visit::before { background: var(--gold); }
+.followup-entry.action-memo::before { background: var(--ink-mute); }
+
+.followup-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.followup-head .when {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+}
+.followup-head .who {
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 12px;
+}
+.followup-head .what {
+    font-size: 11px;
+    background: var(--brand-tint);
+    color: var(--brand);
+    padding: 1px 7px;
+    border-radius: 10px;
+}
+.followup-head .what.action-call { background: var(--positive-tint); color: var(--positive); }
+.followup-head .what.action-email { background: var(--neutral-tint); color: var(--neutral); }
+.followup-head .what.action-visit { background: var(--gold-tint); color: var(--gold); }
+.followup-head .what.action-memo { background: var(--brand-tint); color: var(--brand-2); }
+
+.followup-outcome {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 10.5px;
+    padding: 1px 7px;
+    border-radius: 8px;
+}
+.followup-outcome.outcome-completed { background: var(--positive-tint); color: var(--positive); }
+.followup-outcome.outcome-callback_needed { background: var(--neutral-tint); color: var(--neutral); }
+.followup-outcome.outcome-no_response { background: var(--warn-tint); color: var(--warn); }
+.followup-outcome.outcome-rejected { background: var(--alert-tint); color: var(--alert); }
+.followup-outcome.outcome-pending { background: var(--brand-tint); color: var(--brand); }
+
+.followup-note {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.6;
+    background: var(--surface-warm);
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+/* スタッフ別サマリー */
+.staff-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+.staff-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: all 0.15s;
+}
+.staff-card:hover { border-color: var(--brand-2); }
+.staff-card .name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+}
+.staff-card .name::before {
+    content: '👤 ';
+    font-size: 12px;
+    margin-right: 4px;
+}
+.staff-card .stats {
+    display: flex;
+    gap: 14px;
+    margin: 8px 0;
+}
+.staff-card .stat {
+    flex: 1;
+}
+.staff-card .stat .num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--brand);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+}
+.staff-card .stat .lbl {
+    font-size: 10px;
+    color: var(--ink-3);
+}
+.staff-card .recent {
+    font-size: 11px;
+    color: var(--ink-3);
+    line-height: 1.5;
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+}
+.staff-card .recent strong { color: var(--ink); }
+
+/* 未対応キュー */
+.queue-list { display: grid; gap: 8px; margin-top: 8px; }
+.queue-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    transition: all 0.15s;
+}
+.queue-item:hover { border-color: var(--brand-2); box-shadow: var(--shadow-sm); cursor: pointer; }
+.queue-item.urgent { border-left: 3px solid var(--alert); }
+.queue-item.warn { border-left: 3px solid var(--neutral); }
+.queue-item.gold { border-left: 3px solid var(--gold); }
+.queue-info .target {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+}
+.queue-info .meta {
+    font-size: 11px;
+    color: var(--ink-3);
+    line-height: 1.5;
+    margin-top: 2px;
+}
+.queue-info .meta strong { color: var(--ink-2); }
+.queue-action {
+    font-size: 11px;
+    background: var(--brand);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+.queue-action:hover { background: var(--brand-2); }
+
+.crm-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10.5px;
+    color: var(--ink-3);
+    padding: 3px 8px;
+    background: var(--brand-tint-2);
+    border-radius: 8px;
+}
+.crm-status-pill.connected::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--positive);
+}
+.crm-status-pill.disconnected {
+    background: var(--neutral-tint);
+    color: var(--neutral);
+}
+.crm-status-pill.disconnected::before {
+    content: '⚠ ';
+}
+
+/* ============================================================
    Footer
    ============================================================ */
 footer {
@@ -1298,6 +1819,93 @@ footer code {
 }
 
 /* ============================================================
+   Phase バッジ / レベル切替 / デモモード
+   ============================================================ */
+.phase-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-left: 10px;
+    vertical-align: middle;
+    line-height: 1.4;
+    flex-shrink: 0;
+}
+.phase-badge.phase-1 { background: var(--positive-tint); color: #3F6B3F; }
+.phase-badge.phase-2 { background: var(--neutral-tint); color: #8A5C2A; }
+.phase-badge.phase-3 { background: #ECE7F2; color: #5A4982; }
+.section-nav a .phase-badge {
+    margin-left: 6px;
+    padding: 1px 5px;
+    font-size: 9px;
+}
+
+/* レベル別セクション可視性 */
+body.level-basic [data-level="2"],
+body.level-basic [data-level="3"],
+body.level-advanced [data-level="3"] { display: none !important; }
+body.level-basic .section-nav a[data-level="2"],
+body.level-basic .section-nav a[data-level="3"],
+body.level-advanced .section-nav a[data-level="3"] { display: none !important; }
+
+/* レベルセレクト */
+.level-select {
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--ink-2);
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.level-select:hover { border-color: var(--brand-2); }
+
+/* デモバナー */
+#demoBanner {
+    background: linear-gradient(90deg, #FAF1DE 0%, #F8F1E2 100%);
+    border-bottom: 1px solid var(--gold-2);
+    color: var(--brand);
+    padding: 10px 20px;
+    font-size: 13px;
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+#demoBanner .demo-tag {
+    display: inline-block;
+    background: var(--gold);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 10px;
+    letter-spacing: 0.06em;
+}
+#demoBanner a.demo-exit {
+    margin-left: 12px;
+    color: var(--brand);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* 空状態のオンボーディング装飾 */
+.empty-state.guide::before {
+    content: '✨';
+    display: block;
+    font-size: 22px;
+    margin-bottom: 6px;
+    opacity: 0.55;
+}
+
+/* ============================================================
    Print styles (月次レポート)
    ============================================================ */
 @media print {
@@ -1318,6 +1926,11 @@ footer code {
 </head>
 <body>
 
+<div id="demoBanner" style="display:none;">
+    <span class="demo-tag">DEMO</span>ダミーデータで表示中。実データに切り替えるには
+    <a class="demo-exit" onclick="exitDemo()">こちら</a>
+</div>
+
 <div class="brand-bar">
     <div class="brand-bar-inner">
         <span class="pulse"></span>
@@ -1335,9 +1948,17 @@ footer code {
             </div>
         </div>
         <input class="org-name" id="orgName" type="text" placeholder="御社名を入力" maxlength="40">
+        <button id="privacyToggle" class="privacy-toggle" onclick="togglePrivacyMode()" title="ご遺族の実名表示を切替（実名情報は端末内 localStorage のみに保存）">
+            <span class="dot"></span>匿名表示
+        </button>
         <select id="channelSelect" class="channel-select" onchange="render()">
             <option value="funeral" selected>channel = funeral</option>
             <option value="hokuryu">channel = hokuryu (プレビュー)</option>
+        </select>
+        <select id="levelSelect" class="level-select" onchange="setLevel(this.value)" title="表示レベル：機能解放のフェーズ別に表示量を切替">
+            <option value="basic">Phase 1 — 基本（5）</option>
+            <option value="advanced">Phase 2 — 拡張（9）</option>
+            <option value="full" selected>Phase 3 — フル（16）</option>
         </select>
         <div class="controls">
             <select id="rangeSelect" onchange="render()">
@@ -1353,19 +1974,22 @@ footer code {
 
 <nav class="section-nav">
     <div class="section-nav-inner">
-        <a href="#hero">今週やるべきこと</a>
-        <a href="#roi">ROI / 価値</a>
-        <a href="#impact">導入効果</a>
-        <a href="#alerts">グリーフアラート</a>
-        <a href="#touchpoints">49日 声がけ候補</a>
-        <a href="#forecast">先読み予測</a>
-        <a href="#families">ご遺族別</a>
-        <a href="#distribution">フェーズ分布</a>
-        <a href="#tasks">タスク進捗</a>
-        <a href="#heatmap">グリーフ活動</a>
-        <a href="#memorials">法要・記念日</a>
-        <a href="#trend">月次推移</a>
-        <a href="#features">機能利用</a>
+        <a href="#hero" data-level="1">今週やるべきこと</a>
+        <a href="#roi" data-level="1">ROI / 価値</a>
+        <a href="#queue" data-level="1">未対応キュー</a>
+        <a href="#touchpoints" data-level="1">49日 声がけ候補</a>
+        <a href="#features" data-level="1">機能利用</a>
+        <a href="#alerts" data-level="2">グリーフアラート</a>
+        <a href="#forecast" data-level="2">先読み予測</a>
+        <a href="#distribution" data-level="2">フェーズ分布</a>
+        <a href="#trend" data-level="2">月次推移</a>
+        <a href="#staff" data-level="3">スタッフ別</a>
+        <a href="#impact" data-level="3">導入効果</a>
+        <a href="#families" data-level="3">ご遺族別</a>
+        <a href="#tasks" data-level="3">タスク進捗</a>
+        <a href="#heatmap" data-level="3">グリーフ活動</a>
+        <a href="#memorials" data-level="3">法要・記念日</a>
+        <a href="#identity" data-level="3">実名管理</a>
     </div>
 </nav>
 
@@ -1377,20 +2001,40 @@ footer code {
     <div id="errorBox" style="display:none;"></div>
 
     <!-- HERO: 今週やるべきこと -->
-    <section class="hero" id="hero">
+    <section class="hero" id="hero" data-level="1">
         <div class="hero-head">
-            <h1>今週、御社が動くべきこと</h1>
+            <h1>今週、御社が動くべきこと<span class="phase-badge phase-1">Phase 1</span></h1>
             <span class="head-meta">優先度・緊急度で自動ソート / 直近のアプリ行動から自動抽出</span>
         </div>
         <div class="action-list" id="actionList"></div>
     </section>
 
+    <!-- 未対応キュー -->
+    <section class="panel" id="queue" data-level="1">
+        <div class="panel-head">
+            <h2>未対応キュー — フォローアップ漏れ<span class="phase-badge phase-1">Phase 1</span></h2>
+            <span class="panel-meta" id="crmStatus"></span>
+        </div>
+        <p class="desc">アプリで動きがあるご遺族のうち、72時間以内に当社からの対応記録がない方。被り防止と漏れ防止のための優先キュー。</p>
+        <div class="queue-list" id="queueList"></div>
+    </section>
+
+    <!-- スタッフ別 業務サマリー -->
+    <section class="panel" id="staff" data-level="3">
+        <div class="panel-head">
+            <h2>スタッフ別 業務サマリー<span class="phase-badge phase-3">Phase 3</span></h2>
+            <span class="panel-meta">funeral_followups GROUP BY staff_name</span>
+        </div>
+        <p class="desc">期間内の対応件数、担当ご遺族数、直近の活動。複数スタッフ運用での状況把握用。</p>
+        <div class="staff-grid" id="staffGrid"></div>
+    </section>
+
     <!-- ROI BANNER -->
-    <section class="roi-banner" id="roi">
+    <section class="roi-banner" id="roi" data-level="1">
         <div class="roi-head">
             <div>
                 <div class="label">VALUE DELIVERED</div>
-                <h2 id="roiTitle">今月、ReliefNote が御社にもたらした価値</h2>
+                <h2 id="roiTitle">今月、ReliefNote が御社にもたらした価値<span class="phase-badge phase-1">Phase 1</span></h2>
             </div>
             <div class="scope" id="roiScope"></div>
         </div>
@@ -1405,22 +2049,22 @@ footer code {
     </section>
 
     <!-- 導入効果 (MERIT cards) -->
-    <section class="impact-section" id="impact">
+    <section class="impact-section" id="impact" data-level="3">
         <div class="panel-head">
-            <h2>導入効果サマリー</h2>
+            <h2>導入効果サマリー<span class="phase-badge phase-3">Phase 3</span></h2>
             <span class="panel-meta">ご遺族アプリ 実イベントから算出</span>
         </div>
         <p class="desc">御社が ReliefNote から得ている定量的価値。すべて event_logs テーブルから直接計算。</p>
         <div class="impact-grid" id="impactGrid"></div>
     </section>
 
-    <div class="section-divider">アプリ利用状況（オペレーショナル指標）</div>
-    <div class="stat-grid" id="summaryGrid"></div>
+    <div class="section-divider" data-level="1">アプリ利用状況（オペレーショナル指標）</div>
+    <div class="stat-grid" id="summaryGrid" data-level="1"></div>
 
     <!-- グリーフアラート -->
-    <section class="panel alert-panel" id="alerts">
+    <section class="panel alert-panel" id="alerts" data-level="2">
         <div class="panel-head">
-            <h2>グリーフアラート — 即対応リスト</h2>
+            <h2>グリーフアラート — 即対応リスト<span class="phase-badge phase-2">Phase 2</span></h2>
             <span class="panel-meta" id="alertSource"></span>
         </div>
         <p class="desc">アプリが自動発火した深刻度アラート。長文ログの連続・ネガティブ表現の増加などを検知。<strong>24時間以内のお声がけが推奨されます。</strong></p>
@@ -1429,9 +2073,9 @@ footer code {
     </section>
 
     <!-- 49日前後 + 予測 -->
-    <section class="panel" id="touchpoints">
+    <section class="panel" id="touchpoints" data-level="1">
         <div class="panel-head">
-            <h2>49日前後 — 仏壇・本位牌・法要のご相談タイミング</h2>
+            <h2>49日前後 — 仏壇・本位牌・法要のご相談タイミング<span class="phase-badge phase-1">Phase 1</span></h2>
             <span class="panel-meta">経過 35〜65 日 + 直近7日アクティブ</span>
         </div>
         <p class="desc">仏壇・本位牌・法要・お墓のご相談ベストタイミング。準備度・行動シグナルから優先度を判定。</p>
@@ -1439,9 +2083,9 @@ footer code {
         <div class="insight gold" id="touchpointInsight"></div>
     </section>
 
-    <section class="panel" id="forecast">
+    <section class="panel" id="forecast" data-level="2">
         <div class="panel-head">
-            <h2>先読み予測 — 今後 30/60/90 日の機会</h2>
+            <h2>先読み予測 — 今後 30/60/90 日の機会<span class="phase-badge phase-2">Phase 2</span></h2>
             <span class="panel-meta">first_seen + 49d / 100d / 365d で算出</span>
         </div>
         <p class="desc">ご遺族の初回アプリ利用日を起点に、今後到来する四十九日・百ヶ日・一周忌のタイミング数を予測。</p>
@@ -1449,9 +2093,9 @@ footer code {
     </section>
 
     <!-- ご遺族別 -->
-    <section class="panel" id="families">
+    <section class="panel" id="families" data-level="3">
         <div class="panel-head">
-            <h2>ご遺族別 アクティビティ</h2>
+            <h2>ご遺族別 アクティビティ<span class="phase-badge phase-3">Phase 3</span></h2>
             <span class="panel-meta">行をクリックで詳細タイムライン</span>
         </div>
         <p class="desc">user_id ごとのフェーズ・タスク完了数・最終アクセス。クリックでイベントタイムライン表示。</p>
@@ -1461,18 +2105,18 @@ footer code {
 
     <!-- フェーズ分布 + ヒートマップ -->
     <div class="grid-2">
-        <section class="panel" id="distribution">
+        <section class="panel" id="distribution" data-level="2">
             <div class="panel-head">
-                <h2>フェーズ別 ご遺族分布</h2>
+                <h2>フェーズ別 ご遺族分布<span class="phase-badge phase-2">Phase 2</span></h2>
                 <span class="panel-meta">phase_master.csv 準拠</span>
             </div>
             <p class="desc">どのフェーズに何名のご遺族が滞在中か。M3（3か月以内）に集中する場合は仏壇相談タイミングが集中している兆候。</p>
             <div class="phase-chart" id="phaseChart"></div>
         </section>
 
-        <section class="panel" id="heatmap">
+        <section class="panel" id="heatmap" data-level="3">
             <div class="panel-head">
-                <h2>グリーフ活動 — 日次ヒートマップ</h2>
+                <h2>グリーフ活動 — 日次ヒートマップ<span class="phase-badge phase-3">Phase 3</span></h2>
                 <span class="panel-meta">直近30日 grief_log_saved</span>
             </div>
             <p class="desc">ご遺族のグリーフ記録活動の濃淡。色の濃い日はご遺族が多く想いを綴った日。</p>
@@ -1489,18 +2133,18 @@ footer code {
 
     <!-- タスク + 法要 -->
     <div class="grid-2">
-        <section class="panel" id="tasks">
+        <section class="panel" id="tasks" data-level="3">
             <div class="panel-head">
-                <h2>アフター手続き 完了状況</h2>
+                <h2>アフター手続き 完了状況<span class="phase-badge phase-3">Phase 3</span></h2>
                 <span class="panel-meta">tasks_master.csv ドメイン別</span>
             </div>
             <p class="desc">ご遺族アプリ全 56 タスクのドメイン別完了率。滞留が多い領域は事前相談員フォロー候補。</p>
             <ul class="cat-list" id="categoryList"></ul>
         </section>
 
-        <section class="panel" id="memorials">
+        <section class="panel" id="memorials" data-level="3">
             <div class="panel-head">
-                <h2>ご遺族登録の法要・記念日</h2>
+                <h2>ご遺族登録の法要・記念日<span class="phase-badge phase-3">Phase 3</span></h2>
                 <span class="panel-meta">event_type='anniv_added'</span>
             </div>
             <p class="desc">ご遺族がアプリに登録した命日・法要日。直近30日以内のもの。供物・お参りのご提案機会。</p>
@@ -1509,9 +2153,9 @@ footer code {
     </div>
 
     <!-- 月次推移 -->
-    <section class="panel" id="trend">
+    <section class="panel" id="trend" data-level="2">
         <div class="panel-head">
-            <h2>月次推移サマリー</h2>
+            <h2>月次推移サマリー<span class="phase-badge phase-2">Phase 2</span></h2>
             <span class="panel-meta">v_funeral_daily 相当</span>
         </div>
         <p class="desc">DAU・グリーフアラート発火の月次推移。過去12ヶ月のトレンド。</p>
@@ -1525,10 +2169,27 @@ footer code {
         <div class="insight" id="trendInsight"></div>
     </section>
 
-    <!-- 機能別 -->
-    <section class="panel" id="features">
+    <!-- 実名管理 -->
+    <section class="panel" id="identity" data-level="3">
         <div class="panel-head">
-            <h2>機能別 利用状況</h2>
+            <h2>ご遺族 実名管理<span class="phase-badge phase-3">Phase 3</span></h2>
+            <span class="panel-meta">localStorage / 端末内のみ</span>
+        </div>
+        <p class="desc">ご遺族の実名・連絡先を登録しておくと、ヘッダーの「匿名表示」を切替えた時に user_id の代わりに故人氏名・喪主氏名が表示されます。<strong>これらの情報は Supabase 等クラウドへ送信されず、ご使用の端末内（localStorage）のみに保存されます。</strong></p>
+        <div class="csv-import-row">
+            <label for="csvFile">CSV を取込</label>
+            <input id="csvFile" type="file" accept=".csv" onchange="if(this.files[0])importIdentityCSV(this.files[0])">
+            <button class="btn-print" onclick="exportIdentityCSV()">CSV をエクスポート</button>
+            <button class="btn-print" onclick="clearAllIdentities()" style="border-color:var(--alert);color:var(--alert);">全削除</button>
+            <span class="desc">CSV ヘッダ: <code>user_id,deceased,deceased_age,chief,relation,phone,email,funeral_date,memo</code>（user_id 必須、他は任意）</span>
+        </div>
+        <div id="identitySummary" style="margin-top:12px;font-size:12px;color:var(--ink-3);"></div>
+    </section>
+
+    <!-- 機能別 -->
+    <section class="panel" id="features" data-level="1">
+        <div class="panel-head">
+            <h2>機能別 利用状況<span class="phase-badge phase-1">Phase 1</span></h2>
             <span class="panel-meta">event_type 別カウント</span>
         </div>
         <p class="desc">各機能の利用イベント発火数。グリーフケア機能の継続利用は、ご遺族との接点維持の指標。</p>
@@ -1705,9 +2366,54 @@ function statusBadge(status) {
     return `<span class="badge ${map[status] || 'muted'}">${esc(status)}</span>`;
 }
 function emptyState(msg, hint) {
-    return `<div class="empty-state">${esc(msg)}${hint ? `<div class="hint">${esc(hint)}</div>` : ''}</div>`;
+    // Phase 1 のオンボーディング期は guide クラスで装飾（✨アイコン）を表示
+    const isOnboarding = (document.body.classList.contains('level-basic')) || _isDemo;
+    const cls = isOnboarding ? 'empty-state guide' : 'empty-state';
+    const safeHint = hint || 'データが集まると、ここに自動で表示されます';
+    return `<div class="${cls}">${esc(msg)}<div class="hint">${esc(safeHint)}</div></div>`;
 }
 function loadingState() { return `<div class="empty-state"><span class="spinner"></span>読み込み中…</div>`; }
+
+// ============================================================
+// URL パラメータ（level / demo）
+// ============================================================
+function getUrlParams() {
+    const p = new URLSearchParams(location.search);
+    const lvl = (p.get('level') || 'full').toLowerCase();
+    const valid = ['basic', 'advanced', 'full'];
+    return {
+        level: valid.includes(lvl) ? lvl : 'full',
+        demo: p.get('demo') === '1'
+    };
+}
+function applyLevelClass() {
+    const { level } = getUrlParams();
+    document.body.classList.remove('level-basic', 'level-advanced', 'level-full');
+    document.body.classList.add('level-' + level);
+    const sel = document.getElementById('levelSelect');
+    if (sel) sel.value = level;
+}
+function setLevel(level) {
+    const p = new URLSearchParams(location.search);
+    p.set('level', level);
+    location.search = p.toString();
+}
+function exitDemo() {
+    const p = new URLSearchParams(location.search);
+    p.delete('demo');
+    location.search = p.toString();
+}
+let _isDemo = false;
+function applyDemoBanner() {
+    const { demo } = getUrlParams();
+    _isDemo = demo;
+    const banner = document.getElementById('demoBanner');
+    if (banner) banner.style.display = demo ? 'block' : 'none';
+    const brandSub = document.querySelector('.brand-mark .sub');
+    if (brandSub) brandSub.textContent = demo
+        ? '葬儀社向け アフターケアダッシュボード（デモモード）'
+        : '葬儀社向け アフターケアダッシュボード';
+}
 
 function setStatus(state, text) {
     const el = document.getElementById('connStatus');
@@ -1751,7 +2457,127 @@ function resetActionLog() {
 // ============================================================
 // Supabase fetch
 // ============================================================
+// ============================================================
+// デモデータ生成（?demo=1 のとき本物の Supabase fetch を置換）
+// ============================================================
+function buildDemoEvents() {
+    const events = [];
+    const now = Date.now();
+    const day = 86400000;
+    const ch = currentChannel();
+    // 12 名のご遺族 — 経過日を散らして 49日・100日・1周忌 候補を作る
+    const users = [
+        { id: 'demo-001', daysAgo: 75, alert: false, anniv: '49日法要' },
+        { id: 'demo-002', daysAgo: 50, alert: false },
+        { id: 'demo-003', daysAgo: 45, alert: false },
+        { id: 'demo-004', daysAgo: 30, alert: false },
+        { id: 'demo-005', daysAgo: 22, alert: true  },
+        { id: 'demo-006', daysAgo: 18, alert: false },
+        { id: 'demo-007', daysAgo: 12, alert: false },
+        { id: 'demo-008', daysAgo: 9,  alert: true  },
+        { id: 'demo-009', daysAgo: 6,  alert: false },
+        { id: 'demo-010', daysAgo: 3,  alert: false },
+        { id: 'demo-011', daysAgo: 95, alert: false, anniv: '百ヶ日' },
+        { id: 'demo-012', daysAgo: 110, alert: true  }
+    ];
+    const tasks = [
+        'RN-H24-02','RN-D7-01','RN-D7-06','RN-D7-10','RN-D7-30','RN-D14-01',
+        'RN-D14-06','RN-D14-09','RN-D14-11','RN-D14-20','RN-D14-25b','RN-M3-01','RN-M3-22','RN-M4-01'
+    ];
+    const grief_moods = ['平穏', '寂しい', '悲しい', '辛い', '思い出す'];
+    function rand(n) { return Math.floor(Math.random() * n); }
+    function pick(arr) { return arr[rand(arr.length)]; }
+
+    users.forEach(u => {
+        const start = now - u.daysAgo * day;
+        // app_opened
+        events.push({
+            user_id: u.id, event_type: 'app_opened',
+            event_data: { channel: ch },
+            created_at: new Date(start).toISOString()
+        });
+        // 初日に 3 件 task_detail_opened
+        for (let i = 0; i < 3; i++) {
+            events.push({
+                user_id: u.id, event_type: 'task_detail_opened',
+                event_data: { channel: ch, task_id: tasks[i] },
+                created_at: new Date(start + 60_000 + i * 90_000).toISOString()
+            });
+        }
+        // 経過日に応じて task_completed
+        const completedCount = Math.min(Math.floor(u.daysAgo / 8), tasks.length - 1);
+        for (let i = 0; i < completedCount; i++) {
+            events.push({
+                user_id: u.id, event_type: 'task_completed',
+                event_data: { channel: ch, task_id: tasks[i] },
+                created_at: new Date(start + (i + 1) * day + 3 * 3600_000).toISOString()
+            });
+        }
+        // grief_log_saved を散発的に
+        for (let d = 1; d < Math.min(u.daysAgo, 35); d += 2) {
+            if (Math.random() < 0.45) {
+                events.push({
+                    user_id: u.id, event_type: 'grief_log_saved',
+                    event_data: { channel: ch, mood: pick(grief_moods) },
+                    created_at: new Date(start + d * day + (18 + rand(6)) * 3600_000).toISOString()
+                });
+            }
+        }
+        // screen_viewed をいくつか
+        for (let d = 0; d < Math.min(u.daysAgo, 20); d += 4) {
+            events.push({
+                user_id: u.id, event_type: 'screen_viewed',
+                event_data: { channel: ch, screen: pick(['home','guide','grief','consult']) },
+                created_at: new Date(start + d * day + 9 * 3600_000).toISOString()
+            });
+        }
+        // grief_alert_triggered（一部のユーザー、直近に発火）
+        if (u.alert) {
+            const alertAt = now - rand(3) * day - rand(12) * 3600_000;
+            events.push({
+                user_id: u.id, event_type: 'grief_alert_triggered',
+                event_data: { channel: ch, severity: pick(['high','medium']) },
+                created_at: new Date(alertAt).toISOString()
+            });
+        }
+        // anniv_added（49日 / 百ヶ日）
+        if (u.anniv) {
+            events.push({
+                user_id: u.id, event_type: 'anniv_added',
+                event_data: { channel: ch, kind: u.anniv },
+                created_at: new Date(start + 30 * day).toISOString()
+            });
+        }
+    });
+    return events.sort((a, b) => a.created_at.localeCompare(b.created_at));
+}
+
+function buildDemoFollowups() {
+    const now = Date.now();
+    const day = 86400000;
+    const staffNames = ['田中（事前相談員）', '佐藤（家族葬担当）', '高橋（アフターサービス）'];
+    const seed = [
+        { user: 'demo-001', staff: 0, action: 'phone_call', outcome: 'completed', daysAgo: 7,  note: '49日法要のご相談あり。来週ご来店予定。' },
+        { user: 'demo-003', staff: 1, action: 'visit',      outcome: 'pending',   daysAgo: 12, note: '仏壇・本位牌のご相談。3社見積もり比較中。' },
+        { user: 'demo-004', staff: 2, action: 'phone_call', outcome: 'no_answer', daysAgo: 5,  note: 'お電話差し上げたが不在。明日再架電予定。' },
+        { user: 'demo-007', staff: 0, action: 'message',    outcome: 'completed', daysAgo: 2,  note: 'LINE で香典返しのご案内をお送りしました。' },
+        { user: 'demo-002', staff: 1, action: 'visit',      outcome: 'pending',   daysAgo: 9,  note: '相続のご相談、提携税理士をご紹介中。' },
+        { user: 'demo-011', staff: 2, action: 'phone_call', outcome: 'completed', daysAgo: 14, note: '百ヶ日法要のご相談、ご予約頂きました。' }
+    ];
+    return seed.map((f, i) => ({
+        id: 1000 + i,
+        channel: currentChannel(),
+        user_id: f.user,
+        staff_name: staffNames[f.staff],
+        action_type: f.action,
+        outcome: f.outcome,
+        note: f.note,
+        created_at: new Date(now - f.daysAgo * day).toISOString()
+    }));
+}
+
 async function fetchAllEvents() {
+    if (_isDemo) return buildDemoEvents();
     const since = daysAgoISO(FETCH_LOOKBACK_DAYS);
     const url = `${SUPABASE_URL}/rest/v1/event_logs`
         + `?select=user_id,event_type,event_data,created_at`
@@ -1866,7 +2692,7 @@ function buildPriorityActions(events, users) {
                 id: 'alert_' + u.user_id,
                 priority: 100 + u.alerts7d,
                 tier: 'urgent',
-                target: `…${shortUid(u.user_id)}（経過 ${computePhase(u.firstSeen).days}日）`,
+                target: `${displayName(u.user_id, {compact:true})}（経過 ${computePhase(u.firstSeen).days}日）`,
                 reason: `<strong>グリーフアラート ${u.alerts7d} 件発火</strong>（直近7日）。深いグリーフのご遺族。お電話でご様子伺いを。`,
                 action: { user_id: u.user_id }
             });
@@ -1883,7 +2709,7 @@ function buildPriorityActions(events, users) {
                     id: '49d_' + u.user_id,
                     priority: 80 + (49 - phase.days),
                     tier: 'gold',
-                    target: `…${shortUid(u.user_id)}（49日まで残り ${49 - phase.days}日）`,
+                    target: `${displayName(u.user_id, {compact:true})}（49日まで残り ${49 - phase.days}日）`,
                     reason: `<strong>仏壇・本位牌・法要のご相談ベストタイミング</strong>。完了タスク ${u.tasksCompletedSize}/56・直近セッション ${timeAgo(u.lastSeen)}。`,
                     action: { user_id: u.user_id }
                 });
@@ -1900,7 +2726,7 @@ function buildPriorityActions(events, users) {
                 id: 'silent_' + u.user_id,
                 priority: 50,
                 tier: 'warn',
-                target: `…${shortUid(u.user_id)}（${phase.label}）`,
+                target: `${displayName(u.user_id, {compact:true})}（${phase.label}）`,
                 reason: `<strong>${Math.floor((Date.now() - lastActive) / 86400000)}日間アプリ未利用</strong>。手続き滞留・心理的孤立の可能性。安否確認のお声がけを。`,
                 action: { user_id: u.user_id }
             });
@@ -1921,11 +2747,30 @@ function buildPriorityActions(events, users) {
                 id: 'memorial_' + ev.user_id + '_' + m + '_' + d,
                 priority: 60 - Math.floor(daysAhead),
                 tier: 'normal',
-                target: `…${shortUid(ev.user_id)}（${m}月${d}日 / あと${Math.floor(daysAhead)}日）`,
+                target: `${displayName(ev.user_id, {compact:true})}（${m}月${d}日 / あと${Math.floor(daysAhead)}日）`,
                 reason: `ご遺族登録の<strong>命日・法要日</strong>が近い。供物・お花・お参りのご提案機会。`,
                 action: { user_id: ev.user_id }
             });
         }
+    }
+
+    // 5. 直近対応で「折り返し要」「保留」のままになっているもの
+    for (const f of _followups) {
+        if (!['callback_needed','pending'].includes(f.outcome)) continue;
+        const ageDays = (Date.now() - new Date(f.created_at).getTime()) / 86400000;
+        if (ageDays < 2 || ageDays > 14) continue;
+        // この遺族に新しい対応があるかチェック
+        const list = _followupsByUser[f.user_id] || [];
+        const newer = list.find(x => x.created_at > f.created_at);
+        if (newer) continue;
+        actions.push({
+            id: 'callback_' + f.id,
+            priority: 70,
+            tier: 'urgent',
+            target: `${displayName(f.user_id, {compact:true})}`,
+            reason: `<strong>${esc(OUTCOME_LABEL[f.outcome])}</strong>のまま${Math.floor(ageDays)}日経過（${esc(f.staff_name)} の対応より）。再アプローチ推奨。`,
+            action: { user_id: f.user_id }
+        });
     }
 
     actions.sort((a, b) => b.priority - a.priority);
@@ -2139,7 +2984,7 @@ function renderAlerts(users) {
         const done = isActionDone('alert_' + u.user_id);
         return `
         <tr class="clickable" onclick="showFamilyDetail('${esc(u.user_id)}')">
-            <td><span class="uid">…${esc(shortUid(u.user_id))}</span></td>
+            <td>${displayName(u.user_id)}</td>
             <td><span style="font-size:12px;">${esc(fmtDateTime(u.lastAlertAt))}</span><div style="font-size:10px;color:var(--ink-mute);">${esc(timeAgo(u.lastAlertAt))}</div></td>
             <td class="num"><span class="badge alert">${u.alerts7d}</span></td>
             <td class="num">${u.griefLogs}</td>
@@ -2188,7 +3033,7 @@ function renderTouchpoints(users) {
         const done = isActionDone('49d_' + u.user_id);
         return `
         <tr class="clickable" onclick="showFamilyDetail('${esc(u.user_id)}')">
-            <td><span class="uid">…${esc(shortUid(u.user_id))}</span></td>
+            <td>${displayName(u.user_id)}</td>
             <td><span style="font-size:12px;">${esc(fmtDate(u.firstSeen))}</span><div style="font-size:11px;">${dayLabel}</div></td>
             <td class="num">${u.activeDays}</td>
             <td class="num">${u.tasksCompletedSize}</td>
@@ -2280,9 +3125,13 @@ function renderFamilies(users) {
     const rows = list.map(u => {
         const pct = Math.round((u.tasksCompletedSize / 56) * 100);
         const fillClass = pct >= 60 ? 'positive' : pct >= 25 ? '' : 'warn';
+        const lastFu = lastFollowupForUser(u.user_id);
+        const fuLabel = lastFu
+            ? `<span style="font-size:10px;color:var(--ink-3);">${esc(timeAgo(lastFu.created_at))} ${esc(lastFu.staff_name)}</span>`
+            : '<span style="color:var(--ink-mute);font-size:10px;">—</span>';
         return `
         <tr class="clickable" onclick="showFamilyDetail('${esc(u.user_id)}')">
-            <td><span class="uid">…${esc(shortUid(u.user_id))}</span></td>
+            <td>${displayName(u.user_id)}</td>
             <td><span style="font-size:12px;">${esc(fmtDate(u.firstSeen))}</span><div style="font-size:11px;color:var(--ink-3);">経過 ${u._phase.days}日</div></td>
             <td><span class="badge muted">${esc(u._phase.label)}</span></td>
             <td class="num">${u.activeDays}</td>
@@ -2294,11 +3143,12 @@ function renderFamilies(users) {
             </td>
             <td><span style="font-size:11px;color:var(--ink-3);">${esc(timeAgo(u.lastSeen))}</span></td>
             <td>${u.alerts > 0 ? `<span class="badge alert">${u.alerts}</span>` : '<span style="color:var(--ink-mute);font-size:11px;">—</span>'}</td>
+            <td>${fuLabel}</td>
             <td>${statusBadge(u._status)}</td>
         </tr>`;
     }).join('');
     el.innerHTML = `<table>
-        <thead><tr><th>user_id</th><th>初回 / 経過</th><th>フェーズ</th><th class="num">アクティブ日</th><th>完了タスク (56)</th><th>最終ログ</th><th>アラート</th><th>状態</th></tr></thead>
+        <thead><tr><th>ご遺族</th><th>初回 / 経過</th><th>フェーズ</th><th class="num">アクティブ日</th><th>完了タスク (56)</th><th>最終ログ</th><th>アラート</th><th>最終対応</th><th>状態</th></tr></thead>
         <tbody>${rows}</tbody>
     </table>`;
 }
@@ -2426,7 +3276,7 @@ function renderMemorials(events) {
             </div>
             <div class="memorial-info">
                 <div class="title">記念日 / 法要</div>
-                <div class="sub">user <span class="uid">…${esc(shortUid(m.user_id))}</span></div>
+                <div class="sub">${displayName(m.user_id)}</div>
             </div>
             ${imminent ? '<span class="badge gold">直近</span>' : ''}
         </div>`;
@@ -2504,6 +3354,703 @@ function renderFeatures(events) {
 }
 
 // ============================================================
+// 実名連携層 (localStorage / 端末内のみ)
+// ============================================================
+// プライバシー設計: ご遺族の実名・連絡先は Supabase 等 クラウドへ
+// 一切送信せず、端末の localStorage にのみ保存する。
+// ============================================================
+const IDENTITY_KEY = 'rn_identity_map';
+
+function getIdentityMap() {
+    try { return JSON.parse(localStorage.getItem(IDENTITY_KEY) || '{}'); }
+    catch(e) { return {}; }
+}
+function getIdentity(user_id) {
+    return getIdentityMap()[user_id] || null;
+}
+function setIdentity(user_id, data) {
+    const map = getIdentityMap();
+    map[user_id] = { ...data, updated_at: new Date().toISOString() };
+    localStorage.setItem(IDENTITY_KEY, JSON.stringify(map));
+}
+function deleteIdentity(user_id) {
+    const map = getIdentityMap();
+    delete map[user_id];
+    localStorage.setItem(IDENTITY_KEY, JSON.stringify(map));
+}
+function clearAllIdentities() {
+    if (confirm('全てのご遺族実名情報を端末から削除します。よろしいですか？')) {
+        localStorage.removeItem(IDENTITY_KEY);
+        render();
+    }
+}
+
+// プライバシーモード（実名表示 ON/OFF）
+function getPrivacyMode() {
+    return localStorage.getItem('rn_privacy_mode') === 'on';
+}
+function togglePrivacyMode() {
+    const cur = getPrivacyMode();
+    localStorage.setItem('rn_privacy_mode', cur ? 'off' : 'on');
+    updatePrivacyButton();
+    render();
+}
+function updatePrivacyButton() {
+    const btn = document.getElementById('privacyToggle');
+    if (!btn) return;
+    const on = getPrivacyMode();
+    btn.classList.toggle('on', on);
+    btn.innerHTML = `<span class="dot"></span>${on ? '実名表示中（端末内のみ）' : '匿名表示'}`;
+}
+
+// 表示名ヘルパー
+function displayName(user_id, opt) {
+    opt = opt || {};
+    const id = getIdentity(user_id);
+    if (getPrivacyMode() && id && id.deceased) {
+        const dec = id.deceased ? `故 ${id.deceased}様` : '';
+        const chf = id.chief ? `<span style="font-size:11px;color:var(--ink-3);">喪主 ${id.chief}様</span>` : '';
+        const compact = opt.compact;
+        if (compact) return esc(dec || `…${shortUid(user_id)}`);
+        return `<span class="identity-display"><span class="deceased-name">${esc(dec)}</span>${chf ? ' ' + chf : ''}</span>`;
+    }
+    return `<span class="uid">…${esc(shortUid(user_id))}</span>`;
+}
+function displayNamePlain(user_id) {
+    const id = getIdentity(user_id);
+    if (getPrivacyMode() && id && id.deceased) return `故 ${id.deceased}様`;
+    return `…${shortUid(user_id)}`;
+}
+
+// CSV インポート / エクスポート
+function exportIdentityCSV() {
+    const map = getIdentityMap();
+    const rows = [['user_id','deceased','deceased_age','chief','relation','phone','email','funeral_date','memo']];
+    for (const [uid, d] of Object.entries(map)) {
+        rows.push([uid, d.deceased||'', d.deceased_age||'', d.chief||'', d.relation||'', d.phone||'', d.email||'', d.funeral_date||'', (d.memo||'').replace(/[\r\n]/g,' ')]);
+    }
+    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob([new Uint8Array([0xEF,0xBB,0xBF]), csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `reliefnote_identity_${fmtDate(new Date())}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+function importIdentityCSV(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+        try {
+            let text = e.target.result;
+            // BOM 除去
+            if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+            const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+            if (lines.length < 2) { alert('CSV の中身が空です'); return; }
+            const header = parseCSVLine(lines[0]).map(h => h.trim());
+            const userIdIdx = header.indexOf('user_id');
+            if (userIdIdx < 0) { alert('CSV ヘッダに user_id が必須です'); return; }
+            const map = getIdentityMap();
+            let added = 0, updated = 0;
+            for (let i = 1; i < lines.length; i++) {
+                const cells = parseCSVLine(lines[i]);
+                const uid = cells[userIdIdx];
+                if (!uid) continue;
+                const obj = {};
+                header.forEach((h, idx) => {
+                    if (h === 'user_id') return;
+                    if (cells[idx] != null) obj[h] = cells[idx];
+                });
+                obj.updated_at = new Date().toISOString();
+                if (map[uid]) updated++; else added++;
+                map[uid] = obj;
+            }
+            localStorage.setItem(IDENTITY_KEY, JSON.stringify(map));
+            alert(`CSV 取込: 新規 ${added} 件 / 更新 ${updated} 件`);
+            render();
+        } catch(err) {
+            alert('CSV 読込エラー: ' + err.message);
+        }
+    };
+    reader.readAsText(file);
+}
+function parseCSVLine(line) {
+    const result = [];
+    let cur = '', inQuote = false;
+    for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (inQuote) {
+            if (c === '"' && line[i+1] === '"') { cur += '"'; i++; }
+            else if (c === '"') inQuote = false;
+            else cur += c;
+        } else {
+            if (c === '"') inQuote = true;
+            else if (c === ',') { result.push(cur); cur = ''; }
+            else cur += c;
+        }
+    }
+    result.push(cur);
+    return result;
+}
+
+// ============================================================
+// CRM: フォローアップ (Supabase funeral_followups)
+// ============================================================
+let _followups = [];           // 全フォローアップ（チャネル内）
+let _followupsByUser = {};     // user_id → [followups...]
+let _crmAvailable = true;      // テーブル未作成時 false
+
+const ACTION_LABEL = {
+    call:  '電話',
+    email: 'メール',
+    visit: '来店',
+    memo:  'メモ',
+    other: 'その他'
+};
+const OUTCOME_LABEL = {
+    completed:        '対応完了',
+    callback_needed:  '折り返し要',
+    no_response:      '応答なし',
+    rejected:         '断られた',
+    pending:          '保留'
+};
+
+async function fetchFollowups() {
+    if (_isDemo) {
+        _crmAvailable = true;
+        return buildDemoFollowups();
+    }
+    const url = `${SUPABASE_URL}/rest/v1/funeral_followups`
+        + `?select=id,channel,user_id,staff_name,action_type,outcome,note,created_at`
+        + `&channel=eq.${currentChannel()}`
+        + `&order=created_at.desc&limit=2000`;
+    try {
+        const res = await fetch(url, {
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                'Accept': 'application/json'
+            }
+        });
+        if (res.status === 404 || res.status === 400) {
+            _crmAvailable = false; return [];
+        }
+        if (!res.ok) {
+            const text = await res.text();
+            if (text.includes('does not exist') || text.includes('42P01')) {
+                _crmAvailable = false; return [];
+            }
+            throw new Error(res.status + ' ' + text.slice(0, 200));
+        }
+        _crmAvailable = true;
+        return await res.json();
+    } catch(e) {
+        // Network or other error — assume CRM unavailable but keep dashboard functional
+        console.warn('[CRM] fetch failed:', e);
+        _crmAvailable = false;
+        return [];
+    }
+}
+
+async function recordFollowup(payload) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/funeral_followups`, {
+        method: 'POST',
+        headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+        },
+        body: JSON.stringify({
+            channel: currentChannel(),
+            user_id: payload.user_id,
+            staff_name: payload.staff_name,
+            action_type: payload.action_type,
+            outcome: payload.outcome || null,
+            note: payload.note || null
+        })
+    });
+    if (!res.ok) {
+        const text = await res.text();
+        throw new Error(res.status + ' ' + text.slice(0, 200));
+    }
+    const rows = await res.json();
+    const created = rows[0] || null;
+    if (created) {
+        _followups.unshift(created);
+        if (!_followupsByUser[created.user_id]) _followupsByUser[created.user_id] = [];
+        _followupsByUser[created.user_id].unshift(created);
+    }
+    return created;
+}
+
+function buildFollowupsByUser(rows) {
+    const byUser = {};
+    for (const f of rows) {
+        if (!byUser[f.user_id]) byUser[f.user_id] = [];
+        byUser[f.user_id].push(f);
+    }
+    return byUser;
+}
+
+function lastFollowupForUser(user_id) {
+    const list = _followupsByUser[user_id];
+    return (list && list.length) ? list[0] : null;
+}
+
+// ============================================================
+// お声がけスクリプト 自動生成
+// ============================================================
+function getStaffName() {
+    return localStorage.getItem('rn_staff_name') || '事前相談員';
+}
+function setStaffName(name) {
+    localStorage.setItem('rn_staff_name', name);
+}
+function getOrgNameForScript() {
+    return document.getElementById('orgName').value.trim() || '弊社';
+}
+
+function determineContext(user, phase) {
+    const days = phase.days;
+    if (user.alerts7d > 0) return 'grief_alert';
+    if (phase.code === 'M3' && days >= 42 && days <= 49) return '49d_upcoming';
+    if (phase.code === 'M3' && days >= 50 && days <= 56) return '49d_just_passed';
+    if (phase.code === 'M3' && days >= 35 && days < 42) return '49d_2weeks_out';
+    if (phase.code === 'M3' && days >= 90) return 'hyakkanichi';
+    if (phase.code === 'M10' && days >= 330) return 'isshu_or_late';
+    if (phase.code === 'M10' || phase.code === 'Y3') return 'late_phase';
+    if (phase.code === 'D7' || phase.code === 'D14' || phase.code === 'H24') return 'early';
+    const daysSilent = (Date.now() - new Date(user.lastSeen).getTime()) / 86400000;
+    if (daysSilent > 14) return 'silent';
+    return 'normal';
+}
+
+const CONTEXT_INFO = {
+    grief_alert:      { label: 'グリーフアラート発火中',          tone: 'alert' },
+    '49d_upcoming':   { label: '四十九日まで残り 1 週間以内',     tone: 'gold'  },
+    '49d_2weeks_out': { label: '四十九日まで残り 2〜4 週間',      tone: 'gold'  },
+    '49d_just_passed':{ label: '四十九日 直後',                   tone: 'gold'  },
+    hyakkanichi:      { label: '百ヶ日 近接',                     tone: 'gold'  },
+    isshu_or_late:    { label: '一周忌 近接',                     tone: 'gold'  },
+    late_phase:       { label: '長期フェーズ (M10/Y3)',            tone: ''      },
+    early:            { label: '初期手続き期 (H24/D7/D14)',       tone: ''      },
+    silent:           { label: '14 日以上 アプリ未利用',          tone: 'alert' },
+    normal:           { label: '通常運用',                         tone: ''      }
+};
+
+const SCRIPT_TIPS = {
+    grief_alert:      '焦らせず傾聴の姿勢で。商品提案は持ち出さない。「気にかけている」だけ伝える。',
+    '49d_upcoming':   '法要準備の進捗確認から入り、本位牌・仏壇は会話の流れで自然に。',
+    '49d_2weeks_out': '会場・親族連絡の進捗確認が中心。仏壇話はまだ早い。',
+    '49d_just_passed':'まず法要のねぎらい。本位牌の話は ご遺族の様子を見ながら。',
+    hyakkanichi:      'お墓参り・お供えを起点に、追加法要のご相談を。',
+    isshu_or_late:    '長期間ご一緒した感謝を述べてから、年法要のご相談へ。',
+    late_phase:       '長期フェーズは関係性維持中心。商品提案は控えめに。',
+    early:            '手続き支援が中心。商品提案は控える。役所手続きの不明点を聞き出す。',
+    silent:           '催促にならぬよう。安否確認のトーン徹底。何も用件なしで OK。',
+    normal:           '関係性維持の挨拶。次の節目までの緩やかな見守り姿勢で。'
+};
+
+const SCRIPT_TEMPLATES = {
+    grief_alert: {
+        phone: (u, p, ec, org, staff) =>
+`お世話になっております、${org} ${staff}でございます。
+
+その後、お変わりございませんでしょうか。
+ふと気にかかりまして、お電話差し上げました。
+
+お疲れが出ておられる頃かと存じます。何か少しでも、お話しいただけることがございましたら、お時間のあるときで構いません。
+
+無理にとは申しません。ただ、御社のことを気にかけている人間がここにおりますとお伝えしたく、お電話いたしました。`,
+        email: (u, p, ec, org, staff) =>
+`件名: ご様子を伺って
+
+その後、お変わりございませんでしょうか。
+${org} ${staff}でございます。
+
+何かと大変な日々をお過ごしのことと拝察いたします。
+手続きやお気持ちの整理は、急がず御社のペースで進めていただいて構いません。
+
+お話を伺うだけでも構いません。お電話、ご来店、いつでも歓迎いたします。
+
+決してご返信は不要でございます。お読みいただき、ありがとうございました。
+
+${org}
+${staff}`,
+        visit: (u, p, ec, org, staff) =>
+`お時間のあるときに、お茶でもいかがでしょうか。
+特別な用件はございません。お話を伺うだけで構いません。
+
+お顔を見せていただけるだけで、こちらも安心いたします。`
+    },
+    '49d_upcoming': {
+        phone: (u, p, ec, org, staff) => {
+            const left = 49 - p.days;
+            return `お世話になっております、${org} ${staff}でございます。
+
+四十九日のご法要まで、いよいよ${left}日となりましたね。
+お準備のほう、いかがでいらっしゃいますか。
+
+会場のお手配、お身内へのご連絡など、お疲れではありませんでしょうか。
+
+そろそろ本位牌へのお切り替え、お仏壇のことなど、お考えの頃合いかと存じます。
+もしご検討いただけるのであれば、カタログのお送りも、ご来店でのご相談も承れます。
+
+ご無理のない範囲で、お気軽にご相談ください。`;
+        },
+        email: (u, p, ec, org, staff) => {
+            const left = 49 - p.days;
+            return `件名: 四十九日のご準備について
+
+拝啓
+${org} ${staff}でございます。
+
+四十九日のご法要まで、あと${left}日となりました。
+お変わりなくお過ごしでしょうか。
+
+この時期は、本位牌へのお切り替え、お仏壇のご検討など、
+お気持ちと合わせていろいろなご準備が重なる時期かと存じます。
+
+お仏壇カタログのご郵送、ご来店でのご相談、
+いずれもご対応可能でございます。
+
+これまでアプリで${u.tasksCompletedSize}件のお手続きを進められてこられたこと、
+心より敬意を表します。
+
+何卒よろしくお願い申し上げます。
+敬具
+
+${org}
+${staff}`;
+        },
+        visit: (u, p, ec, org, staff) =>
+`本位牌・お仏壇のことで、ご来店でのご相談はいかがでしょうか。
+実物をご覧いただくと、ご家族でのご相談もしやすくなります。
+
+ご来店の日時、ご都合のよろしい候補をお聞かせください。
+お時間は 30 分から 1 時間ほどを目安にお取りしております。`
+    },
+    '49d_2weeks_out': {
+        phone: (u, p, ec, org, staff) => {
+            const left = 49 - p.days;
+            return `お世話になっております、${org} ${staff}でございます。
+
+四十九日のご法要まで、あと${left}日ほどでいらっしゃいますね。
+お変わりございませんか。
+
+会場のご手配、お参りのお身内へのご連絡など、お進みでしょうか。
+お困りごとがございましたら、お気軽にご相談ください。
+
+ご法要前にご準備が必要なものがございましたら、
+当社でお手伝いできることもございますので、お声がけください。`;
+        },
+        email: (u, p, ec, org, staff) => {
+            const left = 49 - p.days;
+            return `件名: 四十九日のご準備、いかがですか
+
+拝啓
+${org} ${staff}でございます。お変わりございませんでしょうか。
+
+四十九日のご法要まで、あと${left}日となりました。
+会場のお手配、お身内へのご連絡など、徐々にご準備が必要な時期かと存じます。
+
+当社で対応可能なこと、ご相談いただけることがございましたら、
+お気軽にお声がけください。
+
+何卒よろしくお願い申し上げます。
+敬具
+
+${org}
+${staff}`;
+        },
+        visit: (u, p, ec, org, staff) =>
+`法要の段取りやお身内お招きのご相談で、ご来店いただいても対応可能です。
+お時間のあるときに、お気軽にお立ち寄りください。`
+    },
+    '49d_just_passed': {
+        phone: (u, p, ec, org, staff) => {
+            const elapsed = p.days - 49;
+            return `お世話になっております、${org} ${staff}でございます。
+
+先日は四十九日のご法要、誠にお疲れさまでございました。
+${elapsed}日が経ちましたが、お疲れは出ておられませんでしょうか。
+
+大切な節目を無事にお迎えになられたこと、
+心よりお慶び申し上げます。
+
+これからは本位牌をお仏壇に安置し、
+日々のご供養を続けていかれる時期となりますね。
+
+本位牌のご検討、お仏壇のことなど、お話しを伺うだけでも構いませんので、
+お時間のあるときにお気軽にご相談ください。`;
+        },
+        email: (u, p, ec, org, staff) =>
+`件名: 四十九日 ご法要を終えられて
+
+拝啓
+先日は四十九日のご法要、誠にお疲れさまでございました。
+${org} ${staff}でございます。
+
+大切な節目を無事にお迎えになられたこと、
+心よりお慶び申し上げます。
+
+これからは本位牌をお仏壇に安置し、
+日々のご供養を続けていかれる時期となります。
+
+本位牌のご検討、お仏壇のことなど、
+お話しを伺うだけでも構いませんので、お気軽にご相談ください。
+
+敬具
+
+${org}
+${staff}`,
+        visit: (u, p, ec, org, staff) =>
+`本位牌のお迎え、お仏壇のご検討で、御来店いただけませんでしょうか。
+お時間のあるときに、ご都合のよろしい日時をお聞かせください。`
+    },
+    hyakkanichi: {
+        phone: (u, p, ec, org, staff) =>
+`お世話になっております、${org} ${staff}でございます。
+お変わりございませんでしょうか。
+
+まもなく百ヶ日でいらっしゃいますね。
+
+お墓参り、お供え物のご準備、ご親族へのお声がけなど、
+お困りごとがございましたら、お気軽にご相談ください。
+
+百ヶ日のあとも、節目節目で気にかけてまいります。`,
+        email: (u, p, ec, org, staff) =>
+`件名: 百ヶ日のお参りについて
+
+拝啓
+${org} ${staff}でございます。
+
+まもなく百ヶ日のお参りを迎えられる頃合いでございますね。
+お供え物、お墓参り、追加でご検討の法要など、
+ご相談ありましたらご遠慮なくお申し付けください。
+
+敬具
+
+${org}
+${staff}`,
+        visit: (u, p, ec, org, staff) =>
+`お墓参り後にお茶でもお持ちしながら、お話しできればと思います。
+お気軽にお立ち寄りください。`
+    },
+    isshu_or_late: {
+        phone: (u, p, ec, org, staff) =>
+`お世話になっております、${org} ${staff}でございます。
+
+月日が経つのは早いもので、まもなく一周忌でいらっしゃいますね。
+${u.activeDays}日にわたり、当社のサポートをご利用いただきありがとうございました。
+
+一周忌のお参り、お供え、ご親族へのご連絡など、
+何かご支援できることがございましたら、お声がけください。
+
+会場のお手配、僧侶様のご手配、いずれもご相談承れます。`,
+        email: (u, p, ec, org, staff) =>
+`件名: 一周忌のご準備について
+
+拝啓
+${org} ${staff}でございます。
+
+月日が経つのは早いもので、まもなく一周忌を迎えられる頃かと存じます。
+
+これまで${u.activeDays}日にわたり、ご手続きやお気持ちの記録に取り組まれてきたことと拝察いたします。
+一周忌のお参り、お供え、お墓のことなど、
+ご相談ございましたらお気軽にお申し付けください。
+
+敬具
+
+${org}
+${staff}`,
+        visit: (u, p, ec, org, staff) =>
+`一周忌のご相談、ご来店でも対応可能です。
+お時間のあるときに、ご都合のよろしい日時をお聞かせください。`
+    },
+    late_phase: {
+        phone: (u, p, ec, org, staff) =>
+`お世話になっております、${org} ${staff}でございます。
+お変わりございませんでしょうか。
+
+${u.activeDays}日にわたり、当社のサポートをご利用いただきありがとうございます。
+${p.label}でいらっしゃいますね。
+
+何かと節目を迎えられる時期かと存じます。
+お困りごと、ご相談ごとがございましたら、お気軽にお声がけください。`,
+        email: (u, p, ec, org, staff) =>
+`件名: お変わりございませんか
+
+拝啓
+${org} ${staff}でございます。
+
+長きにわたり、当社のサポートをご利用いただきありがとうございます。
+お変わりなくお過ごしでしょうか。
+
+ご相続、不動産名義、ご年法要など、
+このフェーズ特有のご相談がございましたら、お気軽にお申し付けください。
+
+敬具
+
+${org}
+${staff}`,
+        visit: (u, p, ec, org, staff) =>
+`お近くにお越しの際は、お気軽にお立ち寄りください。
+お変わりないお顔を拝見できれば、こちらも安心いたします。`
+    },
+    early: {
+        phone: (u, p, ec, org, staff) =>
+`お世話になっております、${org} ${staff}でございます。
+
+先日のお見送り、本当にお疲れさまでございました。
+
+役所手続き、ご年金、保険のご請求など、何かと立て込む時期かと存じます。
+${u.tasksCompletedSize}件のお手続きをアプリでお進めいただいておりますが、
+ご不明な点はございませんでしょうか。
+
+特に、健康保険のご返却、ご年金の停止、葬祭費のご申請は
+期日のあるお手続きでございます。お困りでしたらお手伝いいたします。`,
+        email: (u, p, ec, org, staff) =>
+`件名: ご手続きのことで何かありましたら
+
+拝啓
+${org} ${staff}でございます。
+先日のお見送り、誠にお疲れさまでございました。
+
+ご家族様におかれましては、役所手続きや保険のご請求など、
+何かと立て込む日々をお過ごしのことと存じます。
+
+アプリのほう、ご手続きの進捗が${u.tasksCompletedSize}件まで進んでいらっしゃるようで、
+心より敬意を表します。
+
+ご不明な点や、お困りごとがございましたら、いつでもご相談ください。
+
+敬具
+
+${org}
+${staff}`,
+        visit: (u, p, ec, org, staff) =>
+`お手続き書類の整理など、ご来店いただければ対面でご支援できます。
+書類をお持ちいただければ、その場で確認・整理のお手伝いも可能です。`
+    },
+    silent: {
+        phone: (u, p, ec, org, staff) => {
+            const silent = Math.floor((Date.now() - new Date(u.lastSeen).getTime()) / 86400000);
+            return `お世話になっております、${org} ${staff}でございます。
+
+ご無沙汰しておりますが、お変わりございませんでしょうか。
+
+最近アプリのご利用がないようで、ふと気にかかりお電話差し上げました。
+
+お手続き、お気持ち、何かお困りのことはございませんでしょうか。
+特に用件があるわけではございません。
+
+ただ、御社のことを気にかけている人間がここにおりますとお伝えしたく、
+お電話いたしました。`;
+        },
+        email: (u, p, ec, org, staff) =>
+`件名: ご様子を伺って
+
+拝啓
+${org} ${staff}でございます。
+
+しばらくお声をいただいておりませんので、
+ふと気にかかりお便り差し上げました。
+
+お手続きのこと、お気持ちのこと、お困りごとがございましたら、
+お気軽にご連絡ください。
+
+特別な用件があるわけではございません。
+ただ、御社のことを気にかけている人間がここにおります、
+というだけのことでございます。
+
+ご返信は不要でございます。お読みいただき、ありがとうございました。
+
+${org}
+${staff}`,
+        visit: (u, p, ec, org, staff) =>
+`お時間のあるときに、お顔を見せにいらしてください。
+お茶でもどうぞ。`
+    },
+    normal: {
+        phone: (u, p, ec, org, staff) =>
+`お世話になっております、${org} ${staff}でございます。
+お変わりございませんでしょうか。
+
+御社のご様子、定期的にお気にかけております。
+${p.label}でいらっしゃいますね。
+
+${u.tasksCompletedSize}件の手続きをお進めいただき、心より敬意を表します。
+
+ご不明な点、お困りごとがございましたら、いつでもお気軽にご相談ください。`,
+        email: (u, p, ec, org, staff) =>
+`件名: お変わりございませんか
+
+拝啓
+${org} ${staff}でございます。
+
+お変わりなくお過ごしでしょうか。
+アプリでの進捗、${u.tasksCompletedSize}件のお手続きを進めていただいておりますね。
+
+手続きのこと、お気持ちのこと、何でもご相談ください。
+
+敬具
+
+${org}
+${staff}`,
+        visit: (u, p, ec, org, staff) =>
+`お近くにお越しの際は、お気軽にお立ち寄りください。
+お茶を一杯お持ちします。`
+    }
+};
+
+function generateScript(user, type) {
+    const phase = computePhase(user.firstSeen);
+    const ctx = determineContext(user, phase);
+    const tmpl = (SCRIPT_TEMPLATES[ctx] && SCRIPT_TEMPLATES[ctx][type])
+        || SCRIPT_TEMPLATES.normal[type];
+    return tmpl(user, phase, user.eventCounts, getOrgNameForScript(), getStaffName());
+}
+
+let _currentScriptUser = null;
+let _currentScriptType = 'phone';
+
+function switchScriptTab(type) {
+    if (!_currentScriptUser) return;
+    _currentScriptType = type;
+    document.querySelectorAll('.script-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.type === type);
+    });
+    document.getElementById('scriptText').value = generateScript(_currentScriptUser, type);
+    const btn = document.getElementById('btnCopyScript');
+    if (btn) { btn.classList.remove('copied'); btn.textContent = 'コピー'; }
+}
+
+function copyScript() {
+    const text = document.getElementById('scriptText').value;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btnCopyScript');
+        btn.classList.add('copied');
+        btn.textContent = 'コピーしました';
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.textContent = 'コピー';
+        }, 2200);
+    }).catch(err => {
+        alert('コピーに失敗しました: ' + err.message);
+    });
+}
+
+function onStaffNameChange() {
+    const v = document.getElementById('staffName').value.trim();
+    setStaffName(v || '事前相談員');
+    if (_currentScriptUser) {
+        document.getElementById('scriptText').value = generateScript(_currentScriptUser, _currentScriptType);
+    }
+}
+
+// ============================================================
 // ご遺族詳細モーダル
 // ============================================================
 function showFamilyDetail(user_id) {
@@ -2526,11 +4073,23 @@ function showFamilyDetail(user_id) {
         return { tone: '', text: '順調に進捗中。当面お声がけ不要。' };
     })();
 
+    // スクリプト生成準備
+    _currentScriptUser = u;
+    _currentScriptType = 'phone';
+    const ctx = determineContext(u, phase);
+    const ctxInfo = CONTEXT_INFO[ctx] || CONTEXT_INFO.normal;
+    const initialScript = generateScript(u, 'phone');
+
+    const id = getIdentity(user_id) || {};
+    const titleName = (getPrivacyMode() && id.deceased)
+        ? `故 ${esc(id.deceased)}様` + (id.chief ? ` <span style="font-size:13px;color:var(--ink-3);font-weight:500;">/ 喪主 ${esc(id.chief)}様</span>` : '')
+        : `ご遺族 詳細 <span class="uid">…${esc(shortUid(user_id))}</span>`;
+
     const modalHTML = `
     <div class="modal-head">
         <div>
-            <h3>ご遺族 詳細 <span class="uid">…${esc(shortUid(user_id))}</span></h3>
-            <div class="head-meta">${esc(phase.label)} / ${esc(status)}</div>
+            <h3>${titleName}</h3>
+            <div class="head-meta">${esc(phase.label)} / ${esc(status)}${id.phone ? ' / ' + esc(id.phone) : ''}</div>
         </div>
         <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
@@ -2550,8 +4109,106 @@ function showFamilyDetail(user_id) {
         </div>
 
         <div class="modal-section">
+            <h4>ご遺族情報（端末内のみ保存）</h4>
+            <div class="identity-form">
+                <label>故人氏名<input type="text" id="id_deceased" value="${esc(id.deceased||'')}" placeholder="山田 太郎"></label>
+                <label>故人年齢<input type="text" id="id_deceased_age" value="${esc(id.deceased_age||'')}" placeholder="82"></label>
+                <label>喪主氏名<input type="text" id="id_chief" value="${esc(id.chief||'')}" placeholder="山田 花子"></label>
+                <label>続柄<input type="text" id="id_relation" value="${esc(id.relation||'')}" placeholder="配偶者 / 長男 等"></label>
+                <label>連絡先 電話<input type="text" id="id_phone" value="${esc(id.phone||'')}" placeholder="090-XXXX-XXXX"></label>
+                <label>連絡先 メール<input type="text" id="id_email" value="${esc(id.email||'')}" placeholder="example@..."></label>
+                <label>施行日<input type="date" id="id_funeral_date" value="${esc(id.funeral_date||'')}"></label>
+                <label style="grid-column: 1 / -1;">メモ<textarea id="id_memo" placeholder="社内メモ・特記事項">${esc(id.memo||'')}</textarea></label>
+                <div class="actions">
+                    <button class="btn-save" onclick="saveIdentityFromModal('${esc(user_id)}')">保存</button>
+                    ${id.deceased ? `<button class="btn-clear" onclick="if(confirm('この方の実名情報を端末から削除しますか？')){deleteIdentity('${esc(user_id)}');showFamilyDetail('${esc(user_id)}');render();}">削除</button>` : ''}
+                    <span class="privacy-note">この情報は <strong>localStorage</strong>（端末内のみ）に保存され、Supabase 等クラウドへ送信されません。</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-section">
             <h4>推奨アクション</h4>
             <div class="insight ${recommendation.tone}">${recommendation.text}</div>
+        </div>
+
+        <div class="modal-section">
+            <h4>お声がけスクリプト（自動生成）</h4>
+            <div class="script-section">
+                <div class="staff-input-row">
+                    <label>担当者名:</label>
+                    <input id="staffName" type="text" value="${esc(getStaffName())}" oninput="onStaffNameChange()" maxlength="20" placeholder="例: 田中">
+                    <span class="context-pill ${ctxInfo.tone ? ctxInfo.tone + '-ctx' : ''}">${esc(ctxInfo.label)}</span>
+                </div>
+                <div class="script-tabs">
+                    <button class="script-tab active" data-type="phone" onclick="switchScriptTab('phone')">📞 お電話</button>
+                    <button class="script-tab" data-type="email" onclick="switchScriptTab('email')">✉️ メール</button>
+                    <button class="script-tab" data-type="visit" onclick="switchScriptTab('visit')">🏠 ご来店誘導</button>
+                </div>
+                <textarea class="script-text" id="scriptText" spellcheck="false">${esc(initialScript)}</textarea>
+                <div class="script-actions">
+                    <span class="script-tip">${esc(SCRIPT_TIPS[ctx] || SCRIPT_TIPS.normal)}</span>
+                    <button class="btn-copy" id="btnCopyScript" onclick="copyScript()">コピー</button>
+                </div>
+                <div class="script-disclaimer">※ アプリ実イベントから状況を判定し、御社名・担当者名・経過日数・完了タスク数を埋め込んだ自動生成サンプルです。御社のトーンや関係性に合わせて適宜編集してご利用ください。</div>
+            </div>
+        </div>
+
+        <div class="modal-section">
+            <h4>対応を記録する（CRM）</h4>
+            ${_crmAvailable ? `
+            <div class="followup-form">
+                <div class="followup-form-grid">
+                    <label>担当者
+                        <input type="text" id="fu_staff" value="${esc(getStaffName())}" placeholder="例: 田中">
+                    </label>
+                    <label>種別
+                        <select id="fu_action">
+                            <option value="call">📞 電話</option>
+                            <option value="email">✉️ メール</option>
+                            <option value="visit">🏠 来店</option>
+                            <option value="memo">📝 社内メモ</option>
+                            <option value="other">その他</option>
+                        </select>
+                    </label>
+                    <label>結果
+                        <select id="fu_outcome">
+                            <option value="completed">対応完了</option>
+                            <option value="callback_needed">折り返し要</option>
+                            <option value="no_response">応答なし</option>
+                            <option value="rejected">断られた</option>
+                            <option value="pending">保留</option>
+                        </select>
+                    </label>
+                </div>
+                <textarea id="fu_note" placeholder="社内メモ：会話の要点、次回フォロー予定、ご遺族のお気持ちなど"></textarea>
+                <div class="followup-form-actions">
+                    <span style="font-size:11px;color:var(--ink-3);">記録は funeral_followups テーブルに保存。スタッフ全員が共有閲覧可。</span>
+                    <button class="btn-save" id="fuSubmit" onclick="submitFollowup('${esc(user_id)}')">記録する</button>
+                </div>
+            </div>
+            ` : `
+            <div class="insight alert">
+                <strong>CRM テーブル未作成</strong>: <code>supabase/migrations/011_funeral_followups.sql</code> を Supabase Dashboard の SQL Editor で実行してください。実行後、ダッシュボードを再読み込みすると有効化されます。
+            </div>
+            `}
+
+            <h4 style="margin-top:18px;">対応履歴（このご遺族）</h4>
+            ${(_followupsByUser[user_id] && _followupsByUser[user_id].length) ? `
+            <div class="followup-history">
+                ${_followupsByUser[user_id].map(f => `
+                <div class="followup-entry action-${esc(f.action_type)}">
+                    <div class="followup-head">
+                        <span class="when">${esc(fmtDateTime(f.created_at))} (${esc(timeAgo(f.created_at))})</span>
+                        <span class="who">${esc(f.staff_name)}</span>
+                        <span class="what action-${esc(f.action_type)}">${esc(ACTION_LABEL[f.action_type] || f.action_type)}</span>
+                        ${f.outcome ? `<span class="followup-outcome outcome-${esc(f.outcome)}">${esc(OUTCOME_LABEL[f.outcome] || f.outcome)}</span>` : ''}
+                    </div>
+                    ${f.note ? `<div class="followup-note">${esc(f.note)}</div>` : ''}
+                </div>
+                `).join('')}
+            </div>
+            ` : `<div class="empty-state" style="padding:14px;text-align:left;">この方への対応記録はまだありません。</div>`}
         </div>
 
         <div class="modal-section">
@@ -2595,11 +4252,220 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeModal();
 });
 
+// 実名情報をモーダルから保存
+function saveIdentityFromModal(user_id) {
+    const data = {
+        deceased: document.getElementById('id_deceased').value.trim(),
+        deceased_age: document.getElementById('id_deceased_age').value.trim(),
+        chief: document.getElementById('id_chief').value.trim(),
+        relation: document.getElementById('id_relation').value.trim(),
+        phone: document.getElementById('id_phone').value.trim(),
+        email: document.getElementById('id_email').value.trim(),
+        funeral_date: document.getElementById('id_funeral_date').value.trim(),
+        memo: document.getElementById('id_memo').value.trim()
+    };
+    setIdentity(user_id, data);
+    // モーダルを再描画して結果反映
+    showFamilyDetail(user_id);
+    // 各セクションの表示も更新
+    renderFamilies(_allUsers);
+    renderQueue(_events, _allUsers);
+    renderIdentitySummary();
+    renderHero(_events, _allUsers);
+    // 保存通知
+    const note = document.createElement('div');
+    note.textContent = '✓ 端末内に保存しました';
+    note.style.cssText = 'position:fixed;bottom:20px;right:20px;background:var(--positive);color:white;padding:10px 16px;border-radius:8px;font-size:13px;z-index:200;box-shadow:var(--shadow-lift);';
+    document.body.appendChild(note);
+    setTimeout(() => note.remove(), 2000);
+}
+
+// フォローアップを送信
+async function submitFollowup(user_id) {
+    const btn = document.getElementById('fuSubmit');
+    const staff = document.getElementById('fu_staff').value.trim();
+    const action = document.getElementById('fu_action').value;
+    const outcome = document.getElementById('fu_outcome').value;
+    const note = document.getElementById('fu_note').value.trim();
+    if (!staff) { alert('担当者名は必須です'); return; }
+    btn.disabled = true;
+    btn.textContent = '保存中…';
+    try {
+        await recordFollowup({
+            user_id, staff_name: staff, action_type: action, outcome, note
+        });
+        setStaffName(staff);
+        // モーダル再描画 + 関連セクション更新
+        showFamilyDetail(user_id);
+        renderQueue(_events, _allUsers);
+        renderStaffSummary(parseInt(document.getElementById('rangeSelect').value, 10));
+        renderHero(_events, _allUsers);
+        const note2 = document.createElement('div');
+        note2.textContent = '✓ 対応を記録しました';
+        note2.style.cssText = 'position:fixed;bottom:20px;right:20px;background:var(--positive);color:white;padding:10px 16px;border-radius:8px;font-size:13px;z-index:200;box-shadow:var(--shadow-lift);';
+        document.body.appendChild(note2);
+        setTimeout(() => note2.remove(), 2000);
+    } catch(e) {
+        alert('記録に失敗しました: ' + e.message);
+        btn.disabled = false;
+        btn.textContent = '記録する';
+    }
+}
+
+// ============================================================
+// 未対応キュー
+// ============================================================
+function renderQueue(events, users) {
+    const sevenDaysAgo = Date.now() - 7 * 86400000;
+    const seventyTwoHoursAgo = Date.now() - 72 * 3600 * 1000;
+    const items = [];
+
+    for (const u of users) {
+        const phase = computePhase(u.firstSeen);
+        const lastSeen = new Date(u.lastSeen).getTime();
+        const lastFollowup = lastFollowupForUser(u.user_id);
+        const lastFollowupAt = lastFollowup ? new Date(lastFollowup.created_at).getTime() : 0;
+
+        // 直近対応済みは除外
+        if (lastFollowupAt >= seventyTwoHoursAgo) continue;
+
+        let priority = 0, tier = 'normal', reason = '';
+
+        if (u.alerts7d > 0) {
+            priority = 100 + u.alerts7d;
+            tier = 'urgent';
+            reason = `<strong>グリーフアラート ${u.alerts7d} 件</strong>（直近7日）。`;
+        } else if (phase.code === 'M3' && phase.days >= 42 && phase.days <= 49) {
+            priority = 80 + (49 - phase.days);
+            tier = 'gold';
+            reason = `<strong>四十九日まで残り ${49 - phase.days} 日</strong>。仏壇・本位牌・法要のご相談タイミング。`;
+        } else if (phase.code === 'M3' && phase.days >= 35 && phase.days <= 65 && lastSeen >= sevenDaysAgo) {
+            priority = 60;
+            tier = 'gold';
+            reason = `49日前後（経過 ${phase.days} 日）かつ直近 7 日アクティブ。`;
+        } else if (Date.now() - lastSeen > 14 * 86400000 && !['M10','Y3'].includes(phase.code)) {
+            priority = 50;
+            tier = 'warn';
+            const silent = Math.floor((Date.now() - lastSeen) / 86400000);
+            reason = `<strong>${silent} 日間アプリ未利用</strong>。`;
+        } else {
+            continue;  // 通常状態 = キュー入りしない
+        }
+
+        if (lastFollowup) {
+            const ago = Math.floor((Date.now() - lastFollowupAt) / 3600 / 1000);
+            reason += ` 最終対応: <strong>${ago < 24 ? ago + ' 時間前' : Math.floor(ago/24) + ' 日前'}</strong>（${esc(lastFollowup.staff_name)} / ${esc(ACTION_LABEL[lastFollowup.action_type] || lastFollowup.action_type)}）。`;
+        } else {
+            reason += ' <strong>未対応</strong>。';
+        }
+
+        items.push({ user: u, priority, tier, reason });
+    }
+    items.sort((a, b) => b.priority - a.priority);
+
+    const el = document.getElementById('queueList');
+    if (items.length === 0) {
+        el.innerHTML = emptyState('未対応のご遺族はいません', 'グリーフアラート発火・49日前後・14日未利用のご遺族で、直近72時間に対応記録があるため全てクリア済み');
+        return;
+    }
+    el.innerHTML = items.slice(0, 12).map(it => `
+        <div class="queue-item ${it.tier}" onclick="showFamilyDetail('${esc(it.user.user_id)}')">
+            <div class="queue-info">
+                <div class="target">${displayName(it.user.user_id)}</div>
+                <div class="meta">${it.reason} 経過 ${computePhase(it.user.firstSeen).days}日 / 完了 ${it.user.tasksCompletedSize}/56</div>
+            </div>
+            <button class="queue-action" onclick="event.stopPropagation(); showFamilyDetail('${esc(it.user.user_id)}')">対応する</button>
+        </div>
+    `).join('');
+}
+
+// ============================================================
+// スタッフ別 業務サマリー
+// ============================================================
+function renderStaffSummary(days) {
+    const el = document.getElementById('staffGrid');
+    if (!_crmAvailable) {
+        el.innerHTML = emptyState('CRM 未接続', '<code>supabase/migrations/011_funeral_followups.sql</code> を Supabase Dashboard で適用してください');
+        return;
+    }
+    if (_followups.length === 0) {
+        el.innerHTML = emptyState('対応記録なし', 'ご遺族モーダルで「対応を記録する」を使うと、ここにスタッフ別の集計が表示されます');
+        return;
+    }
+    const since = Date.now() - days * 86400000;
+    const byStaff = {};
+    for (const f of _followups) {
+        if (new Date(f.created_at).getTime() < since) continue;
+        if (!byStaff[f.staff_name]) {
+            byStaff[f.staff_name] = { name: f.staff_name, actions: 0, families: new Set(), latest: null, latestUser: null };
+        }
+        const s = byStaff[f.staff_name];
+        s.actions++;
+        s.families.add(f.user_id);
+        if (!s.latest || f.created_at > s.latest) {
+            s.latest = f.created_at;
+            s.latestUser = f.user_id;
+            s.latestAction = f.action_type;
+            s.latestNote = f.note;
+        }
+    }
+    const list = Object.values(byStaff).sort((a, b) => b.actions - a.actions);
+    if (list.length === 0) {
+        el.innerHTML = emptyState(`直近${days}日に対応記録なし`);
+        return;
+    }
+    el.innerHTML = list.map(s => `
+        <div class="staff-card">
+            <div class="name">${esc(s.name)}</div>
+            <div class="stats">
+                <div class="stat"><div class="num">${s.actions}</div><div class="lbl">対応件数</div></div>
+                <div class="stat"><div class="num">${s.families.size}</div><div class="lbl">担当遺族数</div></div>
+            </div>
+            <div class="recent">
+                直近: ${esc(timeAgo(s.latest))} / <strong>${esc(displayNamePlain(s.latestUser))}</strong> に ${esc(ACTION_LABEL[s.latestAction] || s.latestAction)}
+                ${s.latestNote ? `<br>「${esc(s.latestNote.slice(0, 40))}${s.latestNote.length > 40 ? '…' : ''}」` : ''}
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============================================================
+// 実名管理 サマリー
+// ============================================================
+function renderIdentitySummary() {
+    const map = getIdentityMap();
+    const total = Object.keys(map).length;
+    const matched = _allUsers.filter(u => map[u.user_id]).length;
+    const el = document.getElementById('identitySummary');
+    el.innerHTML = `
+        端末内に登録済み: <strong>${total} 件</strong>
+        / アプリ利用中ご遺族との突合: <strong>${matched}/${_allUsers.length}</strong> 名
+        / プライバシーモード: <strong>${getPrivacyMode() ? 'ON（実名表示）' : 'OFF（匿名表示）'}</strong>
+    `;
+}
+
+// ============================================================
+// CRM ステータス pill
+// ============================================================
+function renderCrmStatus() {
+    const el = document.getElementById('crmStatus');
+    if (!el) return;
+    if (_crmAvailable) {
+        el.className = 'crm-status-pill connected';
+        el.textContent = `CRM 接続OK / ${_followups.length} 件の対応記録`;
+    } else {
+        el.className = 'crm-status-pill disconnected';
+        el.textContent = 'CRM テーブル未作成 (migration 011 を適用してください)';
+    }
+}
+
 // ============================================================
 // Loading state
 // ============================================================
 function showLoadingAll() {
     document.getElementById('actionList').innerHTML = loadingState();
+    document.getElementById('queueList').innerHTML = loadingState();
+    document.getElementById('staffGrid').innerHTML = loadingState();
     document.getElementById('roiGrid').innerHTML = '';
     document.getElementById('impactGrid').innerHTML = '';
     document.getElementById('summaryGrid').innerHTML = '';
@@ -2616,6 +4482,7 @@ function showLoadingAll() {
     document.getElementById('alertInsight').innerHTML = '';
     document.getElementById('touchpointInsight').innerHTML = '';
     document.getElementById('trendInsight').innerHTML = '';
+    document.getElementById('identitySummary').innerHTML = '';
 }
 
 // ============================================================
@@ -2643,17 +4510,28 @@ function renderUpdated() {
 // ============================================================
 async function render() {
     renderUpdated();
+    updatePrivacyButton();
     setStatus('loading', '読み込み中…');
     showLoadingAll();
     hideError();
     try {
-        _events = await fetchAllEvents();
+        // event_logs と funeral_followups を並列取得
+        const [events, followups] = await Promise.all([
+            fetchAllEvents(),
+            fetchFollowups()
+        ]);
+        _events = events;
+        _followups = followups || [];
+        _followupsByUser = buildFollowupsByUser(_followups);
         _allUsers = aggregateUsers(_events);
         _allUsersMap = {};
         _allUsers.forEach(u => { _allUsersMap[u.user_id] = u; });
         const days = parseInt(document.getElementById('rangeSelect').value, 10);
-        setStatus('ok', `接続OK / ${fmtNum(_events.length)}イベント / ${_allUsers.length}人`);
+        setStatus('ok', `接続OK / ${fmtNum(_events.length)}イベント / ${_allUsers.length}人 / 対応記録${_followups.length}件`);
+        renderCrmStatus();
         renderHero(_events, _allUsers);
+        renderQueue(_events, _allUsers);
+        renderStaffSummary(days);
         renderROI(_events, _allUsers, days);
         renderImpact(_events, _allUsers, days);
         renderSummary(_events, days);
@@ -2668,19 +4546,25 @@ async function render() {
         renderMemorials(_events);
         renderTrend(_events);
         renderFeatures(_events);
+        renderIdentitySummary();
     } catch (e) {
         setStatus('err', '接続エラー');
         showError(e.message);
-        _events = []; _allUsers = []; _allUsersMap = {};
-        renderHero([], []); renderROI([], [], 30); renderImpact([], [], 30);
+        _events = []; _allUsers = []; _allUsersMap = {}; _followups = []; _followupsByUser = {};
+        renderCrmStatus();
+        renderHero([], []); renderQueue([], []); renderStaffSummary(30);
+        renderROI([], [], 30); renderImpact([], [], 30);
         renderSummary([], 30); renderAlerts([]); renderTouchpoints([]);
         renderForecast([], []); renderFamilyFilters(); renderFamilies([]);
         renderPhaseDistribution([]); renderHeatmap([]); renderCategories([], []);
         renderMemorials([]); renderTrend([]); renderFeatures([]);
+        renderIdentitySummary();
     }
 }
 
 syncOrgName();
+applyLevelClass();
+applyDemoBanner();
 render();
 </script>
 
